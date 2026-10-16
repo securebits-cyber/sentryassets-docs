@@ -1,0 +1,32 @@
+---
+title: Licence management
+description: With Pro, SentryAssets compares licences with the installed software, shows costs over time, budgets with a forecast and leads renewals.
+sidebar:
+  label: Licence management
+  order: 6
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition. Keeping licences itself is part of the community edition.
+
+## Licence reconciliation
+
+Each licence is given the products of the software inventory it covers, chosen by hand from suggestions. The page **Licence management** shows per licence:
+
+- the devices the software is installed on;
+- the seats its licence model requires (per user: each responsible person once);
+- seats bought and assigned;
+- devices with the software but without a seat, and unused seats.
+
+Licences short of seats come first. Installed software without a licence is listed; system components and free software can be hidden.
+
+## Costs, budgets and forecast
+
+- Costs of licences and contracts are kept as a monthly figure and shown for the last 24 months.
+- **Budgets** per year, category and currency are set by administration and information security.
+- The **forecast** for the year deducts licences decided not to be renewed from their end.
+
+## Renewals
+
+Licences ending within a period of your choice, and expired ones, become **renewals** with a state (open, in review, renew, cancel, done), a responsible person, a due date, a note and the decision with its reason. A renewal can write the new end into the licence, with the right to change licences. Renewals ending within 30 days without a decision are shown on top.

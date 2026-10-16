@@ -1,0 +1,33 @@
+---
+title: Check rules
+description: With Pro, SentryAssets checks requirements from the inventory's data, such as "every device has a responsible person", and keeps deviations.
+sidebar:
+  label: Check rules
+  order: 10
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+Check rules test requirements from the inventory's data instead of keeping them by hand. Examples:
+
+- "Every device has a responsible person."
+- "Servers with a high protection requirement have a backup proof younger than 90 days."
+
+## Building a rule
+
+A rule is a tree of conditions, put together without code on the page **Check rules**: **all**, **at least one** or **none** of them. Each condition compares a fixed fact with a fitting operator:
+
+category, location, device class, lifecycle, health, responsible person, inventory number, protection requirement, manufacturer, model, host name, last seen, installed software or any category field.
+
+Rules apply to categories and locations of your choice, carry a severity and may name IT-Grundschutz requirements.
+
+## Evaluating
+
+- The page evaluates the rules with the reader's rights. Facts the reader may not see count as **not checkable**, never as a deviation.
+- When administration or information security evaluate, deviations are kept with the date they were first seen.
+- A deviation can be **accepted** with a reason for up to a year.
+- Rules are data only, never code; the evaluation runs apart so that a large inventory does not slow down others.
+
+[Tickets](/en/pro/tickets/) and [workflows](/en/pro/workflows/) turn new deviations into work items in your ticket system. Notification targets can be told about new deviations; the message names only the kind of event, the time, the organisation and a link to the audit log.

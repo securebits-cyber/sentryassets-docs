@@ -1,0 +1,49 @@
+---
+title: Entra ID und Intune
+description: Mit Pro liest SentryAssets Geräte und Personen aus Microsoft Entra ID und Intune, nur lesend, und gleicht sie mit Assets und Verantwortlichen ab.
+sidebar:
+  label: Entra ID und Intune
+  order: 4
+---
+
+import { Badge, Steps, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+SentryAssets liest Geräte und Personen aus Microsoft Entra ID, auf Wunsch mit Compliance, Besitz, Seriennummer und Hauptbenutzer aus Intune. Gelesen wird nur, im Hintergrund in einem Abstand Ihrer Wahl.
+
+## Berechtigungen
+
+Die App-Registrierung braucht Anwendungsberechtigungen mit Zustimmung eines Administrators, alle nur lesend:
+
+| Berechtigung | Wofür |
+|---|---|
+| `Device.Read.All` | Geräte |
+| `User.Read.All` | Personen |
+| `GroupMember.Read.All` | Personen nur aus den gewählten Gruppen |
+| `DeviceManagementManagedDevices.Read.All` | optional, Angaben aus Intune |
+
+## Einrichten
+
+Die Seite **Entra ID und Intune** führt in diesen Schritten:
+
+<Steps>
+
+1. **Verzeichnis und App eintragen:** Mandanten-ID und Anwendungs-ID der App-Registrierung.
+2. Einen der beiden Wege zur Anmeldung wählen:
+   - **Zertifikat in die App hochladen** (empfohlen): SentryAssets erzeugt das Zertifikat auf dem Server; der private Schlüssel verlässt ihn nie.
+   - **Geheimen Clientschlüssel eintragen:** verschlüsselt gespeichert und nie wieder angezeigt.
+3. **Verbindung testen:** Der Test nennt jede fehlende Berechtigung in einfachen Worten.
+4. **Abgleich einschalten** und die Gruppen wählen, aus denen Personen gelesen werden.
+
+</Steps>
+
+## Abgleich
+
+- **Geräte** passen zu Assets über Seriennummer oder MAC-Adresse, **Personen** zu Verantwortlichen über die E-Mail-Adresse.
+- Ein Treffer nur über den Namen oder bei einem privaten Gerät wird nur angeboten und braucht eine Bestätigung.
+- **Nichts gelangt von selbst ins Inventar:** Neue Geräte werden gesammelt zu Assets, neue Personen zu Verantwortlichen; abweichende Angaben übernehmen Sie Feld für Feld. Jeder Eintrag lässt sich von Hand verknüpfen, ignorieren oder zurücksetzen.
+
+<Aside>
+Trennen löscht Einstellungen, Schlüssel und alles Gelesene. Assets und Verantwortliche bleiben erhalten.
+</Aside>

@@ -1,0 +1,128 @@
+---
+title: Konfiguration
+description: Alle Einstellungen von SentryAssets – die Werte der .env, Netzfreigaben, Geheimnisse als Dateien und Einstellungen für eine docker-compose.override.yml.
+sidebar:
+  label: Konfiguration
+  order: 7
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+SentryAssets liest seine Einstellungen aus Umgebungsvariablen mit dem Präfix `SA_`. Die Compose-Datei setzt die meisten selbst; Sie passen nur die Werte der `.env` an. Weitere Einstellungen setzen Sie in einer `docker-compose.override.yml` neben der Compose-Datei.
+
+<Aside type="caution" title="Geheimnisse nur als Dateien">
+Geheimnisse wie Passwörter, Client-Secrets oder der Master-Schlüssel stehen nie direkt in der Umgebung. Für jedes gibt es eine Variante mit `_FILE`, die auf eine Datei zeigt, etwa `SA_OIDC_CLIENT_SECRET_FILE=/run/secrets/oidc_client_secret`. In Produktion startet SentryAssets nicht, wenn ein Geheimnis direkt in der Umgebung steht.
+</Aside>
+
+## Werte der `.env`
+
+### Grundeinstellungen
+
+| Variable | Standard | Bedeutung |
+|---|---|---|
+| `SA_UI_HOST` | – (Pflicht) | Hostname der Weboberfläche, etwa `assets.example.test` |
+| `SA_AGENT_HOST` | – (Pflicht) | Hostname für Agents, etwa `agents.example.test` |
+| `SA_UI_TLS` | – (Pflicht) | E-Mail-Adresse für ACME (Let's Encrypt) oder `internal` für ein Zertifikat der internen CA von Caddy |
+| `SA_BIND_ADDRESS` | alle Adressen | Adresse, an die die Ports gebunden werden |
+| `SA_HTTP_PORT` | `80` | Port für HTTP (Weiterleitung und ACME) |
+| `SA_UI_PORT` | `443` | Port für HTTPS, gemeinsam für Oberfläche und Agents |
+| `SA_AGENT_SEPARATE_PORT` | `8443` | eigener Port für Agents, nur mit `docker-compose.agent-port.yml` |
+| `SA_LOG_LEVEL` | `INFO` | `DEBUG`, `INFO`, `WARNING` oder `ERROR` |
+| `SA_EXTENSIONS` | `enterprise,isms` | eingebaute Erweiterungen; leer für nur die Community-Edition |
+
+### Agents und Dokumente
+
+| Variable | Standard | Bedeutung |
+|---|---|---|
+| `SA_AGENT_AUTO_UPDATE` | `true` | Updates der Agents anbieten; `false` schaltet das ab |
+| `SA_AGENT_VERSION` | Version des Stands | Version der Agent-Builds unter `/downloads/agent/` |
+| `SA_DOCUMENT_MAX_BYTES` | `26214400` (25 MiB) | größte Datei beim Hochladen |
+| `SA_CLAMAV_SOCKET` | leer | `/run/clamav/clamd.sock` mit dem Profil `scanner`, siehe unten |
+
+### Netzfreigaben
+
+Verbindungen, die SentryAssets nach außen aufbaut, gehen nur in Netze, die Sie erlauben. Listen sind durch Kommas getrennt; `public` steht für alle global gerouteten Adressen. Eine gesetzte Liste ersetzt den Standard.
+
+| Variable | Standard | Für |
+|---|---|---|
+| `SA_DIRECTORY_ALLOWED_NETWORKS` | private Netze | Domänencontroller (Active Directory) |
+| `SA_NOTIFICATION_ALLOWED_NETWORKS` | `public` | Ziele von Benachrichtigungen |
+| `SA_ASSISTANT_ALLOWED_NETWORKS` | `public` | Modell des KI-Assistenten |
+| `SA_HYPERVISOR_ALLOWED_NETWORKS` | private Netze | Proxmox VE und vCenter (Pro) |
+| `SA_SIEM_ALLOWED_NETWORKS` | private Netze | SIEM-Ziele (Pro) |
+| `SA_TICKET_ALLOWED_NETWORKS` | private Netze | Ticketsysteme (Pro) |
+| `SA_EGRESS_DENIED_EXTRA` | leer | weitere gesperrte Adressen, etwa die LAN- und öffentliche Adresse des Hosts und `172.17.0.1/32` für `docker0` |
+
+Private Netze sind `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `100.64.0.0/10` und `fc00::/7`. Ein Ziel im eigenen Netz geben Sie möglichst als einzelne Adresse frei, etwa `public,192.168.10.5/32`.
+
+Immer gesperrt, auch innerhalb erlaubter Netze: die Netze der eigenen Container (`172.30.248.0/21`), Loopback, Link-local, Metadaten-Adressen von Cloud-Anbietern und reservierte Bereiche. Kollidiert `172.30.248.0/21` mit einem lokalen Netz, ändern Sie den Bereich in der Compose-Datei an allen Stellen gemeinsam.
+
+### Mehrere Instanzen und externe Dienste
+
+| Variable | Standard | Bedeutung |
+|---|---|---|
+| `SA_API_REPLICAS`, `SA_GATEWAY_REPLICAS`, `SA_WORKER_REPLICAS` | `2` | Zahl der Instanzen mit `docker-compose.ha.yml` |
+| `SA_DATABASE_HOST` | `postgres` | PostgreSQL; ein anderer Host braucht TLS |
+| `SA_DATABASE_SSLMODE` | `disable` | `disable`, `verify-ca` oder `verify-full` |
+| `SA_VALKEY_HOST` | `valkey` | Valkey; ein anderer Host braucht TLS |
+| `SA_VALKEY_TLS` | `false` | TLS zu Valkey |
+
+In Produktion startet SentryAssets nicht, wenn die Verbindung zu PostgreSQL oder Valkey unverschlüsselt wäre und der Host kein Dienstname des Compose-Netzes ist. Siehe [Hochverfügbarkeit](/pro/hochverfuegbarkeit/).
+
+### Images
+
+| Variable | Standard | Bedeutung |
+|---|---|---|
+| `SA_IMAGE_REGISTRY` | `localhost` | Präfix der Image-Namen |
+| `SA_VERSION` | `latest` | Tag der Images |
+
+## Einstellungen für eine Override-Datei
+
+Diese Werte setzt die Compose-Datei nicht von selbst. Tragen Sie sie bei den Diensten `api` und, wo nötig, `worker` in einer `docker-compose.override.yml` ein:
+
+```yaml title="docker-compose.override.yml"
+services:
+  api:
+    environment:
+      SA_SESSION_IDLE_MINUTES: "20"
+      SA_OIDC_ISSUER: https://login.example.test/realms/recplast
+      SA_OIDC_CLIENT_ID: sentryassets
+      SA_OIDC_ROLE_MAPPING: sa-admins=admin,sa-isb=isb,sa-it=editor
+      SA_OIDC_CLIENT_SECRET_FILE: /run/secrets/oidc_client_secret
+    secrets: [oidc_client_secret]
+secrets:
+  oidc_client_secret:
+    file: ./secrets/oidc_client_secret
+```
+
+| Variable | Standard | Bedeutung |
+|---|---|---|
+| `SA_SESSION_IDLE_MINUTES` | `30` | Leerlauf bis zum Ende der Sitzung (5–240) |
+| `SA_SESSION_ABSOLUTE_HOURS` | `12` | höchste Laufzeit einer Sitzung (1–24) |
+| `SA_OIDC_ISSUER` | – | Issuer des Identity Providers (https) |
+| `SA_OIDC_CLIENT_ID` | – | Client-ID |
+| `SA_OIDC_CLIENT_SECRET_FILE` | – | Datei mit dem Client-Secret |
+| `SA_OIDC_ROLE_CLAIM` | `groups` | Claim mit den Gruppen |
+| `SA_OIDC_ROLE_MAPPING` | – | Paare `Gruppe=Rolle`, durch Kommas getrennt |
+| `SA_EMERGENCY_ACCESS` | `auto` | Notfallzugang: `auto` (aus, sobald OIDC aktiv ist), `enabled`, `disabled` |
+| `SA_CONTACT_RETENTION_DAYS` | `365` | archivierte Ansprechpartner nach dieser Zeit zur Löschung vorschlagen (30–3650) |
+| `SA_DOCUMENT_QUOTA_BYTES` | 20 GiB | Summe aller Dokumentversionen je Organisation |
+| `SA_DOCUMENT_TRANSFERS` | `2` | gleichzeitige Uploads und Downloads je API-Instanz; jede hält eine Datei im Speicher, erhöhen Sie dann auch `mem_limit` der API |
+| `SA_DOCUMENT_UPKEEP_MINUTES` | `60` | Abstand der Pflege des Dokumentenspeichers; `0` schaltet sie ab |
+
+OIDC lässt sich auch in der Oberfläche einrichten ([Einrichtung](/guides/einrichtung/)); die Server-Konfiguration hat dann Vorrang.
+
+## Virenscanner
+
+```bash
+# in der .env: SA_CLAMAV_SOCKET=/run/clamav/clamd.sock
+docker compose --profile scanner up -d
+# Signaturen aktualisieren, etwa täglich per Timer
+docker compose --profile scanner-update run --rm clamav-update
+```
+
+Der Scanner hat kein Netz; die API erreicht ihn über einen Socket. Ist ein Scanner eingetragen, aber nicht erreichbar, werden Uploads abgelehnt statt ungeprüft gespeichert. Ohne Scanner weist die Oberfläche auf ungeprüfte Dateien hin.
+
+## Vorgeschalteter Proxy
+
+Steht vor Caddy ein weiterer Reverse-Proxy, muss er Anfragen bis zu diesen Größen durchlassen: Dokumente bis `SA_DOCUMENT_MAX_BYTES`, die Kataloge des IT-Grundschutzes (`/api/v1/grundschutz/catalog`, `/api/v1/kompendium/catalog`) bis 16 MiB. Für Agents reicht er TLS unverändert durch (TCP), denn Caddy prüft deren Client-Zertifikate selbst.

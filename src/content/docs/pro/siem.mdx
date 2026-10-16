@@ -1,0 +1,41 @@
+---
+title: SIEM-Export
+description: Mit Pro leitet SentryAssets das Audit-Log laufend an bis zu drei SIEM-Ziele weiter, per Syslog über TLS, JSON Lines über HTTPS oder Splunk HEC.
+sidebar:
+  label: SIEM-Export
+  order: 7
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Das Audit-Log geht laufend an bis zu drei Ziele, sobald Einträge entstehen.
+
+## Formate
+
+| Ziel | Übertragung |
+|---|---|
+| Syslog | RFC 5424 über TLS, Standard-Port 6514 |
+| JSON Lines | HTTPS, optional mit Bearer-Token |
+| Splunk | HTTP Event Collector |
+
+Jeder Eintrag ist die Zeile des Datei-Exports mit ihrem Hash; das SIEM kann die Kette also nachrechnen.
+
+## Einrichten
+
+<Steps>
+
+1. Öffnen Sie **SIEM-Export** und legen Sie ein Ziel an.
+2. Wählen Sie, ob das Ziel **alle Einträge** oder nur **Sicherheitsereignisse** erhält (Anmeldungen, Benutzer und Rollen, Agents, Zertifikate, das Audit-Log selbst, Sicherungen und mehr).
+3. Wählen Sie den Beginn: ab jetzt oder mit allen bisherigen Einträgen.
+4. Eine Testnachricht muss ankommen, bevor das Ziel Einträge erhält.
+
+</Steps>
+
+## Verhalten
+
+- Der Job-Worker sendet jede Minute, mindestens einmal und in der Reihenfolge, in der die Einträge entstanden.
+- Ein Ziel, das nicht antwortet, wird mit wachsender Pause bis 15 Minuten erneut versucht und hält kein anderes auf. Ins Log kommt nur der Wechsel zwischen „funktioniert“ und „scheitert“.
+- Erreicht werden nur Netze, die der Betreiber erlaubt (`SA_SIEM_ALLOWED_NETWORKS`, Standard: private Netze; `public` für ein SIEM im Internet), über TLS 1.3 mit Zertifikatsprüfung.
+- Das Token wird verschlüsselt gespeichert und bei einer Änderung des Ziels erneut verlangt.

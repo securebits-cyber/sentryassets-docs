@@ -1,0 +1,81 @@
+---
+title: Einrichtung
+description: Nach der Installation den Einrichtungsassistenten durchlaufen, die Anmeldung mit OIDC einrichten und den Notfallzugang verstehen.
+sidebar:
+  label: Einrichtung
+  order: 2
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Nach der [Installation](/guides/installation/) melden Sie sich mit dem Notfallkonto an. Der Einrichtungsassistent führt durch die Grundeinrichtung; jeden Schritt finden Sie später auch unter **Einstellungen**.
+
+## Einrichtungsassistent
+
+Der Assistent öffnet sich bei der ersten Anmeldung und steht danach unter **Einstellungen › Einrichtungsassistent**. Er führt in dieser Reihenfolge durch:
+
+1. **Organisation:** Name Ihrer Organisation; er erscheint in der Seitenleiste und auf Etiketten.
+2. **Standort:** der erste Standort im Standortbaum (Standort, Gebäude, Etage, Raum).
+3. **Anmeldung:** OIDC einrichten und testen (siehe unten).
+4. **Erster Agent:** ein Rollout-Token erzeugen und den fertigen Installationsbefehl kopieren (siehe [Agents](/guides/agents/)).
+
+In einer leeren Installation bietet der Assistent zusätzlich an, **Beispieldaten** zu laden: eine erfundene Firma mit Standorten, Personen, Lieferanten, Geräten, Beziehungen, Lizenzen und Verträgen. Sie lassen sich in einem Schritt wieder entfernen; Beispieleinträge, auf die Ihre eigenen Daten verweisen oder die Sie geändert haben, bleiben erhalten. Solange Beispieldaten geladen sind, sagt die Übersicht das.
+
+## Anmeldung mit OIDC
+
+SentryAssets meldet Personen über Ihren Identity Provider an (OpenID Connect mit Authorization Code und PKCE, etwa Entra ID, Keycloak, Authentik oder Okta). Konten entstehen mit der ersten Anmeldung; die Rolle folgt bei jeder Anmeldung den Gruppen.
+
+<Steps>
+
+1. Legen Sie beim Identity Provider eine vertrauliche Anwendung (mit Client-Secret) für SentryAssets an:
+   - Weiterleitungsadresse: `https://<SA_UI_HOST>/api/v1/auth/oidc/callback`
+   - Adresse nach der Abmeldung: `https://<SA_UI_HOST>/login`
+   - Der Provider liefert die Gruppen im Claim `groups` (der Name ist mit `SA_OIDC_ROLE_CLAIM` einstellbar).
+
+2. Tragen Sie unter **Einstellungen › Anmeldung** Issuer, Client-ID, Client-Secret und die Zuordnung von Gruppen zu Rollen als Entwurf ein, zum Beispiel `sa-admins=admin` und `sa-auditors=auditor`. Die Rollen erklärt [Rollen und Rechte](/reference/rollen/).
+
+3. Prüfen Sie den Entwurf mit einer **Testanmeldung** mit einem Konto, das nach der Zuordnung Administrator ist. Aktivieren lässt sich nur ein erfolgreich getesteter Entwurf.
+
+4. **Aktivieren** Sie die Anmeldung. Ab jetzt melden sich alle über OIDC an.
+
+</Steps>
+
+Jede Änderung an der Anmeldung verlangt eine frische Bestätigung: beim Notfallkonto den Einmalcode, bei OIDC-Konten eine erneute Anmeldung beim Identity Provider.
+
+- **Keine passende Gruppe:** Die Anmeldung wird abgelehnt.
+- **Mehrere Gruppen:** Es gilt die Rolle mit den meisten Rechten.
+- **Rechte entzogen:** Bei jeder Erneuerung der Sitzung prüft SentryAssets, ob das Konto noch aktiv ist. Entzogene Gruppen wirken spätestens bei der nächsten Anmeldung. Mit [SCIM](/pro/scim/) wirkt eine Sperre sofort.
+- **Sitzungen:** Leerlauf 30 Minuten, absolute Laufzeit 12 Stunden (`SA_SESSION_IDLE_MINUTES`, `SA_SESSION_ABSOLUTE_HOURS`).
+
+### OIDC über die Server-Konfiguration
+
+Alternativ legen Sie OIDC in einer `docker-compose.override.yml` mit `SA_OIDC_ISSUER`, `SA_OIDC_CLIENT_ID`, `SA_OIDC_ROLE_MAPPING` und `SA_OIDC_CLIENT_SECRET_FILE` (als Secret-Datei) fest. Diese Konfiguration hat Vorrang; die Oberfläche zeigt sie dann nur an.
+
+## Notfallzugang
+
+Das Notfallkonto entsteht nur auf dem Server (`cli admin create-emergency`), nie über die Oberfläche. Es meldet sich in einem Schritt mit Benutzername, Passwort und Einmalcode an; Passwörter sind mit Argon2id gespeichert, und nach Fehlversuchen wird das Konto mit wachsender Wartezeit gesperrt.
+
+Sobald OIDC aktiv ist, ist der Notfallzugang automatisch abgeschaltet. Für den Ausfall des Identity Providers bleiben diese Befehle auf dem Server:
+
+```bash
+# OIDC aus der Oberfläche abschalten; danach gilt wieder der Notfallzugang
+docker compose run --rm cli admin disable-oidc
+
+# Neues TOTP-Geheimnis für ein Notfallkonto, laufende Sitzungen enden
+docker compose run --rm cli admin reset-totp --username notfall
+```
+
+<Aside>
+Ob der Notfallzugang neben OIDC aktiv bleibt, steuert `SA_EMERGENCY_ACCESS` (`auto`, `enabled`, `disabled`). Lassen Sie es bei `auto`, außer Sie haben einen guten Grund.
+</Aside>
+
+## Benutzer verwalten
+
+Unter **Einstellungen › Benutzer** sehen Sie alle Konten mit Rolle, Status und letzter Anmeldung. **Deaktivieren** entzieht den Zugriff sofort, mit „Rückgängig“ im Hinweis. Eine Administration und ein Weg zur Anmeldung bleiben immer bestehen. Einladungen und Startpasswörter gibt es nicht, weil Konten mit der ersten OIDC-Anmeldung entstehen.
+
+## Weitere Einstellungen
+
+- **Verzeichnisdienste:** Abgleich der Computer mit dem Active Directory per LDAPS, siehe [Funktionen](/reference/funktionen/#verzeichnis).
+- **Benachrichtigungen:** Webhook und Gotify für gewählte Ereignisse, siehe [Funktionen](/reference/funktionen/#benachrichtigungen).
+- **KI-Assistent:** standardmäßig aus, siehe [KI-Assistent](/reference/ki-assistent/).
+- **Lizenz und Edition:** Lizenzschlüssel und Testzeitraum, siehe [Lizenz und Editionen](/guides/lizenz/).

@@ -1,0 +1,35 @@
+---
+title: Schutzbedarfsvererbung
+description: Mit Pro leitet SentryAssets den Schutzbedarf entlang der Abhängigkeiten nach dem Maximumprinzip ab, mit Kumulations- und Verteilungseffekt.
+sidebar:
+  label: Schutzbedarfsvererbung
+  order: 1
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Ein Server, auf dem eine wichtige Anwendung läuft, braucht mindestens deren Schutzbedarf. SentryAssets leitet das entlang der Beziehungen im Inventar ab, nach dem **Maximumprinzip** des BSI-Standards 200-2 (Kap. 8.2): Je Schutzziel gilt der höchste Schutzbedarf dessen, was von einem Objekt abhängt.
+
+## Wie vererbt wird
+
+- **Host** erbt von dem, was auf ihm läuft (etwa der Server von seinen VMs und Anwendungen);
+- **Anbieter** erbt von dem, was von ihm abhängt (etwa der Switch von den Servern dahinter);
+- **Teil** erbt von seinem Ganzen;
+- über mehrere Stufen, je Schutzziel (Vertraulichkeit, Integrität, Verfügbarkeit), mit Herkunft und Weg jedes Werts.
+
+Zwei Effekte, die der Standard nennt, berücksichtigen Sie mit Begründung:
+
+- **Kumulationseffekt:** Viele Objekte mit normalem Schutzbedarf können zusammen einen höheren ergeben, etwa ein Host mit vielen VMs.
+- **Verteilungseffekt:** Ist eine Anwendung redundant auf mehrere Server verteilt, kann der einzelne Server einen geringeren Schutzbedarf haben.
+
+## Vorschläge übernehmen
+
+Die Seite **Schutzbedarfsvererbung** zeigt je Asset den vorgeschlagenen Schutzbedarf und den aktuellen. Sie übernehmen Vorschläge bewusst, einzeln oder bis zu 100 auf einmal; „Rückgängig“ läuft über die Massenbearbeitung des Inventars. Nichts ändert sich von selbst.
+
+## Grafik der Abhängigkeiten
+
+Ein Asset steht in der Mitte, seine Nachbarn bis zu drei Schritte entfernt darum. Pfeile zeigen, wo Schutzbedarf weitergegeben wird; jedes Kästchen trägt die Farbe seines Schutzbedarfs. Ein Klick oder `Enter` macht ein anderes Asset zur Mitte. Die Seite **Abhängigkeiten** führt dorthin.
+
+Die Ergebnisse unterstützen Ihre Entscheidung; festgelegt wird der Schutzbedarf von Ihnen.

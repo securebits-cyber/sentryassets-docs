@@ -1,0 +1,75 @@
+---
+title: High availability
+description: Run SentryAssets with several instances of API, agent gateway and job worker, on one host or across several hosts with TLS to database and Valkey.
+sidebar:
+  label: High availability
+  order: 14
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+By default SentryAssets runs one instance each of API, agent gateway and job worker. To keep running while one instance fails or is updated, start several. The Compose files for this are part of every edition.
+
+## What several instances carry
+
+| Service | Several instances | Why |
+|---|---|---|
+| API | yes | sessions, sign-in flows, CSRF tokens and rate limits are in Valkey; background tasks run only once per installation |
+| Agent gateway | yes | replay protection, revocation list and certificate checks in the database |
+| Job worker | yes | jobs are fetched with a row lock, each runs once |
+| Caddy | one instance per host | spreads over the instances in its own Compose network |
+
+Some settings are kept briefly by each instance: the sign-in method up to 10 seconds, unlocking by licence or trial up to 30 seconds, a deactivated issuing CA in the gateway up to 5 minutes. Limits for concurrent exports and transfers apply per instance.
+
+## On one host
+
+```bash
+cd deploy/compose
+docker compose -f docker-compose.yml -f docker-compose.ha.yml up -d
+```
+
+Two of each by default; `SA_API_REPLICAS`, `SA_GATEWAY_REPLICAS` and `SA_WORKER_REPLICAS` in `.env` change that.
+
+Caddy finds the instances through DNS in the container network and looks again every five seconds. If no connection to an instance comes about, Caddy tries the next one in turn for up to five seconds. After an error it repeats reading requests, never writing ones.
+
+<Aside type="caution" title="Hanging instances">
+Caddy does not notice an instance that accepts connections but hangs. Docker marks it unhealthy through its health check but does not restart it by itself. Watch `docker compose ps` and restart such an instance.
+</Aside>
+
+### Updating
+
+```bash
+git pull
+docker compose -f docker-compose.yml -f docker-compose.ha.yml build
+docker compose -f docker-compose.yml -f docker-compose.ha.yml run --rm migrate
+docker compose -f docker-compose.yml -f docker-compose.ha.yml up -d api gateway worker caddy
+```
+
+Requests may fail briefly until the new instances are ready; the action can then be repeated. A version whose schema does not allow old and new instances side by side for a moment says so in its notes.
+
+## Across several hosts
+
+With instances on several hosts, data leave the container network. Then: **every connection across hosts with TLS 1.3 and certificate verification.** In production SentryAssets does not start if the connection to PostgreSQL or Valkey on a host with a dot in its name or an IP address would be unencrypted.
+
+```bash
+# in .env:
+#   SA_DATABASE_HOST=db.example.test     SA_DATABASE_SSLMODE=verify-full
+#   SA_VALKEY_HOST=valkey.example.test   SA_VALKEY_TLS=true
+# the servers' CA certificates in secrets/database_ca.pem and secrets/valkey_ca.pem
+docker compose -f docker-compose.yml -f docker-compose.external-data.yml -f docker-compose.ha.yml up -d
+```
+
+`docker-compose.external-data.yml` mounts the CA certificates as secrets and gives the services networks of their own to the outside, one for API and worker and a separate one for the gateway. **Allow these networks (`172.30.255.0/24`) in the host's firewall only to the ports of database and Valkey**; the gateway is reachable from the internet and would otherwise get a way into the local network.
+
+- **Database:** PostgreSQL with streaming replication and automatic failover, for example with Patroni, behind an address that always points to the primary; a certificate for that name. `pg_hba.conf` only for the application hosts, only `hostssl` and `scram-sha-256`. The separate roles stay separate.
+- **Valkey:** with Sentinel or as a managed service, with TLS 1.3; the ACL users stay separate. An outage ends sessions.
+- **Caddy** forwards only to instances in its own Compose network, never across the LAN.
+- **Document storage:** every API instance needs the same `documents` directory. The files are encrypted; still limit a shared file system to the application hosts and authenticate it (NFS with `sec=krb5p`).
+- **Secrets:** `master_key`, `gateway_proxy_secret` and the passwords of the database roles and Valkey must be the same on every host. Distribute them by a secure way, readable only by the service user.
+- **Agent PKI:** every Caddy instance needs the `pki` volume with the private key of the endpoint certificate; secure ways only here as well. `pki rotate` writes the bundle of issuing CAs only on the host it runs on; distribute it to every host before restarting the proxies.
+- **Load balancer in front of the hosts:** pass TLS for agents and web UI through unchanged (TCP). Caddy then sees only the load balancer's address; rate limits per source IP apply to everyone together, and the audit log names the wrong address. The PROXY protocol is planned.
+
+## Limitations
+
+- Database, Valkey and the shared document storage are single points of failure unless they are run highly available themselves.
+- Running across several hosts is not tested in every environment.

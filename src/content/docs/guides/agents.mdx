@@ -1,0 +1,98 @@
+---
+title: Agents
+description: Den SentryAssets-Agent unter Linux und Windows ausrollen, Geräte freigeben, sperren und aktualisieren.
+sidebar:
+  label: Agents
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Der Agent erfasst Inventar und Zustand eines Geräts und meldet sie an Ihren Server. Er **liest nur**, baut **nur ausgehende** Verbindungen auf und kann keine Befehle, Skripte oder Dateien des Servers ausführen. Auf den Geräten wird außer dem Agent nichts installiert; die Befehle nutzen nur, was das Betriebssystem mitbringt.
+
+## Was der Agent erfasst
+
+| Bereich | Inhalt |
+|---|---|
+| System | Hostname, Betriebssystem und Version, Laufzeit |
+| Hardware | Hersteller, Modell, Seriennummer, CPU, Arbeitsspeicher, Datenträger |
+| Netzwerk | Schnittstellen mit MAC- und IP-Adressen, Durchsatz je Schnittstelle |
+| Software | installierte Programme mit Version und Hersteller; übertragen nur, wenn sich die Liste geändert hat |
+| Zustand | Auslastung von CPU, Arbeitsspeicher, Platten und, soweit der Treiber sie meldet, Grafikkarte |
+| Hyper-V | auf einem Hyper-V-Host die Gäste, wenn die Verbindung „Hyper-V über den Agent“ eingerichtet ist ([Virtualisierung](/pro/virtualisierung/)) |
+
+Dateiinhalte, Browserverläufe, Tastatur- oder Bildschirmdaten, Verbindungen und Prozesse erfasst der Agent nie.
+
+**Plattformen:** Linux (x86-64, ARM64) mit systemd und Windows (x86-64) als Dienst. Ein Agent für macOS ist geplant.
+
+## Agent ausrollen
+
+<Steps>
+
+1. Öffnen Sie **Agents** und wählen Sie **Rollout-Token erzeugen**.
+
+2. Legen Sie fest:
+   - **Bezeichnung**, zum Beispiel Standort oder Gerätegruppe;
+   - **Gültig für (Stunden, höchstens 168)**, Standard 24;
+   - **Maximale Anzahl Geräte**;
+   - **Standort der neuen Assets (optional)**;
+   - **Neue Agents erst nach Freigabe zulassen**, wenn jedes Gerät einzeln bestätigt werden soll.
+
+3. **Token erzeugen.** Das Token wird **nur einmal angezeigt**; der Server speichert nur seinen Hash. Kopieren Sie es jetzt.
+
+4. Wählen Sie die Plattform und kopieren Sie den fertigen Installationsbefehl. Er lädt den Agent von Ihrem Server, prüft die SHA-256-Prüfsumme und bricht bei Abweichung vor der Installation ab.
+
+5. Führen Sie den Befehl auf dem Gerät aus, unter Linux als root, unter Windows in einer PowerShell als Administrator. Fragt der Agent nach dem Rollout-Token, fügen Sie es ein; die Eingabe bleibt unsichtbar und erscheint weder in der Befehlszeile noch in der Historie.
+
+</Steps>
+
+Der Agent prüft zuerst, ob er Ihren Server erreicht und dessen CA zum Fingerprint im Befehl passt, und fragt erst dann nach dem Token. Ohne passenden Fingerprint bricht er ab; ein „Trust on First Use“ gibt es nicht.
+
+### Softwareverteilung
+
+Für Ansible, Skripte und ähnliche Werkzeuge legen Sie das Token vorher in der Datei ab, die im Befehl steht, unter Linux mit Besitzer root und Rechten `0600`, unter Windows nur für SYSTEM und Administratoren lesbar. Andere Dateien verweigert der Agent. Nach erfolgreicher Registrierung löscht er die Datei.
+
+## Ergebnis prüfen
+
+- Das Gerät erscheint unter **Agents**, mit Freigabe zunächst als **ausstehend**. Geben Sie es frei; ohne Freigabe sperrt das System einen ausstehenden Agent nach 7 Tagen und widerruft sein Zertifikat (die Frist ist bis 30 Tage einstellbar).
+- Nach dem ersten Inventar erscheint das Gerät als Asset mit Hardware, Software und Zustand.
+- Die Liste zeigt standardmäßig nur Agents, die Aufmerksamkeit brauchen (Freigabe ausstehend, seit einem Tag keine Meldung, Zertifikat läuft bald ab), alle auf Wunsch.
+
+## Sperren
+
+Ein gesperrter Agent wird bei jeder Anfrage abgewiesen; sein Zertifikat steht auf der Sperrliste. Ein Rollout-Token **widerrufen** Sie ebenso unter **Agents**; bereits registrierte Geräte bleiben davon unberührt.
+
+## Zertifikate und Erneuerung
+
+Jeder Agent erzeugt sein eigenes Schlüsselpaar (ECDSA P-256), das das Gerät nie verlässt, und erhält ein Zertifikat für 30 Tage. Ab Tag 20 erneuert er es selbst, jedes Mal mit einem **neuen** Schlüssel. Verbindungen laufen ausschließlich über mTLS mit TLS 1.3 gegen die bei der Registrierung gepinnte CA.
+
+## Updates
+
+Agents aktualisieren sich selbst, aber nur auf Versionen, die der Hersteller offline signiert hat (Ed25519, Schlüssel im Agent eingebaut). Ein übernommener Server kann daher keine fremde Version verteilen.
+
+- Nur höhere Versionen, nie ein Rückschritt; jedes Gerät wartet nach dem ersten Angebot eine feste Zeit von bis zu 24 Stunden.
+- Server-seitig abschalten: `SA_AGENT_AUTO_UPDATE=false` in der `.env`.
+- Sofort installieren auf einem Linux-Gerät:
+
+  ```bash
+  sudo /opt/sentryassets-agent/bin/sentryassets-agent update
+  sudo systemctl restart sentryassets-agent
+  ```
+
+- Rückfall: `sentryassets-agent.previous` (Linux) bzw. `sentryassets-agent.exe.old` (Windows) zurückbenennen und den Dienst neu starten.
+
+## Härtung auf dem Gerät
+
+- **Linux:** systemd-Unit mit Sandbox (unter anderem `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `MemoryDenyWriteExecute`, Systemaufruf-Filter). Schreibrechte nur im eigenen Programmverzeichnis und im Zustandsverzeichnis `/var/lib/sentryassets-agent`.
+- **Windows:** Dienst; Zustandsverzeichnis `%ProgramData%\SentryAssets\Agent` nur für SYSTEM und Administratoren. Daten über WMI mit festen, lesenden Abfragen, kein PowerShell-Aufruf.
+- Der Agent verweigert den Start, wenn Verzeichnis oder Dateien für andere lesbar sind.
+
+<Aside type="caution" title="Bekannte Einschränkungen">
+Der private Schlüssel liegt bisher in einer Datei mit strengen Rechten; TPM und CNG sind vorbereitet. Windows-Binaries sind noch nicht mit Authenticode signiert, was SmartScreen oder Virenscanner melden können.
+</Aside>
+
+## Fehlerbehebung
+
+- **„Server nicht erreichbar“:** Die Meldung nennt Host und Port. Prüfen Sie DNS, Routen, Firewalls und, falls gesetzt, den Proxy des Geräts. Eine TLS-Inspektion durch einen Proxy bricht mTLS bewusst; nehmen Sie den Agent-Host dort aus.
+- **Uhrzeit:** Zertifikate brauchen eine korrekte Uhr. Der Agent erkennt eine Abweichung und meldet sie.
+- **Neu registrieren:** den Dienst vorher anhalten (`sudo systemctl stop sentryassets-agent`), danach neu starten. Der Befehl aus dem Rollout-Dialog tut das selbst.

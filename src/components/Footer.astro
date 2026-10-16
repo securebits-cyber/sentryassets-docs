@@ -1,0 +1,25 @@
+---
+// Starlight's footer (pagination, edit link, last updated) plus the vendor line, in the
+// language of the page. "Registered trademark" only once the mark is registered.
+import Default from '@astrojs/starlight/components/Footer.astro';
+
+const { locale } = Astro.locals.starlightRoute;
+const vendor =
+	locale === 'en'
+		? 'SentryAssets is a product of SecureBits Cyber Security UG (haftungsbeschränkt)'
+		: 'SentryAssets ist ein Produkt der SecureBits Cyber Security UG (haftungsbeschränkt)';
+---
+
+<Default />
+<p class="sa-vendor">{vendor}</p>
+
+<style>
+	.sa-vendor {
+		margin-top: 1.5rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--sl-color-gray-5);
+		font-size: var(--sl-text-xs);
+		color: var(--sl-color-gray-3);
+		text-align: center;
+	}
+</style>

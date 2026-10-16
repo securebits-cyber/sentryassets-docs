@@ -1,0 +1,49 @@
+---
+title: Entra ID and Intune
+description: With Pro, SentryAssets reads devices and people from Microsoft Entra ID and Intune, read-only, and matches them with assets and owners.
+sidebar:
+  label: Entra ID and Intune
+  order: 4
+---
+
+import { Badge, Steps, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+SentryAssets reads devices and people from Microsoft Entra ID, if wanted with compliance, ownership, serial number and primary user from Intune. It only reads, in the background at an interval of your choice.
+
+## Permissions
+
+The app registration needs application permissions with an administrator's consent, all read-only:
+
+| Permission | For |
+|---|---|
+| `Device.Read.All` | devices |
+| `User.Read.All` | people |
+| `GroupMember.Read.All` | people from the chosen groups only |
+| `DeviceManagementManagedDevices.Read.All` | optional, details from Intune |
+
+## Setting up
+
+The page **Entra ID and Intune** leads through these steps:
+
+<Steps>
+
+1. **Enter directory and app:** tenant ID and application ID of the app registration.
+2. Choose one of the two ways to sign in:
+   - **Upload the certificate to the app** (recommended): SentryAssets creates the certificate on the server; the private key never leaves it.
+   - **Enter a client secret:** stored encrypted and never shown again.
+3. **Test the connection:** the test names each missing permission in plain words.
+4. **Switch the sync on** and choose the groups people are read from.
+
+</Steps>
+
+## Matching
+
+- **Devices** match assets by serial number or MAC address, **people** match owners by e-mail address.
+- A match by name alone or on a personal device is only offered and needs a confirmation.
+- **Nothing reaches the inventory by itself:** new devices become assets and new people owners in bulk; differing details are taken over field by field. Each entry can be linked by hand, ignored or reset.
+
+<Aside>
+Disconnecting deletes the settings, the key and everything read. Assets and owners stay.
+</Aside>

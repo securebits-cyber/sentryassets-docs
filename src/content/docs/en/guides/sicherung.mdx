@@ -1,0 +1,78 @@
+---
+title: Backup and migration
+description: Back up the SentryAssets installation encrypted, verify it, restore it on another server and renew the agent PKI.
+sidebar:
+  label: Backup and migration
+  order: 6
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+A backup holds the database, the documents and the files of the agent PKI in **one** file, encrypted with the master key. It also moves the installation to another server.
+
+## Backing up
+
+```bash
+docker compose run --rm backup create --keep 14   # new backup, the 14 newest are kept
+docker compose run --rm backup list               # backups in the volume backups
+docker compose run --rm backup verify <name>      # full check without writing anything
+docker compose run --rm -T backup create --stdout > sentryassets.sabak   # straight to the host
+```
+
+- Best every night from a timer or cron job, for example:
+
+  ```bash
+  0 2 * * * cd /opt/sentryassets/deploy/compose && docker compose run --rm backup create --keep 14
+  ```
+
+- Copy the files to another system regularly.
+- **System health** shows the last backup and warns when it is missing, older than two days or a later one failed.
+- Every backup and restore is recorded in the audit log.
+
+<Aside type="danger" title="No restore without the master key">
+The backup is encrypted with `./secrets/master_key`. Keep the key apart from the backups. No backup contains the key of the root CA (`root-ca.p12`); it stays offline.
+</Aside>
+
+## Restoring or moving
+
+<Steps>
+
+1. Prepare the installation on the new server as described under [Installation](/en/guides/installation/), up to and including `generate-secrets.sh` and `docker compose build`.
+
+2. Take `./secrets/master_key` from the old server. The other secrets may be new.
+
+3. Start **only** the database and restore the backup:
+
+   ```bash
+   docker compose up -d postgres
+   docker compose run --rm -T backup restore - < sentryassets.sabak
+   docker compose up -d
+   ```
+
+4. `cli setup` and `cli pki init` are not needed; both come from the backup. Agents find the new server as soon as `SA_AGENT_HOST` points to it in DNS. Everyone signs in again.
+
+</Steps>
+
+- A backup is restored only into an **empty** database, with the same or a newer version. If `docker compose up` already ran on the new server, remove the database volume first (`docker compose down` and `docker volume rm sentryassets_postgres-data`).
+- Before it commits, the restore checks every foreign key. The command names date and age of the backup.
+- Afterwards repeat what happened since the backup: block agents, rollout and status tokens again, deactivate accounts again, set changed emergency passwords again. Agents that renewed their certificate after the backup enrol again with a new rollout token.
+- Restore only backups from your own storage: anyone with the master key can build a valid file.
+
+## Renewing the agent PKI
+
+The issuing CA and the certificate of the agent endpoint are valid for one year; **System health** warns 60 days before. They are renewed with the root key from the offline medium:
+
+```bash
+docker compose run --rm -v /media/offline:/offline:ro cli pki rotate --root-key /offline/root-ca.p12
+docker compose restart caddy
+```
+
+The command asks for the passphrase and issues both again for the same names. **Restart the proxy by the time the command names**, usually 24 hours later. Until then the previous issuing CA keeps issuing, and it stays valid until it ends, so no agent drops out. If the command reports that the files were not all replaced, do not restart the proxy and run the command again.
+
+## Checking the audit chain
+
+```bash
+docker compose run --rm cli audit verify
+```
+
+The job worker also checks the chain regularly; **System health** shows when it last did.

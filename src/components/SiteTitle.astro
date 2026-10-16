@@ -1,0 +1,57 @@
+---
+// Wordmark "sentryassets." with the line ASSET MANAGEMENT below (design system of the
+// app): Roboto Bold, tracking -0.04em, "sentry" and the dot in signal blue, "assets" in
+// the text colour, the line below in Roboto Mono.
+//
+// A component rather than an SVG: an SVG in an <img> is a document of its own and does
+// not see the self-hosted fonts of the page. On small screens the line below would take
+// too much height in the narrow header and is left out.
+const { locale } = Astro.locals.starlightRoute;
+const href = locale ? `/${locale}/` : '/';
+---
+
+<a {href} class="sa-lockup">
+	<span class="sa-wordmark"
+		><span class="sa-brand">sentry</span>assets<span class="sa-brand" aria-hidden="true">.</span
+		></span
+	>
+	<span class="sa-tagline" aria-hidden="true">Asset Management</span>
+</a>
+
+<style>
+	.sa-lockup {
+		display: inline-flex;
+		flex-direction: column;
+		line-height: 1;
+		text-decoration: none;
+	}
+	.sa-wordmark {
+		font-family: var(--__sl-font);
+		font-weight: 700;
+		font-size: var(--sl-text-xl);
+		letter-spacing: -0.04em;
+		color: var(--sl-color-white);
+		white-space: nowrap;
+	}
+	.sa-brand {
+		color: var(--sa-brand);
+	}
+	.sa-tagline {
+		align-self: flex-end;
+		font-family: var(--sl-font-mono);
+		font-size: 8px;
+		letter-spacing: 0.32em;
+		text-transform: uppercase;
+		color: var(--sl-color-gray-3);
+		margin-top: 0.3em;
+		/* The tracking adds space on the right; without this the line would stand too far
+		   to the left under the wordmark. */
+		margin-right: -0.32em;
+		white-space: nowrap;
+	}
+	@media (max-width: 50rem) {
+		.sa-tagline {
+			display: none;
+		}
+	}
+</style>

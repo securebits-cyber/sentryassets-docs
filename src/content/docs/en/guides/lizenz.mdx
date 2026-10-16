@@ -1,0 +1,63 @@
+---
+title: Licence and editions
+description: The editions of SentryAssets, the trial without a key, entering a licence key and the Elastic License 2.0.
+sidebar:
+  label: Licence and editions
+  order: 7
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Every edition is in the same image. Without a licence the additional areas are visible, with a lock and an explanation of what they do; the server refuses their requests on its own. A licence key or the trial unlocks them at once.
+
+## Editions
+
+| Edition | For | Contains |
+|---|---|---|
+| **Community** | everyone, without a licence key and without a limit on assets | the whole core: inventory, agents, collector, IT-Grundschutz, licences, contracts, racks and more ([Features](/en/reference/funktionen/)) |
+| **Pro** | teams with up to 500, 1,500 or 5,000 assets | in addition every function under [Pro and Enterprise](/en/pro/schutzbedarf/) |
+| **Enterprise** | large and distributed environments from 5,000 assets | everything in Pro, plus a support contract with agreed response times |
+| **ISMS add-on** | adds to Pro or Enterprise | the information security management system ([ISMS add-on](/en/pro/isms/)) |
+
+## Trial
+
+With the trial you try **every** function of Pro, Enterprise and the ISMS add-on once for 30 days, without a key and without an internet connection.
+
+<Steps>
+
+1. Open **Settings › License and edition**.
+2. Choose **Try for 30 days**. The page shows until when the trial runs.
+3. Enter a licence key before it ends if you want to go on.
+
+</Steps>
+
+Afterwards the community edition applies again. **Your data are kept**; the additional areas are locked until you enter a licence key. With a valid key no trial is offered.
+
+## Entering a licence key
+
+<Steps>
+
+1. You get the key through the shop on [sentry-assets.de](https://sentry-assets.de).
+2. Enter it under **Settings › License and edition**.
+3. The page shows what the key unlocks, the asset limit and the term.
+
+</Steps>
+
+- The key is checked **offline**, through a signature of the vendor. The installation needs no internet connection for it and sends no usage data.
+- One key applies per organisation.
+- After the term the community edition applies again; all data are kept.
+
+<Aside>
+To run the community edition alone, set `SA_EXTENSIONS=` (empty) in `.env` and rebuild the images. The areas of the extensions are then missing, and so is the trial.
+</Aside>
+
+## The software licence
+
+SentryAssets is **source-available**, and every edition is licensed under the **Elastic License 2.0** (`Elastic-2.0`).
+
+- You may use, change and pass on the software.
+- You may not offer it to third parties as a hosted or managed service or circumvent its licence key functionality.
+- The software is provided without warranty (section "No Liability" of the licence).
+- Third-party components keep their own licences.
+
+The full text is in the file `LICENSE` in the repository.

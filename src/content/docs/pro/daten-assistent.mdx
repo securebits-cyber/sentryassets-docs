@@ -1,0 +1,42 @@
+---
+title: Daten-Assistent
+description: Mit Pro beantwortet eine KI Fragen über Ihr eigenes Inventar in eigenen Worten, mit festen, nur lesenden Abfragen und den Rechten der fragenden Person.
+sidebar:
+  label: Daten-Assistent
+  order: 13
+---
+
+import { Badge, Aside, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Der Daten-Assistent ist eine **KI**. Er beantwortet Fragen über Ihre eigenen Daten in eigenen Worten, etwa „Welche Server mit hohem Schutzbedarf haben keine verantwortliche Person?“. Er nutzt das Sprachmodell, das für den [KI-Assistenten](/reference/ki-assistent/) eingerichtet ist.
+
+<Aside type="caution" title="Daten gehen an den Anbieter des Modells">
+Anders als der Hilfe-Assistent erhält das Modell hier **Ergebnisse aus Ihrem Inventar**: bis zu 25 Assets mit festen Feldern wie Name, Kategorie, Standort und Zustand, Zählungen, Software-Zahlen und offene Abweichungen. Notizen, Dokumente, Zugangsdaten und Einstellungen erhält es nie. Nutzen Sie ein Modell, dem Sie diese Daten anvertrauen, etwa ein eigenes Modell im eigenen Netz.
+</Aside>
+
+## Wie eine Antwort entsteht
+
+1. Das Modell wählt bis zu drei **nur lesende** Abfragen aus einer festen Liste: Assets finden, Assets zählen, Software finden, offene Abweichungen von Prüfregeln.
+2. SentryAssets prüft jede Abfrage streng und führt sie mit den **Rechten der fragenden Person** aus.
+3. Das Modell antwortet nur aus den Ergebnissen. Die Ergebnisse stehen unter der Antwort mit ihren Filtern, Zahlen und einem Link in die Asset-Liste.
+
+Ergebnisse können keine weiteren Abfragen auslösen. Antworten mit Links oder verborgenen Zeichen werden nicht gezeigt.
+
+## Einschalten
+
+<Steps>
+
+1. Richten Sie zuerst den [KI-Assistenten](/reference/ki-assistent/) ein.
+2. Die Administration schaltet den Daten-Assistenten auf der Seite **Daten-Assistent** eigens ein, nach bestätigter Anmeldung.
+3. Optional: Namen verantwortlicher Personen gehen nur mit einem **zweiten Schalter** mit.
+
+</Steps>
+
+- Die Zustimmung gilt für den Endpunkt des Modells zu diesem Zeitpunkt. Ändert sich der Endpunkt, erhält er nichts, bis erneut zugestimmt wird.
+- Weder Frage noch Antwort werden gespeichert.
+- Fragen stellen Administration, Informationssicherheit, Bearbeitung und Prüfung; höchstens 20 Fragen je Person und Stunde.
+- Der Assistent hat keine schreibenden Abfragen und ändert nie Daten.
+
+Antworten der KI können falsch sein; die gelisteten Ergebnisse sind die Grundlage. Unterstützung, keine Prüfung.

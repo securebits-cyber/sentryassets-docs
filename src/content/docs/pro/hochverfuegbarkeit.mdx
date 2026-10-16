@@ -1,0 +1,75 @@
+---
+title: Hochverfügbarkeit
+description: SentryAssets mit mehreren Instanzen von API, Agent-Gateway und Job-Worker betreiben, auf einem Host oder über mehrere Hosts mit TLS zu Datenbank und Valkey.
+sidebar:
+  label: Hochverfügbarkeit
+  order: 14
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+SentryAssets läuft standardmäßig mit je einer Instanz von API, Agent-Gateway und Job-Worker. Für einen Betrieb, der den Ausfall oder die Aktualisierung einer Instanz übersteht, starten Sie mehrere. Die Compose-Dateien dafür gehören zu jeder Edition.
+
+## Was mehrere Instanzen tragen
+
+| Dienst | Mehrere Instanzen | Warum |
+|---|---|---|
+| API | ja | Sitzungen, Anmeldeabläufe, CSRF-Token und Rate-Limits liegen in Valkey; Hintergrundaufgaben laufen je Installation nur einmal |
+| Agent-Gateway | ja | Replay-Schutz, Sperrliste und Zertifikatsprüfung in der Datenbank |
+| Job-Worker | ja | Aufträge werden mit Zeilensperre geholt, jeder läuft einmal |
+| Caddy | eine Instanz je Host | verteilt auf die Instanzen im eigenen Compose-Netz |
+
+Einige Einstellungen merkt sich jede Instanz kurz selbst: die Anmeldeart bis zu 10 Sekunden, die Freischaltung durch Lizenz oder Testzeitraum bis zu 30 Sekunden, eine deaktivierte Issuing-CA im Gateway bis zu 5 Minuten. Grenzen für gleichzeitige Exporte und Übertragungen gelten je Instanz.
+
+## Auf einem Host
+
+```bash
+cd deploy/compose
+docker compose -f docker-compose.yml -f docker-compose.ha.yml up -d
+```
+
+Standard sind je zwei Instanzen; `SA_API_REPLICAS`, `SA_GATEWAY_REPLICAS` und `SA_WORKER_REPLICAS` in der `.env` ändern das.
+
+Caddy findet die Instanzen über DNS im Container-Netz und fragt alle fünf Sekunden neu. Kommt zu einer Instanz keine Verbindung zustande, versucht Caddy bis zu fünf Sekunden lang reihum die nächste. Lesende Anfragen wiederholt Caddy nach einem Fehler, schreibende nie.
+
+<Aside type="caution" title="Hängende Instanzen">
+Eine Instanz, die Verbindungen annimmt, aber hängt, erkennt Caddy nicht. Docker markiert sie über ihren Healthcheck als ungesund, startet sie aber nicht von selbst neu. Überwachen Sie `docker compose ps` und starten Sie eine solche Instanz neu.
+</Aside>
+
+### Aktualisieren
+
+```bash
+git pull
+docker compose -f docker-compose.yml -f docker-compose.ha.yml build
+docker compose -f docker-compose.yml -f docker-compose.ha.yml run --rm migrate
+docker compose -f docker-compose.yml -f docker-compose.ha.yml up -d api gateway worker caddy
+```
+
+Kurz können Anfragen scheitern, bis die neuen Instanzen bereit sind; die Aktion lässt sich dann wiederholen. Eine Version, deren Schema alte und neue Instanzen nicht kurz nebeneinander erlaubt, nennt das in ihren Hinweisen.
+
+## Über mehrere Hosts
+
+Laufen Instanzen auf mehreren Hosts, verlassen Daten das Container-Netz. Dann gilt: **jede Verbindung über Hostgrenzen mit TLS 1.3 und Zertifikatsprüfung.** In Produktion startet SentryAssets nicht, wenn die Verbindung zu PostgreSQL oder Valkey auf einem Host mit Punkt im Namen oder einer IP-Adresse unverschlüsselt wäre.
+
+```bash
+# in der .env:
+#   SA_DATABASE_HOST=db.example.test     SA_DATABASE_SSLMODE=verify-full
+#   SA_VALKEY_HOST=valkey.example.test   SA_VALKEY_TLS=true
+# die CA-Zertifikate der Server nach secrets/database_ca.pem und secrets/valkey_ca.pem
+docker compose -f docker-compose.yml -f docker-compose.external-data.yml -f docker-compose.ha.yml up -d
+```
+
+`docker-compose.external-data.yml` hängt die CA-Zertifikate als Secrets ein und gibt den Diensten eigene Netze nach außen, eines für API und Worker und ein getrenntes für das Gateway. **Erlauben Sie diese Netze (`172.30.255.0/24`) in der Firewall des Hosts nur zu den Ports von Datenbank und Valkey**; das Gateway ist aus dem Internet erreichbar und erhielte sonst einen Weg ins lokale Netz.
+
+- **Datenbank:** PostgreSQL mit Streaming-Replikation und automatischem Umschalten, etwa mit Patroni, hinter einer Adresse, die immer auf den Primärserver zeigt; Zertifikat für diesen Namen. `pg_hba.conf` nur für die Hosts der Anwendung, nur `hostssl` und `scram-sha-256`. Die getrennten Rollen bleiben getrennt.
+- **Valkey:** mit Sentinel oder als verwalteter Dienst, mit TLS 1.3; die ACL-Benutzer bleiben getrennt. Ein Ausfall beendet Sitzungen.
+- **Caddy** leitet nur an Instanzen im eigenen Compose-Netz weiter, nie über das LAN.
+- **Dokumentenspeicher:** Alle API-Instanzen brauchen dasselbe Verzeichnis `documents`. Die Dateien sind verschlüsselt; beschränken Sie ein gemeinsames Dateisystem trotzdem auf die Hosts der Anwendung und authentisieren Sie es (NFS mit `sec=krb5p`).
+- **Geheimnisse:** `master_key`, `gateway_proxy_secret` und die Passwörter von Datenbankrollen und Valkey müssen auf allen Hosts gleich sein. Verteilen Sie sie über einen sicheren Weg, nur für den Dienstbenutzer lesbar.
+- **Agent-PKI:** Das Volume `pki` mit dem privaten Schlüssel des Endpunkt-Zertifikats brauchen alle Caddy-Instanzen; auch dafür nur sichere Wege. `pki rotate` schreibt das Bündel der Issuing-CAs nur auf dem Host, auf dem es läuft; verteilen Sie es danach auf alle Hosts, bevor Sie die Proxys neu starten.
+- **Load Balancer vor den Hosts:** TLS für Agents und Oberfläche unverändert durchreichen (TCP). Caddy sieht dann nur die Adresse des Load Balancers; Rate-Limits je Quell-IP gelten für alle zusammen, und das Audit-Log nennt die falsche Adresse. Das PROXY-Protokoll ist geplant.
+
+## Einschränkungen
+
+- Datenbank, Valkey und der gemeinsame Dokumentenspeicher sind einzelne Ausfallpunkte, solange sie nicht eigens hochverfügbar betrieben werden.
+- Der Betrieb über mehrere Hosts ist nicht in jeder Umgebung erprobt.

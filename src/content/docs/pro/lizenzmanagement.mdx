@@ -1,0 +1,32 @@
+---
+title: Lizenzmanagement
+description: Mit Pro vergleicht SentryAssets Lizenzen mit der installierten Software, zeigt Kosten im Verlauf, Budgets mit Prognose und führt Verlängerungen.
+sidebar:
+  label: Lizenzmanagement
+  order: 6
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro. Die Lizenzverwaltung selbst gehört zur Community-Edition.
+
+## Soll-Ist-Abgleich
+
+Jede Lizenz erhält die Produkte aus dem Software-Inventar, die sie abdeckt, von Hand aus Vorschlägen gewählt. Die Seite **Lizenzmanagement** zeigt je Lizenz:
+
+- die Geräte, auf denen die Software installiert ist;
+- die Plätze, die ihr Lizenzmodell verlangt (je Benutzer: jede verantwortliche Person einmal);
+- gekaufte und zugeordnete Plätze;
+- Geräte mit der Software, aber ohne Platz, und ungenutzte Plätze.
+
+Lizenzen mit zu wenigen Plätzen stehen oben. Installierte Software ohne Lizenz wird gelistet; Systemkomponenten und freie Software lassen sich ausblenden.
+
+## Kosten, Budgets und Prognose
+
+- Die Kosten aus Lizenzen und Verträgen werden monatlich festgehalten und für die letzten 24 Monate gezeigt.
+- **Budgets** je Jahr, Kategorie und Währung legen Administration und Informationssicherheit fest.
+- Die **Prognose** für das Jahr zieht Lizenzen ab, deren Verlängerung abgelehnt ist, ab ihrem Ende.
+
+## Verlängerungen
+
+Lizenzen, die innerhalb eines Zeitraums Ihrer Wahl enden, und abgelaufene werden zu **Verlängerungen** mit Stand (offen, in Prüfung, verlängern, kündigen, erledigt), verantwortlicher Person, Termin, Notiz und der Entscheidung mit Begründung. Eine Verlängerung kann das neue Ende in die Lizenz schreiben, mit dem Recht, Lizenzen zu ändern. Verlängerungen, die innerhalb von 30 Tagen enden und noch keine Entscheidung haben, stehen oben.

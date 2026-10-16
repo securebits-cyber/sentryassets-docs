@@ -1,0 +1,59 @@
+---
+title: API
+description: Die REST-API von SentryAssets, Status-Meldungen aus einem Monitoring und die Grenzen des Maschinenzugangs.
+sidebar:
+  label: API
+  order: 8
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Die Weboberfläche nutzt eine REST-API unter `https://<SA_UI_HOST>/api/v1/…`. Diese API ist an die Sitzung der Oberfläche gebunden (Cookie und CSRF-Token). Für Maschinen gibt es bewusst nur Zugänge mit einem eng begrenzten Zweck.
+
+## Maschinenzugang
+
+| Zugang | Wofür | Darf |
+|---|---|---|
+| Status-Token | Zustände aus einem vorhandenen Monitoring melden | nur `POST /api/v1/status-reports`; kein Lesen, kein Ändern |
+| SCIM-Token ([Pro](/pro/scim/)) | Benutzer und Gruppen aus dem Identity Provider übertragen | Zugänge beenden und Rollen senken, nie gewähren |
+
+Alle Tokens haben 256 Bit, werden nur einmal angezeigt, nur als Hash gespeichert, laufen nach höchstens einem Jahr ab, sind widerrufbar und haben eigene Rate-Limits.
+
+<Aside>
+Einen allgemeinen API-Schlüssel zum Lesen oder Ändern des Inventars gibt es nicht. So kann ein gestohlener Schlüssel nie mehr als seinen einen Zweck.
+</Aside>
+
+## Status-Meldungen
+
+Ein Monitoring wie Checkmk, Zabbix oder Uptime Kuma meldet den Zustand eines Assets. SentryAssets zeigt ihn in der Ampel des Assets, neben dem, was der Agent meldet.
+
+1. Legen Sie unter **Einstellungen › Status-Tokens** ein Token an (Gültigkeit bis 365 Tage). Es beginnt mit `sa_sts_` und wird nur einmal angezeigt.
+2. Die Kennung eines Assets (`asset_id`) steht in seiner Adresse in der Oberfläche.
+3. Melden Sie den Zustand:
+
+```bash
+curl --fail -X POST "https://assets.example.test/api/v1/status-reports" \
+  -H "Authorization: Bearer $SA_STATUS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"asset_id": "<asset-uuid>", "state": "warning", "message": "Backup-Job seit 2 Tagen fehlgeschlagen"}'
+```
+
+| Feld | Werte |
+|---|---|
+| `asset_id` | UUID des Assets |
+| `state` | `ok`, `warning`, `critical` oder `unknown` |
+| `message` | optional, bis 300 druckbare Zeichen |
+
+Antwort `204` ohne Inhalt. Eine Meldung ist höchstens 4 KiB groß; je Token sind bis zu 1 200 Meldungen je Minute möglich.
+
+## Health-Endpunkte
+
+`/health/live` und `/health/ready` von API und Gateway antworten ohne Anmeldung und ohne interne Details. Sie dienen den Healthchecks der Container; Caddy reicht sie nicht nach außen weiter.
+
+## Agent-Protokoll
+
+Agents und Collectors sprechen über einen eigenen Host (`SA_AGENT_HOST`) das Protokoll `agent/v1` mit mTLS. Es ist keine öffentliche Schnittstelle für eigene Programme; siehe [Architektur](/reference/architektur/#agent-verbindung).
+
+## Export von Daten
+
+Für die Weitergabe von Daten nutzen Sie die Exporte der Oberfläche: Asset-Liste als CSV, Anforderungspaket des IT-Grundschutzes als CSV, Audit-Log als JSON Lines, Kostenbericht als CSV. Mit [Pro](/pro/siem/) geht das Audit-Log laufend an ein SIEM.

@@ -1,0 +1,84 @@
+---
+title: Häufige Fragen
+description: Antworten auf häufige Fragen zu SentryAssets – Lizenz, Betrieb, Agents, Datenschutz und IT-Grundschutz.
+sidebar:
+  label: Häufige Fragen
+  order: 9
+---
+
+<details>
+<summary>Unter welcher Lizenz steht SentryAssets?</summary>
+
+SentryAssets ist quelloffen und steht mit allen Editionen unter der Elastic License 2.0. Der Quellcode ist öffentlich, und Sie dürfen ihn nutzen, ändern und weitergeben. Nicht erlaubt ist, SentryAssets Dritten als gehosteten oder verwalteten Dienst anzubieten oder die Funktion der Lizenzschlüssel zu umgehen.
+
+</details>
+
+<details>
+<summary>Was kostet die Community-Edition?</summary>
+
+Nichts. Die Community-Edition braucht keinen Lizenzschlüssel und hat keine Grenze für die Zahl der Assets. Pro, Enterprise und das ISMS-Add-on erhalten Sie über den Shop auf sentry-assets.de.
+
+</details>
+
+<details>
+<summary>Sendet SentryAssets Daten an den Hersteller?</summary>
+
+Nein. Die Installation sendet keine Nutzungsdaten, und Lizenzschlüssel werden offline geprüft. Verbindungen nach außen entstehen nur durch Funktionen, die Sie selbst einrichten, etwa den Identity Provider oder den KI-Assistenten.
+
+</details>
+
+<details>
+<summary>Kann ich Pro testen, ohne zu kaufen?</summary>
+
+Ja. Unter Einstellungen › Lizenz und Edition starten Sie einmalig einen Testzeitraum von 30 Tagen mit allen Funktionen von Pro, Enterprise und dem ISMS-Add-on, ohne Schlüssel. Danach gilt wieder die Community-Edition; Ihre Daten bleiben erhalten.
+
+</details>
+
+<details>
+<summary>Kann der Server über den Agent Befehle auf meinen Geräten ausführen?</summary>
+
+Nein. Der Agent liest nur und baut nur ausgehende Verbindungen auf. Einen Mechanismus, um Befehle, Skripte oder Dateien des Servers auszuführen, gibt es nicht. Updates nimmt er nur an, wenn der Hersteller sie signiert hat; auch ein übernommener Server kann keine fremde Version verteilen.
+
+</details>
+
+<details>
+<summary>Muss ich auf den Geräten etwas nachinstallieren?</summary>
+
+Nein. Der Installationsbefehl nutzt nur, was das Betriebssystem mitbringt, unter Linux etwa curl, wget oder python3, je nachdem, was vorhanden ist. Installiert wird nur der Agent selbst.
+
+</details>
+
+<details>
+<summary>Gibt es einen Agent für macOS?</summary>
+
+Noch nicht. Ein Agent für macOS ist geplant. Bis dahin erfassen Sie Macs über den Collector, über Entra ID und Intune (Pro) oder von Hand.
+
+</details>
+
+<details>
+<summary>Läuft SentryAssets auch mit Podman?</summary>
+
+Die Compose-Dateien sind für Docker und Podman ausgelegt, jeweils rootless; ein vollständiger Test mit Podman steht noch aus. Mit Podman setzen Sie für die Ports 80 und 443 `net.ipv4.ip_unprivileged_port_start=80`.
+
+</details>
+
+<details>
+<summary>Welche Variante des IT-Grundschutzes soll ich nehmen?</summary>
+
+Für einen Neueinstieg ohne bisherige Grundschutz-Dokumentation passt Grundschutz++. Wer jetzt ein Zertifikat nach ISO 27001 auf Basis von IT-Grundschutz anstrebt oder ein bestehendes Sicherheitskonzept weiterführt, nimmt die Edition 2023. Die Seite Grundschutz vergleicht beide Varianten.
+
+</details>
+
+<details>
+<summary>Ersetzt SentryAssets eine Prüfung oder Zertifizierung?</summary>
+
+Nein. SentryAssets unterstützt beim Vorgehen, dokumentiert und erinnert. Ob Anforderungen erfüllt sind, entscheiden Sie; ein Audit bleibt Aufgabe einer Prüferin oder eines Prüfers.
+
+</details>
+
+<details>
+<summary>Wie sichere ich SentryAssets?</summary>
+
+Mit `docker compose run --rm backup create --keep 14`, am besten jede Nacht. Die Sicherung enthält Datenbank, Dokumente und Agent-PKI in einer verschlüsselten Datei. Bewahren Sie den Master-Schlüssel getrennt davon auf. Mehr unter Sicherung und Umzug.
+
+</details>

@@ -1,0 +1,64 @@
+---
+title: Fehlerbehebung
+description: Häufige Probleme bei Installation, Anmeldung, Agents, Uploads und Konnektoren von SentryAssets und wie Sie sie lösen.
+sidebar:
+  label: Fehlerbehebung
+  order: 10
+---
+
+Zuerst hilft fast immer ein Blick in die Logs:
+
+```bash
+docker compose ps
+docker compose logs --tail 100 <dienst>
+```
+
+Fehlermeldungen an die Oberfläche sind allgemein gehalten; die Details stehen im Log mit derselben Korrelations-ID.
+
+## Installation und Start
+
+| Problem | Ursache und Lösung |
+|---|---|
+| Ein Dienst startet nicht und nennt eine unsichere Einstellung | Ein Geheimnis steht direkt in der Umgebung statt als Datei, oder eine Pflichtangabe fehlt. Die Meldung nennt die Einstellung, nie den Wert. |
+| `migrate` endet mit Fehler | Die Datenbank ist nicht erreichbar oder ein Secret fehlt. `../../scripts/generate-secrets.sh` erzeugt fehlende Secrets, dann `docker compose up -d postgres` und `docker compose run --rm migrate`. |
+| Anmeldung liefert Fehler 500 nach einem abgebrochenen Start | Container mit fehlenden Netzwerk-Aliasen. `docker compose up -d --force-recreate` erzeugt sie neu. |
+| Start verweigert wegen unverschlüsselter Verbindung | PostgreSQL oder Valkey liegen auf einem anderen Host ohne TLS. Siehe [Hochverfügbarkeit](/pro/hochverfuegbarkeit/). |
+| Ports 80 oder 443 sind nicht verfügbar | Rootless Docker oder Podman dürfen keine niedrigen Ports öffnen, siehe [Installation](/guides/installation/#voraussetzungen). |
+| Zertifikat wird nicht ausgestellt | Für ACME müssen Port 80 und 443 aus dem Internet erreichbar sein und die DNS-Namen auf den Server zeigen. Im internen Netz `SA_UI_TLS=internal` setzen. |
+
+## Anmeldung
+
+| Problem | Ursache und Lösung |
+|---|---|
+| OIDC-Anmeldung wird abgelehnt | Keine Gruppe des Kontos passt zur Zuordnung, oder der Claim heißt anders als `groups`. Prüfen Sie die Zuordnung unter **Einstellungen › Anmeldung**. |
+| Identity Provider nicht erreichbar | `docker compose run --rm cli admin disable-oidc`; danach gilt wieder der Notfallzugang. |
+| Notfallkonto gesperrt oder Authenticator verloren | `docker compose run --rm cli admin reset-totp --username <name>` |
+| Sitzung endet unerwartet | Nach 30 Minuten Leerlauf oder 12 Stunden endet jede Sitzung. Ein deaktiviertes Konto verliert die Sitzung bei der nächsten Erneuerung. |
+
+## Agents und Collector
+
+| Problem | Ursache und Lösung |
+|---|---|
+| „Server nicht erreichbar“ bei der Registrierung | DNS, Routen oder Firewall zwischen Gerät und Server. Die Meldung nennt Host und Port. |
+| Registrierung bricht wegen der CA ab | Der Fingerprint im Befehl passt nicht zur Root-CA, oder ein Proxy bricht TLS auf. Nehmen Sie den Agent-Host von der TLS-Inspektion aus. |
+| Token abgelehnt | abgelaufen, aufgebraucht oder widerrufen. Erzeugen Sie ein neues. |
+| Agent erscheint nicht als Asset | Er wartet auf Freigabe unter **Agents**. Ohne Freigabe wird er nach der Frist gesperrt. |
+| Agent meldet sich nicht mehr | Zertifikat abgelaufen (Uhrzeit des Geräts prüfen) oder Agent gesperrt. Ein gesperrter Agent braucht ein neues Rollout-Token. |
+| Collector findet keine MAC-Adressen | Er steht in einem anderen Netzsegment. |
+
+## Uploads und Dokumente
+
+| Problem | Ursache und Lösung |
+|---|---|
+| Datei zu groß | Grenze `SA_DOCUMENT_MAX_BYTES`, Standard 25 MiB. Ein vorgeschalteter Proxy kann eine eigene, kleinere Grenze haben; die Oberfläche nennt ihn dann als Ursache. |
+| Upload abgelehnt, Scanner nicht erreichbar | Ein Virenscanner ist eingetragen, läuft aber nicht. `docker compose --profile scanner up -d`. |
+| Speicher voll | Die Summe aller Versionen je Organisation ist begrenzt (`SA_DOCUMENT_QUOTA_BYTES`). |
+| Katalog des BSI lässt sich nicht einlesen | Die Datei ist größer als 16 MiB, oder ein vorgeschalteter Proxy begrenzt die Größe. |
+
+## Verbindungen nach außen
+
+Benachrichtigungen, Verzeichnisdienst, KI-Assistent und Konnektoren erreichen nur Netze, die Sie freigeben. Ein Ziel im eigenen Netz braucht die passende Variable, etwa `SA_NOTIFICATION_ALLOWED_NETWORKS=public,192.168.10.5/32` ([Konfiguration](/reference/konfiguration/#netzfreigaben)). Ziele brauchen TLS 1.3 und ein gültiges Zertifikat; für eine eigene CA hinterlegen Sie deren Zertifikat in der jeweiligen Verbindung.
+
+## Systemzustand
+
+Die Seite **Systemzustand** zeigt, ob Datenbank, Valkey, Job-Worker und Virenscanner antworten. Wartet ein Auftrag lange über seine Zeit hinaus, läuft der Worker vermutlich nicht: `docker compose logs worker`.

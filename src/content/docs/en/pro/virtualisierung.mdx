@@ -1,0 +1,39 @@
+---
+title: Virtualisation
+description: With Pro, SentryAssets reads hosts and virtual machines from Proxmox VE, vCenter and Hyper-V, read-only, and assigns VMs to their host.
+sidebar:
+  label: Virtualisation
+  order: 5
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+SentryAssets reads hosts and virtual machines in the background at an interval of your choice (1 to 168 hours). A VM "runs on" the asset of its host.
+
+## Supported systems
+
+| System | Access |
+|---|---|
+| **Proxmox VE** | one node of the cluster, port 8006, API token of a user with the role `PVEAuditor` on `/` (read-only) |
+| **VMware vCenter** 7.0 Update 2 or newer | port 443, a user with the role "Read-only"; single ESXi hosts without vCenter lack the API needed |
+| **Hyper-V** | through the agent on the host: add the connection "Hyper-V through agent" once; the agent reads the guests through WMI, read-only, with what Windows brings along |
+
+## Security
+
+- Each connection is tested first, step by step in plain words, with the negotiated TLS version.
+- The certificate is always verified, against the hypervisor's own CA if you add it (Proxmox `pve-root-ca`, vCenter VMCA).
+- TLS 1.3; vCenter before 8.0 Update 3 can only do TLS 1.2 and is then spoken to with ECDHE and AEAD only. The page recommends the TLS profile with 1.3.
+- Only networks the operator allows are reached (`SA_HYPERVISOR_ALLOWED_NETWORKS`, private networks by default).
+- Token secret and password are stored sealed and never shown. If kind, host, port or CA change, the secret must be entered again.
+
+## Matching
+
+- VMs match assets by the MAC addresses the hypervisor gave them.
+- A match by name alone, a host or an asset that is no VM is only offered.
+- **Nothing reaches the inventory by itself:** machines and hosts become assets in bulk with a proposed category; differing details such as vCPU, memory, operating system or the host after a move are taken over field by field.
+
+<Aside>
+On a Hyper-V host the agent reports at most 1,000 guests with name, ID, state, vCPU, memory, MAC addresses and BIOS GUID.
+</Aside>

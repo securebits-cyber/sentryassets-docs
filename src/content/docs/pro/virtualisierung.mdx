@@ -1,0 +1,39 @@
+---
+title: Virtualisierung
+description: Mit Pro liest SentryAssets Hosts und virtuelle Maschinen aus Proxmox VE, vCenter und Hyper-V, nur lesend, und ordnet VMs ihrem Host zu.
+sidebar:
+  label: Virtualisierung
+  order: 5
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+SentryAssets liest Hosts und virtuelle Maschinen im Hintergrund in einem Abstand Ihrer Wahl (1 bis 168 Stunden). Eine VM „läuft auf“ dem Asset ihres Hosts.
+
+## Unterstützte Systeme
+
+| System | Zugang |
+|---|---|
+| **Proxmox VE** | ein Knoten des Clusters, Port 8006, API-Token eines Benutzers mit der Rolle `PVEAuditor` auf `/` (nur lesend) |
+| **VMware vCenter** ab 7.0 Update 2 | Port 443, Benutzer mit der Rolle „Nur lesen“; einzelne ESXi-Hosts ohne vCenter haben die nötige API nicht |
+| **Hyper-V** | über den Agent auf dem Host: einmal die Verbindung „Hyper-V über den Agent“ anlegen; der Agent liest die Gäste über WMI, nur lesend, mit Bordmitteln von Windows |
+
+## Sicherheit
+
+- Jede Verbindung wird zuerst getestet, Schritt für Schritt in einfachen Worten, mit der ausgehandelten TLS-Version.
+- Das Zertifikat wird immer geprüft, gegen die eigene CA des Hypervisors, wenn Sie sie hinterlegen (Proxmox `pve-root-ca`, vCenter VMCA).
+- TLS 1.3; vCenter vor 8.0 Update 3 kann nur TLS 1.2 und wird dann nur mit ECDHE und AEAD angesprochen. Die Seite empfiehlt das TLS-Profil mit 1.3.
+- Erreicht werden nur Netze, die der Betreiber erlaubt (`SA_HYPERVISOR_ALLOWED_NETWORKS`, Standard: private Netze).
+- Token-Geheimnis und Passwort werden versiegelt gespeichert und nie angezeigt. Ändern sich Art, Host, Port oder CA, ist das Geheimnis neu einzugeben.
+
+## Abgleich
+
+- VMs passen zu Assets über die MAC-Adressen, die der Hypervisor ihnen gegeben hat.
+- Ein Treffer nur über den Namen, ein Host oder ein Asset, das keine VM ist, wird nur angeboten.
+- **Nichts gelangt von selbst ins Inventar:** Maschinen und Hosts werden gesammelt zu Assets mit vorgeschlagener Kategorie; abweichende Angaben wie vCPU, Arbeitsspeicher, Betriebssystem oder der Host nach einem Umzug übernehmen Sie Feld für Feld.
+
+<Aside>
+Auf einem Hyper-V-Host meldet der Agent höchstens 1 000 Gäste mit Name, Kennung, Zustand, vCPU, Arbeitsspeicher, MAC-Adressen und BIOS-GUID.
+</Aside>

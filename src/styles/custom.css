@@ -1,0 +1,178 @@
+/* SentryAssets design system -> Starlight theme.
+ * The values are the design tokens of the SentryAssets web UI. This file is the only
+ * place with colour values; components use the variables below.
+ * Signal blue is the one accent; info and AI are violet, never blue.
+ */
+
+/* Roboto and Roboto Mono, self-hosted: no external requests. */
+@font-face {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('../fonts/roboto.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Roboto Mono';
+	font-style: normal;
+	font-weight: 100 700;
+	font-display: swap;
+	src: url('../fonts/roboto-mono.woff2') format('woff2');
+}
+
+/* Dark theme: cool blue-black (the app's dark tokens). */
+:root {
+	--sl-font: 'Roboto';
+	--sl-font-mono: 'Roboto Mono';
+
+	--sl-color-accent-low: #172f63; /* brand-900 */
+	--sl-color-accent: #2f66e6; /* brand-500 */
+	--sl-color-accent-high: #8daefa; /* brand-300, text accent on dark */
+
+	--sl-color-white: #f3f5f9; /* text-primary */
+	--sl-color-gray-1: #dce1ea; /* between text-primary and text-secondary */
+	--sl-color-gray-2: #b4bbc8; /* text-secondary */
+	--sl-color-gray-3: #8b93a3; /* text-muted */
+	--sl-color-gray-4: #5f6778; /* text-disabled */
+	--sl-color-gray-5: #323a4b; /* border-strong */
+	--sl-color-gray-6: #161a23; /* surface-card */
+	--sl-color-black: #0b0d12; /* bg-page */
+
+	/* Asides "note" and badges "note" carry the violet of info and AI. */
+	--sl-color-blue-low: #241d3d;
+	--sl-color-blue: #9b82ec; /* info-500 on dark */
+	--sl-color-blue-high: #d4c8fa;
+
+	--sa-brand: #2f66e6; /* brand-500, the wordmark in both themes */
+	--sa-tint-brand: rgba(47, 102, 230, 0.16); /* tint-brand */
+	--sa-text-brand: #8daefa; /* text-brand */
+	--sa-border-subtle: #232937; /* border-subtle */
+	--sa-glow-brand: 0 6px 18px rgba(47, 102, 230, 0.22); /* glow-brand */
+	--sa-on-brand: #ffffff; /* text-on-brand */
+	--sa-action: #2f66e6; /* action */
+	--sa-action-hover: #2352c4; /* action-hover */
+}
+
+/* Light theme: bright, airy, white cards and cool hairlines. */
+:root[data-theme='light'] {
+	--sl-color-accent-low: #dbe6fe; /* brand-100 */
+	--sl-color-accent: #2352c4; /* brand-600, contrast on white */
+	--sl-color-accent-high: #1b3a80; /* brand-800 */
+
+	--sl-color-white: #17191f; /* text-primary */
+	--sl-color-gray-1: #3a3f49;
+	--sl-color-gray-2: #565c66; /* text-secondary */
+	--sl-color-gray-3: #686e7a; /* text-muted */
+	--sl-color-gray-4: #b7bdc6; /* text-disabled */
+	--sl-color-gray-5: #dee0e6; /* border-strong */
+	--sl-color-gray-6: #ecedf1; /* border-subtle */
+	--sl-color-gray-7: #f5f6f8; /* bg-sunken */
+	--sl-color-black: #fbfbfc; /* bg-page */
+
+	--sl-color-blue-low: #f1ecfc; /* info-bg */
+	--sl-color-blue: #7c5cd6; /* info-500 */
+	--sl-color-blue-high: #6340bf; /* info-400 */
+
+	--sa-tint-brand: #eef4ff; /* tint-brand */
+	--sa-text-brand: #2352c4; /* text-brand */
+	--sa-border-subtle: #ecedf1; /* border-subtle */
+}
+
+/* Titles: bold, slightly negative tracking. */
+.sl-markdown-content h1,
+.sl-markdown-content h2,
+.sl-markdown-content h3,
+.hero h1,
+h1#_top {
+	letter-spacing: -0.02em;
+	font-weight: 700;
+}
+
+/* Every action is a pill; the primary one is solid signal blue. */
+.sl-link-button {
+	border-radius: 9999px;
+}
+.sl-link-button.primary {
+	background: var(--sa-action);
+	border: 0;
+	color: var(--sa-on-brand);
+	box-shadow: var(--sa-glow-brand);
+}
+.sl-link-button.primary:hover {
+	background: var(--sa-action-hover);
+}
+
+/* The search field as a pill. */
+site-search button[data-open-modal] {
+	border-radius: 9999px;
+}
+
+/* Badges as pills. */
+.sl-badge {
+	border-radius: 9999px;
+}
+
+/* Active sidebar entry: brand tint and a 3-px bar on the left instead of a full fill. */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+	background-color: var(--sa-tint-brand);
+	color: var(--sa-text-brand);
+	box-shadow: inset 3px 0 0 var(--sl-color-accent);
+}
+
+/* Cards: radius-lg (16 px) with a hairline. */
+.sl-markdown-content .card {
+	border-radius: 1rem;
+	border-color: var(--sa-border-subtle);
+}
+
+/* Visible focus everywhere (WCAG 2.4.7). */
+:focus-visible {
+	outline: 2px solid var(--sl-color-accent);
+	outline-offset: 2px;
+}
+
+/* The stage of the start page: a soft glow of the accent from the top right. */
+.hero {
+	position: relative;
+	isolation: isolate;
+}
+.hero::before {
+	content: '';
+	position: absolute;
+	inset: -4rem -2.5rem -2rem;
+	z-index: -1;
+	background: radial-gradient(
+		120% 105% at 78% 12%,
+		color-mix(in srgb, var(--sl-color-accent) 16%, transparent) 0%,
+		transparent 62%
+	);
+	mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+	-webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+}
+:root[data-theme='light'] .hero::before {
+	background: radial-gradient(
+		120% 105% at 78% 12%,
+		color-mix(in srgb, var(--sl-color-accent) 20%, transparent) 0%,
+		transparent 64%
+	);
+}
+
+/* The hero image carries its own frame; Starlight caps it at 25rem, too small for a
+   product screenshot, so from two columns on it takes up to half the stage. */
+.hero .hero-html {
+	width: 100%;
+	max-width: none;
+}
+.hero .hero-html img {
+	width: 100%;
+	height: auto;
+	border-radius: 1rem;
+	border: 1px solid var(--sl-color-gray-5);
+}
+@media (min-width: 50rem) {
+	.hero .hero-html {
+		width: min(100%, 44rem);
+	}
+}

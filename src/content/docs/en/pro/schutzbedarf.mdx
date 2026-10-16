@@ -1,0 +1,35 @@
+---
+title: Protection inheritance
+description: With Pro, SentryAssets derives protection requirements along the dependencies by the maximum principle, with cumulation and distribution effects.
+sidebar:
+  label: Protection inheritance
+  order: 1
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+A server running an important application needs at least that application's protection requirement. SentryAssets derives this along the relations in the inventory, by the **maximum principle** of BSI Standard 200-2 (ch. 8.2): per security goal, the highest protection requirement of whatever depends on an object applies.
+
+## How it is inherited
+
+- a **host** inherits from what runs on it (such as the server from its VMs and applications);
+- a **provider** inherits from what depends on it (such as the switch from the servers behind it);
+- a **part** inherits from its whole;
+- over several steps, per security goal (confidentiality, integrity, availability), with where each value comes from and the way there.
+
+Two effects the standard names are taken into account with a reason:
+
+- **Cumulation effect:** many objects with normal protection requirements can together give a higher one, such as a host with many VMs.
+- **Distribution effect:** if an application is spread redundantly over several servers, a single server can have a lower protection requirement.
+
+## Taking proposals over
+
+The page **Protection inheritance** shows the proposed and the current protection requirement per asset. You take proposals over deliberately, one at a time or up to 100 at once; "Undo" works through the inventory's bulk editing. Nothing changes by itself.
+
+## Dependency graph
+
+An asset stands in the centre, its neighbours up to three steps away around it. Arrows show where protection is passed on; each box carries the colour of its protection requirement. A click or `Enter` makes another asset the centre. The page **Dependencies** leads there.
+
+The results support your decision; the protection requirement is set by you.

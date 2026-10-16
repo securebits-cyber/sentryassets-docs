@@ -1,0 +1,40 @@
+---
+title: Tickets
+description: Mit Pro werden Abweichungen von Prüfregeln mit einem Klick zu Tickets in Jira, GitLab, YouTrack oder Zammad.
+sidebar:
+  label: Tickets
+  order: 11
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Eine Abweichung von einer [Prüfregel](/pro/pruefregeln/) wird mit einem Klick auf der Seite der Prüfregeln zu einem Ticket. Die Seite zeigt danach das offene Ticket mit seinem Link.
+
+## Unterstützte Systeme
+
+Jira (Cloud und Data Center), GitLab, YouTrack und Zammad. Bis zu drei Verbindungen je Organisation.
+
+## Verbindung einrichten
+
+<Steps>
+
+1. Öffnen Sie **Tickets** und legen Sie eine Verbindung an, mit einem eigenen Token für SentryAssets.
+2. Wählen Sie Projekt, Vorgangstyp bzw. Gruppe.
+3. Testen Sie die Verbindung. Der Test prüft Projekt, Vorgangstyp oder Gruppe, bevor ein Ticket dorthin geht.
+
+</Steps>
+
+Das Token wird verschlüsselt gespeichert und erneut verlangt, wenn sich der Weg zum System ändert.
+
+## Inhalt eines Tickets
+
+Regel, Schweregrad, Beschreibung und Bezug zum IT-Grundschutz, das Asset und ein Link ins Inventar. Namen aus dem Inventar erreichen ein Ticket nie als Markup, Erwähnung oder Schnellaktion.
+
+## Verhalten
+
+- Tickets erstellt der Job-Worker, nur in Netzen, die der Betreiber erlaubt (`SA_TICKET_ALLOWED_NETWORKS`, Standard: private Netze; `public` für ein Ticketsystem im Internet), über TLS 1.3 mit Zertifikatsprüfung.
+- Der Stand der Tickets wird alle 15 Minuten abgefragt.
+- Ein fehlgeschlagenes Ticket lässt sich erneut anstoßen.
+- Die Seite **Tickets** listet Verbindungen und Tickets.

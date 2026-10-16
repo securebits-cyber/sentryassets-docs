@@ -1,0 +1,121 @@
+---
+title: Installation
+description: Install SentryAssets with Docker Compose on a Linux server, from the requirements to the first sign-in.
+sidebar:
+  label: Installation
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+SentryAssets runs as a Docker Compose stack on your own Linux server. This guide takes you from an empty server to the first sign-in.
+
+## Requirements
+
+| Area | Requirement |
+|---|---|
+| Server | Linux with Docker (rootless recommended) or Podman, each with the Compose plugin, and Git |
+| Memory | 4 GiB recommended (the containers' limits add up to just over 3 GiB); another 2.5 GiB with the virus scanner |
+| DNS | two names, one for the web UI (such as `assets.example.test`) and one for the agents (such as `agents.example.test`); both may point to the same server |
+| Ports | 80 and 443 reachable from outside; agents and web UI share port 443 and are told apart by host name |
+| Certificate | either automatic through ACME (Let's Encrypt, with an e-mail address) or an internal certificate from Caddy (`internal`) |
+
+<Aside type="caution" title="Low ports without root">
+Rootless Docker needs `sudo setcap cap_net_bind_service=ep $(which rootlesskit)` once for ports below 1024. With Podman (or as a fallback that allows low ports to every local user) set `sysctl net.ipv4.ip_unprivileged_port_start=80`.
+</Aside>
+
+If port 443 is not an option for the agents, `docker-compose.agent-port.yml` gives them a port of their own (8443 by default).
+
+## Install
+
+<Steps>
+
+1. Get the repository and change to the directory of the Compose files:
+
+   ```bash
+   git clone https://github.com/securebits-cyber/sentryassets.git
+   cd sentryassets/deploy/compose
+   ```
+
+2. Create the settings and adjust `SA_UI_HOST`, `SA_AGENT_HOST` and `SA_UI_TLS` (see [Configuration](/en/reference/konfiguration/)):
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Create random secrets. The script writes them once to `./secrets` and on later runs only creates missing ones:
+
+   ```bash
+   ../../scripts/generate-secrets.sh
+   ```
+
+4. Build the images and create the database schema:
+
+   ```bash
+   docker compose build
+   docker compose run --rm migrate
+   ```
+
+5. Create the organisation:
+
+   ```bash
+   docker compose run --rm cli setup --organization "RECPLAST GmbH"
+   ```
+
+6. Create the PKI for the agents. The command asks for a passphrase for the root key and prints the **fingerprint of the root CA**; note it down, every agent installation needs it:
+
+   ```bash
+   docker compose run --rm cli pki init --organization "RECPLAST GmbH" \
+     --agent-host agents.example.test --output-dir /pki
+   ```
+
+7. Write the encrypted root key straight to an offline medium and delete it from the volume. It is only needed to renew the CAs:
+
+   ```bash
+   (umask 077; docker compose run --rm -T --entrypoint cat cli /pki/root-ca.p12 > /media/offline/root-ca.p12)
+   docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
+   ```
+
+8. Create an emergency account. The command asks for the password and shows an `otpauth://` address for your authenticator app:
+
+   ```bash
+   docker compose run --rm cli admin create-emergency --username emergency
+   ```
+
+9. Start the stack:
+
+   ```bash
+   docker compose up -d
+   ```
+
+</Steps>
+
+## Check the result
+
+- `docker compose ps` shows every service as `healthy`; `migrate` has exited with code 0.
+- `https://<SA_UI_HOST>` shows the sign-in. Sign in with the emergency account; the [setup wizard](/en/guides/einrichtung/) leads through location, OIDC test and the first agent.
+
+<Aside type="danger" title="Keep the master key safe">
+`./secrets/master_key` encrypts stored secrets (TOTP, issuing CA), every document and the backups. Without it they are lost. Keep it apart from the backups, for example printed in a safe or in a password manager.
+</Aside>
+
+## Editions in the image
+
+The Compose file builds the extensions for Pro, Enterprise and the ISMS add-on into the images. Without a licence their areas are visible and locked; a licence key or the [trial](/en/guides/lizenz/) unlocks them at once. To build the community edition alone, set `SA_EXTENSIONS=` (empty) in `.env`.
+
+## Updating
+
+```bash
+git pull
+docker compose build
+docker compose run --rm migrate
+docker compose up -d
+```
+
+Notes on single versions are in the changelog (`CHANGELOG.md`). For updates without downtime see [High availability](/en/pro/hochverfuegbarkeit/).
+
+## Troubleshooting
+
+- **A service does not start:** `docker compose logs <service>` shows the cause. Unsafe settings, such as a secret given directly in the environment instead of as a file, stop the start with a message that never shows the value itself.
+- **Sign-in fails with error 500 after an interrupted start:** `docker compose up -d --force-recreate` creates the containers again with their network aliases.
+- More cases under [Troubleshooting](/en/reference/fehlerbehebung/).

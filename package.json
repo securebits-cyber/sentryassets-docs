@@ -1,0 +1,34 @@
+{
+  "name": "sentryassets-docs",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro build && node scripts/check-content.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.42.6",
+    "astro": "7.4.0",
+    "astro-mermaid": "2.1.0",
+    "mermaid": "12.2.0",
+    "sharp": "0.35.5",
+    "starlight-plugin-icons": "1.1.6",
+    "starlight-scroll-to-top": "2.0.0",
+    "unocss": "66.11.0"
+  },
+  "devDependencies": {
+    "@iconify-json/material-icon-theme": "1.2.72",
+    "@iconify-json/ph": "1.2.2",
+    "@unocss/astro": "66.11.0"
+  },
+  "overrides": {
+    "astro-mermaid": {
+      "mermaid": "$mermaid"
+    }
+  }
+}

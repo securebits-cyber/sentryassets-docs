@@ -1,0 +1,66 @@
+---
+title: Asset-Management selbst betreiben
+description: Dokumentation für SentryAssets – selbst betriebenes, quelloffenes Asset-Management für KMU mit automatischer Erfassung, Asset-Zustand und Unterstützung für den BSI IT-Grundschutz.
+template: splash
+hero:
+  title: Ihr Inventar ist Ihre Strukturanalyse
+  tagline: SentryAssets erfasst Hardware, Software und Netzwerkgeräte automatisch, zeigt ihren Zustand und führt Sie Schritt für Schritt durch den BSI IT-Grundschutz – selbst betrieben, auf Ihrem Server.
+  actions:
+    - text: Installation starten
+      link: /guides/installation/
+      icon: rocket
+    - text: Funktionen ansehen
+      link: /reference/funktionen/
+      icon: open-book
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Was SentryAssets kann
+
+<CardGrid>
+	<Card title="Inventar mit Herkunft" icon="list-format">
+		Assets mit Kategorien, Standorten bis zum Raum, Verantwortlichen, Lebenszyklus und
+		Beziehungen. Jeder Wert zeigt, woher er stammt. Mehr unter
+		[Funktionen](/reference/funktionen/).
+	</Card>
+	<Card title="Automatische Erfassung" icon="laptop">
+		Agents für Linux und Windows, nur lesend und nur ausgehend, ein Collector für
+		Netzwerkscans mit SNMPv3 und LLDP sowie der Abgleich mit dem Active Directory.
+		Los geht es unter [Agents](/guides/agents/).
+	</Card>
+	<Card title="BSI IT-Grundschutz" icon="approve-check">
+		Grundschutz++ und Edition 2023 mit geführtem Ablauf vom Informationsverbund bis
+		zum Grundschutz-Check, jede Anforderung in einfachen Worten erklärt. Siehe
+		[IT-Grundschutz](/guides/grundschutz/).
+	</Card>
+	<Card title="Sicherheit eingebaut" icon="seti:lock">
+		OIDC, Notfallzugang mit TOTP, Audit-Log mit Hash-Kette, Mandantentrennung per
+		Row-Level Security, mTLS mit TLS 1.3 für Agents. Mehr unter
+		[Sicherheit](/reference/sicherheit/).
+	</Card>
+	<Card title="Selbst betrieben" icon="setting">
+		Ein gehärteter Docker-Compose-Stack auf Ihrem Linux-Server. Die Installation sendet
+		keine Nutzungsdaten an den Hersteller. Siehe [Installation](/guides/installation/).
+	</Card>
+	<Card title="Pro und Enterprise" icon="star">
+		Schutzbedarfsvererbung, automatische Modellierung, Konnektoren, Prüfregeln,
+		Workflows und mehr, 30 Tage ohne Schlüssel testbar. Siehe
+		[Lizenz und Editionen](/guides/lizenz/).
+	</Card>
+</CardGrid>
+
+## Einstieg
+
+- [Installation](/guides/installation/) – den Stack per Docker Compose starten
+- [Einrichtung](/guides/einrichtung/) – Einrichtungsassistent, Anmeldung mit OIDC, Notfallzugang
+- [Agents](/guides/agents/) – Geräte unter Linux und Windows erfassen
+- [IT-Grundschutz](/guides/grundschutz/) – der Weg nach BSI-Standard 200-2 im System
+- [Sicherung und Umzug](/guides/sicherung/) – die Installation sichern und wiederherstellen
+- [Konfiguration](/reference/konfiguration/) – alle Einstellungen der `.env`
+
+---
+
+*SentryAssets ist quelloffen und steht mit allen Editionen unter der Elastic License 2.0.
+Diese Dokumentation gibt es auch auf [Englisch](/en/).*

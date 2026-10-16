@@ -1,0 +1,54 @@
+---
+title: Datenschutz
+description: Welche personenbezogenen Daten SentryAssets verarbeitet, wo sie liegen und welche Funktionen Auskunft und Löschung unterstützen.
+sidebar:
+  label: Datenschutz
+  order: 5
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+SentryAssets läuft auf Ihrem Server. Sie sind Verantwortliche oder Verantwortlicher im Sinne der DSGVO; der Hersteller erhält keine Daten.
+
+<Aside title="Unterstützung, keine Rechtsberatung">
+Diese Seite beschreibt, was die Software tut. Ob Ihre Verarbeitung zulässig ist, klären Sie mit Ihrer oder Ihrem Datenschutzbeauftragten.
+</Aside>
+
+## Keine Daten an den Hersteller
+
+- Die Installation sendet keine Nutzungsdaten und meldet sich nirgends an.
+- Lizenzschlüssel und Testzeitraum werden offline geprüft.
+- Verbindungen nach außen entstehen nur durch Funktionen, die Sie einrichten: Identity Provider, Benachrichtigungen, Verzeichnisdienst, Konnektoren, KI-Assistent.
+
+## Welche personenbezogenen Daten anfallen
+
+| Bereich | Daten |
+|---|---|
+| Konten | Name, E-Mail-Adresse, Rolle, letzte Anmeldung |
+| Verantwortliche | Name und Kontaktangaben der Personen, denen Assets zugeordnet sind |
+| Lieferanten | Ansprechpartner mit Kontaktangaben |
+| Inventar | Felder, die eine Kategorie als personenbezogen kennzeichnet, etwa IMEI oder Telefonnummer; Gerätenamen können Personennamen enthalten |
+| Asset-Ausgaben | wer welches Gerät erhalten und zurückgegeben hat |
+| Audit-Log | wer wann was geändert hat, mit Quell-IP |
+| Agents | Hostname und Gerätedaten; keine angemeldeten Benutzer, keine Dateiinhalte, Verläufe, Tastatur- oder Bildschirmdaten |
+
+## Zugriff begrenzen
+
+- Personenbezogene Feldwerte und Kontakte sehen nur Administration, Informationssicherheit und Bearbeitung ([Rollen und Rechte](/reference/rollen/)).
+- Der Verlauf eines Assets zeigt keine personenbezogenen Werte.
+- Benachrichtigungen enthalten keine personenbezogenen Angaben.
+- Exporte starten nur von der Seite der Anwendung selbst, nie über einen Link.
+
+## Auskunft und Löschung
+
+- **Auskunft:** Die Angaben eines Ansprechpartners lassen sich gesammelt herausgeben; jede Herausgabe wird protokolliert.
+- **Löschung:** Ansprechpartner, die seit einer Frist archiviert sind (Standard 365 Tage, `SA_CONTACT_RETENTION_DAYS`), werden zur Löschung vorgeschlagen.
+- **Dokumente** haben Aufbewahrungsfristen; laufende Fristen verkürzen dürfen nur Administration und Informationssicherheit.
+
+## KI
+
+Der Hilfe-Assistent erhält nie Inventardaten. Der Daten-Assistent (Pro) erhält Ergebnisse aus Ihrem Inventar und ist deshalb eigens einzuschalten; Namen von Verantwortlichen gehen nur mit einem zweiten Schalter mit. Siehe [KI-Assistent](/reference/ki-assistent/) und [Daten-Assistent](/pro/daten-assistent/).
+
+## Aufbewahrung im Audit-Log
+
+Das Audit-Log ist bewusst unveränderlich, damit es als Nachweis taugt. Es enthält keine Geheimnisse und keine Inhalte von Dokumenten, aber Namen von Personen und Quell-IPs. Berücksichtigen Sie das in Ihrem Verzeichnis der Verarbeitungstätigkeiten.

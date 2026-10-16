@@ -1,0 +1,70 @@
+---
+title: Collector
+description: Scan networks with the SentryAssets collector, match the devices found and read switches over SNMPv3 and LLDP.
+sidebar:
+  label: Collector
+  order: 4
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The collector finds devices that run no agent: printers, switches, phones, IoT devices. It is a program of its own for Linux, runs **without root rights** and scans only the networks you allow on site. One collector per network segment is enough.
+
+## How the scan works
+
+- Per address one TCP connection attempt to a fixed list of ports: 22, 80, 443, 445, 515, 554, 631, 3389, 8080, 8443, 9100. The collector sends nothing and closes each connection at once. It reads no banners, sends no ICMP and uses no raw sockets.
+- It reads the MAC address from the ARP table (only in its own segment) and the name through reverse DNS from the system's resolver.
+- Limits: at most 32 attempts at a time and 200 per second. Scans are 1 to 24 hours apart, 4 hours by default.
+
+## Allowed networks
+
+You set the networks when setting up the collector on its machine. The server can only narrow this list, never widen it.
+
+- at most 8 networks, each at most a /22 (1,024 addresses), 4,096 addresses together;
+- private IPv4 ranges only (RFC 1918 and 100.64.0.0/10), without overlap. For 100.64.0.0/10 the collector warns, as it is often a provider's network.
+
+A collector can thus serve neither as a tool against the internet nor as a stepping stone into networks nobody on site allowed.
+
+## Setting up a collector
+
+<Steps>
+
+1. Open **Agents › Create rollout token** and choose the kind **Collector**. A collector token names the location the collector is bound to; devices found propose this location.
+
+   Alternatively, open the asset of a Linux machine with an agent and choose **Set up as collector for this network**. The web UI proposes the private networks of its interfaces.
+
+2. Copy the installation command and run it on the machine. It checks the networks and the checksums and creates an unprivileged user of its own for the collector.
+
+3. Approve the collector under **Agents** if the token requires approval. Under **Network** you choose which of the allowed networks it scans and how often.
+
+</Steps>
+
+## Matching findings
+
+The page **Network** lists the devices found and matches them with the inventory, in this order:
+
+1. MAC address (globally unique ones only, no random ones);
+2. name, full or short, with the host name and name of the asset;
+3. address with the interfaces of the agents.
+
+Exactly one match links the device, several are a conflict, none means "new". You can **take a device over as an asset** (with a proposed category and the collector's location), link it to an asset, unlink it or ignore it, each with "Undo". A device found by several collectors appears once. Matching never changes assets by itself.
+
+## SNMPv3 and LLDP
+
+For switches, routers and printers the collector reads on request over SNMPv3 the system, the chassis (manufacturer, model, serial number, firmware), the MAC addresses and names of the interfaces and the LLDP neighbours.
+
+- up to 4 SNMPv3 users per collector, **authPriv with SHA-2 and AES** only, passphrases of at least 20 characters (generated on request);
+- stored encrypted and sealed so that only their collector receives them; it keeps them in memory only;
+- a user can be limited to some of the collector's networks; a device that has answered is asked with its own user only;
+- only devices the same scan found, with a fixed budget of requests per device.
+
+Under **Racks** you take a switch's interfaces over as ports in one click; LLDP neighbours appear there as cable suggestions. Nothing is cabled by itself.
+
+<Aside>
+Set up an SNMPv3 user with read rights only on the devices. SentryAssets never writes over SNMP.
+</Aside>
+
+## Troubleshooting
+
+- **No MAC addresses:** the collector is in another segment than the devices. The ARP table only knows its own segment; set up a collector of its own there.
+- **A scan reports nothing:** a blocked collector or one not yet approved does not scan. An invalid stored choice of networks scans nothing rather than everything, on purpose.

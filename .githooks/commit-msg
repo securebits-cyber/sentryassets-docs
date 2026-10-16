@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Elastic-2.0
+# Copyright (c) 2026 SecureBits Cyber Security UG (haftungsbeschränkt).
+# Licensed under the Elastic License 2.0; see the LICENSE file at the root of the project.
+#
+# Prüft Commit-Nachrichten gegen die Commit-Richtlinie (siehe CONTRIBUTING.md).
+#
+#  1. Erste Zeile im Format der Conventional Commits
+#  2. Nur erlaubte Trailer
+#  3. Co-authored-by nur mit freigegebenen Adressen aus .github/allowed-coauthors
+#  4. Keine Erzeugungs-Hinweise in der Nachricht
+#
+# Wird lokal als Git-Hook und in der CI (scripts/check-commit-message.sh) genutzt.
+set -euo pipefail
+
+msg_file="${1:?Pfad zur Commit-Nachricht fehlt}"
+repo_root="$(git rev-parse --show-toplevel)"
+allowlist="${repo_root}/.github/allowed-coauthors"
+
+fail() {
+  echo "Commit abgelehnt: $1" >&2
+  echo "Siehe CONTRIBUTING.md, Abschnitt Commit-Nachrichten." >&2
+  exit 1
+}
+
+# Kommentarzeilen entfernen (wie Git es beim Speichern tut)
+body="$(grep -v '^#' "$msg_file" || true)"
+first_line="$(printf '%s\n' "$body" | sed -n '1p')"
+
+# Merge- und Revert-Commits von Git selbst zulassen
+if [[ "$first_line" =~ ^(Merge|Revert)\  ]]; then
+  exit 0
+fi
+
+# 1. Conventional Commits
+cc_regex='^(feat|fix|security|refactor|test|docs|chore|ci|build|perf)(\([a-z0-9-]+\))?!?: .{3,}$'
+if ! [[ "$first_line" =~ $cc_regex ]]; then
+  fail "Erste Zeile entspricht nicht dem Format '<typ>(<bereich>): <beschreibung>'."
+fi
+if (( ${#first_line} > 100 )); then
+  fail "Erste Zeile ist länger als 100 Zeichen."
+fi
+
+# 2./3. Trailer prüfen: jede Zeile im Format 'Schlüssel: Wert' am Ende der Nachricht
+allowed_keys='^(Signed-off-by|Co-authored-by|Refs|Fixes|Closes|BREAKING CHANGE):'
+trailers="$(printf '%s\n' "$body" | git interpret-trailers --parse 2>/dev/null || true)"
+
+while IFS= read -r line; do
+  [[ -z "$line" ]] && continue
+  if ! [[ "$line" =~ $allowed_keys ]]; then
+    fail "Nicht erlaubter Trailer: '${line%%:*}'."
+  fi
+  if [[ "${line,,}" == co-authored-by:* ]]; then
+    email="$(sed -n 's/.*<\(.*\)>.*/\1/p' <<<"$line" | tr '[:upper:]' '[:lower:]')"
+    [[ -z "$email" ]] && fail "Co-authored-by ohne E-Mail-Adresse."
+    if [[ ! -f "$allowlist" ]] || ! grep -qixF "$email" <(grep -v '^#' "$allowlist"); then
+      fail "Co-authored-by mit nicht freigegebener Adresse '$email'."
+    fi
+  fi
+done <<<"$trailers"
+
+# 4. Erzeugungs-Hinweise und Sitzungslinks
+if grep -Eiq '(generated (with|by)|created (with|by)|written (with|by)|erstellt (mit|von)|generiert (mit|von))' <<<"$body"; then
+  fail "Die Nachricht enthält einen Erzeugungs-Hinweis."
+fi
+if grep -q $'\xF0\x9F\xA4\x96' <<<"$body"; then
+  fail "Die Nachricht enthält ein nicht erlaubtes Symbol."
+fi
+if grep -Eiq 'https?://[^ ]*/session[_/-]' <<<"$body"; then
+  fail "Die Nachricht enthält einen Sitzungslink."
+fi
+
+exit 0

@@ -1,0 +1,81 @@
+---
+title: Setup
+description: After the installation, go through the setup wizard, set up sign-in with OIDC and understand the emergency access.
+sidebar:
+  label: Setup
+  order: 2
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+After the [installation](/en/guides/installation/) you sign in with the emergency account. The setup wizard leads through the basic setup; every step can also be found later under **Settings**.
+
+## Setup wizard
+
+The wizard opens at the first sign-in and stays available under **Settings › Setup wizard**. It leads through, in this order:
+
+1. **Organisation:** the name of your organisation; it appears in the sidebar and on labels.
+2. **Location:** the first location in the location tree (site, building, floor, room).
+3. **Sign-in:** set up and test OIDC (see below).
+4. **First agent:** create a rollout token and copy the ready-made installation command (see [Agents](/en/guides/agents/)).
+
+In an empty installation the wizard also offers to load **example data**: an invented company with sites, people, suppliers, devices, relations, licences and contracts. They can be removed again in one step; example entries that your own data refer to, or that you changed, stay. While example data are loaded, the overview says so.
+
+## Sign-in with OIDC
+
+SentryAssets signs people in through your identity provider (OpenID Connect with authorization code and PKCE, such as Entra ID, Keycloak, Authentik or Okta). Accounts are created at the first sign-in; the role follows the groups at every sign-in.
+
+<Steps>
+
+1. Create a confidential application (with a client secret) for SentryAssets at the identity provider:
+   - redirect URI: `https://<SA_UI_HOST>/api/v1/auth/oidc/callback`
+   - post-logout redirect URI: `https://<SA_UI_HOST>/login`
+   - the provider sends the groups in the claim `groups` (the name can be set with `SA_OIDC_ROLE_CLAIM`).
+
+2. Under **Settings › Sign-in**, enter issuer, client ID, client secret and the mapping of groups to roles as a draft, for example `sa-admins=admin` and `sa-auditors=auditor`. [Roles and permissions](/en/reference/rollen/) explains the roles.
+
+3. Check the draft with a **trial sign-in** using an account that the mapping makes an administrator. Only a successfully tested draft can be activated.
+
+4. **Activate** the sign-in. From now on everyone signs in through OIDC.
+
+</Steps>
+
+Every change to the sign-in asks for a fresh confirmation: the one-time code for the emergency account, a new sign-in at the identity provider for OIDC accounts.
+
+- **No matching group:** the sign-in is refused.
+- **Several groups:** the role with the most rights applies.
+- **Rights taken away:** at every session renewal SentryAssets checks that the account is still active. Removed groups take effect at the next sign-in at the latest. With [SCIM](/en/pro/scim/) a block takes effect at once.
+- **Sessions:** 30 minutes idle, 12 hours at most (`SA_SESSION_IDLE_MINUTES`, `SA_SESSION_ABSOLUTE_HOURS`).
+
+### OIDC in the server configuration
+
+Alternatively, set OIDC in a `docker-compose.override.yml` with `SA_OIDC_ISSUER`, `SA_OIDC_CLIENT_ID`, `SA_OIDC_ROLE_MAPPING` and `SA_OIDC_CLIENT_SECRET_FILE` (as a secret file). This configuration takes precedence; the web UI then only shows it.
+
+## Emergency access
+
+The emergency account is created only on the server (`cli admin create-emergency`), never through the web UI. It signs in in one step with user name, password and one-time code; passwords are stored with Argon2id, and failed attempts lock the account with a growing delay.
+
+Once OIDC is active, the emergency access is switched off. For an outage of the identity provider these commands stay on the server:
+
+```bash
+# Switch off OIDC set in the web UI; the emergency access applies again
+docker compose run --rm cli admin disable-oidc
+
+# New TOTP secret for an emergency account; running sessions end
+docker compose run --rm cli admin reset-totp --username emergency
+```
+
+<Aside>
+Whether the emergency access stays active next to OIDC is set by `SA_EMERGENCY_ACCESS` (`auto`, `enabled`, `disabled`). Keep `auto` unless you have a good reason.
+</Aside>
+
+## Managing users
+
+**Settings › Users** lists every account with role, status and last sign-in. **Deactivate** removes access at once, with "Undo" in the notice. One administrator and one way to sign in always remain. There are no invitations or initial passwords, because accounts are created with the first OIDC sign-in.
+
+## Further settings
+
+- **Directory services:** syncing computers with Active Directory over LDAPS, see [Features](/en/reference/funktionen/#directory).
+- **Notifications:** webhook and Gotify for chosen events, see [Features](/en/reference/funktionen/#notifications).
+- **AI assistant:** off by default, see [AI assistant](/en/reference/ki-assistent/).
+- **License and edition:** licence key and trial, see [Licence and editions](/en/guides/lizenz/).

@@ -1,0 +1,33 @@
+---
+title: Roadmap
+description: Was in SentryAssets geplant ist, und bekannte Einschränkungen des aktuellen Stands.
+sidebar:
+  label: Roadmap
+  order: 11
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside>
+Geplante Funktionen sind Absichten, keine Zusagen. Reihenfolge und Umfang können sich ändern.
+</Aside>
+
+## Geplant
+
+- **Agent für macOS** als launchd-Dienst, mit dem Schlüssel im Schlüsselbund des Systems.
+- **Schlüssel im TPM bzw. in CNG** unter Windows, nicht exportierbar.
+- **Signiertes Installationspaket (MSI)** und Authenticode-Signatur für Windows.
+- **Veröffentlichte, signierte Container-Images** statt eines Baus beim Betreiber.
+- **Diese Dokumentation als Wissensbasis** des KI-Assistenten.
+- **PROXY-Protokoll** für einen Load Balancer vor mehreren Hosts.
+- **Datenschutz-Add-on** für Datenschutzbeauftragte, als eigenes Add-on neben dem ISMS-Add-on.
+
+## Bekannte Einschränkungen
+
+- Der Windows-Agent ist noch nicht mit Authenticode signiert; SmartScreen oder Virenscanner können ihn melden.
+- OIDC und der Verzeichnisabgleich sind gegen Testserver geprüft, noch nicht gegen jede Kombination aus Identity Provider und Active Directory.
+- Die Prüfung der Audit-Kette liest das ganze Log; ab etwa 25 Millionen Einträgen überschreitet sie die Zeitgrenze eines Auftrags.
+- Die GPU-Auslastung unter Linux gibt es nur für den Treiber amdgpu.
+- Der Betrieb über mehrere Hosts ist beschrieben, aber nicht in jeder Umgebung erprobt.
+
+Die Änderungen jeder Version stehen im Änderungsprotokoll (`CHANGELOG.md`) im Repository.

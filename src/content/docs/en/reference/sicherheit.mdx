@@ -1,0 +1,79 @@
+---
+title: Security
+description: How SentryAssets protects sign-in, data, agents and operations, with limits and residual risks.
+sidebar:
+  label: Security
+  order: 4
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+SentryAssets holds data about your whole IT, and the agent runs with elevated rights on many devices. Security is therefore the foundation, not an add-on. This page describes the measures and their limits.
+
+## Principles
+
+- **Deny by default:** every endpoint requires sign-in and an explicit permission. Exceptions (health, starting the sign-in, enrolment) are marked explicitly.
+- **Input is untrusted**, including data from agents, network devices and connectors: checked against a schema with length and value limits, unknown fields are refused.
+- **No secrets** in logs, error messages or API responses. Errors towards the outside are generic; details are in the log with a correlation ID.
+
+## Sign-in and sessions
+
+| Topic | Implementation |
+|---|---|
+| Method | OIDC with authorization code and PKCE, handled in the backend; no tokens in the browser |
+| Session | server-side in Valkey, cookie `__Host-sa_session` with `HttpOnly`, `Secure`, `SameSite=Lax`; a new session ID after sign-in |
+| Lifetime | 30 minutes idle, 12 hours at most |
+| CSRF | synchroniser token and a check of `Origin` or `Sec-Fetch-Site` for every changing request |
+| Emergency access | Argon2id, TOTP required, lockout after failed attempts; switched off once OIDC is active |
+| Machine access | only tokens for one narrow purpose (status reports, SCIM), 256 bits, stored as a hash, shown once, expiring, revocable |
+
+## Web security
+
+- a strict Content Security Policy without `unsafe-inline` and `unsafe-eval`, with Trusted Types; `frame-ancestors 'none'`, HSTS, `nosniff`, a restrictive `Permissions-Policy`;
+- no HTML rendered from data;
+- rate limits for sign-in, enrolment and writing endpoints; limited request and upload sizes.
+
+## Data
+
+- **Tenant isolation** with row-level security in PostgreSQL and in the service as well; the application does not own the tables.
+- **Encryption of stored secrets** (TOTP, connector credentials, CA keys) and of every document by envelope encryption: a data key per entry, the master key outside the database.
+- **Cryptography** only from established libraries; randomness only from a cryptographically secure generator.
+- **TLS 1.3** for every encrypted connection, always with certificate verification. Exception: LDAPS to domain controllers may negotiate TLS 1.2 with ECDHE and AEAD if the server cannot do TLS 1.3. Revocation lists (CRL) are also fetched over HTTP; the CA's signature ensures they are genuine.
+
+## Audit log
+
+- Every write creates an entry with time, actor, action, object, changes (without secrets), correlation ID and source IP.
+- Entries are linked by a **hash chain** (SHA-256 over canonical JSON). The application may only insert, never change or delete, enforced by the database's rights.
+- Check with `docker compose run --rm cli audit verify` and regularly in the job worker.
+- Export as JSON Lines: each line carries what its hash covers, so anyone holding the file can recompute the chain.
+
+## Agents
+
+- read-only, outbound only, no mechanism to run commands or scripts;
+- a key pair of its own per device (ECDSA P-256), certificates for 30 days, renewal with a new key;
+- mTLS with TLS 1.3, trust only in the CA pinned at enrolment, no "trust on first use";
+- identity only from the certificate; revocation list at every request; replay protection;
+- rollout tokens with 256 bits, stored as a hash, valid for 7 days at most, limited uses, revocable;
+- updates only with the vendor's signature, no downgrade.
+
+## Operations
+
+- containers without root rights, read-only, without capabilities, with `no-new-privileges` and resource limits;
+- separate networks; database and Valkey not reachable from outside; the gateway without a way out;
+- secrets as files, not environment variables; the application does not start with a secret in its environment;
+- outgoing connections (notifications, directory, connectors, AI) only into networks the operator allows; the containers' own networks, loopback, link-local and metadata addresses are always closed.
+
+## Supply chain
+
+- lockfiles with hashes, regular vulnerability scans;
+- reproducible agent builds with a CycloneDX SBOM and SHA-256 checksums, signed keylessly with cosign.
+
+<Aside type="caution" title="Known limits">
+- The agent's private key is kept in a file with strict permissions for now; TPM and CNG are prepared.
+- Windows binaries are not yet Authenticode-signed.
+- Container images are built by the operator from the source; signed, published images will follow.
+</Aside>
+
+## Reporting vulnerabilities
+
+Please do not report vulnerabilities as public issues; follow `SECURITY.md` in the repository.

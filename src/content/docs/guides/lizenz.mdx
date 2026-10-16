@@ -1,0 +1,63 @@
+---
+title: Lizenz und Editionen
+description: Die Editionen von SentryAssets, der Testzeitraum ohne Schlüssel, das Eintragen eines Lizenzschlüssels und die Elastic License 2.0.
+sidebar:
+  label: Lizenz und Editionen
+  order: 7
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Alle Editionen stecken im selben Image. Ohne Lizenz sind die zusätzlichen Bereiche sichtbar, mit einem Schloss und einer Erklärung, was sie tun; der Server lehnt ihre Anfragen selbst ab. Mit einem Lizenzschlüssel oder dem Testzeitraum werden sie sofort frei.
+
+## Editionen
+
+| Edition | Für wen | Enthält |
+|---|---|---|
+| **Community** | alle, ohne Lizenzschlüssel und ohne Begrenzung der Assets | den ganzen Kern: Inventar, Agents, Collector, IT-Grundschutz, Lizenzen, Verträge, Racks und mehr ([Funktionen](/reference/funktionen/)) |
+| **Pro** | Teams bis 500, 1.500 oder 5.000 Assets | zusätzlich alle Funktionen unter [Pro und Enterprise](/pro/schutzbedarf/) |
+| **Enterprise** | große und verteilte Umgebungen ab 5.000 Assets | alle Funktionen von Pro, dazu ein Supportvertrag mit vereinbarten Reaktionszeiten |
+| **ISMS-Add-on** | Ergänzung zu Pro oder Enterprise | das Managementsystem für Informationssicherheit ([ISMS-Add-on](/pro/isms/)) |
+
+## Testzeitraum
+
+Mit dem Testzeitraum probieren Sie **alle** Funktionen von Pro, Enterprise und dem ISMS-Add-on einmalig 30 Tage lang aus, ohne Schlüssel und ohne Internetverbindung.
+
+<Steps>
+
+1. Öffnen Sie **Einstellungen › Lizenz und Edition**.
+2. Wählen Sie **30 Tage testen**. Die Seite zeigt, bis wann der Testzeitraum läuft.
+3. Tragen Sie vor dem Ende einen Lizenzschlüssel ein, wenn Sie weitermachen möchten.
+
+</Steps>
+
+Nach dem Ende gilt wieder die Community-Edition. **Ihre Daten bleiben erhalten**; die zusätzlichen Bereiche sind gesperrt, bis Sie einen Lizenzschlüssel eintragen. Mit einem gültigen Schlüssel wird kein Testzeitraum angeboten.
+
+## Lizenzschlüssel eintragen
+
+<Steps>
+
+1. Den Schlüssel erhalten Sie über den Shop auf [sentry-assets.de](https://sentry-assets.de).
+2. Tragen Sie ihn unter **Einstellungen › Lizenz und Edition** ein.
+3. Die Seite zeigt, was der Schlüssel freischaltet, die Grenze der Assets und die Laufzeit.
+
+</Steps>
+
+- Der Schlüssel wird **offline** geprüft, über eine Signatur des Herstellers. Die Installation braucht dafür keine Internetverbindung und sendet keine Nutzungsdaten.
+- Je Organisation gilt ein Schlüssel.
+- Nach Ablauf der Laufzeit gilt wieder die Community-Edition; alle Daten bleiben erhalten.
+
+<Aside>
+Wer nur die Community-Edition betreiben möchte, setzt `SA_EXTENSIONS=` (leer) in der `.env` und baut die Images neu. Die Bereiche der Erweiterungen fehlen dann, ebenso der Testzeitraum.
+</Aside>
+
+## Die Lizenz der Software
+
+SentryAssets ist **quelloffen** und steht mit allen Editionen unter der **Elastic License 2.0** (`Elastic-2.0`).
+
+- Sie dürfen die Software nutzen, ändern und weitergeben.
+- Nicht erlaubt ist, sie Dritten als gehosteten oder verwalteten Dienst anzubieten oder die Funktion der Lizenzschlüssel zu umgehen.
+- Die Software wird ohne Gewährleistung bereitgestellt (Abschnitt „No Liability“ der Lizenz).
+- Mitgelieferte Komponenten Dritter behalten ihre eigenen Lizenzen.
+
+Den vollständigen Text finden Sie in der Datei `LICENSE` im Repository.

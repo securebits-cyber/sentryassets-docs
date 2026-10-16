@@ -1,0 +1,121 @@
+---
+title: Installation
+description: SentryAssets mit Docker Compose auf einem Linux-Server installieren, von den Voraussetzungen bis zur ersten Anmeldung.
+sidebar:
+  label: Installation
+  order: 1
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+SentryAssets läuft als Docker-Compose-Stack auf einem eigenen Linux-Server. Diese Anleitung führt von einem leeren Server bis zur ersten Anmeldung.
+
+## Voraussetzungen
+
+| Bereich | Anforderung |
+|---|---|
+| Server | Linux mit Docker (rootless empfohlen) oder Podman, jeweils mit Compose-Plugin, dazu Git |
+| Arbeitsspeicher | 4 GiB empfohlen (die Obergrenzen der Container ergeben zusammen gut 3 GiB); mit Virenscanner weitere 2,5 GiB |
+| DNS | zwei Namen, einer für die Weboberfläche (etwa `assets.example.test`) und einer für die Agents (etwa `agents.example.test`); beide dürfen auf denselben Server zeigen |
+| Ports | 80 und 443 von außen erreichbar; Agents und Weboberfläche teilen sich Port 443 und werden über den Hostnamen getrennt |
+| Zertifikat | entweder automatisch über ACME (Let's Encrypt, dafür eine E-Mail-Adresse) oder ein internes Zertifikat von Caddy (`internal`) |
+
+<Aside type="caution" title="Niedrige Ports ohne Root-Rechte">
+Rootless Docker braucht für Ports unter 1024 einmalig `sudo setcap cap_net_bind_service=ep $(which rootlesskit)`. Bei Podman (oder als Notlösung, die allen lokalen Benutzern niedrige Ports erlaubt) setzen Sie `sysctl net.ipv4.ip_unprivileged_port_start=80`.
+</Aside>
+
+Wenn Port 443 für die Agents nicht in Frage kommt, bekommen sie mit `docker-compose.agent-port.yml` einen eigenen Port (Standard 8443).
+
+## Installieren
+
+<Steps>
+
+1. Repository holen und in das Verzeichnis der Compose-Dateien wechseln:
+
+   ```bash
+   git clone https://github.com/securebits-cyber/sentryassets.git
+   cd sentryassets/deploy/compose
+   ```
+
+2. Die Einstellungen anlegen und `SA_UI_HOST`, `SA_AGENT_HOST` und `SA_UI_TLS` anpassen (siehe [Konfiguration](/reference/konfiguration/)):
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Zufällige Geheimnisse erzeugen. Das Skript legt sie einmalig unter `./secrets` ab und erzeugt bei späteren Aufrufen nur fehlende:
+
+   ```bash
+   ../../scripts/generate-secrets.sh
+   ```
+
+4. Images bauen und das Datenbankschema anlegen:
+
+   ```bash
+   docker compose build
+   docker compose run --rm migrate
+   ```
+
+5. Die Organisation anlegen:
+
+   ```bash
+   docker compose run --rm cli setup --organization "RECPLAST GmbH"
+   ```
+
+6. Die PKI für die Agents erzeugen. Der Befehl fragt eine Passphrase für den Root-Schlüssel ab und gibt den **Fingerprint der Root-CA** aus; notieren Sie ihn, jede Agent-Installation braucht ihn:
+
+   ```bash
+   docker compose run --rm cli pki init --organization "RECPLAST GmbH" \
+     --agent-host agents.example.test --output-dir /pki
+   ```
+
+7. Den verschlüsselten Root-Schlüssel direkt auf einen Offline-Datenträger schreiben und im Volume löschen. Er wird nur zum Erneuern der CAs gebraucht:
+
+   ```bash
+   (umask 077; docker compose run --rm -T --entrypoint cat cli /pki/root-ca.p12 > /media/offline/root-ca.p12)
+   docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
+   ```
+
+8. Ein Notfallkonto anlegen. Der Befehl fragt das Passwort ab und zeigt eine `otpauth://`-Adresse für Ihre Authenticator-App:
+
+   ```bash
+   docker compose run --rm cli admin create-emergency --username notfall
+   ```
+
+9. Den Stack starten:
+
+   ```bash
+   docker compose up -d
+   ```
+
+</Steps>
+
+## Ergebnis prüfen
+
+- `docker compose ps` zeigt alle Dienste als `healthy`; `migrate` ist mit Code 0 beendet.
+- Unter `https://<SA_UI_HOST>` erscheint die Anmeldung. Melden Sie sich mit dem Notfallkonto an; der [Einrichtungsassistent](/guides/einrichtung/) führt durch Standort, OIDC-Test und den ersten Agent.
+
+<Aside type="danger" title="Master-Schlüssel sichern">
+`./secrets/master_key` verschlüsselt gespeicherte Geheimnisse (TOTP, Issuing-CA), alle Dokumente und die Sicherungen. Ohne ihn sind diese verloren. Bewahren Sie ihn getrennt von den Sicherungen auf, etwa ausgedruckt im Tresor oder in einem Passwortmanager.
+</Aside>
+
+## Editionen im Image
+
+Die Compose-Datei baut die Erweiterungen für Pro, Enterprise und das ISMS-Add-on in die Images ein. Ohne Lizenz sind deren Bereiche sichtbar und gesperrt; mit einem Lizenzschlüssel oder dem [Testzeitraum](/guides/lizenz/) werden sie sofort frei. Wer nur die Community-Edition bauen möchte, setzt `SA_EXTENSIONS=` (leer) in der `.env`.
+
+## Aktualisieren
+
+```bash
+git pull
+docker compose build
+docker compose run --rm migrate
+docker compose up -d
+```
+
+Hinweise zu einzelnen Versionen stehen im Änderungsprotokoll (`CHANGELOG.md`). Für Updates ohne Ausfall siehe [Hochverfügbarkeit](/pro/hochverfuegbarkeit/).
+
+## Fehlerbehebung
+
+- **Ein Dienst startet nicht:** `docker compose logs <dienst>` zeigt die Ursache. Unsichere Einstellungen, etwa ein Geheimnis direkt in der Umgebung statt als Datei, verhindern den Start mit einer Meldung ohne den Wert selbst.
+- **Anmeldung liefert Fehler 500 nach einem abgebrochenen Start:** `docker compose up -d --force-recreate` erzeugt die Container mit ihren Netzwerk-Aliasen neu.
+- Weitere Fälle unter [Fehlerbehebung](/reference/fehlerbehebung/).

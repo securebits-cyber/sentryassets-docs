@@ -1,0 +1,59 @@
+---
+title: API
+description: The REST API of SentryAssets, status reports from a monitoring and the limits of machine access.
+sidebar:
+  label: API
+  order: 8
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The web UI uses a REST API under `https://<SA_UI_HOST>/api/v1/…`. That API is bound to the web UI's session (cookie and CSRF token). For machines there are deliberately only accesses with one narrow purpose.
+
+## Machine access
+
+| Access | Purpose | May |
+|---|---|---|
+| Status token | report states from an existing monitoring | only `POST /api/v1/status-reports`; no reading, no changes |
+| SCIM token ([Pro](/en/pro/scim/)) | provision users and groups from the identity provider | end access and lower roles, never grant |
+
+Every token has 256 bits, is shown once, stored as a hash, expires after a year at most, can be revoked and has rate limits of its own.
+
+<Aside>
+There is no general API key to read or change the inventory. A stolen key can thus never do more than its one purpose.
+</Aside>
+
+## Status reports
+
+A monitoring such as Checkmk, Zabbix or Uptime Kuma reports the state of an asset. SentryAssets shows it in the asset's traffic light, next to what the agent reports.
+
+1. Create a token under **Settings › Status tokens** (valid for up to 365 days). It starts with `sa_sts_` and is shown once.
+2. An asset's ID (`asset_id`) is in its address in the web UI.
+3. Report the state:
+
+```bash
+curl --fail -X POST "https://assets.example.test/api/v1/status-reports" \
+  -H "Authorization: Bearer $SA_STATUS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"asset_id": "<asset-uuid>", "state": "warning", "message": "Backup job failing for 2 days"}'
+```
+
+| Field | Values |
+|---|---|
+| `asset_id` | UUID of the asset |
+| `state` | `ok`, `warning`, `critical` or `unknown` |
+| `message` | optional, up to 300 printable characters |
+
+Response `204` without content. A report is at most 4 KiB; each token may send up to 1,200 reports per minute.
+
+## Health endpoints
+
+`/health/live` and `/health/ready` of API and gateway answer without sign-in and without internal details. They serve the containers' health checks; Caddy does not pass them to the outside.
+
+## Agent protocol
+
+Agents and collectors use a host of their own (`SA_AGENT_HOST`) and the protocol `agent/v1` over mTLS. It is not a public interface for your own programs; see [Architecture](/en/reference/architektur/#agent-connection).
+
+## Exporting data
+
+To pass data on, use the exports of the web UI: the asset list as CSV, the IT-Grundschutz requirement package as CSV, the audit log as JSON Lines, the cost report as CSV. With [Pro](/en/pro/siem/) the audit log goes to a SIEM continuously.

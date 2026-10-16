@@ -1,0 +1,78 @@
+---
+title: Sicherung und Umzug
+description: Die SentryAssets-Installation verschlüsselt sichern, prüfen, auf einem anderen Server wiederherstellen und die Agent-PKI erneuern.
+sidebar:
+  label: Sicherung und Umzug
+  order: 6
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Eine Sicherung enthält die Datenbank, die Dokumente und die Dateien der Agent-PKI in **einer** Datei, verschlüsselt mit dem Master-Schlüssel. Mit ihr ziehen Sie auch auf einen anderen Server um.
+
+## Sichern
+
+```bash
+docker compose run --rm backup create --keep 14   # neue Sicherung, die 14 neuesten bleiben
+docker compose run --rm backup list               # Sicherungen im Volume backups
+docker compose run --rm backup verify <Name>      # vollständig prüfen, ohne etwas zu schreiben
+docker compose run --rm -T backup create --stdout > sentryassets.sabak   # direkt auf den Host
+```
+
+- Am besten jede Nacht per Timer oder Cron, etwa:
+
+  ```bash
+  0 2 * * * cd /opt/sentryassets/deploy/compose && docker compose run --rm backup create --keep 14
+  ```
+
+- Kopieren Sie die Dateien regelmäßig auf ein anderes System.
+- Die Seite **Systemzustand** zeigt die letzte Sicherung und warnt, wenn sie fehlt, älter als zwei Tage ist oder eine spätere scheiterte.
+- Jede Sicherung und Wiederherstellung steht im Audit-Log.
+
+<Aside type="danger" title="Ohne Master-Schlüssel keine Wiederherstellung">
+Die Sicherung ist mit `./secrets/master_key` verschlüsselt. Bewahren Sie den Schlüssel getrennt von den Sicherungen auf. Den Schlüssel der Root-CA (`root-ca.p12`) enthält keine Sicherung; er bleibt offline.
+</Aside>
+
+## Wiederherstellen oder umziehen
+
+<Steps>
+
+1. Bereiten Sie auf dem neuen Server die Installation vor wie unter [Installation](/guides/installation/) beschrieben, bis einschließlich `generate-secrets.sh` und `docker compose build`.
+
+2. Übernehmen Sie `./secrets/master_key` vom alten Server. Die übrigen Geheimnisse dürfen neu sein.
+
+3. Starten Sie **nur** die Datenbank und spielen Sie die Sicherung ein:
+
+   ```bash
+   docker compose up -d postgres
+   docker compose run --rm -T backup restore - < sentryassets.sabak
+   docker compose up -d
+   ```
+
+4. `cli setup` und `cli pki init` entfallen; beides kommt aus der Sicherung. Die Agents finden den neuen Server, sobald `SA_AGENT_HOST` per DNS auf ihn zeigt. Alle Personen melden sich neu an.
+
+</Steps>
+
+- Wiederhergestellt wird nur in eine **leere** Datenbank, mit derselben oder einer neueren Version. Lief auf dem neuen Server schon `docker compose up`, entfernen Sie vorher das Volume der Datenbank (`docker compose down` und `docker volume rm sentryassets_postgres-data`).
+- Vor dem Abschluss prüft die Wiederherstellung jeden Fremdschlüssel. Der Befehl nennt Datum und Alter der Sicherung.
+- Wiederholen Sie danach, was seit der Sicherung geschah: gesperrte Agents, Rollout- und Status-Tokens erneut sperren, deaktivierte Konten erneut deaktivieren, geänderte Notfallpasswörter erneut setzen. Agents, die ihr Zertifikat nach der Sicherung erneuert haben, melden sich mit einem neuen Rollout-Token wieder an.
+- Spielen Sie nur Sicherungen aus Ihrer eigenen Ablage ein: Wer den Master-Schlüssel hat, kann eine gültige Datei bauen.
+
+## Agent-PKI erneuern
+
+Issuing-CA und Zertifikat des Agent-Endpunkts gelten ein Jahr; der **Systemzustand** warnt 60 Tage vorher. Erneuert wird mit dem Root-Schlüssel vom Offline-Datenträger:
+
+```bash
+docker compose run --rm -v /media/offline:/offline:ro cli pki rotate --root-key /offline/root-ca.p12
+docker compose restart caddy
+```
+
+Der Befehl fragt die Passphrase ab und stellt beides für dieselben Namen neu aus. **Starten Sie den Proxy bis zu dem Zeitpunkt neu, den der Befehl nennt**, in der Regel 24 Stunden später. Bis dahin stellt die bisherige Issuing-CA aus, und sie bleibt gültig, bis sie endet; so fällt kein Agent heraus. Meldet der Befehl, dass die Dateien nicht vollständig ersetzt sind, starten Sie den Proxy nicht neu und führen Sie den Befehl erneut aus.
+
+## Audit-Kette prüfen
+
+```bash
+docker compose run --rm cli audit verify
+```
+
+Der Job-Worker prüft die Kette außerdem regelmäßig; der **Systemzustand** zeigt, wann zuletzt.

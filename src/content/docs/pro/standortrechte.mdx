@@ -1,0 +1,27 @@
+---
+title: Standortrechte
+description: Mit Pro beschränken Sie Personen auf das Schreiben an ihren Standorten; Lesen bleibt, wie die Rolle es erlaubt.
+sidebar:
+  label: Standortrechte
+  order: 8
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Die Administration bindet Personen an einen oder mehrere Standorte. Eine gebundene Person legt dann Assets, Racks, Materialbuchungen und Standorte **nur dort und darunter** an und ändert sie nur dort.
+
+## Was gilt
+
+- **Schreiben** nur an den gebundenen Standorten und allem darunter.
+- **Lesen** bleibt, wie die Rolle es erlaubt, mandantenweit.
+- Nichts, was für die ganze Organisation gilt, ändert eine gebundene Person: Kategorien, Felder, Nummernkreise, Lifecycle-Regeln, Artikel des Verbrauchsmaterials, der GLPI-Import.
+- Die Bindung gilt ab der nächsten Anfrage, nie für die Administration.
+- Sie gilt auch nach dem Ende der Lizenz weiter; nur das Ändern von Bindungen braucht die Lizenz.
+
+<Aside>
+Wurden alle Standorte einer Person gelöscht, schreibt sie nirgends, statt wieder überall.
+</Aside>
+
+Die Bindungen verwalten Sie auf der Seite **Standortrechte**.

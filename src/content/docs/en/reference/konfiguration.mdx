@@ -1,0 +1,128 @@
+---
+title: Configuration
+description: Every setting of SentryAssets – the values of .env, network allowances, secrets as files and settings for a docker-compose.override.yml.
+sidebar:
+  label: Configuration
+  order: 7
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+SentryAssets reads its settings from environment variables with the prefix `SA_`. The Compose file sets most of them itself; you only adjust the values in `.env`. Further settings go into a `docker-compose.override.yml` next to the Compose file.
+
+<Aside type="caution" title="Secrets as files only">
+Secrets such as passwords, client secrets or the master key never stand directly in the environment. Each has a variant ending in `_FILE` that points to a file, such as `SA_OIDC_CLIENT_SECRET_FILE=/run/secrets/oidc_client_secret`. In production SentryAssets does not start if a secret is given directly in the environment.
+</Aside>
+
+## Values in `.env`
+
+### Basic settings
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `SA_UI_HOST` | – (required) | host name of the web UI, such as `assets.example.test` |
+| `SA_AGENT_HOST` | – (required) | host name for agents, such as `agents.example.test` |
+| `SA_UI_TLS` | – (required) | e-mail address for ACME (Let's Encrypt) or `internal` for a certificate from Caddy's internal CA |
+| `SA_BIND_ADDRESS` | all addresses | address the ports are bound to |
+| `SA_HTTP_PORT` | `80` | port for HTTP (redirect and ACME) |
+| `SA_UI_PORT` | `443` | port for HTTPS, shared by web UI and agents |
+| `SA_AGENT_SEPARATE_PORT` | `8443` | a port of their own for agents, only with `docker-compose.agent-port.yml` |
+| `SA_LOG_LEVEL` | `INFO` | `DEBUG`, `INFO`, `WARNING` or `ERROR` |
+| `SA_EXTENSIONS` | `enterprise,isms` | extensions built in; empty for the community edition alone |
+
+### Agents and documents
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `SA_AGENT_AUTO_UPDATE` | `true` | offer agent updates; `false` switches that off |
+| `SA_AGENT_VERSION` | version of the source | version of the agent builds under `/downloads/agent/` |
+| `SA_DOCUMENT_MAX_BYTES` | `26214400` (25 MiB) | largest file on upload |
+| `SA_CLAMAV_SOCKET` | empty | `/run/clamav/clamd.sock` with the profile `scanner`, see below |
+
+### Network allowances
+
+Connections SentryAssets opens to the outside go only into networks you allow. Lists are comma-separated; `public` stands for every globally routed address. A list you set replaces the default.
+
+| Variable | Default | For |
+|---|---|---|
+| `SA_DIRECTORY_ALLOWED_NETWORKS` | private networks | domain controllers (Active Directory) |
+| `SA_NOTIFICATION_ALLOWED_NETWORKS` | `public` | notification targets |
+| `SA_ASSISTANT_ALLOWED_NETWORKS` | `public` | the AI assistant's model |
+| `SA_HYPERVISOR_ALLOWED_NETWORKS` | private networks | Proxmox VE and vCenter (Pro) |
+| `SA_SIEM_ALLOWED_NETWORKS` | private networks | SIEM targets (Pro) |
+| `SA_TICKET_ALLOWED_NETWORKS` | private networks | ticket systems (Pro) |
+| `SA_EGRESS_DENIED_EXTRA` | empty | further closed addresses, such as the host's LAN and public address and `172.17.0.1/32` for `docker0` |
+
+Private networks are `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `100.64.0.0/10` and `fc00::/7`. Allow a target in your own network as a single address where possible, such as `public,192.168.10.5/32`.
+
+Always closed, even inside allowed networks: the networks of the own containers (`172.30.248.0/21`), loopback, link-local, cloud metadata addresses and reserved ranges. If `172.30.248.0/21` collides with a local network, change the range everywhere in the Compose file together.
+
+### Several instances and external services
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `SA_API_REPLICAS`, `SA_GATEWAY_REPLICAS`, `SA_WORKER_REPLICAS` | `2` | number of instances with `docker-compose.ha.yml` |
+| `SA_DATABASE_HOST` | `postgres` | PostgreSQL; another host needs TLS |
+| `SA_DATABASE_SSLMODE` | `disable` | `disable`, `verify-ca` or `verify-full` |
+| `SA_VALKEY_HOST` | `valkey` | Valkey; another host needs TLS |
+| `SA_VALKEY_TLS` | `false` | TLS to Valkey |
+
+In production SentryAssets does not start when the connection to PostgreSQL or Valkey would be unencrypted and the host is no service name of the Compose network. See [High availability](/en/pro/hochverfuegbarkeit/).
+
+### Images
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `SA_IMAGE_REGISTRY` | `localhost` | prefix of the image names |
+| `SA_VERSION` | `latest` | tag of the images |
+
+## Settings for an override file
+
+The Compose file does not set these values by itself. Add them to the services `api` and, where needed, `worker` in a `docker-compose.override.yml`:
+
+```yaml title="docker-compose.override.yml"
+services:
+  api:
+    environment:
+      SA_SESSION_IDLE_MINUTES: "20"
+      SA_OIDC_ISSUER: https://login.example.test/realms/recplast
+      SA_OIDC_CLIENT_ID: sentryassets
+      SA_OIDC_ROLE_MAPPING: sa-admins=admin,sa-isb=isb,sa-it=editor
+      SA_OIDC_CLIENT_SECRET_FILE: /run/secrets/oidc_client_secret
+    secrets: [oidc_client_secret]
+secrets:
+  oidc_client_secret:
+    file: ./secrets/oidc_client_secret
+```
+
+| Variable | Default | Meaning |
+|---|---|---|
+| `SA_SESSION_IDLE_MINUTES` | `30` | idle time until a session ends (5–240) |
+| `SA_SESSION_ABSOLUTE_HOURS` | `12` | longest lifetime of a session (1–24) |
+| `SA_OIDC_ISSUER` | – | issuer of the identity provider (https) |
+| `SA_OIDC_CLIENT_ID` | – | client ID |
+| `SA_OIDC_CLIENT_SECRET_FILE` | – | file with the client secret |
+| `SA_OIDC_ROLE_CLAIM` | `groups` | claim with the groups |
+| `SA_OIDC_ROLE_MAPPING` | – | pairs `group=role`, comma-separated |
+| `SA_EMERGENCY_ACCESS` | `auto` | emergency access: `auto` (off once OIDC is active), `enabled`, `disabled` |
+| `SA_CONTACT_RETENTION_DAYS` | `365` | propose archived contacts for deletion after this time (30–3650) |
+| `SA_DOCUMENT_QUOTA_BYTES` | 20 GiB | sum of all document versions per organisation |
+| `SA_DOCUMENT_TRANSFERS` | `2` | concurrent uploads and downloads per API instance; each holds a file in memory, so raise the API's `mem_limit` as well |
+| `SA_DOCUMENT_UPKEEP_MINUTES` | `60` | interval of the document storage upkeep; `0` switches it off |
+
+OIDC can also be set up in the web UI ([Setup](/en/guides/einrichtung/)); the server configuration then takes precedence.
+
+## Virus scanner
+
+```bash
+# in .env: SA_CLAMAV_SOCKET=/run/clamav/clamd.sock
+docker compose --profile scanner up -d
+# refresh the signatures, for example daily from a timer
+docker compose --profile scanner-update run --rm clamav-update
+```
+
+The scanner has no network; the API reaches it through a socket. If a scanner is set but cannot be reached, uploads are refused rather than stored unchecked. Without a scanner the web UI points out unchecked files.
+
+## Proxy in front
+
+If another reverse proxy stands in front of Caddy, it must pass requests of these sizes: documents up to `SA_DOCUMENT_MAX_BYTES`, the Grundschutz catalogues (`/api/v1/grundschutz/catalog`, `/api/v1/kompendium/catalog`) up to 16 MiB. For agents it passes TLS through unchanged (TCP), as Caddy checks their client certificates itself.

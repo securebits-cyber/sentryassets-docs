@@ -1,0 +1,37 @@
+---
+title: Workflows
+description: With Pro, new deviations from check rules become tickets without manual work, at once or after an approval.
+sidebar:
+  label: Workflows
+  order: 12
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+A workflow turns new deviations from [check rules](/en/pro/pruefregeln/) into [tickets](/en/pro/tickets/) without manual work.
+
+## A workflow sets
+
+- the rules it reacts to (or all);
+- the minimum severity;
+- the ticket system and the language of its tickets;
+- how many tickets one run may make (20 at most);
+- whether it runs at once or waits for an approval.
+
+## Process
+
+```mermaid
+flowchart LR
+  A[Evaluation finds new deviations] --> B{Approval needed?}
+  B -- no --> C[Tickets with the rights of the evaluating person]
+  B -- yes --> D[Run waits]
+  D -- approved --> E[Tickets with the rights of the approver]
+  D -- 30 days without decision --> F[Run expires]
+```
+
+- A workflow starts as soon as an evaluation by administration or information security keeps new deviations.
+- Each ticket is checked as if created by hand.
+- One evaluation makes 50 tickets at most; deviations beyond a limit are counted as skipped.
+- A failing workflow never stops the evaluation.

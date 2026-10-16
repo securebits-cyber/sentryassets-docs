@@ -1,0 +1,72 @@
+---
+title: Features
+description: Every feature of the SentryAssets community edition at a glance, from the inventory and automatic discovery to reports and operations.
+sidebar:
+  label: Features
+  order: 1
+---
+
+This page describes the community edition. Features from Pro on are under [Pro and Enterprise](/en/pro/schutzbedarf/).
+
+## Overview and tasks
+
+The **Overview** is the start page: the next sensible step, progress in the IT-Grundschutz, key figures compared with the previous week, the sources of discovery and the **Tasks**. Tasks arise from deadlines and rules, such as licences and contracts running out, support ending, backup proofs missing, requirements due or consumables below their minimum. The command palette (`Ctrl + K`) finds assets, pages and actions.
+
+## Inventory
+
+- **Assets** with category, location, owners, lifecycle (planned, active, in maintenance, retired, disposed), protection requirement per security goal and relations to other assets.
+- **Categories** as a tree with fields of their own per category, such as IMEI for mobile devices; fields holding personal values are marked and visible only to roles allowed to see them. The navigation lists the categories with their counts.
+- **Locations** as a tree from site through building and floor down to the room, with a responsible person, a contact on site, access protection, hazards after the BSI's elementary threats and the internet connection. Connections between locations (WAN, VPN, own line, radio link) are seen from both ends. A location's protection requirement follows the maximum principle from its assets.
+- **Inventory numbers** with numbering schemes per category, optionally required; batch creation of identical assets; QR labels on A4 sheets or on tape (12, 18 or 24 mm) for label printers.
+- **Asset list** with search, filters (category, device class, location, health), bulk editing with "Undo" and CSV export with formula protection.
+- **Asset detail** with profile, relations, history without personal values and health.
+- **Dependencies:** every relation between assets on one page, filtered by kind and searchable.
+- **GLPI import:** CSV exports with proposals for category, status and location, a check of every row and creation all or nothing.
+- **Lifecycle rules:** warranty ending, a device older than its replacement age, not seen for long; as tasks and filters, without a rule changing an asset by itself.
+
+## Automatic discovery
+
+- **Agents** for Linux and Windows, see [Agents](/en/guides/agents/).
+- **Collector** for network scans with SNMPv3 and LLDP, see [Collector](/en/guides/collector/).
+- **Software inventory** per device with normalised names and publishers; the overview filters by platform, source, publisher and device class.
+
+### Directory
+
+The **Active Directory** sync reads computer objects over LDAPS (port 636) from the chosen OUs, with an ordinary domain account without special rights. It matches them with assets; conflicts are resolved by hand. Domain controllers must be in an allowed network (`SA_DIRECTORY_ALLOWED_NETWORKS`). Set up under **Settings › Directory services**: save a draft, **Test connection**, activate.
+
+## Asset health
+
+A traffic light per asset (healthy, warning, critical, unknown) with its reasons, from the agent's last heartbeat with fixed thresholds (silence by device class, disk from 90 %, memory from 95 %) and from states an existing monitoring reports. Assets needing attention are on a page of their own and appear as tasks in the overview. The **Health** tab of an asset shows CPU, memory, disks, network throughput and graphics card.
+
+**Status tokens** (under **Settings**) let a monitoring report states only (`POST /api/v1/status-reports`), without reading or changing anything; they are shown once, kept as a hash, expire and can be revoked. See [API](/en/reference/api/).
+
+## IT-Grundschutz
+
+Grundschutz++ and Edition 2023 with a guided process, the Grundschutz check and evidence, see [IT-Grundschutz](/en/guides/grundschutz/).
+
+## Records
+
+- **Licences:** product, manufacturer, licence model (per device, per user, volume, concurrent use, subscription, site), seats, term and cost; assigned to assets or people, over-assignment shown; licence keys encrypted and visible only to administration and information security, each time with an audit entry.
+- **Contracts:** supplier, type, term, notice period with automatic renewal, cost with billing interval; reminders before deadlines; covered assets, licences and locations.
+- **Certificates:** import from PEM, DER or PKCS#7 (files with a private key are refused), chain and issuer from the signatures, deadlines 14, 30 and 60 days ahead, weak algorithms named, revocation lists checked daily.
+- **Asset handovers and security keys:** handing out and taking back with condition and a protocol to print; a reminder before the last working day. For security keys and smartcards the form factor, functions, firmware, registered services and certificates in the PIV slots. PIN, PUK, seeds or recovery codes are never stored.
+- **Consumables:** stock per location with a minimum; receipts, withdrawals and stocktakings that are never changed afterwards but booked back.
+- **Racks:** to scale, front and rear, with devices and passive elements; mounting by dragging, arrow keys or form with a collision check; ports, cables with label, type, colour and length, also between racks; connected ports in the colour of their cable; ports from SNMP and cable suggestions from LLDP; print view and PNG export.
+- **Suppliers and contacts** with CSV import, archiving, access requests and erasure of personal data.
+- **Documents** with versions, per-file encryption, confidentiality levels, retention periods, optional virus scanning and links to assets, locations, suppliers, licences and contracts.
+
+## Reports
+
+- **Inventory:** assets by lifecycle, category and location, what needs care (no owner, orphaned, support ending, shadow IT) and agent coverage; every figure leads to the filtered asset list.
+- **Costs:** monthly and yearly costs of licences and contracts per currency, area and item, as CSV and for printing.
+
+## Notifications
+
+Webhook and Gotify for chosen events, such as new or blocked agents, emergency sign-ins, sign-in changes, failed directory syncs or a broken audit chain. Messages carry no personal details. Targets over https with TLS 1.3 only; by default only addresses in the internet, a server in your own network needs `SA_NOTIFICATION_ALLOWED_NETWORKS`. Set up under **Settings › Notifications**.
+
+## Operations
+
+- **System health:** database, Valkey, job worker and virus scanner, the job queue, deadlines of the agent PKI, document storage and the last check of the audit chain.
+- **Audit log** with hash chain, filters, names of people and export as JSON Lines, see [Security](/en/reference/sicherheit/#audit-log).
+- **Backup and migration**, see [Backup and migration](/en/guides/sicherung/).
+- **Web UI** in German and English, light and dark.

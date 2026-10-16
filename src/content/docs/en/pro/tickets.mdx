@@ -1,0 +1,40 @@
+---
+title: Tickets
+description: With Pro, deviations from check rules become tickets in Jira, GitLab, YouTrack or Zammad in one click.
+sidebar:
+  label: Tickets
+  order: 11
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+A deviation from a [check rule](/en/pro/pruefregeln/) becomes a ticket in one click on the page of check rules. The page then shows the open ticket with its link.
+
+## Supported systems
+
+Jira (Cloud and Data Center), GitLab, YouTrack and Zammad. Up to three connections per organisation.
+
+## Setting up a connection
+
+<Steps>
+
+1. Open **Tickets** and add a connection, with a token of its own for SentryAssets.
+2. Choose project, issue type or group.
+3. Test the connection. The test checks project, issue type or group before any ticket goes there.
+
+</Steps>
+
+The token is stored encrypted and asked for again when the way to the system changes.
+
+## Contents of a ticket
+
+Rule, severity, description and IT-Grundschutz reference, the asset and a link into the inventory. Names from the inventory never reach a ticket as markup, mention or quick action.
+
+## Behaviour
+
+- Tickets are made by the job worker, only in networks the operator allows (`SA_TICKET_ALLOWED_NETWORKS`, private networks by default; `public` for a ticket system in the internet), over TLS 1.3 with the certificate verified.
+- Their state is looked up every 15 minutes.
+- A failed ticket can be started again.
+- The page **Tickets** lists connections and tickets.

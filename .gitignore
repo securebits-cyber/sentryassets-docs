@@ -1,0 +1,18 @@
+# Build output
+dist/
+.astro/
+.starlight-icons/
+
+# Dependencies
+node_modules/
+
+# Logs and environment
+npm-debug.log*
+.env
+.env.*
+
+# Editors and local files
+.DS_Store
+.vscode/
+.idea/
+.forbidden-terms

@@ -1,0 +1,58 @@
+---
+title: Rollen und Rechte
+description: Die fünf festen Rollen von SentryAssets und was jede darf, von der Administration bis zum reinen Lesen.
+sidebar:
+  label: Rollen und Rechte
+  order: 3
+---
+
+SentryAssets kennt fünf feste Rollen. Die Rolle kommt bei OIDC-Konten bei jeder Anmeldung aus den Gruppen des Identity Providers ([Einrichtung](/guides/einrichtung/#anmeldung-mit-oidc)). Unter **Einstellungen › Rollen und Rechte** sehen Administration, Informationssicherheit und Prüfung dieselbe Tabelle, gegen die jede Anfrage geprüft wird.
+
+| Rolle | Kennung | Gedacht für |
+|---|---|---|
+| Administrator | `admin` | Betrieb und Einrichtung: alles, auch Anmeldung, Benutzer, Agents, Benachrichtigungen, Systemzustand |
+| Informationssicherheit | `isb` | Informationssicherheitsbeauftragte: Inventar und IT-Grundschutz vollständig, Audit-Log, Lizenzschlüssel |
+| Bearbeitung | `editor` | IT-Team im Alltag: Inventar, Standorte, Lizenzen, Verträge, Dokumente, Grundschutz-Check pflegen |
+| Prüfung (nur lesend) | `auditor` | interne oder externe Prüfung: alles lesen einschließlich Audit-Log, nichts ändern |
+| Lesend | `viewer` | Auskunft: Inventar und Verwaltung lesen |
+
+Passt bei der Anmeldung mehr als eine Gruppe, gilt die Rolle mit den meisten Rechten. Ohne passende Gruppe wird die Anmeldung abgelehnt.
+
+## Rechte im Einzelnen
+
+| Bereich | Administrator | Informationssicherheit | Bearbeitung | Prüfung | Lesend |
+|---|---|---|---|---|---|
+| Inventar, Standorte, Lizenzen, Verträge, Racks, Material lesen | ja | ja | ja | ja | ja |
+| Inventar, Standorte, Lizenzen, Verträge, Racks, Material ändern | ja | ja | ja | – | – |
+| Kategorien und Felder verwalten | ja | ja | – | – | – |
+| Personenbezogene Feldwerte und Kontakte lesen | ja | ja | ja | – | – |
+| IT-Grundschutz lesen | ja | ja | ja | ja | – |
+| Grundschutz-Check bearbeiten | ja | ja | ja | – | – |
+| Informationsverbund und Kataloge verwalten | ja | ja | – | – | – |
+| Lizenzschlüssel von Software anzeigen | ja | ja | – | – | – |
+| Sicherheitsschlüssel verwalten | ja | ja | – | – | – |
+| Audit-Log lesen | ja | ja | – | ja | – |
+| Agents und Rollout-Tokens ansehen | ja | ja | – | ja | – |
+| Agents freigeben und sperren, Rollout-Tokens erzeugen | ja | – | – | – | – |
+| Netzwerkfunde abgleichen | ja | ja | ja | – | – |
+| Benutzer, Anmeldung, Benachrichtigungen, Status-Tokens, KI-Assistent einrichten | ja | – | – | – | – |
+| Systemzustand und Sicherungen | ja | – | – | – | – |
+| KI-Assistent nutzen | ja | ja | ja | ja | ja |
+
+## Vertraulichkeit von Dokumenten
+
+| Rolle | Sieht Dokumente bis |
+|---|---|
+| Administrator, Informationssicherheit | streng vertraulich |
+| Bearbeitung, Prüfung | vertraulich |
+| Lesend | intern |
+
+Nachweise oberhalb der eigenen Stufe werden im Grundschutz-Check nur gezählt, nicht gezeigt.
+
+## Rechte je Standort
+
+Mit [Pro](/pro/standortrechte/) lassen sich Personen auf das Schreiben an bestimmten Standorten beschränken. Lesen bleibt, wie die Rolle es erlaubt.
+
+## Eigene Rollen
+
+Eigene Rollen gibt es nicht. Die festen Rollen halten die Rechte überschaubar und prüfbar.

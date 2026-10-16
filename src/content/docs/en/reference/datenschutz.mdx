@@ -1,0 +1,54 @@
+---
+title: Data protection
+description: Which personal data SentryAssets processes, where they are kept and which features support access requests and erasure.
+sidebar:
+  label: Data protection
+  order: 5
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+SentryAssets runs on your server. You are the controller under the GDPR; the vendor receives no data.
+
+<Aside title="Support, not legal advice">
+This page describes what the software does. Whether your processing is lawful is for you to settle with your data protection officer.
+</Aside>
+
+## No data to the vendor
+
+- The installation sends no usage data and registers nowhere.
+- Licence keys and the trial are checked offline.
+- Outgoing connections arise only from features you set up: the identity provider, notifications, directory service, connectors, AI assistant.
+
+## Personal data involved
+
+| Area | Data |
+|---|---|
+| Accounts | name, e-mail address, role, last sign-in |
+| Owners | name and contact details of the people assets are assigned to |
+| Suppliers | contacts with their details |
+| Inventory | fields a category marks as personal, such as IMEI or phone number; device names may contain people's names |
+| Asset handovers | who received and returned which device |
+| Audit log | who changed what and when, with source IP |
+| Agents | host name and device data; no signed-in users, no file contents, histories, keyboard or screen data |
+
+## Limiting access
+
+- Personal field values and contacts are visible only to administration, information security and editors ([Roles and permissions](/en/reference/rollen/)).
+- An asset's history shows no personal values.
+- Notifications carry no personal details.
+- Exports start only from the application's own page, never from a link.
+
+## Access requests and erasure
+
+- **Access requests:** a contact's details can be disclosed together; every disclosure is recorded.
+- **Erasure:** contacts archived for a period (365 days by default, `SA_CONTACT_RETENTION_DAYS`) are proposed for deletion.
+- **Documents** have retention periods; only administration and information security may shorten running periods.
+
+## AI
+
+The help assistant never receives inventory data. The data assistant (Pro) receives results from your inventory and is therefore switched on separately; names of owners go along only with a second switch. See [AI assistant](/en/reference/ki-assistent/) and [Data assistant](/en/pro/daten-assistent/).
+
+## Retention in the audit log
+
+The audit log is deliberately immutable so that it can serve as evidence. It holds no secrets and no document contents, but names of people and source IPs. Take this into account in your record of processing activities.

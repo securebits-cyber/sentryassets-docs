@@ -1,0 +1,27 @@
+---
+title: Location rights
+description: With Pro, you limit people to writing at their locations; reading stays as the role allows.
+sidebar:
+  label: Location rights
+  order: 8
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+The administration binds people to one or more locations. A bound person then adds and changes assets, racks, stock bookings and locations **only there and below**.
+
+## What applies
+
+- **Writing** only at the bound locations and everything below them.
+- **Reading** stays as the role allows, across the whole tenant.
+- A bound person changes nothing that applies to the whole organisation: categories, fields, numbering, lifecycle rules, consumable items, the GLPI import.
+- The binding applies from the next request on, never to the administration.
+- It also keeps applying after the licence has ended; only changing bindings needs the licence.
+
+<Aside>
+If all of a person's locations were deleted, they write nowhere instead of everywhere again.
+</Aside>
+
+Bindings are managed on the page **Location rights**.

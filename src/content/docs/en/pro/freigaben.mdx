@@ -1,0 +1,22 @@
+---
+title: Approvals
+description: With Pro, states in the Grundschutz check are submitted for approval after the four-eyes principle, reviewed and approved with a history.
+sidebar:
+  label: Approvals
+  order: 3
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition, for Grundschutz++ and Edition 2023.
+
+A recorded state in the Grundschutz check can be submitted for approval. Information security or administration approve it or return it with a reason.
+
+## Rules
+
+- **Four eyes:** whoever submitted, or changed state, justification or evidence since the last approval, cannot approve it.
+- **What is approved is what was seen:** if state, justification or evidence change after submitting or approving, including a new version of an evidence document, the state is due again. The responsible person, the date and the note do not count.
+- A change made while a decision is pending waits for it and then counts against the person who made it.
+- Submissions waiting for a decision are always listed first.
+
+Every submission, approval and return is in the history and the audit log; names only for roles allowed to read them. The page **Approvals** lists everything waiting for a decision.

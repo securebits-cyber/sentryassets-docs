@@ -1,0 +1,48 @@
+---
+title: KI-Assistent
+description: Der Hilfe-Assistent von SentryAssets beantwortet Fragen zur Bedienung und zum IT-Grundschutz, mit Mistral oder einem eigenen Modell, ohne Inventardaten.
+sidebar:
+  label: KI-Assistent
+  order: 6
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Der Hilfe-Assistent ist eine **KI**. Er beantwortet Fragen zur Bedienung von SentryAssets und zum IT-Grundschutz, zum Beispiel „Wie lege ich ein Rollout-Token an?“ oder „Was verlangt der Baustein zur Datensicherung?“. Er ist ausgeschaltet, bis die Administration ihn einschaltet.
+
+<Aside type="caution" title="Unterstützung, keine Prüfung">
+Antworten der KI können falsch sein. Jede Antwort nennt ihre Quellen; prüfen Sie dort nach, bevor Sie sich darauf stützen.
+</Aside>
+
+## Was das Modell erhält
+
+- die Frage;
+- den Pfad der Seite, auf der Sie fragen, ohne Kennungen;
+- die passenden Abschnitte aus den Hilfetexten der Oberfläche und, für Rollen, die den IT-Grundschutz lesen dürfen, aus dem importierten Kompendium.
+
+**Inventardaten erhält das Modell nie.** Außerhalb seiner Themen oder ohne Quellen gibt der Assistent keine Antwort. Fragen über Ihre eigenen Daten beantwortet der [Daten-Assistent](/pro/daten-assistent/) (Pro), der eigens einzuschalten ist.
+
+## Einrichten
+
+<Steps>
+
+1. Öffnen Sie **Einstellungen › KI-Assistent**.
+2. Wählen Sie den Anbieter:
+   - **Mistral** (Rechenzentren in der EU), mit API-Schlüssel;
+   - **OpenAI-kompatibler Endpunkt**, etwa ein eigenes Modell über Ollama oder vLLM.
+3. Testen Sie die Verbindung und schalten Sie den Assistenten ein.
+
+</Steps>
+
+- Verbindungen nur über https mit TLS 1.3 und Zertifikatsprüfung.
+- Der API-Schlüssel wird verschlüsselt gespeichert und nicht wieder angezeigt.
+- Ein Modell im eigenen Netz braucht dessen Netz in `SA_ASSISTANT_ALLOWED_NETWORKS`, etwa `public,192.168.10.7/32`. Standard sind nur Adressen im Internet.
+- Es gibt Grenzen je Person und Organisation. Das Audit-Log vermerkt Fragen ohne ihren Text.
+
+## Fragen
+
+Öffnen Sie den Assistenten über **KI-Assistent** in der Navigation oder über die Befehlspalette (`Strg + K`, „KI-Assistent fragen: …“). Jede Frage wird für sich beantwortet; die Antwort ist als KI gekennzeichnet und nennt ihre Quellen.
+
+## Diese Dokumentation als Wissensbasis
+
+Die Hilfetexte der Oberfläche und das Kompendium sind heute die Wissensbasis. Diese Dokumentation soll später dazukommen.

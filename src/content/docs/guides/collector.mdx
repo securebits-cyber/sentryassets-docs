@@ -1,0 +1,70 @@
+---
+title: Collector
+description: Netzwerke mit dem SentryAssets-Collector untersuchen, gefundene Geräte abgleichen und Switches per SNMPv3 und LLDP auslesen.
+sidebar:
+  label: Collector
+  order: 4
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Der Collector findet Geräte, auf denen kein Agent läuft: Drucker, Switches, Telefone, IoT-Geräte. Er ist ein eigenes Programm für Linux, läuft **ohne Root-Rechte** und untersucht nur die Netze, die Sie vor Ort freigeben. Ein Collector je Netzsegment genügt.
+
+## Wie der Scan funktioniert
+
+- Je Adresse ein TCP-Verbindungsaufbau auf eine feste Liste von Ports: 22, 80, 443, 445, 515, 554, 631, 3389, 8080, 8443, 9100. Der Collector sendet nichts und schließt jede Verbindung sofort. Er liest keine Banner, sendet kein ICMP und nutzt keine Raw Sockets.
+- Die MAC-Adresse liest er aus der ARP-Tabelle (nur im eigenen Segment), den Namen per Reverse-DNS beim Resolver des Systems.
+- Grenzen: höchstens 32 Versuche gleichzeitig und 200 je Sekunde. Der Abstand zwischen zwei Scans liegt zwischen 1 und 24 Stunden, Standard 4 Stunden.
+
+## Freigegebene Netze
+
+Die Netze legen Sie beim Einrichten auf dem Collector-Rechner fest. Der Server kann diese Liste nur einschränken, nie erweitern.
+
+- höchstens 8 Netze, jedes höchstens ein /22 (1 024 Adressen), zusammen höchstens 4 096 Adressen;
+- nur private IPv4-Bereiche (RFC 1918 und 100.64.0.0/10), ohne Überschneidung. Für 100.64.0.0/10 warnt der Collector, weil das oft das Netz eines Providers ist.
+
+Ein Collector taugt damit weder als Werkzeug gegen das Internet noch als Sprungbrett in Netze, die vor Ort niemand freigegeben hat.
+
+## Collector einrichten
+
+<Steps>
+
+1. Öffnen Sie **Agents › Rollout-Token erzeugen** und wählen Sie die Art **Collector**. Ein Collector-Token nennt den Standort, an den der Collector gebunden wird; gefundene Geräte schlagen diesen Standort vor.
+
+   Alternativ öffnen Sie das Asset eines Linux-Rechners mit Agent und wählen **Als Collector für dieses Netz einrichten**. Die Oberfläche schlägt die privaten Netze seiner Schnittstellen vor.
+
+2. Kopieren Sie den Installationsbefehl und führen Sie ihn auf dem Rechner aus. Er prüft die Netze und die Prüfsummen und legt einen eigenen, unprivilegierten Benutzer für den Collector an.
+
+3. Geben Sie den Collector unter **Agents** frei, falls das Token eine Freigabe verlangt. Unter **Netzwerk** wählen Sie, welche der freigegebenen Netze er wie oft untersucht.
+
+</Steps>
+
+## Funde abgleichen
+
+Die Seite **Netzwerk** listet die gefundenen Geräte und gleicht sie mit dem Inventar ab, in dieser Reihenfolge:
+
+1. MAC-Adresse (nur weltweit eindeutige, keine zufälligen);
+2. Name, voll oder kurz, mit Hostname und Name des Assets;
+3. Adresse mit den Schnittstellen der Agents.
+
+Genau ein Treffer verknüpft das Gerät, mehrere sind ein Konflikt, keiner bedeutet „neu“. Sie können ein Gerät **als Asset übernehmen** (mit vorgeschlagener Kategorie und dem Standort des Collectors), einem Asset zuordnen, die Zuordnung lösen oder es ausblenden, jeweils mit „Rückgängig“. Ein Gerät, das mehrere Collectors finden, erscheint einmal. Der Abgleich verändert Assets nie von selbst.
+
+## SNMPv3 und LLDP
+
+Für Switches, Router und Drucker liest der Collector auf Wunsch per SNMPv3 System, Gehäuse (Hersteller, Modell, Seriennummer, Firmware), die MAC-Adressen und Namen der Schnittstellen und die LLDP-Nachbarn.
+
+- bis zu 4 SNMPv3-Zugänge je Collector, nur **authPriv mit SHA-2 und AES**, Passphrasen mit mindestens 20 Zeichen (auf Wunsch erzeugt);
+- verschlüsselt gespeichert und so versiegelt, dass nur der zugehörige Collector sie erhält; er hält sie nur im Arbeitsspeicher;
+- ein Zugang lässt sich auf einzelne Netze des Collectors beschränken; ein Gerät, das schon geantwortet hat, wird nur mit seinem Zugang gefragt;
+- nur Geräte, die derselbe Scan fand, und mit einem festen Budget an Anfragen je Gerät.
+
+Die Schnittstellen eines Switches übernehmen Sie unter **Racks** auf einen Klick als Ports; LLDP-Nachbarn erscheinen dort als Vorschläge für Kabel. Verkabelt wird nie von selbst.
+
+<Aside>
+Richten Sie auf den Geräten einen eigenen SNMPv3-Benutzer nur mit Leserechten ein. SentryAssets schreibt nie per SNMP.
+</Aside>
+
+## Fehlerbehebung
+
+- **Keine MAC-Adressen:** Der Collector steht in einem anderen Segment als die Geräte. Die ARP-Tabelle kennt nur das eigene Segment; richten Sie dort einen eigenen Collector ein.
+- **Ein Scan meldet nichts:** Ein gesperrter oder noch nicht freigegebener Collector scannt nicht. Eine ungültige gespeicherte Auswahl der Netze scannt bewusst nichts statt alles.

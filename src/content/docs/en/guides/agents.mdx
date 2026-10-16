@@ -1,0 +1,98 @@
+---
+title: Agents
+description: Roll out the SentryAssets agent on Linux and Windows, approve, block and update devices.
+sidebar:
+  label: Agents
+  order: 3
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The agent collects inventory and health of a device and reports them to your server. It **only reads**, opens **only outbound** connections and cannot run commands, scripts or files from the server. Nothing but the agent is installed on the devices; the commands use only what the operating system brings along.
+
+## What the agent collects
+
+| Area | Contents |
+|---|---|
+| System | host name, operating system and version, uptime |
+| Hardware | manufacturer, model, serial number, CPU, memory, disks |
+| Network | interfaces with MAC and IP addresses, throughput per interface |
+| Software | installed programs with version and publisher; sent only when the list has changed |
+| Health | load of CPU, memory, disks and, where the driver reports it, the graphics card |
+| Hyper-V | the guests on a Hyper-V host, once the connection "Hyper-V through agent" is set up ([Virtualisation](/en/pro/virtualisierung/)) |
+
+The agent never collects file contents, browser histories, keyboard or screen data, connections or processes.
+
+**Platforms:** Linux (x86-64, ARM64) with systemd and Windows (x86-64) as a service. An agent for macOS is planned.
+
+## Rolling out an agent
+
+<Steps>
+
+1. Open **Agents** and choose **Create rollout token**.
+
+2. Set:
+   - **Description**, for example a site or device group;
+   - **Valid for (hours, at most 168)**, 24 by default;
+   - **Maximum number of devices**;
+   - **Location of the new assets (optional)**;
+   - **Admit new agents only after approval**, if each device is to be confirmed.
+
+3. **Create token.** The token is **shown once**; the server keeps only its hash. Copy it now.
+
+4. Choose the platform and copy the ready-made installation command. It downloads the agent from your server, checks the SHA-256 checksum and stops before installing if it differs.
+
+5. Run the command on the device, as root on Linux, in a PowerShell as administrator on Windows. When the agent asks for the rollout token, paste it; the input stays hidden and appears neither on the command line nor in the history.
+
+</Steps>
+
+The agent first checks that it reaches your server and that the server's CA matches the fingerprint in the command, and only then asks for the token. Without a matching fingerprint it stops; there is no "trust on first use".
+
+### Software distribution
+
+For Ansible, scripts and similar tools, put the token beforehand into the file named in the command, owned by root with mode `0600` on Linux, readable only by SYSTEM and administrators on Windows. The agent refuses any other file. After a successful enrolment it deletes the file.
+
+## Check the result
+
+- The device appears under **Agents**, first as **pending** if approval is required. Approve it; without approval, the system blocks a pending agent after 7 days and revokes its certificate (the period can be set up to 30 days).
+- After the first inventory the device appears as an asset with hardware, software and health.
+- By default the list shows only agents that need attention (approval pending, no report for a day, certificate about to run out), all of them on request.
+
+## Blocking
+
+A blocked agent is refused at every request; its certificate is on the revocation list. A rollout token is **revoked** under **Agents** as well; devices already enrolled are not affected.
+
+## Certificates and renewal
+
+Each agent creates its own key pair (ECDSA P-256), which never leaves the device, and receives a certificate for 30 days. From day 20 it renews it itself, each time with a **new** key. Connections use only mTLS with TLS 1.3 against the CA pinned at enrolment.
+
+## Updates
+
+Agents update themselves, but only to versions the vendor signed offline (Ed25519, keys built into the agent). A server taken over can therefore not distribute a foreign version.
+
+- Only higher versions, never a step back; after the first offer each device waits a fixed time of up to 24 hours.
+- Switch off on the server: `SA_AGENT_AUTO_UPDATE=false` in `.env`.
+- Install at once on a Linux device:
+
+  ```bash
+  sudo /opt/sentryassets-agent/bin/sentryassets-agent update
+  sudo systemctl restart sentryassets-agent
+  ```
+
+- Fallback: rename `sentryassets-agent.previous` (Linux) or `sentryassets-agent.exe.old` (Windows) back and restart the service.
+
+## Hardening on the device
+
+- **Linux:** systemd unit with a sandbox (among others `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `MemoryDenyWriteExecute`, a system call filter). Write access only to its own program directory and the state directory `/var/lib/sentryassets-agent`.
+- **Windows:** a service; the state directory `%ProgramData%\SentryAssets\Agent` only for SYSTEM and administrators. Data through WMI with fixed, read-only queries, no PowerShell.
+- The agent refuses to start if its directory or files are readable by others.
+
+<Aside type="caution" title="Known limitations">
+The private key is kept in a file with strict permissions for now; TPM and CNG are prepared. Windows binaries are not yet Authenticode-signed, which SmartScreen or virus scanners may report.
+</Aside>
+
+## Troubleshooting
+
+- **"Server not reachable":** the message names host and port. Check DNS, routes, firewalls and, if set, the device's proxy. TLS inspection by a proxy breaks mTLS on purpose; exempt the agent host there.
+- **Clock:** certificates need a correct clock. The agent detects a deviation and reports it.
+- **Enrolling again:** stop the service first (`sudo systemctl stop sentryassets-agent`) and start it again afterwards. The command from the rollout dialog does that itself.

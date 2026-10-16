@@ -1,0 +1,33 @@
+---
+title: Prüfregeln
+description: Mit Pro prüft SentryAssets Anforderungen aus den Daten des Inventars, etwa „jedes Gerät hat eine verantwortliche Person“, und hält Abweichungen fest.
+sidebar:
+  label: Prüfregeln
+  order: 10
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Prüfregeln prüfen Anforderungen aus den Daten des Inventars, statt sie von Hand zu pflegen. Beispiele:
+
+- „Jedes Gerät hat eine verantwortliche Person.“
+- „Server mit hohem Schutzbedarf haben einen Sicherungsnachweis, der jünger als 90 Tage ist.“
+
+## Eine Regel bauen
+
+Eine Regel ist ein Baum aus Bedingungen, ohne Code auf der Seite **Prüfregeln** zusammengestellt: **alle**, **mindestens eine** oder **keine** davon. Jede Bedingung vergleicht eine feste Eigenschaft mit einem passenden Vergleich:
+
+Kategorie, Standort, Geräteklasse, Lebenszyklus, Zustand, verantwortliche Person, Inventarnummer, Schutzbedarf, Hersteller, Modell, Hostname, zuletzt gesehen, installierte Software oder ein beliebiges Feld einer Kategorie.
+
+Regeln gelten für Kategorien und Standorte Ihrer Wahl, tragen einen Schweregrad und können Anforderungen des IT-Grundschutzes nennen.
+
+## Auswerten
+
+- Die Seite wertet die Regeln mit den Rechten der lesenden Person aus. Eigenschaften, die diese Person nicht sehen darf, gelten als **nicht prüfbar**, nie als Abweichung.
+- Werten Administration oder Informationssicherheit aus, werden Abweichungen mit dem Datum festgehalten, an dem sie zuerst auftraten.
+- Eine Abweichung lässt sich mit Begründung für bis zu ein Jahr **hinnehmen**.
+- Regeln sind nur Daten, nie Code; die Auswertung läuft getrennt, damit ein großes Inventar andere nicht ausbremst.
+
+Aus neuen Abweichungen werden mit [Tickets](/pro/tickets/) und [Workflows](/pro/workflows/) Aufgaben in Ihrem Ticketsystem. Benachrichtigungsziele können über neue Abweichungen informiert werden; die Nachricht nennt nur Art, Zeitpunkt, Organisation und einen Link zum Audit-Log.

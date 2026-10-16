@@ -1,0 +1,48 @@
+---
+title: AI assistant
+description: The SentryAssets help assistant answers questions on using the software and on the IT-Grundschutz, with Mistral or your own model, without inventory data.
+sidebar:
+  label: AI assistant
+  order: 6
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The help assistant is an **AI**. It answers questions on using SentryAssets and on the IT-Grundschutz, such as "How do I create a rollout token?" or "What does the backup module require?". It stays off until the administration switches it on.
+
+<Aside type="caution" title="Support, not an audit">
+AI answers can be wrong. Every answer names its sources; check them before relying on it.
+</Aside>
+
+## What the model receives
+
+- the question;
+- the path of the page you ask from, without identifiers;
+- the matching passages from the help texts of the web UI and, for roles allowed to read the IT-Grundschutz, from the imported Kompendium.
+
+**The model never receives inventory data.** Outside its topics or without sources the assistant gives no answer. Questions about your own data are answered by the [data assistant](/en/pro/daten-assistent/) (Pro), which is switched on separately.
+
+## Setting up
+
+<Steps>
+
+1. Open **Settings › AI assistant**.
+2. Choose the provider:
+   - **Mistral** (data centres in the EU), with an API key;
+   - an **OpenAI-compatible endpoint**, such as your own model through Ollama or vLLM.
+3. Test the connection and switch the assistant on.
+
+</Steps>
+
+- Connections over https with TLS 1.3 and certificate verification only.
+- The API key is stored encrypted and not shown again.
+- A model in your own network needs its network in `SA_ASSISTANT_ALLOWED_NETWORKS`, such as `public,192.168.10.7/32`. By default only addresses in the internet.
+- There are limits per person and organisation. The audit log records questions without their text.
+
+## Asking
+
+Open the assistant through **AI assistant** in the navigation or the command palette (`Ctrl + K`, "Ask the AI assistant: …"). Each question is answered on its own; the answer is marked as AI and names its sources.
+
+## This documentation as knowledge base
+
+Today the help texts of the web UI and the Kompendium are the knowledge base. This documentation is to be added later.

@@ -1,0 +1,36 @@
+---
+title: SCIM
+description: Mit Pro übertragen Identity Provider wie Entra ID, Okta, Keycloak oder Authentik Benutzer und Gruppen per SCIM 2.0; Sperren wirken sofort, Rechte entstehen nur mit einer Anmeldung.
+sidebar:
+  label: SCIM
+  order: 9
+---
+
+import { Badge, Aside, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Mit SCIM 2.0 überträgt Ihr Identity Provider, etwa Entra ID, Okta, Keycloak oder Authentik, Benutzer und Gruppen an SentryAssets.
+
+## Was SCIM bewirkt
+
+- Eine dort gesperrte oder gelöschte Person verliert hier **sofort** den Zugang, einschließlich laufender Sitzungen.
+- Verlässt jemand eine Gruppe, sinkt die Rolle sofort, wenn die übrigen Gruppen weniger erlauben; ohne zugeordnete Gruppe endet der Zugang.
+- **SCIM gewährt nie:** Zugang und höhere Rollen entstehen weiter nur mit einer signierten Anmeldung über OIDC. Ein gestohlenes Token kann Personen aussperren, aber niemandem Rechte geben.
+- Die letzte Administration wird nie gesperrt.
+
+## Einrichten
+
+<Steps>
+
+1. Öffnen Sie **SCIM** und erzeugen Sie ein Token. Es wird nur einmal angezeigt, nur als Hash gespeichert, läuft nach höchstens einem Jahr ab und ist widerrufbar.
+2. Tragen Sie beim Identity Provider die Adresse ein, die die Seite zeigt, und das Token.
+3. Starten Sie die Bereitstellung beim Identity Provider.
+
+</Steps>
+
+Übertragene Benutzer passen zu Konten über den OIDC-Claim `sub`, bei Entra ID über `oid`. Die Seite zeigt, wer übertragen ist und wer sich schon angemeldet hat.
+
+<Aside>
+Die Gruppenzuordnung zu Rollen bleibt die der [Anmeldung](/guides/einrichtung/#anmeldung-mit-oidc).
+</Aside>

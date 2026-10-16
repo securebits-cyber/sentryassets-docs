@@ -1,0 +1,36 @@
+---
+title: SCIM
+description: With Pro, identity providers such as Entra ID, Okta, Keycloak or Authentik provision users and groups over SCIM 2.0; blocks take effect at once, rights come only with a sign-in.
+sidebar:
+  label: SCIM
+  order: 9
+---
+
+import { Badge, Aside, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+With SCIM 2.0 your identity provider, such as Entra ID, Okta, Keycloak or Authentik, provisions users and groups to SentryAssets.
+
+## What SCIM does
+
+- A person blocked or deleted there loses access here **at once**, sessions included.
+- Leaving a group lowers the role at once if the remaining groups allow less; without a mapped group, access ends.
+- **SCIM never grants:** access and higher roles still come only with a signed OIDC sign-in. A stolen token can lock people out but give nobody rights.
+- The last administrator is never blocked.
+
+## Setting up
+
+<Steps>
+
+1. Open **SCIM** and create a token. It is shown once, stored as a hash, expires after a year at most and can be revoked.
+2. Enter the address shown on the page and the token at the identity provider.
+3. Start provisioning at the identity provider.
+
+</Steps>
+
+Provisioned users match accounts by the OIDC claim `sub`, for Entra ID by `oid`. The page shows who is provisioned and who has signed in already.
+
+<Aside>
+The mapping of groups to roles stays the one of the [sign-in](/en/guides/einrichtung/#sign-in-with-oidc).
+</Aside>
