@@ -20,13 +20,36 @@ SentryAssets liest Hosts und virtuelle Maschinen im Hintergrund in einem Abstand
 | **VMware vCenter** ab 7.0 Update 2 | Port 443, Benutzer mit der Rolle „Nur lesen“; einzelne ESXi-Hosts ohne vCenter haben die nötige API nicht |
 | **Hyper-V** | über den Agent auf dem Host: einmal die Verbindung „Hyper-V über den Agent“ anlegen; der Agent liest die Gäste über WMI, nur lesend, mit Bordmitteln von Windows |
 
+## Proxmox VE anbinden
+
+1. Legen Sie in Proxmox VE unter „Rechenzentrum › Berechtigungen“ einen Benutzer an, etwa `sentryassets@pve`, und geben Sie ihm auf `/` die Rolle `PVEAuditor`. Er liest nur.
+2. Erzeugen Sie für ihn unter „API-Token“ ein Token ohne „Privilege Separation“ oder geben Sie dem Token selbst die Rolle `PVEAuditor`.
+3. Öffnen Sie in SentryAssets **Virtualisierung › Verbindungen** und wählen Sie **Verbindung hinzufügen**. Tragen Sie als **Host** den Namen oder die Adresse eines Knotens ein, dazu die **Token-ID** (`benutzer@realm!token`) und das **Geheimnis des Tokens**.
+4. Hinterlegen Sie das Zertifikat wie im nächsten Abschnitt beschrieben, speichern Sie und wählen Sie **Testen**. Erst nach einem erfolgreichen Test lässt sich die Verbindung einschalten.
+
+### Welches Zertifikat?
+
+SentryAssets prüft das Zertifikat des Knotens immer vollständig: Kette, Gültigkeit und ob es zum Host passt. Welche Angabe Sie brauchen, hängt vom Zertifikat des Knotens ab:
+
+| Zertifikat des Knotens | Host | CA-Zertifikat (PEM, optional) | Name im Zertifikat (optional) |
+|---|---|---|---|
+| Selbst ausgestellt, wie nach der Installation | Name oder Adresse, die im Zertifikat steht | Inhalt von `/etc/pve/pve-root-ca.pem` | leer |
+| Let's Encrypt oder eine andere öffentliche Stelle, erreichbar unter dem Namen | der Name aus dem Zertifikat | leer | leer |
+| Let's Encrypt oder eine andere öffentliche Stelle, intern nur über die IP-Adresse erreichbar | die interne IP-Adresse | leer | der Name aus dem Zertifikat, etwa `pve1.example.de` |
+
+Mit **Name im Zertifikat** verbindet sich SentryAssets mit dem eingetragenen Host und prüft das Zertifikat gegen diesen Namen. Das ist nötig, wenn der Name öffentlich auf eine andere Adresse zeigt als intern: Die Verbindung geht dann nur an die interne Adresse in einem erlaubten Netz.
+
+<Aside type="caution">
+Meldet der Test „Das Zertifikat des Hypervisors ist nicht vertrauenswürdig oder passt nicht zum Host“, passt meist die Tabelle nicht: Ein Zertifikat von Let's Encrypt mit der IP-Adresse als Host braucht den **Namen im Zertifikat**, und `pve-root-ca.pem` hilft dann nicht, weil diese CA das Zertifikat nicht ausgestellt hat.
+</Aside>
+
 ## Sicherheit
 
 - Jede Verbindung wird zuerst getestet, Schritt für Schritt in einfachen Worten, mit der ausgehandelten TLS-Version.
-- Das Zertifikat wird immer geprüft, gegen die eigene CA des Hypervisors, wenn Sie sie hinterlegen (Proxmox `pve-root-ca`, vCenter VMCA).
+- Das Zertifikat wird immer geprüft, gegen die eigene CA des Hypervisors, wenn Sie sie hinterlegen (Proxmox `pve-root-ca`, vCenter VMCA), und gegen den Host oder den **Namen im Zertifikat**, wenn Sie ihn eintragen.
 - TLS 1.3; vCenter vor 8.0 Update 3 kann nur TLS 1.2 und wird dann nur mit ECDHE und AEAD angesprochen. Die Seite empfiehlt das TLS-Profil mit 1.3.
 - Erreicht werden nur Netze, die der Betreiber erlaubt (`SA_HYPERVISOR_ALLOWED_NETWORKS`, Standard: private Netze).
-- Token-Geheimnis und Passwort werden versiegelt gespeichert und nie angezeigt. Ändern sich Art, Host, Port oder CA, ist das Geheimnis neu einzugeben.
+- Token-Geheimnis und Passwort werden versiegelt gespeichert und nie angezeigt. Ändern sich Art, Host, Port, Name im Zertifikat oder CA, ist das Geheimnis neu einzugeben.
 
 ## Abgleich
 

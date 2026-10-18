@@ -20,13 +20,36 @@ SentryAssets reads hosts and virtual machines in the background at an interval o
 | **VMware vCenter** 7.0 Update 2 or newer | port 443, a user with the role "Read-only"; single ESXi hosts without vCenter lack the API needed |
 | **Hyper-V** | through the agent on the host: add the connection "Hyper-V through agent" once; the agent reads the guests through WMI, read-only, with what Windows brings along |
 
+## Connecting Proxmox VE
+
+1. In Proxmox VE, under "Datacenter › Permissions", add a user such as `sentryassets@pve` and give it the role `PVEAuditor` on `/`. It only reads.
+2. Under "API Tokens", create a token for it without "Privilege Separation", or give the token itself the role `PVEAuditor`.
+3. In SentryAssets, open **Virtualisation › Connections** and choose **Add connection**. Enter the name or address of a node as **Host**, the **Token ID** (`user@realm!token`) and the **Token secret**.
+4. Add the certificate as described in the next section, save and choose **Test**. Only after a successful test can the connection be switched on.
+
+### Which certificate?
+
+SentryAssets always verifies the node's certificate in full: chain, validity and whether it matches the host. What you enter depends on the node's certificate:
+
+| Node's certificate | Host | CA certificate (PEM, optional) | Name in the certificate (optional) |
+|---|---|---|---|
+| Self-signed, as after installation | name or address that is in the certificate | content of `/etc/pve/pve-root-ca.pem` | empty |
+| Let's Encrypt or another public authority, reachable by its name | the name from the certificate | empty | empty |
+| Let's Encrypt or another public authority, reachable internally only by its IP address | the internal IP address | empty | the name from the certificate, such as `pve1.example.com` |
+
+With **Name in the certificate**, SentryAssets connects to the host entered and checks the certificate against that name. This is needed where the name points to another address publicly than internally: the connection then goes only to the internal address in an allowed network.
+
+<Aside type="caution">
+If the test reports "The hypervisor's certificate is not trusted or does not match the host", the table usually does not match: a certificate from Let's Encrypt with the IP address as host needs the **Name in the certificate**, and `pve-root-ca.pem` does not help there, as that CA did not issue the certificate.
+</Aside>
+
 ## Security
 
 - Each connection is tested first, step by step in plain words, with the negotiated TLS version.
-- The certificate is always verified, against the hypervisor's own CA if you add it (Proxmox `pve-root-ca`, vCenter VMCA).
+- The certificate is always verified, against the hypervisor's own CA if you add it (Proxmox `pve-root-ca`, vCenter VMCA), and against the host or the **Name in the certificate** if you enter one.
 - TLS 1.3; vCenter before 8.0 Update 3 can only do TLS 1.2 and is then spoken to with ECDHE and AEAD only. The page recommends the TLS profile with 1.3.
 - Only networks the operator allows are reached (`SA_HYPERVISOR_ALLOWED_NETWORKS`, private networks by default).
-- Token secret and password are stored sealed and never shown. If kind, host, port or CA change, the secret must be entered again.
+- Token secret and password are stored sealed and never shown. If kind, host, port, name in the certificate or CA change, the secret must be entered again.
 
 ## Matching
 
