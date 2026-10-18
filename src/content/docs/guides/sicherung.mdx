@@ -55,7 +55,7 @@ Die Sicherung ist mit `./secrets/master_key` verschlüsselt. Bewahren Sie den Sc
 
 - Wiederhergestellt wird nur in eine **leere** Datenbank, mit derselben oder einer neueren Version. Lief auf dem neuen Server schon `docker compose up`, entfernen Sie vorher das Volume der Datenbank (`docker compose down` und `docker volume rm sentryassets_postgres-data`).
 - Vor dem Abschluss prüft die Wiederherstellung jeden Fremdschlüssel. Der Befehl nennt Datum und Alter der Sicherung.
-- Wiederholen Sie danach, was seit der Sicherung geschah: gesperrte Agents, Rollout- und Status-Tokens erneut sperren, deaktivierte Konten erneut deaktivieren, geänderte Notfallpasswörter erneut setzen. Agents, die ihr Zertifikat nach der Sicherung erneuert haben, melden sich mit einem neuen Rollout-Token wieder an.
+- Wiederholen Sie danach, was seit der Sicherung geschah: gesperrte Agents, Rollout- und Status-Tokens erneut sperren, deaktivierte Konten erneut deaktivieren, geänderte Passwörter lokaler Konten erneut setzen oder Zugänge zurücksetzen. Agents, die ihr Zertifikat nach der Sicherung erneuert haben, melden sich mit einem neuen Rollout-Token wieder an.
 - Spielen Sie nur Sicherungen aus Ihrer eigenen Ablage ein: Wer den Master-Schlüssel hat, kann eine gültige Datei bauen.
 
 ## Agent-PKI erneuern

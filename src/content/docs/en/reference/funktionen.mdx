@@ -62,10 +62,11 @@ Grundschutz++ and Edition 2023 with a guided process, the Grundschutz check and 
 
 ## Notifications
 
-Webhook and Gotify for chosen events, such as new or blocked agents, emergency sign-ins, sign-in changes, failed directory syncs or a broken audit chain. Messages carry no personal details. Targets over https with TLS 1.3 only; by default only addresses in the internet, a server in your own network needs `SA_NOTIFICATION_ALLOWED_NETWORKS`. Set up under **Settings › Notifications**.
+Webhook and Gotify for chosen events, such as new or blocked agents, sign-ins with local accounts, changes to local accounts, sign-in changes, failed directory syncs or a broken audit chain. Messages carry no personal details. Targets over https with TLS 1.3 only; by default only addresses in the internet, a server in your own network needs `SA_NOTIFICATION_ALLOWED_NETWORKS`. Set up under **Settings › Notifications**.
 
 ## Operations
 
+- **Sign-in:** local accounts with password and mandatory TOTP, created by the administration with a setup link; optionally OIDC with any identity provider; five fixed [roles](/en/reference/rollen/); see [Setup](/en/guides/einrichtung/#sign-in-local-accounts-and-oidc).
 - **System health:** database, Valkey, job worker and virus scanner, the job queue, deadlines of the agent PKI, document storage and the last check of the audit chain.
 - **Audit log** with hash chain, filters, names of people and export as JSON Lines, see [Security](/en/reference/sicherheit/#audit-log).
 - **Backup and migration**, see [Backup and migration](/en/guides/sicherung/).

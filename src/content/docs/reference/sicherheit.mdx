@@ -20,11 +20,11 @@ SentryAssets hält Daten über Ihre gesamte IT, und der Agent läuft mit erhöht
 
 | Thema | Umsetzung |
 |---|---|
-| Verfahren | OIDC mit Authorization Code und PKCE, abgewickelt im Backend; keine Tokens im Browser |
+| Verfahren | lokale Konten mit Passwort und Pflicht-TOTP; optional OIDC mit Authorization Code und PKCE, abgewickelt im Backend; keine Tokens im Browser |
 | Sitzung | serverseitig in Valkey, Cookie `__Host-sa_session` mit `HttpOnly`, `Secure`, `SameSite=Lax`; neue Sitzungs-ID nach der Anmeldung |
 | Laufzeit | Leerlauf 30 Minuten, absolut 12 Stunden |
 | CSRF | Synchronizer-Token und Prüfung von `Origin` bzw. `Sec-Fetch-Site` für jede ändernde Anfrage |
-| Notfallzugang | Argon2id, TOTP Pflicht, Sperre nach Fehlversuchen; abgeschaltet, sobald OIDC aktiv ist |
+| Lokale Konten | Argon2id, TOTP Pflicht (von der Datenbank erzwungen), Sperre nach Fehlversuchen; angelegt nur von Administratoren mit frischer Bestätigung; Passwort und TOTP legt die Person selbst über einen Einrichtungslink fest (256 Bit, nur als Hash gespeichert, einmal angezeigt, 72 Stunden gültig, im URL-Fragment); das Anlegen neuer lokaler Konten lässt sich untersagen; abschaltbar mit `SA_LOCAL_ACCOUNTS=disabled` |
 | Maschinenzugang | nur Tokens für einen eng begrenzten Zweck (Status-Meldungen, SCIM), 256 Bit, nur als Hash gespeichert, einmal angezeigt, mit Ablauf, widerrufbar |
 
 ## Web-Sicherheit

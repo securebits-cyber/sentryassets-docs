@@ -1,6 +1,6 @@
 ---
 title: Einrichtung
-description: Nach der Installation den Einrichtungsassistenten durchlaufen, die Anmeldung mit OIDC einrichten und den Notfallzugang verstehen.
+description: Nach der Installation den Einrichtungsassistenten durchlaufen, lokale Konten anlegen und optional die Anmeldung mit OIDC einrichten.
 sidebar:
   label: Einrichtung
   order: 2
@@ -8,7 +8,7 @@ sidebar:
 
 import { Aside, Steps } from '@astrojs/starlight/components';
 
-Nach der [Installation](/guides/installation/) melden Sie sich mit dem Notfallkonto an. Der Einrichtungsassistent führt durch die Grundeinrichtung; jeden Schritt finden Sie später auch unter **Einstellungen**.
+Nach der [Installation](/guides/installation/) melden Sie sich mit dem ersten Administratorkonto an. Der Einrichtungsassistent führt durch die Grundeinrichtung; jeden Schritt finden Sie später auch unter **Einstellungen**.
 
 ## Einrichtungsassistent
 
@@ -16,14 +16,70 @@ Der Assistent öffnet sich bei der ersten Anmeldung und steht danach unter **Ein
 
 1. **Organisation:** Name Ihrer Organisation; er erscheint in der Seitenleiste und auf Etiketten.
 2. **Standort:** der erste Standort im Standortbaum (Standort, Gebäude, Etage, Raum).
-3. **Anmeldung:** OIDC einrichten und testen (siehe unten).
+3. **Anmeldung (optional):** prüfen, ob OIDC erreichbar ist, falls Sie einen Identity Provider nutzen (siehe unten).
 4. **Erster Agent:** ein Rollout-Token erzeugen und den fertigen Installationsbefehl kopieren (siehe [Agents](/guides/agents/)).
 
 In einer leeren Installation bietet der Assistent zusätzlich an, **Beispieldaten** zu laden: eine erfundene Firma mit Standorten, Personen, Lieferanten, Geräten, Beziehungen, Lizenzen und Verträgen. Sie lassen sich in einem Schritt wieder entfernen; Beispieleinträge, auf die Ihre eigenen Daten verweisen oder die Sie geändert haben, bleiben erhalten. Solange Beispieldaten geladen sind, sagt die Übersicht das.
 
-## Anmeldung mit OIDC
+## Anmeldung: lokale Konten und OIDC
 
-SentryAssets meldet Personen über Ihren Identity Provider an (OpenID Connect mit Authorization Code und PKCE, etwa Entra ID, Keycloak, Authentik oder Okta). Konten entstehen mit der ersten Anmeldung; die Rolle folgt bei jeder Anmeldung den Gruppen.
+SentryAssets kennt zwei gleichwertige Arten der Anmeldung:
+
+- **Lokale Konten** mit Benutzername, Passwort und Einmalcode aus einer Authenticator-App (TOTP). Der Einmalcode ist **Pflicht**; ein lokales Konto ohne ihn gibt es nicht.
+- **OIDC** über Ihren Identity Provider, etwa Entra ID, Keycloak, Authentik oder Okta. OIDC ist **optional**.
+
+Beide gelten nebeneinander. Wer keinen Identity Provider hat, arbeitet nur mit lokalen Konten. Wer OIDC nutzt, behält lokale Konten für Personen ohne Firmenkonto und als Weg hinein, falls der Identity Provider ausfällt.
+
+## Lokale Konten
+
+Lokale Konten legt nur eine Administration an; selbst registrieren kann sich niemand. Das Passwort legt die Person selbst fest, sodass es niemand sonst kennt.
+
+<Steps>
+
+1. Öffnen Sie **Einstellungen › Benutzer** und wählen Sie **Lokales Konto anlegen**. Tragen Sie Benutzername (Kleinbuchstaben, Ziffern und `. _ @ -`), Anzeigename, optional die E-Mail-Adresse und die [Rolle](/reference/rollen/) ein.
+
+2. SentryAssets zeigt einen **Einrichtungslink**, nur dieses eine Mal. Geben Sie ihn der Person auf einem vertraulichen Weg, etwa persönlich oder über einen verschlüsselten Messenger. Wer den Link hat, kann das Konto einrichten.
+
+3. Die Person öffnet den Link, scannt den QR-Code mit ihrer Authenticator-App, wählt ein Passwort und bestätigt mit dem ersten Einmalcode. Danach ist sie angemeldet, und der Link gilt nicht mehr.
+
+</Steps>
+
+<Aside>
+Ein Einrichtungslink gilt 72 Stunden. Ist er abgelaufen, zeigt die Benutzerliste „Link abgelaufen“; erzeugen Sie mit **Zugang zurücksetzen** einen neuen.
+</Aside>
+
+- **Passwortregeln:** mindestens 12 Zeichen, ohne den Benutzernamen und ohne „sentryassets“. Ein langer Satz ist leichter zu merken als ein kurzes, kompliziertes Passwort.
+- **Rolle ändern:** Bei lokalen Konten wählen Sie die Rolle direkt in der Benutzerliste; sie gilt sofort, auch in laufenden Sitzungen.
+- **Passwort oder Authenticator verloren:** **Zugang zurücksetzen** macht Passwort und Einmalcode ungültig, beendet alle Sitzungen des Kontos und erzeugt einen neuen Einrichtungslink.
+- **Eigenes Passwort ändern:** Jede Person ändert Passwort und Authenticator selbst im **Profil**.
+- **Fehlversuche:** Nach fünf falschen Anmeldungen wird das Konto mit wachsender Wartezeit gesperrt.
+- **Neue lokale Konten untersagen:** Unter **Einstellungen › Benutzer** schalten Sie **Anlegen neuer lokaler Konten erlauben** ab, wenn neue Personen nur noch über OIDC kommen sollen. Bestehende lokale Konten melden sich weiter an und lassen sich zurücksetzen.
+
+Anlegen, Rolle ändern, Zurücksetzen und der Schalter für neue Konten verlangen eine frische Bestätigung Ihrer Anmeldung: bei lokalen Konten einen Einmalcode, bei OIDC-Konten eine erneute Anmeldung beim Identity Provider.
+
+### Befehle auf dem Server
+
+Diese Befehle brauchen keine Oberfläche, etwa wenn niemand mehr hineinkommt:
+
+```bash
+# Ein Administratorkonto anlegen (fragt das Passwort ab, zeigt die TOTP-Adresse)
+docker compose run --rm cli admin create-admin --username admin
+
+# Neues TOTP-Geheimnis für ein lokales Konto, laufende Sitzungen enden
+docker compose run --rm cli admin reset-totp --username admin
+
+# Sperre nach Fehlversuchen aufheben, deaktiviertes Konto wieder aktivieren
+docker compose run --rm cli admin unlock --username admin
+docker compose run --rm cli admin enable-account --username admin
+```
+
+<Aside>
+Wer ausschließlich OIDC zulassen will, setzt `SA_LOCAL_ACCOUNTS=disabled`. Dann gibt es weder lokale Anmeldung noch Einrichtungslinks, und laufende lokale Sitzungen enden. Prüfen Sie vorher, dass sich eine Administration über OIDC anmelden kann.
+</Aside>
+
+## Anmeldung mit OIDC (optional)
+
+Mit OIDC meldet SentryAssets Personen über Ihren Identity Provider an (OpenID Connect mit Authorization Code und PKCE). Konten entstehen mit der ersten Anmeldung; die Rolle folgt bei jeder Anmeldung den Gruppen.
 
 <Steps>
 
@@ -36,42 +92,24 @@ SentryAssets meldet Personen über Ihren Identity Provider an (OpenID Connect mi
 
 3. Prüfen Sie den Entwurf mit einer **Testanmeldung** mit einem Konto, das nach der Zuordnung Administrator ist. Aktivieren lässt sich nur ein erfolgreich getesteter Entwurf.
 
-4. **Aktivieren** Sie die Anmeldung. Ab jetzt melden sich alle über OIDC an.
+4. **Aktivieren** Sie die Anmeldung. Die Anmeldeseite bietet dann beides an: das Unternehmenskonto und lokale Konten.
 
 </Steps>
 
-Jede Änderung an der Anmeldung verlangt eine frische Bestätigung: beim Notfallkonto den Einmalcode, bei OIDC-Konten eine erneute Anmeldung beim Identity Provider.
-
 - **Keine passende Gruppe:** Die Anmeldung wird abgelehnt.
 - **Mehrere Gruppen:** Es gilt die Rolle mit den meisten Rechten.
+- **Rolle:** Bei OIDC-Konten ändern Sie die Rolle über die Gruppen beim Identity Provider, nicht in SentryAssets.
 - **Rechte entzogen:** Bei jeder Erneuerung der Sitzung prüft SentryAssets, ob das Konto noch aktiv ist. Entzogene Gruppen wirken spätestens bei der nächsten Anmeldung. Mit [SCIM](/pro/scim/) wirkt eine Sperre sofort.
 - **Sitzungen:** Leerlauf 30 Minuten, absolute Laufzeit 12 Stunden (`SA_SESSION_IDLE_MINUTES`, `SA_SESSION_ABSOLUTE_HOURS`).
+- **Abschalten:** OIDC lässt sich nur abschalten, wenn ein lokales Administratorkonto eingerichtet ist. Fällt der Identity Provider aus, schaltet `docker compose run --rm cli admin disable-oidc` die in der Oberfläche gespeicherte Konfiguration ab.
 
 ### OIDC über die Server-Konfiguration
 
 Alternativ legen Sie OIDC in einer `docker-compose.override.yml` mit `SA_OIDC_ISSUER`, `SA_OIDC_CLIENT_ID`, `SA_OIDC_ROLE_MAPPING` und `SA_OIDC_CLIENT_SECRET_FILE` (als Secret-Datei) fest. Diese Konfiguration hat Vorrang; die Oberfläche zeigt sie dann nur an.
 
-## Notfallzugang
-
-Das Notfallkonto entsteht nur auf dem Server (`cli admin create-emergency`), nie über die Oberfläche. Es meldet sich in einem Schritt mit Benutzername, Passwort und Einmalcode an; Passwörter sind mit Argon2id gespeichert, und nach Fehlversuchen wird das Konto mit wachsender Wartezeit gesperrt.
-
-Sobald OIDC aktiv ist, ist der Notfallzugang automatisch abgeschaltet. Für den Ausfall des Identity Providers bleiben diese Befehle auf dem Server:
-
-```bash
-# OIDC aus der Oberfläche abschalten; danach gilt wieder der Notfallzugang
-docker compose run --rm cli admin disable-oidc
-
-# Neues TOTP-Geheimnis für ein Notfallkonto, laufende Sitzungen enden
-docker compose run --rm cli admin reset-totp --username notfall
-```
-
-<Aside>
-Ob der Notfallzugang neben OIDC aktiv bleibt, steuert `SA_EMERGENCY_ACCESS` (`auto`, `enabled`, `disabled`). Lassen Sie es bei `auto`, außer Sie haben einen guten Grund.
-</Aside>
-
 ## Benutzer verwalten
 
-Unter **Einstellungen › Benutzer** sehen Sie alle Konten mit Rolle, Status und letzter Anmeldung. **Deaktivieren** entzieht den Zugriff sofort, mit „Rückgängig“ im Hinweis. Eine Administration und ein Weg zur Anmeldung bleiben immer bestehen. Einladungen und Startpasswörter gibt es nicht, weil Konten mit der ersten OIDC-Anmeldung entstehen.
+Unter **Einstellungen › Benutzer** sehen Sie alle Konten mit Rolle, Anmeldeart, Status und letzter Anmeldung. **Deaktivieren** entzieht den Zugriff sofort, mit „Rückgängig“ im Hinweis. Ihr eigenes Konto ändern Sie dort nicht; dafür gibt es das Profil. Eine Administration und ein Weg zur Anmeldung bleiben immer bestehen.
 
 ## Weitere Einstellungen
 

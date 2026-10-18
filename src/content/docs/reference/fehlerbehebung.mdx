@@ -31,8 +31,8 @@ Fehlermeldungen an die Oberfläche sind allgemein gehalten; die Details stehen i
 | Problem | Ursache und Lösung |
 |---|---|
 | OIDC-Anmeldung wird abgelehnt | Keine Gruppe des Kontos passt zur Zuordnung, oder der Claim heißt anders als `groups`. Prüfen Sie die Zuordnung unter **Einstellungen › Anmeldung**. |
-| Identity Provider nicht erreichbar | `docker compose run --rm cli admin disable-oidc`; danach gilt wieder der Notfallzugang. |
-| Notfallkonto gesperrt oder Authenticator verloren | `docker compose run --rm cli admin reset-totp --username <name>` |
+| Identity Provider nicht erreichbar | Lokale Konten melden sich weiter an. Gespeicherte OIDC-Konfiguration abschalten: `docker compose run --rm cli admin disable-oidc` |
+| Lokales Konto gesperrt, Passwort oder Authenticator verloren | **Einstellungen › Benutzer › Zugang zurücksetzen** und den neuen Einrichtungslink weitergeben; ohne Oberfläche `docker compose run --rm cli admin reset-totp --username <name>` bzw. `admin unlock` |
 | Sitzung endet unerwartet | Nach 30 Minuten Leerlauf oder 12 Stunden endet jede Sitzung. Ein deaktiviertes Konto verliert die Sitzung bei der nächsten Erneuerung. |
 
 ## Agents und Collector

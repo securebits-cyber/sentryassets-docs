@@ -76,10 +76,10 @@ Wenn Port 443 für die Agents nicht in Frage kommt, bekommen sie mit `docker-com
    docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
    ```
 
-8. Ein Notfallkonto anlegen. Der Befehl fragt das Passwort ab und zeigt eine `otpauth://`-Adresse für Ihre Authenticator-App:
+8. Das erste Administratorkonto anlegen. Der Befehl fragt das Passwort ab und zeigt eine `otpauth://`-Adresse für Ihre Authenticator-App:
 
    ```bash
-   docker compose run --rm cli admin create-emergency --username notfall
+   docker compose run --rm cli admin create-admin --username admin
    ```
 
 9. Den Stack starten:
@@ -93,7 +93,7 @@ Wenn Port 443 für die Agents nicht in Frage kommt, bekommen sie mit `docker-com
 ## Ergebnis prüfen
 
 - `docker compose ps` zeigt alle Dienste als `healthy`; `migrate` ist mit Code 0 beendet.
-- Unter `https://<SA_UI_HOST>` erscheint die Anmeldung. Melden Sie sich mit dem Notfallkonto an; der [Einrichtungsassistent](/guides/einrichtung/) führt durch Standort, OIDC-Test und den ersten Agent.
+- Unter `https://<SA_UI_HOST>` erscheint die Anmeldung. Melden Sie sich mit dem Administratorkonto an; der [Einrichtungsassistent](/guides/einrichtung/) führt durch Standort und den ersten Agent. Weitere Personen erhalten ein [lokales Konto](/guides/einrichtung/#lokale-konten), optional richten Sie OIDC ein.
 
 <Aside type="danger" title="Master-Schlüssel sichern">
 `./secrets/master_key` verschlüsselt gespeicherte Geheimnisse (TOTP, Issuing-CA), alle Dokumente und die Sicherungen. Ohne ihn sind diese verloren. Bewahren Sie ihn getrennt von den Sicherungen auf, etwa ausgedruckt im Tresor oder in einem Passwortmanager.

@@ -31,8 +31,8 @@ Error messages in the web UI are generic; the details are in the log under the s
 | Problem | Cause and solution |
 |---|---|
 | OIDC sign-in is refused | No group of the account matches the mapping, or the claim is not called `groups`. Check the mapping under **Settings › Sign-in**. |
-| Identity provider not reachable | `docker compose run --rm cli admin disable-oidc`; the emergency access applies again. |
-| Emergency account locked or authenticator lost | `docker compose run --rm cli admin reset-totp --username <name>` |
+| Identity provider not reachable | Local accounts go on signing in. To switch off the stored OIDC configuration: `docker compose run --rm cli admin disable-oidc` |
+| Local account locked, password or authenticator lost | **Settings › Users › Reset access** and pass on the new setup link; without the web UI `docker compose run --rm cli admin reset-totp --username <name>` or `admin unlock` |
 | Session ends unexpectedly | Every session ends after 30 minutes idle or 12 hours. A deactivated account loses its session at the next renewal. |
 
 ## Agents and collector

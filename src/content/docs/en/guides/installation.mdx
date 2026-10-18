@@ -76,10 +76,10 @@ If port 443 is not an option for the agents, `docker-compose.agent-port.yml` giv
    docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
    ```
 
-8. Create an emergency account. The command asks for the password and shows an `otpauth://` address for your authenticator app:
+8. Create the first administrator account. The command asks for the password and shows an `otpauth://` address for your authenticator app:
 
    ```bash
-   docker compose run --rm cli admin create-emergency --username emergency
+   docker compose run --rm cli admin create-admin --username admin
    ```
 
 9. Start the stack:
@@ -93,7 +93,7 @@ If port 443 is not an option for the agents, `docker-compose.agent-port.yml` giv
 ## Check the result
 
 - `docker compose ps` shows every service as `healthy`; `migrate` has exited with code 0.
-- `https://<SA_UI_HOST>` shows the sign-in. Sign in with the emergency account; the [setup wizard](/en/guides/einrichtung/) leads through location, OIDC test and the first agent.
+- `https://<SA_UI_HOST>` shows the sign-in. Sign in with the administrator account; the [setup wizard](/en/guides/einrichtung/) leads through location and the first agent. Other people get a [local account](/en/guides/einrichtung/#local-accounts); OIDC is optional.
 
 <Aside type="danger" title="Keep the master key safe">
 `./secrets/master_key` encrypts stored secrets (TOTP, issuing CA), every document and the backups. Without it they are lost. Keep it apart from the backups, for example printed in a safe or in a password manager.

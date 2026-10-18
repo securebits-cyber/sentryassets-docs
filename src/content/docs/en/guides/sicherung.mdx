@@ -55,7 +55,7 @@ The backup is encrypted with `./secrets/master_key`. Keep the key apart from the
 
 - A backup is restored only into an **empty** database, with the same or a newer version. If `docker compose up` already ran on the new server, remove the database volume first (`docker compose down` and `docker volume rm sentryassets_postgres-data`).
 - Before it commits, the restore checks every foreign key. The command names date and age of the backup.
-- Afterwards repeat what happened since the backup: block agents, rollout and status tokens again, deactivate accounts again, set changed emergency passwords again. Agents that renewed their certificate after the backup enrol again with a new rollout token.
+- Afterwards repeat what happened since the backup: block agents, rollout and status tokens again, deactivate accounts again, set changed passwords of local accounts again or reset their access. Agents that renewed their certificate after the backup enrol again with a new rollout token.
 - Restore only backups from your own storage: anyone with the master key can build a valid file.
 
 ## Renewing the agent PKI

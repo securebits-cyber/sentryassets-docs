@@ -104,7 +104,7 @@ secrets:
 | `SA_OIDC_CLIENT_SECRET_FILE` | – | file with the client secret |
 | `SA_OIDC_ROLE_CLAIM` | `groups` | claim with the groups |
 | `SA_OIDC_ROLE_MAPPING` | – | pairs `group=role`, comma-separated |
-| `SA_EMERGENCY_ACCESS` | `auto` | emergency access: `auto` (off once OIDC is active), `enabled`, `disabled` |
+| `SA_LOCAL_ACCOUNTS` | `enabled` | local accounts with password and TOTP: `enabled` (next to OIDC) or `disabled` (OIDC only) |
 | `SA_CONTACT_RETENTION_DAYS` | `365` | propose archived contacts for deletion after this time (30–3650) |
 | `SA_DOCUMENT_QUOTA_BYTES` | 20 GiB | sum of all document versions per organisation |
 | `SA_DOCUMENT_TRANSFERS` | `2` | concurrent uploads and downloads per API instance; each holds a file in memory, so raise the API's `mem_limit` as well |
