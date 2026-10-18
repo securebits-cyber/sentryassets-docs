@@ -16,3 +16,6 @@ npm-debug.log*
 .vscode/
 .idea/
 .forbidden-terms
+
+# Lokale Kopie der Design-Unterlagen aus dem Produkt-Repository
+/docs/
