@@ -55,6 +55,7 @@ If the test reports "The hypervisor's certificate is not trusted or does not mat
 
 - VMs match assets by the MAC addresses the hypervisor gave them.
 - A match by name alone, a host or an asset that is no VM is only offered.
+- The order is up to you: once you create or link a host's asset, its machines already taken over run on it ("runs on"); machines taken over later get the relation when they are created.
 - **Nothing reaches the inventory by itself:** machines and hosts become assets in bulk with a proposed category; differing details such as vCPU, memory, operating system or the host after a move are taken over field by field.
 
 <Aside>
