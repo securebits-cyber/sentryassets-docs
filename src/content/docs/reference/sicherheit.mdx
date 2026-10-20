@@ -46,6 +46,7 @@ SentryAssets hält Daten über Ihre gesamte IT, und der Agent läuft mit erhöht
 - Einträge sind über eine **Hash-Kette** (SHA-256 über kanonisches JSON) verbunden. Die Anwendung darf nur einfügen, nie ändern oder löschen, durchgesetzt über die Rechte der Datenbank.
 - Prüfung mit `docker compose run --rm cli audit verify` und regelmäßig im Job-Worker.
 - Export als JSON Lines: Jede Zeile trägt, was ihr Hash abdeckt, sodass jeder mit der Datei die Kette nachrechnen kann.
+- **Versiegelte Bereiche:** Einträge, die nur eine bestimmte Rolle sehen darf, etwa die vertrauliche Akte des [Datenschutz-Add-ons](/pro/datenschutz-add-on/#vertrauliche-akte), erscheinen im vollständigen Export nur als Platzhalter mit Zeitpunkt, Bereich und Hash; gefilterte Exporte lassen sie weg. Die Kette bleibt so prüfbar.
 
 ## Agents
 

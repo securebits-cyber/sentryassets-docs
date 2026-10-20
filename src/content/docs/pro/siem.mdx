@@ -20,7 +20,7 @@ Das Audit-Log geht laufend an bis zu drei Ziele, sobald Einträge entstehen.
 | JSON Lines | HTTPS, optional mit Bearer-Token |
 | Splunk | HTTP Event Collector |
 
-Jeder Eintrag ist die Zeile des Datei-Exports mit ihrem Hash; das SIEM kann die Kette also nachrechnen.
+Jeder Eintrag ist die Zeile des Datei-Exports mit ihrem Hash; das SIEM kann die Kette also nachrechnen. Einträge versiegelter Bereiche, etwa der vertraulichen Akte des [Datenschutz-Add-ons](/pro/datenschutz-add-on/#vertrauliche-akte), erhält ein Ziel mit **allen Einträgen** nur als Platzhalter mit Zeitpunkt, Bereich und Hash; ein Ziel mit **Sicherheitsereignissen** erhält sie gar nicht.
 
 ## Einrichten
 

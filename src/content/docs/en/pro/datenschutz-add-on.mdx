@@ -1,0 +1,96 @@
+---
+title: Data protection add-on
+description: The data protection add-on leads step by step through the duties of the GDPR, from the record of processing activities to the activity report of the data protection officer.
+sidebar:
+  label: Data protection add-on
+  order: 16
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Data protection add-on" variant="note" /> The add-on adds to every edition, the community edition included, and is licensed separately.
+
+The data protection add-on leads organisations and their data protection officers step by step through the duties of the GDPR and the German BDSG. It builds on your inventory: you choose systems, suppliers and people instead of entering them again. With the add-on, the group **Data protection** appears in the navigation, divided into **Build**, **Run** and **Review and report**.
+
+<Aside type="caution" title="Support, not legal advice">
+The add-on structures and documents. Whether processing is lawful, a notification is needed or a risk acceptable is for your organisation and your data protection officer to decide.
+</Aside>
+
+## Without a licence
+
+The **data protection check** with about 40 questions, whether a **data protection officer is required** together with their designation, and the **record of processing activities** (Art. 30 (1) GDPR) with CSV export can be used without a licence. Everything else shows a lock without one.
+
+## Build
+
+| Area | Contents |
+|---|---|
+| **Organisation** | whether an officer is required, designation of the data protection officer with notification to the authority, conflict of interest, responsibilities |
+| **Policy and commitment** | data protection policy from a template, approved by the management; commitment of employees to confidentiality per person |
+| **Templates to sign** | management resolution on the policy and designation of the data protection officer, filled in from your entries, as print view or PDF |
+| **Record** | activities with legal bases, data subjects, data, recipients, third countries, retention, systems and suppliers; 21 templates of typical activities, balancing of interests, gaps per activity, print view |
+| **Privacy notices** | register of the information duties under Art. 13 and 14 GDPR per activity |
+| **Processors** | selection, checks with follow-up, instructions, sub-processors and third countries; shared with the ISMS add-on |
+| **TOM** | technical and organisational measures per the Standard Data Protection Model, with the state of the IT-Grundschutz modules |
+| **Risk model** and **impact assessment** | threshold analysis per the mandatory list of the German supervisory authorities, data protection impact assessment per Art. 35 (7) GDPR, opinion of the data protection officer, management decision, prior consultation |
+| **Deletion concept** | deletion classes per DIN 66398 with templates, rules per activity and data category, implementation per system, backups and archives, review |
+| **As a processor** | record per Art. 30 (2) GDPR, where you process on behalf of others yourself |
+
+## Run
+
+| Area | Contents |
+|---|---|
+| **Data subject requests** | register with deadlines, procedure and letter templates; optionally an inbox that only reads a mailbox through Microsoft Graph or IMAP |
+| **Data breaches** | together with the ISMS security incidents: assessment, suggestion on the duty to notify, notification to the authority within 72 hours, record per Art. 33 (5) GDPR |
+| **New projects** | departments report new software, suppliers or purposes; the data protection officer reviews them and gives an opinion |
+| **Trainings** | trainings with attendees, import of lists, due date per person and a **training record to sign** |
+| **Record of advice** | advice, opinions and information with the recommendation and the management decision: followed, partly followed or deviated from, with a reason |
+| **Confidential file** | concerns of employees and data subjects, see below |
+| **Supervisory authority** | inquiries, complaints, consultations, notifications and inspections with deadline, handling and correspondence from the documents |
+
+## Review and report
+
+| Area | Contents |
+|---|---|
+| **Reviews** | reviews by the data protection officer with checklist, findings and corrective actions; the internal audits of the ISMS can be shown for reading |
+| **Activity report** | report to the management with key figures and acknowledgement, see below |
+
+## Who may do what
+
+| Role | Rights in the add-on |
+|---|---|
+| Data protection (`dpo`) | everything; only they word opinions, the record of advice, reviews and the activity report, and change the confidential file |
+| Administrator | reads everything and changes the other areas; sees the confidential file, every look is recorded |
+| Information security | reads, without data subject requests, matters with the authority and the confidential file; reports new projects |
+| Audit | reads like information security |
+| Editor | reports new projects and sees only their own |
+
+The exact rights are listed under **Settings › Roles and permissions** ([Roles and permissions](/en/reference/rollen/)).
+
+## Confidential file
+
+Employees and data subjects may turn to the data protection officer directly (Art. 38 (4) GDPR); their identity is confidential (§ 6 (5) BDSG).
+
+- Name, contact, description, notes and attachments are encrypted one by one. A database dump or a backup alone does not show them.
+- The list shows no names. Search, command palette, exports, webhooks and the AI assistant do not reach the file.
+- When the administration opens a concern or downloads an attachment, the data protection officer sees it under **Looks**, with person and time.
+- A mail from the inbox can be taken over as a concern. The inbox then empties it and does not read the same mail again; delete it in the mailbox itself.
+
+<Aside type="note" title="Sealed entries in the audit log">
+The entries of the file stand in a sealed area of the audit log that only the data protection officer sees. The file export and the [SIEM export](/en/pro/siem/) contain only placeholders in their place, with time, area and hash, so that the chain can still be verified. Whoever has the server and the master key can still read the file.
+</Aside>
+
+## Activity report
+
+The data protection officer reports to the highest management level (Art. 38 (3) GDPR), usually once a year.
+
+1. Under **Data protection › Activity report**, everyone with read access sees the **key figures** for a period of their choice, three years at most: advice and management decisions, concerns, requests, data breaches, reviews, trainings, matters with the authority, projects, record and deletion concept. Only numbers, no names or contents; what your role may not read stays empty.
+2. The data protection officer creates a report, writes the assessment and recommendations and counts the key figures again where needed.
+3. With **Submit**, the key figures are fixed. Until the management has taken note, the report can be withdrawn.
+4. The **print view** has a field for the management's signature. Upload the signed copy as a document.
+5. Under **Acknowledgement by the management**, the data protection officer or the administration records date, person and the signed copy. Date and person then stand; the signed copy can follow later. An acknowledged report is kept as evidence and can no longer be deleted.
+
+Figures marked “now” give the state on the day of counting, not at the end of the period.
+
+## Getting started
+
+Start on the **Data protection** home page with the guided way: each step shows what is missing and leads to the page that closes the gap. You can try the add-on during the [trial](/en/guides/lizenz/#trial).

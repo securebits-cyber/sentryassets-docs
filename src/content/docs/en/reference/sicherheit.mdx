@@ -46,6 +46,7 @@ SentryAssets holds data about your whole IT, and the agent runs with elevated ri
 - Entries are linked by a **hash chain** (SHA-256 over canonical JSON). The application may only insert, never change or delete, enforced by the database's rights.
 - Check with `docker compose run --rm cli audit verify` and regularly in the job worker.
 - Export as JSON Lines: each line carries what its hash covers, so anyone holding the file can recompute the chain.
+- **Sealed areas:** entries that only a certain role may see, such as the confidential file of the [data protection add-on](/en/pro/datenschutz-add-on/#confidential-file), appear in the full export only as placeholders with time, area and hash; filtered exports leave them out. The chain stays verifiable.
 
 ## Agents
 

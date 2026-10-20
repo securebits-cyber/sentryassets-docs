@@ -1,0 +1,96 @@
+---
+title: Datenschutz-Add-on
+description: Das Datenschutz-Add-on führt Schritt für Schritt durch die Pflichten der DSGVO, vom Verzeichnis von Verarbeitungstätigkeiten bis zum Tätigkeitsbericht der oder des Datenschutzbeauftragten.
+sidebar:
+  label: Datenschutz-Add-on
+  order: 16
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Datenschutz-Add-on" variant="note" /> Das Add-on ergänzt jede Edition, auch die Community-Edition, und wird eigens lizenziert.
+
+Das Datenschutz-Add-on führt Organisationen und ihre Datenschutzbeauftragten Schritt für Schritt durch die Pflichten der DSGVO und des BDSG. Es nutzt Ihr Inventar: Systeme, Lieferanten und Personen wählen Sie aus, statt sie neu zu erfassen. Mit dem Add-on erscheint die Gruppe **Datenschutz** in der Navigation, gegliedert in **Aufbauen**, **Betreiben** und **Prüfen und berichten**.
+
+<Aside type="caution" title="Unterstützung, keine Rechtsberatung">
+Das Add-on strukturiert und dokumentiert. Ob eine Verarbeitung zulässig ist, eine Meldung nötig oder ein Risiko tragbar, entscheiden Ihre Organisation und Ihre Datenschutzbeauftragten.
+</Aside>
+
+## Ohne Lizenz
+
+Den **Datenschutz-Check** mit rund 40 Fragen, die Prüfung der **Benennungspflicht** mit der Benennung der oder des Datenschutzbeauftragten und das **Verzeichnis von Verarbeitungstätigkeiten** (Art. 30 Abs. 1 DSGVO) mit CSV-Export nutzen Sie ohne Lizenz. Alles Weitere zeigt ohne Lizenz ein Schloss.
+
+## Aufbauen
+
+| Bereich | Inhalt |
+|---|---|
+| **Organisation** | Benennungspflicht, Benennung der oder des Datenschutzbeauftragten mit Meldung an die Aufsicht, Interessenkonflikt, Zuständigkeiten |
+| **Leitlinie und Verpflichtung** | Datenschutzleitlinie aus einer Vorlage mit Freigabe durch die Leitung; Verpflichtung der Beschäftigten auf die Vertraulichkeit je Person |
+| **Vorlagen zum Unterschreiben** | Beschluss der Leitung zur Leitlinie und Benennung der oder des Datenschutzbeauftragten, ausgefüllt aus Ihren Angaben, als Druckansicht oder PDF |
+| **Verzeichnis** | Verarbeitungen mit Rechtsgrundlagen, Betroffenen, Daten, Empfängern, Drittland, Löschfrist, Systemen und Lieferanten; 21 Vorlagen typischer Verarbeitungen, Interessenabwägung, Lücken je Verarbeitung, Druckansicht |
+| **Datenschutzhinweise** | Register der Informationspflichten nach Art. 13 und 14 DSGVO je Verarbeitung |
+| **Auftragsverarbeiter** | Auswahl, Kontrolle mit Wiedervorlage, Weisungen, Unterauftragnehmer und Drittland; gemeinsam mit dem ISMS-Add-on |
+| **TOM** | technische und organisatorische Maßnahmen nach dem Standard-Datenschutzmodell, mit dem Stand der Bausteine aus dem IT-Grundschutz |
+| **Risikomodell** und **Folgenabschätzung** | Schwellwertanalyse nach der Muss-Liste der DSK, Datenschutz-Folgenabschätzung nach Art. 35 Abs. 7 DSGVO, Stellungnahme der oder des Datenschutzbeauftragten, Entscheidung der Leitung, vorherige Konsultation |
+| **Löschkonzept** | Löschklassen nach DIN 66398 mit Vorlagen, Regeln je Verarbeitung und Datenkategorie, Umsetzung je System, Sicherungen und Archive, Überprüfung |
+| **Als Auftragsverarbeiter** | Verzeichnis nach Art. 30 Abs. 2 DSGVO, wenn Sie selbst im Auftrag verarbeiten |
+
+## Betreiben
+
+| Bereich | Inhalt |
+|---|---|
+| **Betroffenenanfragen** | Register mit Fristen, Verfahrensbeschreibung und Musterschreiben; optional ein Posteingang, der ein Postfach über Microsoft Graph oder IMAP nur liest |
+| **Datenpannen** | gemeinsam mit den Sicherheitsvorfällen des ISMS: Bewertung, Vorschlag zur Meldepflicht, Meldung an die Aufsicht binnen 72 Stunden, Verzeichnis nach Art. 33 Abs. 5 DSGVO |
+| **Neue Vorhaben** | Fachbereiche melden neue Software, Lieferanten oder Zwecke; die oder der Datenschutzbeauftragte prüft und nimmt Stellung |
+| **Schulungen** | Schulungen mit Teilnehmenden, Import von Listen, Fälligkeit je Person und ein **Schulungsnachweis zum Unterschreiben** |
+| **Arbeitsnachweis** | Beratungen, Stellungnahmen und Unterrichtungen mit Empfehlung und der Entscheidung der Leitung: gefolgt, teilweise gefolgt oder abgewichen, mit Begründung |
+| **Vertrauliche Akte** | Anliegen von Beschäftigten und Betroffenen, siehe unten |
+| **Aufsichtsbehörde** | Anfragen, Beschwerden, Konsultationen, Meldungen und Prüfungen mit Frist, Bearbeitung und Schriftverkehr aus den Dokumenten |
+
+## Prüfen und berichten
+
+| Bereich | Inhalt |
+|---|---|
+| **Prüfungen** | Prüfungen der oder des Datenschutzbeauftragten mit Prüfliste, Feststellungen und Korrekturmaßnahmen; die internen Audits des ISMS lassen sich zum Lesen einblenden |
+| **Tätigkeitsbericht** | Bericht an die Leitung mit Kennzahlen und Kenntnisnahme, siehe unten |
+
+## Wer was darf
+
+| Rolle | Rechte im Add-on |
+|---|---|
+| Datenschutz (`dpo`) | alles; allein formuliert sie oder er Stellungnahmen, den Arbeitsnachweis, Prüfungen und den Tätigkeitsbericht und ändert die vertrauliche Akte |
+| Administrator | liest alles und ändert die übrigen Bereiche; sieht die vertrauliche Akte, jedes Öffnen wird protokolliert |
+| Informationssicherheit | liest, ohne Betroffenenanfragen, Vorgänge mit der Aufsicht und vertrauliche Akte; meldet neue Vorhaben |
+| Prüfung | liest wie die Informationssicherheit |
+| Bearbeitung | meldet neue Vorhaben und sieht nur die eigenen |
+
+Die genauen Rechte stehen unter **Einstellungen › Rollen und Rechte** ([Rollen und Rechte](/reference/rollen/)).
+
+## Vertrauliche Akte
+
+Beschäftigte und Betroffene dürfen sich direkt an die oder den Datenschutzbeauftragten wenden (Art. 38 Abs. 4 DSGVO); deren Identität ist vertraulich (§ 6 Abs. 5 BDSG).
+
+- Name, Kontakt, Beschreibung, Notizen und Anhänge sind einzeln verschlüsselt. Ein Abzug der Datenbank oder eine Sicherung allein zeigt sie nicht.
+- Die Liste zeigt keine Namen. Suche, Befehlspalette, Exporte, Webhooks und der KI-Assistent erreichen die Akte nicht.
+- Öffnet die Administration ein Anliegen oder lädt einen Anhang herunter, sieht die oder der Datenschutzbeauftragte das unter **Einsichten**, mit Person und Zeitpunkt.
+- Eine Mail aus dem Posteingang lässt sich als Anliegen übernehmen. Der Posteingang leert sie dann und liest dieselbe Mail nicht erneut ein; im Postfach selbst löschen Sie sie.
+
+<Aside type="note" title="Versiegelte Einträge im Audit-Log">
+Die Einträge der Akte stehen in einem versiegelten Bereich des Audit-Logs, den nur die oder der Datenschutzbeauftragte sieht. Der Datei-Export und der [SIEM-Export](/pro/siem/) enthalten an ihrer Stelle nur Platzhalter mit Zeitpunkt, Bereich und Hash, damit die Kette prüfbar bleibt. Wer Server und Master-Schlüssel hat, kann die Akte trotzdem lesen.
+</Aside>
+
+## Tätigkeitsbericht
+
+Die oder der Datenschutzbeauftragte berichtet der höchsten Managementebene (Art. 38 Abs. 3 DSGVO), meist einmal im Jahr.
+
+1. Unter **Datenschutz › Tätigkeitsbericht** sehen alle mit Leserecht die **Kennzahlen** für einen frei wählbaren Zeitraum von höchstens drei Jahren: Beratungen und Entscheidungen der Leitung, Anliegen, Anfragen, Datenpannen, Prüfungen, Schulungen, Vorgänge mit der Aufsicht, Vorhaben, Verzeichnis und Löschkonzept. Nur Zahlen, keine Namen oder Inhalte; was Ihre Rolle nicht lesen darf, bleibt leer.
+2. Die oder der Datenschutzbeauftragte legt einen Bericht an, schreibt Einschätzung und Empfehlungen und zählt die Kennzahlen bei Bedarf neu.
+3. Mit **Vorlegen** stehen die Kennzahlen fest. Bis zur Kenntnisnahme lässt sich der Bericht zurückziehen.
+4. Die **Druckansicht** enthält ein Feld für die Unterschrift der Leitung. Das unterschriebene Exemplar laden Sie als Dokument hoch.
+5. Unter **Kenntnisnahme der Leitung** halten die oder der Datenschutzbeauftragte oder die Administration Datum, Person und das unterschriebene Exemplar fest. Ein zur Kenntnis genommener Bericht bleibt als Nachweis erhalten und lässt sich nicht mehr löschen.
+
+Angaben mit „jetzt“ geben den Stand am Tag der Zählung wieder, nicht das Ende des Zeitraums.
+
+## Einstieg
+
+Den Einstieg finden Sie auf der Startseite **Datenschutz** mit dem geführten Weg: Jeder Schritt zeigt, was fehlt, und führt zur Seite, die es schließt. Testen können Sie das Add-on im [Testzeitraum](/guides/lizenz/#testzeitraum).

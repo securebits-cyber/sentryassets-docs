@@ -20,7 +20,7 @@ The audit log goes to up to three targets continuously, as entries are written.
 | JSON Lines | HTTPS, optionally with a bearer token |
 | Splunk | HTTP Event Collector |
 
-Each entry is the line of the file export with its hash, so the SIEM can recompute the chain.
+Each entry is the line of the file export with its hash, so the SIEM can recompute the chain. Entries of sealed areas, such as the confidential file of the [data protection add-on](/en/pro/datenschutz-add-on/#confidential-file), reach a target with **all entries** only as placeholders with time, area and hash; a target with **security events** does not receive them at all.
 
 ## Setting up
 
