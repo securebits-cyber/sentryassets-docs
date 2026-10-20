@@ -24,7 +24,7 @@ SentryAssets reads hosts and virtual machines in the background at an interval o
 
 1. In Proxmox VE, under "Datacenter › Permissions", add a user such as `sentryassets@pve` and give it the role `PVEAuditor` on `/`. It only reads.
 2. Under "API Tokens", create a token for it without "Privilege Separation", or give the token itself the role `PVEAuditor`.
-3. In SentryAssets, open **Virtualisation › Connections** and choose **Add connection**. Enter the name or address of a node as **Host**, the **Token ID** (`user@realm!token`) and the **Token secret**.
+3. In SentryAssets, open **Discovery › Virtualisation › Connections** and choose **Add connection**. Enter the name or address of a node as **Host**, the **Token ID** (`user@realm!token`) and the **Token secret**.
 4. Add the certificate as described in the next section, save and choose **Test**. Only after a successful test can the connection be switched on.
 
 ### Which certificate?
