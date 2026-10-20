@@ -16,6 +16,7 @@ With SCIM 2.0 your identity provider, such as Entra ID, Okta, Keycloak or Authen
 
 - A person blocked or deleted there loses access here **at once**, sessions included.
 - Leaving a group lowers the role at once if the remaining groups allow less; without a mapped group, access ends.
+- If the remaining groups give a role that allows neither less nor more, such as editor instead of data protection, the role stays, but all the person's sessions end; the next sign-in brings the new role. The audit log records it.
 - **SCIM never grants:** access and higher roles still come only with a signed OIDC sign-in. A stolen token can lock people out but give nobody rights.
 - The last administrator is never blocked.
 

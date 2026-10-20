@@ -58,6 +58,15 @@ Für Ansible, Skripte und ähnliche Werkzeuge legen Sie das Token vorher in der 
 - Nach dem ersten Inventar erscheint das Gerät als Asset mit Hardware, Software und Zustand.
 - Die Liste zeigt standardmäßig nur Agents, die Aufmerksamkeit brauchen (Freigabe ausstehend, seit einem Tag keine Meldung, Zertifikat läuft bald ab), alle auf Wunsch.
 
+## Agent für ein bestehendes Asset
+
+Steht das Gerät schon im Inventar, etwa von Hand angelegt oder als virtuelle Maschine aus dem Hypervisor, soll der Agent kein zweites Asset anlegen.
+
+- **Vor der Installation:** Öffnen Sie das Asset, Reiter **Zustand**, und wählen Sie **Agent für dieses Asset installieren**. Das Rollout-Token gilt dann für genau eine Installation, und der Agent meldet sich als dieses Asset.
+- **Nachträglich zusammenführen:** Hat ein Agent doch ein eigenes Asset angelegt, zeigt dessen Reiter **Zustand** die Frage **Steht dieses Gerät schon im Inventar?** mit möglichen Treffern (gleicher Name, Hostname, gleiche Seriennummer oder MAC-Adresse). **Agent übertragen** verbindet den Agent mit dem bestehenden Asset. Name, Kategorie und Standort des Ziels bleiben, Hostname, Hersteller, Modell, Seriennummer und MAC-Adressen pflegt künftig der Agent. Das bisherige Asset können Sie dabei gleich löschen.
+
+Die Treffer sind nur Vorschläge; übertragen wird erst, wenn eine Person es bestätigt.
+
 ## Sperren
 
 Ein gesperrter Agent wird bei jeder Anfrage abgewiesen; sein Zertifikat steht auf der Sperrliste. Ein Rollout-Token **widerrufen** Sie ebenso unter **Agents**; bereits registrierte Geräte bleiben davon unberührt.

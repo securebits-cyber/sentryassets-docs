@@ -1,49 +1,50 @@
 ---
 title: Roles and permissions
-description: The five fixed roles of SentryAssets and what each may do, from administration to read-only.
+description: The six fixed roles of SentryAssets and what each may do, from administration to read-only.
 sidebar:
   label: Roles and permissions
   order: 3
 ---
 
-SentryAssets has five fixed roles. For local accounts the administration sets the role under **Settings › Users** ([Local accounts](/en/guides/einrichtung/#local-accounts)); for OIDC accounts it comes from the identity provider's groups at every sign-in ([Sign-in with OIDC](/en/guides/einrichtung/#sign-in-with-oidc-optional)). Under **Settings › Roles and permissions**, administration, information security and auditors see the same table every request is checked against.
+SentryAssets has six fixed roles. For local accounts the administration sets the role under **Settings › Users** ([Local accounts](/en/guides/einrichtung/#local-accounts)); for OIDC accounts it comes from the identity provider's groups at every sign-in ([Sign-in with OIDC](/en/guides/einrichtung/#sign-in-with-oidc-optional)). Under **Settings › Roles and permissions**, administration, information security, data protection and auditors see the same table every request is checked against.
 
 | Role | Key | Meant for |
 |---|---|---|
 | Administrator | `admin` | operations and setup: everything, including sign-in, users, agents, notifications, system health |
 | Information security | `isb` | information security officers: inventory and IT-Grundschutz in full, audit log, licence keys |
 | Editor | `editor` | the IT team day to day: inventory, locations, licences, contracts, documents, Grundschutz check |
+| Data protection | `dpo` | data protection officers: read everything like auditors, plus personal fields, contacts and strictly confidential documents; change nothing in the core |
 | Auditor (read only) | `auditor` | internal or external audit: read everything including the audit log, change nothing |
 | Read only | `viewer` | information: read inventory and records |
 
-If more than one group matches at sign-in, the role with the most rights applies. Without a matching group the sign-in is refused.
+If more than one group matches at sign-in, the first in this order applies: administrator, information security, editor, data protection, auditor, read only. Without a matching group the sign-in is refused.
 
 ## Permissions in detail
 
-| Area | Administrator | Information security | Editor | Auditor | Read only |
-|---|---|---|---|---|---|
-| Read inventory, locations, licences, contracts, racks, consumables | yes | yes | yes | yes | yes |
-| Change inventory, locations, licences, contracts, racks, consumables | yes | yes | yes | – | – |
-| Manage categories and fields | yes | yes | – | – | – |
-| Read personal field values and contacts | yes | yes | yes | – | – |
-| Read IT-Grundschutz | yes | yes | yes | yes | – |
-| Edit the Grundschutz check | yes | yes | yes | – | – |
-| Manage information domains and catalogues | yes | yes | – | – | – |
-| Show software licence keys | yes | yes | – | – | – |
-| Manage security keys | yes | yes | – | – | – |
-| Read the audit log | yes | yes | – | yes | – |
-| View agents and rollout tokens | yes | yes | – | yes | – |
-| Approve and block agents, create rollout tokens | yes | – | – | – | – |
-| Match network findings | yes | yes | yes | – | – |
-| Set up users, sign-in, notifications, status tokens, AI assistant | yes | – | – | – | – |
-| System health and backups | yes | – | – | – | – |
-| Use the AI assistant | yes | yes | yes | yes | yes |
+| Area | Administrator | Information security | Editor | Data protection | Auditor | Read only |
+|---|---|---|---|---|---|---|
+| Read inventory, locations, licences, contracts, racks, consumables | yes | yes | yes | yes | yes | yes |
+| Change inventory, locations, licences, contracts, racks, consumables | yes | yes | yes | – | – | – |
+| Manage categories and fields | yes | yes | – | – | – | – |
+| Read personal field values and contacts | yes | yes | yes | yes | – | – |
+| Read IT-Grundschutz | yes | yes | yes | yes | yes | – |
+| Edit the Grundschutz check | yes | yes | yes | – | – | – |
+| Manage information domains and catalogues | yes | yes | – | – | – | – |
+| Show software licence keys | yes | yes | – | – | – | – |
+| Manage security keys | yes | yes | – | – | – | – |
+| Read the audit log | yes | yes | – | yes | yes | – |
+| View agents and rollout tokens | yes | yes | – | yes | yes | – |
+| Approve and block agents, create rollout tokens | yes | – | – | – | – | – |
+| Match network findings | yes | yes | yes | – | – | – |
+| Set up users, sign-in, notifications, status tokens, AI assistant | yes | – | – | – | – | – |
+| System health and backups | yes | – | – | – | – | – |
+| Use the AI assistant | yes | yes | yes | yes | yes | yes |
 
 ## Confidentiality of documents
 
 | Role | Sees documents up to |
 |---|---|
-| Administrator, information security | strictly confidential |
+| Administrator, information security, data protection | strictly confidential |
 | Editor, auditor | confidential |
 | Read only | internal |
 

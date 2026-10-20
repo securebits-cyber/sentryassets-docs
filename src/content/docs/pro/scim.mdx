@@ -16,6 +16,7 @@ Mit SCIM 2.0 überträgt Ihr Identity Provider, etwa Entra ID, Okta, Keycloak od
 
 - Eine dort gesperrte oder gelöschte Person verliert hier **sofort** den Zugang, einschließlich laufender Sitzungen.
 - Verlässt jemand eine Gruppe, sinkt die Rolle sofort, wenn die übrigen Gruppen weniger erlauben; ohne zugeordnete Gruppe endet der Zugang.
+- Ergeben die übrigen Gruppen eine Rolle, die weder weniger noch mehr erlaubt, etwa Bearbeitung statt Datenschutz, bleibt die Rolle, aber alle Sitzungen der Person enden; die nächste Anmeldung bringt die neue Rolle. Das Audit-Log vermerkt es.
 - **SCIM gewährt nie:** Zugang und höhere Rollen entstehen weiter nur mit einer signierten Anmeldung über OIDC. Ein gestohlenes Token kann Personen aussperren, aber niemandem Rechte geben.
 - Die letzte Administration wird nie gesperrt.
 

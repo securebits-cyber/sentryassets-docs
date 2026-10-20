@@ -97,7 +97,7 @@ With OIDC, SentryAssets signs people in through your identity provider (OpenID C
 </Steps>
 
 - **No matching group:** the sign-in is refused.
-- **Several groups:** the role with the most permissions applies.
+- **Several groups:** the first role in the order administrator, information security, editor, data protection, auditor, read only applies (see [Roles and permissions](/en/reference/rollen/)).
 - **Role:** for OIDC accounts, change the role through the groups at the identity provider, not in SentryAssets.
 - **Permissions revoked:** at every session renewal SentryAssets checks that the account is still active. Revoked groups take effect at the next sign-in at the latest. With [SCIM](/en/pro/scim/) a block applies at once.
 - **Sessions:** idle 30 minutes, absolute lifetime 12 hours (`SA_SESSION_IDLE_MINUTES`, `SA_SESSION_ABSOLUTE_HOURS`).

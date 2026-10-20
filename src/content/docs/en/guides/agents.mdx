@@ -58,6 +58,15 @@ For Ansible, scripts and similar tools, put the token beforehand into the file n
 - After the first inventory the device appears as an asset with hardware, software and health.
 - By default the list shows only agents that need attention (approval pending, no report for a day, certificate about to run out), all of them on request.
 
+## Agent for an existing asset
+
+If the device is in the inventory already, created by hand or as a virtual machine from the hypervisor, the agent should not create a second asset.
+
+- **Before installing:** open the asset, tab **Condition**, and choose **Install an agent for this asset**. The rollout token then serves exactly one installation, and the agent reports as this asset.
+- **Merging afterwards:** if an agent created an asset of its own after all, its tab **Condition** asks **Is this device in the inventory already?** with possible matches (same name, host name, serial number or MAC address). **Move agent** connects the agent to the existing asset. Name, category and location of the target stay; host name, manufacturer, model, serial number and MAC addresses are kept up to date by the agent from then on. You can delete the previous asset in the same step.
+
+The matches are suggestions only; nothing moves until a person confirms it.
+
 ## Blocking
 
 A blocked agent is refused at every request; its certificate is on the revocation list. A rollout token is **revoked** under **Agents** as well; devices already enrolled are not affected.

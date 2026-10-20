@@ -97,7 +97,7 @@ Mit OIDC meldet SentryAssets Personen über Ihren Identity Provider an (OpenID C
 </Steps>
 
 - **Keine passende Gruppe:** Die Anmeldung wird abgelehnt.
-- **Mehrere Gruppen:** Es gilt die Rolle mit den meisten Rechten.
+- **Mehrere Gruppen:** Es gilt die erste Rolle in der Reihenfolge Administrator, Informationssicherheit, Bearbeitung, Datenschutz, Prüfung, Lesend (siehe [Rollen und Rechte](/reference/rollen/)).
 - **Rolle:** Bei OIDC-Konten ändern Sie die Rolle über die Gruppen beim Identity Provider, nicht in SentryAssets.
 - **Rechte entzogen:** Bei jeder Erneuerung der Sitzung prüft SentryAssets, ob das Konto noch aktiv ist. Entzogene Gruppen wirken spätestens bei der nächsten Anmeldung. Mit [SCIM](/pro/scim/) wirkt eine Sperre sofort.
 - **Sitzungen:** Leerlauf 30 Minuten, absolute Laufzeit 12 Stunden (`SA_SESSION_IDLE_MINUTES`, `SA_SESSION_ABSOLUTE_HOURS`).
