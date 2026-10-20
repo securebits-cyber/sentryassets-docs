@@ -15,7 +15,7 @@ SentryAssets runs as a Docker Compose stack on your own Linux server. This guide
 | Area | Requirement |
 |---|---|
 | Server | Linux with Docker (rootless recommended) or Podman, each with the Compose plugin, and Git |
-| Memory | 4 GiB recommended (the containers' limits add up to just over 3 GiB); another 2.5 GiB with the virus scanner |
+| Memory | at least 4 GiB, 6 GiB recommended; 2.5 GiB more with the virus scanner for uploads |
 | DNS | two names, one for the web UI (such as `assets.example.test`) and one for the agents (such as `agents.example.test`); both may point to the same server |
 | Ports | 80 and 443 reachable from outside; agents and web UI share port 443 and are told apart by host name |
 | Certificate | either automatic through ACME (Let's Encrypt, with an e-mail address) or an internal certificate from Caddy (`internal`) |
