@@ -37,7 +37,7 @@ The **guided way**, the **scope check** with a print view as a record and the **
 
 | Area | Content |
 |---|---|
-| **Management** | the members of the management with the state of their training (valid for 36 months by default) and the decisions on implementing and overseeing the measures with minutes; an oversight is due when none was recorded in the last year |
+| **Management** | the members of the management with the state of their training (valid for 36 months by default) and the decisions on implementing and overseeing the measures with minutes, which the management confirms itself (see below); an oversight is due when none was confirmed in the last year |
 | **Trainings** | trainings of the management with attendees, in the shared register of trainings |
 | **Reporting** | the incidents of the shared register, checked for significance after § 2 No. 11 BSIG and the thresholds of the Implementing Regulation; the add-on suggests, a person decides. Early warning within 24 hours, notification within 72 hours, final report after a month, progress and interim reports, and informing the recipients of the services |
 | **Supply chain** | the suppliers of the register the ISMS uses too, with criticality and assessment; plus what the contract with each supplier covers (see below) |
@@ -63,11 +63,22 @@ Assessments count for the ISMS and NIS2 alike: what the ISMS assessed appears in
 
 - **Review of effectiveness:** one internal audit a year is enough, topic by topic. The step counts as done when an audit was completed in the last year and no corrective action is overdue.
 - **Proofs to the authority (§ 39 BSIG in Germany):** operators of critical facilities prove every three years by audits, inspections or certifications that the requirements are met, with the security deficiencies found. You record the kind, date, auditing body, scope, deficiencies, the day submitted and the report. The next proof is due 36 months after the last submission, the first 36 months after the day NIS2 began to apply to you; you enter that day in the scope check. Proofs cannot be deleted.
-- **Report to the management:** where every step stands with figures on registration, measures, the management, incidents, the supply chain and effectiveness, to print, as a PDF or as a Markdown file, with a field for the acknowledgement. Afterwards you record the acknowledgement under **Management** as an **oversight** decision.
+- **Report to the management:** where every step stands with figures on registration, measures, the management, incidents, the supply chain and effectiveness, to print, as a PDF or as a Markdown file, with a field for the acknowledgement. A member of the management takes note of it personally with **Take note**; the figures are kept with it, and that counts as oversight.
 
 ## Shared with the ISMS and data protection
 
 Incidents, appointments, trainings, internal audits and the supply chain live in shared registers that the ISMS add-on, the data protection add-on and the NIS2 add-on use together. An incident thus has one detection and one set of deadlines for NIS2 and the GDPR. Each add-on changes only its own part; you read another add-on's entries with its read right and while it is licensed.
+
+## Confirmation by the management
+
+The management approves the measures and oversees their implementation itself (Art. 20 (1) NIS2). That is why it confirms decisions and the report signed in with its own account:
+
+1. Under **NIS2 › Management** the administration links each member to their user account. The account needs at least the role **Auditor**, which otherwise only reads.
+2. The member signs in and opens **NIS2 › Confirmations**. It lists the decisions waiting for their confirmation, each with its content, participants and minutes.
+3. With **Confirm** they confirm the decision in the version they read, optionally with a note.
+4. They take note of the report to the management on the report's page with **Take note**.
+
+A decision counts for the guided way once a member has confirmed it. If someone changes it afterwards, it counts as unconfirmed again. Confirmations cannot be changed or deleted; nobody confirms on behalf of the management, the administration included.
 
 ## Who may do what
 
@@ -75,7 +86,7 @@ Incidents, appointments, trainings, internal audits and the supply chain live in
 |---|---|
 | Administrator | everything |
 | Information security | everything; NIS2 is a task of information security, there is no role of its own |
-| Auditor | reads everything |
+| Auditor | reads everything; a linked member of the management confirms decisions and the report with it |
 | Other roles | do not see the add-on |
 
 The exact rights are listed under **Settings › Roles and permissions** ([Roles and permissions](/en/reference/rollen/)).

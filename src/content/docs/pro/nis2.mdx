@@ -37,7 +37,7 @@ Den **geführten Weg**, die **Betroffenheitsprüfung** mit Druckansicht als Nach
 
 | Bereich | Inhalt |
 |---|---|
-| **Geschäftsleitung** | Mitglieder der Geschäftsleitung mit dem Stand ihrer Schulung (gültig standardmäßig 36 Monate) und Beschlüsse zur Umsetzung und Überwachung der Maßnahmen mit Protokoll; eine Überwachung ist fällig, wenn im letzten Jahr keine festgehalten ist (§ 38 BSIG) |
+| **Geschäftsleitung** | Mitglieder der Geschäftsleitung mit dem Stand ihrer Schulung (gültig standardmäßig 36 Monate) und Beschlüsse zur Umsetzung und Überwachung der Maßnahmen mit Protokoll, die die Geschäftsleitung selbst bestätigt (siehe unten); eine Überwachung ist fällig, wenn im letzten Jahr keine bestätigt ist (§ 38 BSIG) |
 | **Schulungen** | Schulungen der Geschäftsleitung mit Teilnehmenden, im gemeinsamen Register der Schulungen |
 | **Meldungen** | die Vorfälle aus dem gemeinsamen Register, geprüft auf Erheblichkeit nach § 2 Nr. 11 BSIG und den Schwellen der Durchführungsverordnung; das Add-on schlägt vor, eine Person entscheidet. Frühe Erstmeldung binnen 24 Stunden, Meldung binnen 72 Stunden, Abschlussmeldung nach einem Monat, dazu Fortschritts- und Zwischenmeldungen und die Information der Empfänger der Dienste (§ 35 BSIG) |
 | **Lieferkette** | die Lieferanten aus dem Register, das auch das ISMS nutzt, mit Kritikalität und Bewertung; dazu je Lieferant, was der Vertrag regelt (siehe unten) |
@@ -63,11 +63,22 @@ Bewertungen gelten für ISMS und NIS2 gemeinsam: Was das ISMS bewertet hat, ersc
 
 - **Prüfung der Wirksamkeit:** Ein internes Audit je Jahr genügt, Thema für Thema. Der Schritt gilt als erledigt, wenn im letzten Jahr ein Audit abgeschlossen wurde und keine Korrekturmaßnahme überfällig ist.
 - **Nachweise an das BSI (§ 39 BSIG):** Betreiber kritischer Anlagen weisen die Erfüllung der Anforderungen alle drei Jahre durch Audits, Prüfungen oder Zertifizierungen nach, mit den festgestellten Sicherheitsmängeln. Sie halten Art, Datum, prüfende Stelle, Geltungsbereich, Mängel, den Tag der Übermittlung und den Bericht fest. Der nächste Nachweis ist 36 Monate nach der letzten Übermittlung fällig, der erste 36 Monate nach dem Tag, seit dem NIS2 für Sie gilt; diesen Tag tragen Sie in der Betroffenheitsprüfung ein. Nachweise lassen sich nicht löschen.
-- **Bericht an die Geschäftsleitung:** der Stand aller Schritte mit Kennzahlen zu Registrierung, Maßnahmen, Geschäftsleitung, Vorfällen, Lieferkette und Wirksamkeit, zum Drucken, als PDF oder als Markdown-Datei, mit einem Feld für die Kenntnisnahme. Die Kenntnisnahme halten Sie danach unter **Geschäftsleitung** als Beschluss **Überwachung** fest.
+- **Bericht an die Geschäftsleitung:** der Stand aller Schritte mit Kennzahlen zu Registrierung, Maßnahmen, Geschäftsleitung, Vorfällen, Lieferkette und Wirksamkeit, zum Drucken, als PDF oder als Markdown-Datei, mit einem Feld für die Kenntnisnahme. Ein Mitglied der Geschäftsleitung nimmt ihn mit **Zur Kenntnis nehmen** selbst zur Kenntnis; die Kennzahlen bleiben damit festgehalten, und das gilt als Überwachung.
 
 ## Gemeinsam mit ISMS und Datenschutz
 
 Vorfälle, Benennungen, Schulungen, interne Audits und die Lieferkette liegen in gemeinsamen Registern, die ISMS-Add-on, Datenschutz-Add-on und NIS2-Add-on teilen. Ein Vorfall hat so eine Erkennung und einen Satz Fristen für NIS2 und DSGVO. Jedes Add-on ändert nur seinen Teil; die Einträge eines anderen Add-ons lesen Sie mit dessen Leserecht und solange es lizenziert ist.
+
+## Bestätigung durch die Geschäftsleitung
+
+Die Geschäftsleitung billigt die Maßnahmen und überwacht ihre Umsetzung selbst (§ 38 Abs. 1 BSIG). Deshalb bestätigt sie Beschlüsse und den Bericht mit eigener Anmeldung:
+
+1. Die Administration verknüpft unter **NIS2 › Geschäftsleitung** jedes Mitglied mit seinem Benutzerkonto. Das Konto braucht mindestens die Rolle **Prüfung**; die gibt sonst nur Leserechte.
+2. Das Mitglied meldet sich an und öffnet **NIS2 › Bestätigungen**. Dort stehen die Beschlüsse, die auf seine Bestätigung warten, jeweils mit Inhalt, Teilnehmenden und Protokoll.
+3. Mit **Bestätigen** bestätigt es den Beschluss in der Fassung, die es gelesen hat, auf Wunsch mit einer Bemerkung.
+4. Den Bericht an die Geschäftsleitung nimmt es auf der Seite des Berichts mit **Zur Kenntnis nehmen** zur Kenntnis.
+
+Ein Beschluss zählt für den geführten Weg erst, wenn ein Mitglied ihn bestätigt hat. Ändert jemand den Beschluss danach, gilt er wieder als unbestätigt. Bestätigungen lassen sich weder ändern noch löschen; niemand bestätigt für die Geschäftsleitung, auch die Administration nicht.
 
 ## Wer was darf
 
@@ -75,7 +86,7 @@ Vorfälle, Benennungen, Schulungen, interne Audits und die Lieferkette liegen in
 |---|---|
 | Administrator | alles |
 | Informationssicherheit | alles; NIS2 ist Aufgabe der Informationssicherheit, eine eigene Rolle gibt es nicht |
-| Prüfung | liest alles |
+| Prüfung | liest alles; ein verknüpftes Mitglied der Geschäftsleitung bestätigt damit Beschlüsse und den Bericht |
 | Übrige Rollen | sehen das Add-on nicht |
 
 Die genauen Rechte stehen unter **Einstellungen › Rollen und Rechte** ([Rollen und Rechte](/reference/rollen/)).
