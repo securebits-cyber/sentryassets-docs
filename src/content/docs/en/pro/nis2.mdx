@@ -1,0 +1,85 @@
+---
+title: NIS2 add-on
+description: The NIS2 add-on leads step by step through the duties under NIS2, from the scope check through registration, measures and reporting to the proof towards the management and the authority.
+sidebar:
+  label: NIS2 add-on
+  order: 17
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="NIS2 add-on" variant="note" /> The add-on adds to every edition, the community edition included, and is licensed separately.
+
+The NIS2 add-on helps organisations that fall under the NIS2 Directive or need to find out whether they do. Germany implements the Directive with its new BSIG, Austria with the NISG 2026. The add-on leads from the question "Does NIS2 cover us?" to the proof towards the management and the authority. Its guiding idea: the inventory is the first piece of evidence. Assets, suppliers, incidents and the state of IT-Grundschutz are already in SentryAssets; the add-on reads them instead of asking for them again. With the add-on, the group **NIS2** appears in the navigation, divided into **Build**, **Run** and **Review and report**.
+
+<Aside type="caution" title="Support, not legal advice">
+The add-on structures and documents. Whether NIS2 covers you, whether an incident is significant and which measures are appropriate is for your organisation and its advisers to decide. The rules are shown with their legal basis and the day they were last checked.
+</Aside>
+
+## Without a licence
+
+The **guided way**, the **scope check** with a print view as a record and the **NIS2 check** with 35 questions work without a licence. Everything else shows a lock without one.
+
+- **Scope check:** the country of the main establishment, the sector and kind of entity after the annexes of the Directive, the size after Recommendation 2003/361/EC (staff, turnover, balance sheet) and special cases such as DNS, trust services, telecoms and critical facilities. The result is essential or important entity, not covered or "have it checked", each with its reasons and legal basis, the range of fines and the registration deadline. A different decision is recorded with its reason.
+- **Countries:** the rules of Germany and Austria apply in detail. For all 27 member states the add-on names the law, the authority and the CSIRT with their date.
+- **NIS2 check:** 35 questions on registration, the management, the ten areas of measures, reporting, the supply chain and proof. Every gap leads to the step that closes it.
+
+## Build
+
+| Area | Content |
+|---|---|
+| **Scope** | the check above, with a print view |
+| **Registration** | the details the authority asks for (§ 33 BSIG in Germany): name, legal form, register number, address, contacts, public IP ranges, supervisory authorities, and a reachable point of contact; the date, reference and evidence of the registration. When the details change afterwards, a deadline of two weeks runs until the report of the change is recorded. Private networks are refused as public IP ranges |
+| **Responsibility** | the management, the information security officer and the deputy, in the shared register of appointments |
+| **Measures** | 51 requirements in the 13 sections of the annex of Implementing Regulation (EU) 2024/2690, mapped to the ten areas of Art. 21 (2) NIS2; for each the state, a description, the person responsible, evidence and a deadline, and a reason when it does not apply. Next to it the progress of the matching modules of the Grundschutz check and figures from the inventory, such as assets without an owner or devices without vendor support. A print view serves as the documentation of the measures |
+
+## Run
+
+| Area | Content |
+|---|---|
+| **Management** | the members of the management with the state of their training (valid for 36 months by default) and the decisions on implementing and overseeing the measures with minutes; an oversight is due when none was recorded in the last year |
+| **Trainings** | trainings of the management with attendees, in the shared register of trainings |
+| **Reporting** | the incidents of the shared register, checked for significance after § 2 No. 11 BSIG and the thresholds of the Implementing Regulation; the add-on suggests, a person decides. Early warning within 24 hours, notification within 72 hours, final report after a month, progress and interim reports, and informing the recipients of the services |
+| **Supply chain** | the suppliers of the register the ISMS uses too, with criticality and assessment; plus what the contract with each supplier covers (see below) |
+
+<Aside type="note" title="No automatic reporting">
+The authorities' reporting portals have no open interface, and a person is responsible for a report. The add-on puts the details of each stage together as text to copy into the authority's form; afterwards you record the time and the reference.
+</Aside>
+
+## Review and report
+
+| Area | Content |
+|---|---|
+| **Effectiveness** | where the reviews stand, the proofs to the authority and the report to the management, see below |
+| **Audits** | internal audits under NIS2 with a checklist, results and corrective actions; templates along the areas of Art. 21 (2) NIS2 |
+
+## Security of the supply chain
+
+NIS2 asks you to settle security with your service providers as well (Art. 21 (2) (d) NIS2). For suppliers of high or medium criticality you record whether the contract covers: security requirements for the service, reporting of security incidents, rules for access, handling of vulnerabilities, subcontractors, rights to audit and to information, and rules for the end of the contract. Each point is **settled**, **partly**, **missing** or **not applicable**, with a note and optionally the contract as a document.
+
+Assessments count for the ISMS and NIS2 alike: what the ISMS assessed appears in the NIS2 add-on at once. A supplier with recorded contract points is removed in the NIS2 add-on only.
+
+## Effectiveness and proof
+
+- **Review of effectiveness:** one internal audit a year is enough, topic by topic. The step counts as done when an audit was completed in the last year and no corrective action is overdue.
+- **Proofs to the authority (§ 39 BSIG in Germany):** operators of critical facilities prove every three years by audits, inspections or certifications that the requirements are met, with the security deficiencies found. You record the kind, date, auditing body, scope, deficiencies, the day submitted and the report. The next proof is due 36 months after the last submission, the first 36 months after the day NIS2 began to apply to you; you enter that day in the scope check. Proofs cannot be deleted.
+- **Report to the management:** where every step stands with figures on registration, measures, the management, incidents, the supply chain and effectiveness, to print, as a PDF or as a Markdown file, with a field for the acknowledgement. Afterwards you record the acknowledgement under **Management** as an **oversight** decision.
+
+## Shared with the ISMS and data protection
+
+Incidents, appointments, trainings, internal audits and the supply chain live in shared registers that the ISMS add-on, the data protection add-on and the NIS2 add-on use together. An incident thus has one detection and one set of deadlines for NIS2 and the GDPR. Each add-on changes only its own part; you read another add-on's entries with its read right and while it is licensed.
+
+## Who may do what
+
+| Role | Rights in the add-on |
+|---|---|
+| Administrator | everything |
+| Information security | everything; NIS2 is a task of information security, there is no role of its own |
+| Auditor | reads everything |
+| Other roles | do not see the add-on |
+
+The exact rights are listed under **Settings › Roles and permissions** ([Roles and permissions](/en/reference/rollen/)).
+
+## Getting started
+
+Start on the **NIS2** start page with the guided way: first the scope check and the NIS2 check, then each step with what is missing and a link to the page that closes it. You can try the add-on during the [trial](/en/guides/lizenz/#trial).

@@ -97,6 +97,8 @@ export default defineConfig({
 							{ icon: 'i-ph:chat-circle-dots-duotone', slug: 'pro/daten-assistent' },
 							{ icon: 'i-ph:copy-duotone', slug: 'pro/hochverfuegbarkeit' },
 							{ icon: 'i-ph:shield-star-duotone', slug: 'pro/isms' },
+							{ icon: 'i-ph:user-focus-duotone', slug: 'pro/datenschutz-add-on' },
+							{ icon: 'i-ph:shield-warning-duotone', slug: 'pro/nis2' },
 						],
 					},
 				],

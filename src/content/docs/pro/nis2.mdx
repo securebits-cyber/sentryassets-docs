@@ -1,0 +1,85 @@
+---
+title: NIS2-Add-on
+description: Das NIS2-Add-on führt Schritt für Schritt durch die Pflichten nach NIS2 und dem BSIG, von der Betroffenheitsprüfung über Registrierung, Maßnahmen und Meldungen bis zum Nachweis gegenüber Geschäftsleitung und Behörde.
+sidebar:
+  label: NIS2-Add-on
+  order: 17
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="NIS2-Add-on" variant="note" /> Das Add-on ergänzt jede Edition, auch die Community-Edition, und wird eigens lizenziert.
+
+Das NIS2-Add-on hilft Organisationen, die unter die NIS2-Richtlinie fallen oder das klären müssen. In Deutschland setzt das NIS2-Umsetzungsgesetz die Richtlinie mit dem neuen BSIG um, in Österreich das NISG 2026. Das Add-on führt von der Frage „Betrifft uns NIS2?“ bis zum Nachweis gegenüber Geschäftsleitung und Behörde. Leitsatz: Das Inventar ist der erste Nachweis. Assets, Lieferanten, Vorfälle und der Stand des IT-Grundschutzes stehen schon in SentryAssets; das Add-on liest sie, statt sie neu zu erfassen. Mit dem Add-on erscheint die Gruppe **NIS2** in der Navigation, gegliedert in **Aufbauen**, **Betreiben** und **Prüfen und berichten**.
+
+<Aside type="caution" title="Unterstützung, keine Rechtsberatung">
+Das Add-on strukturiert und dokumentiert. Ob NIS2 Sie erfasst, ob ein Vorfall erheblich ist und welche Maßnahmen angemessen sind, entscheiden Ihre Organisation und ihre Beraterinnen und Berater. Die Regeln stehen mit ihrer Rechtsgrundlage und dem Tag, an dem sie zuletzt geprüft wurden.
+</Aside>
+
+## Ohne Lizenz
+
+Den **geführten Weg**, die **Betroffenheitsprüfung** mit Druckansicht als Nachweis und den **NIS2-Check** mit 35 Fragen nutzen Sie ohne Lizenz. Alles Weitere zeigt ohne Lizenz ein Schloss.
+
+- **Betroffenheitsprüfung:** Land der Hauptniederlassung, Sektor und Art der Einrichtung nach den Anhängen der Richtlinie, Größe nach der Empfehlung 2003/361/EG (Beschäftigte, Umsatz, Bilanz) und Sonderfälle wie DNS, Vertrauensdienste, Telekommunikation und kritische Anlagen. Das Ergebnis lautet besonders wichtige oder wichtige Einrichtung, nicht betroffen oder „prüfen lassen“, jeweils mit Begründung und Rechtsgrundlage, Bußgeldrahmen und Frist der Registrierung. Ein abweichendes Ergebnis halten Sie mit Begründung fest.
+- **Länder:** Für Deutschland und Österreich gelten die Regeln im Detail. Für alle 27 Mitgliedstaaten nennt das Add-on Gesetz, Behörde und CSIRT mit Stand.
+- **NIS2-Check:** 35 Fragen zu Registrierung, Geschäftsleitung, den zehn Bereichen der Maßnahmen, Meldungen, Lieferkette und Nachweisen. Jede Lücke führt zum Schritt, der sie schließt.
+
+## Aufbauen
+
+| Bereich | Inhalt |
+|---|---|
+| **Betroffenheit** | die Prüfung oben, mit Druckansicht |
+| **Registrierung** | die Angaben, die die Behörde verlangt (§ 33 BSIG): Name, Rechtsform, Registernummer, Anschrift, Kontakte, öffentliche IP-Bereiche, zuständige Aufsichtsbehörden, dazu eine erreichbare Kontaktstelle; Datum, Aktenzeichen und Nachweis der Registrierung. Ändern sich die Angaben danach, läuft eine Frist von zwei Wochen, bis die Meldung der Änderung festgehalten ist. Private Netze lehnt das Add-on als öffentliche IP-Bereiche ab |
+| **Verantwortung** | Geschäftsleitung, Informationssicherheitsbeauftragte oder -beauftragter und Vertretung, im gemeinsamen Register der Benennungen |
+| **Maßnahmen** | 51 Anforderungen in den 13 Abschnitten des Anhangs der Durchführungsverordnung (EU) 2024/2690, zugeordnet zu den zehn Bereichen nach § 30 Abs. 2 BSIG; je Anforderung Stand, Beschreibung, verantwortliche Person, Nachweis und Frist, bei „entfällt“ eine Begründung. Daneben stehen der Stand der passenden Bausteine aus dem Grundschutz-Check und Zahlen aus dem Inventar, etwa Assets ohne Verantwortliche oder Geräte ohne Herstellerunterstützung. Eine Druckansicht dient als Dokumentation nach § 30 Abs. 1 BSIG |
+
+## Betreiben
+
+| Bereich | Inhalt |
+|---|---|
+| **Geschäftsleitung** | Mitglieder der Geschäftsleitung mit dem Stand ihrer Schulung (gültig standardmäßig 36 Monate) und Beschlüsse zur Umsetzung und Überwachung der Maßnahmen mit Protokoll; eine Überwachung ist fällig, wenn im letzten Jahr keine festgehalten ist (§ 38 BSIG) |
+| **Schulungen** | Schulungen der Geschäftsleitung mit Teilnehmenden, im gemeinsamen Register der Schulungen |
+| **Meldungen** | die Vorfälle aus dem gemeinsamen Register, geprüft auf Erheblichkeit nach § 2 Nr. 11 BSIG und den Schwellen der Durchführungsverordnung; das Add-on schlägt vor, eine Person entscheidet. Frühe Erstmeldung binnen 24 Stunden, Meldung binnen 72 Stunden, Abschlussmeldung nach einem Monat, dazu Fortschritts- und Zwischenmeldungen und die Information der Empfänger der Dienste (§ 35 BSIG) |
+| **Lieferkette** | die Lieferanten aus dem Register, das auch das ISMS nutzt, mit Kritikalität und Bewertung; dazu je Lieferant, was der Vertrag regelt (siehe unten) |
+
+<Aside type="note" title="Keine automatische Meldung">
+Die Meldeportale der Behörden haben keine offene Schnittstelle, und eine Meldung verantwortet ein Mensch. Das Add-on stellt die Angaben je Stufe als Text zusammen, den Sie in das Formular der Behörde kopieren; den Zeitpunkt und das Aktenzeichen halten Sie danach fest.
+</Aside>
+
+## Prüfen und berichten
+
+| Bereich | Inhalt |
+|---|---|
+| **Wirksamkeit** | Stand der Prüfungen, Nachweise an die Behörde und der Bericht an die Geschäftsleitung, siehe unten |
+| **Audits** | interne Audits unter NIS2 mit Prüfliste, Ergebnissen und Korrekturmaßnahmen; Vorlagen entlang der Bereiche von Art. 21 Abs. 2 NIS2 |
+
+## Sicherheit der Lieferkette
+
+NIS2 verlangt, die Sicherheit auch mit Ihren Dienstleistern zu regeln (Art. 21 Abs. 2 lit. d NIS2). Bei Lieferanten mit hoher oder mittlerer Kritikalität halten Sie fest, ob der Vertrag diese Punkte regelt: Sicherheitsanforderungen an die Leistung, Meldung von Sicherheitsvorfällen, Regeln für Zugänge, Umgang mit Schwachstellen, Unterauftragnehmer, Prüf- und Auskunftsrechte und Regeln für das Vertragsende. Jeder Punkt ist **geregelt**, **teilweise**, **fehlt** oder **entfällt**, dazu eine Bemerkung und optional der Vertrag als Dokument.
+
+Bewertungen gelten für ISMS und NIS2 gemeinsam: Was das ISMS bewertet hat, erscheint im NIS2-Add-on sofort. Einen Lieferanten mit erfassten Vertragspunkten entfernen Sie nur im NIS2-Add-on.
+
+## Wirksamkeit und Nachweise
+
+- **Prüfung der Wirksamkeit:** Ein internes Audit je Jahr genügt, Thema für Thema. Der Schritt gilt als erledigt, wenn im letzten Jahr ein Audit abgeschlossen wurde und keine Korrekturmaßnahme überfällig ist.
+- **Nachweise an das BSI (§ 39 BSIG):** Betreiber kritischer Anlagen weisen die Erfüllung der Anforderungen alle drei Jahre durch Audits, Prüfungen oder Zertifizierungen nach, mit den festgestellten Sicherheitsmängeln. Sie halten Art, Datum, prüfende Stelle, Geltungsbereich, Mängel, den Tag der Übermittlung und den Bericht fest. Der nächste Nachweis ist 36 Monate nach der letzten Übermittlung fällig, der erste 36 Monate nach dem Tag, seit dem NIS2 für Sie gilt; diesen Tag tragen Sie in der Betroffenheitsprüfung ein. Nachweise lassen sich nicht löschen.
+- **Bericht an die Geschäftsleitung:** der Stand aller Schritte mit Kennzahlen zu Registrierung, Maßnahmen, Geschäftsleitung, Vorfällen, Lieferkette und Wirksamkeit, zum Drucken, als PDF oder als Markdown-Datei, mit einem Feld für die Kenntnisnahme. Die Kenntnisnahme halten Sie danach unter **Geschäftsleitung** als Beschluss **Überwachung** fest.
+
+## Gemeinsam mit ISMS und Datenschutz
+
+Vorfälle, Benennungen, Schulungen, interne Audits und die Lieferkette liegen in gemeinsamen Registern, die ISMS-Add-on, Datenschutz-Add-on und NIS2-Add-on teilen. Ein Vorfall hat so eine Erkennung und einen Satz Fristen für NIS2 und DSGVO. Jedes Add-on ändert nur seinen Teil; die Einträge eines anderen Add-ons lesen Sie mit dessen Leserecht und solange es lizenziert ist.
+
+## Wer was darf
+
+| Rolle | Rechte im Add-on |
+|---|---|
+| Administrator | alles |
+| Informationssicherheit | alles; NIS2 ist Aufgabe der Informationssicherheit, eine eigene Rolle gibt es nicht |
+| Prüfung | liest alles |
+| Übrige Rollen | sehen das Add-on nicht |
+
+Die genauen Rechte stehen unter **Einstellungen › Rollen und Rechte** ([Rollen und Rechte](/reference/rollen/)).
+
+## Einstieg
+
+Den Einstieg finden Sie auf der Startseite **NIS2** mit dem geführten Weg: zuerst die Betroffenheitsprüfung und der Check, dann jeder Schritt mit dem, was fehlt, und einem Link zur Seite, die es schließt. Testen können Sie das Add-on im [Testzeitraum](/guides/lizenz/#testzeitraum).
