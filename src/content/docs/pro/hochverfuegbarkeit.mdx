@@ -21,6 +21,10 @@ SentryAssets läuft standardmäßig mit je einer Instanz von API, Agent-Gateway 
 
 Einige Einstellungen merkt sich jede Instanz kurz selbst: die Anmeldeart bis zu 10 Sekunden, die Freischaltung durch Lizenz oder Testzeitraum bis zu 30 Sekunden, eine deaktivierte Issuing-CA im Gateway bis zu 5 Minuten. Grenzen für gleichzeitige Exporte und Übertragungen gelten je Instanz.
 
+## Lizenz
+
+Mehrere **aktive** Instanzen gehören zu Pro und Enterprise. Ohne eine solche Lizenz arbeitet je Dienst eine Instanz; weitere warten, ohne Verbindungen anzunehmen oder Aufträge zu holen, und übernehmen, wenn die aktive ausfällt. Die aktive Instanz hält dafür einen Lease von 20 Sekunden in der Datenbank und verlängert ihn alle 5 Sekunden; beim geordneten Stopp gibt sie ihn sofort zurück, nach einem Absturz endet er von selbst. Der **Systemzustand** zeigt, was gilt. Endet die Lizenz, arbeitet binnen Sekunden wieder nur eine Instanz je Dienst.
+
 ## Auf einem Host
 
 ```bash

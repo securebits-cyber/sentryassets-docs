@@ -19,11 +19,14 @@ Der Agent erfasst Inventar und Zustand eines Geräts und meldet sie an Ihren Ser
 | Netzwerk | Schnittstellen mit MAC- und IP-Adressen, Durchsatz je Schnittstelle |
 | Software | installierte Programme mit Version und Hersteller; übertragen nur, wenn sich die Liste geändert hat |
 | Zustand | Auslastung von CPU, Arbeitsspeicher, Platten und, soweit der Treiber sie meldet, Grafikkarte |
+| Sicherheitszustand | Festplattenverschlüsselung, Virenschutz mit Alter der Signaturen, Firewall, automatische Updates mit dem Tag der letzten Updates, Secure Boot und Bildschirmsperre, je ein, aus, teilweise oder unbekannt |
 | Hyper-V | auf einem Hyper-V-Host die Gäste, wenn die Verbindung „Hyper-V über den Agent“ eingerichtet ist ([Virtualisierung](/pro/virtualisierung/)) |
 
 Dateiinhalte, Browserverläufe, Tastatur- oder Bildschirmdaten, Verbindungen und Prozesse erfasst der Agent nie.
 
 **Plattformen:** Linux (x86-64, ARM64) mit systemd und Windows (x86-64) als Dienst. Ein Agent für macOS ist geplant.
+
+**Sicherheitszustand:** Unter Windows liest der Agent ihn über feste WMI-Abfragen und die Registry, unter Linux nur aus Dateien (dm-crypt, EFI-Variablen, aktivierte Dienste, Konfiguration von unattended-upgrades und dnf-automatic). Er startet dafür kein Programm und liest keine Schlüssel, Regeln, Funde oder Namen von Updates. Sie sehen ihn in der Registerkarte **Zustand** des Assets, sofern Sie Agents sehen dürfen; ein Stand älter als drei Tage zählt nicht mehr. Der Sammler heißt `security` und ist standardmäßig aktiv.
 
 ## Agent ausrollen
 

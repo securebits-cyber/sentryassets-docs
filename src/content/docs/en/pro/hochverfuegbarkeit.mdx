@@ -21,6 +21,10 @@ By default SentryAssets runs one instance each of API, agent gateway and job wor
 
 Some settings are kept briefly by each instance: the sign-in method up to 10 seconds, unlocking by licence or trial up to 30 seconds, a deactivated issuing CA in the gateway up to 5 minutes. Limits for concurrent exports and transfers apply per instance.
 
+## License
+
+Several **active** instances belong to Pro and Enterprise. Without such a license one instance per service works; further ones wait without taking connections or jobs and take over when the active one fails. The active instance holds a lease of 20 seconds in the database for this and renews it every 5 seconds; a clean stop gives it back at once, after a crash it ends by itself. The **System status** shows which applies. When the license ends, only one instance per service works again within seconds.
+
 ## On one host
 
 ```bash

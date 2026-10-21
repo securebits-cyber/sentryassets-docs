@@ -15,6 +15,12 @@ docker compose logs --tail 100 <service>
 
 Error messages in the web UI are generic; the details are in the log under the same correlation ID.
 
+## Report a problem
+
+In the user menu (at the foot of the navigation), **Report a problem** puts together a report for support: your description, the version, the page opened without search parameters, browser, language and the server's last failure with its correlation ID. If you like, capture a screenshot; the browser asks which tab, window or screen. Black out what nobody should see with the mouse before saving.
+
+The report is **not sent**; it is saved as a JSON file you pass on yourself. Session, sign-in data and form input are never in it. With the correlation ID, operators find the matching entry in the log.
+
 ## Installation and start
 
 | Problem | Cause and solution |

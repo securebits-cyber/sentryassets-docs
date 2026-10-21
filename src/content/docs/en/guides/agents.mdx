@@ -19,11 +19,14 @@ The agent collects inventory and health of a device and reports them to your ser
 | Network | interfaces with MAC and IP addresses, throughput per interface |
 | Software | installed programs with version and publisher; sent only when the list has changed |
 | Health | load of CPU, memory, disks and, where the driver reports it, the graphics card |
+| Security state | disk encryption, antivirus with the age of its signatures, firewall, automatic updates with the day of the last updates, Secure Boot and screen lock, each on, off, partly or unknown |
 | Hyper-V | the guests on a Hyper-V host, once the connection "Hyper-V through agent" is set up ([Virtualisation](/en/pro/virtualisierung/)) |
 
 The agent never collects file contents, browser histories, keyboard or screen data, connections or processes.
 
 **Platforms:** Linux (x86-64, ARM64) with systemd and Windows (x86-64) as a service. An agent for macOS is planned.
+
+**Security state:** On Windows the agent reads it through fixed WMI queries and the registry, on Linux from files only (dm-crypt, EFI variables, enabled services, the configuration of unattended-upgrades and dnf-automatic). It starts no program for this and reads no keys, rules, findings or update names. You see it on the asset's **Health** tab if you may see agents; a state older than three days no longer counts. The collector is called `security` and is on by default.
 
 ## Rolling out an agent
 
