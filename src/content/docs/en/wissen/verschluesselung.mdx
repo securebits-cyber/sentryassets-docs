@@ -1,0 +1,21 @@
+---
+title: "Disk encryption"
+description: "Why mobile devices and servers need encrypted disks and what is often forgotten."
+sidebar:
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+A lost laptop without encryption gives away all its data: the disk can be removed and read elsewhere. IT-Grundschutz therefore asks for encryption of laptops and removable media (modules SYS.3.1, SYS.2.1) and a concept of which methods are used (CON.1).
+
+## What matters
+
+- **All fixed drives**, not only the system drive, and servers too, whose disks are replaced and disposed of.
+- **Keep recovery keys in a central place**, or the data is lost to you as well after a defect.
+- **Current methods** after the BSI's technical guideline TR-02102.
+- **Control:** which devices are encrypted and which are not; the SentryAssets agent reports this for Windows (BitLocker) and Linux (dm-crypt).
+
+<Aside type="tip" title="In the ISMS add-on">
+The implementation aid of the ISMS add-on describes the measures for this step by step per platform, shows the assets of your organisation they concern and, where SentryAssets can detect it, how far they are. See [Implementation aid](/en/wissen/umsetzungshilfe/).
+</Aside>

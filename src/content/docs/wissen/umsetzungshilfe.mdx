@@ -1,0 +1,31 @@
+---
+title: "Umsetzungshilfe"
+description: "Technische Maßnahmen zu den Anforderungen des IT-Grundschutzes: was zu tun ist, wo es Ihre Assets betrifft und wie weit Sie sind."
+sidebar:
+  order: 1
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Die Anforderungen des IT-Grundschutzes sagen, **was** erreicht werden muss, nicht **wie**. Die Umsetzungshilfe des ISMS-Add-ons schließt diese Lücke mit technischen Maßnahmen: Eine Maßnahme wie „Datenträger verschlüsseln“ wird einmal beschrieben und den Anforderungen beider Ausgaben zugeordnet, der Edition 2023 und Grundschutz++.
+
+## Was die Hilfe zeigt
+
+- **Unter jeder passenden Anforderung** bei „Umsetzung prüfen“: Ziel, Schritte je Plattform (Windows und Active Directory, Microsoft 365 mit Entra ID und Intune, Linux, macOS, Netzwerk), woran Sie die Umsetzung erkennen, welcher Nachweis genügt, Aufwand und Voraussetzungen.
+- **Bei Ihnen betroffen:** die Zielobjekte Ihrer Modellierung und die Assets in Betrieb dahinter, aus der Edition 2023 und über die Zielobjekt-Kategorien des Informationsverbunds in Grundschutz++.
+- **Erkennung:** Für Verschlüsselung, Secure Boot, Bildschirmsperre, Betriebssystem-Updates, Schutz vor Schadprogrammen, Firewall und Mehr-Faktor-Anmeldung sagt die Hilfe, wie weit die Geräte laut Agent sind, mit der Konformität aus Intune und der Zahl der Konten mit MFA aus Entra ID (Enterprise). Daraus folgt ein **Vorschlag** für den Umsetzungsstand, der nie automatisch gesetzt wird.
+- **In den Realisierungsplan:** eine Maßnahme mit Verantwortlichem, Termin und den Assets übernehmen.
+- **Wissensdatenbank** unter **ISMS › Wissen: technische Maßnahmen:** je Maßnahme Hintergrund, typische Fallstricke, Bezug zu den Anforderungen und Quellen, gegliedert nach Baustein oder Praktik.
+
+<Aside type="caution" title="Empfehlung, keine Vorgabe">
+Die Maßnahmen sind Empfehlungen von SentryAssets, keine Vorgaben des BSI und keine Rechtsberatung. Ob eine Anforderung erfüllt ist, bewerten Sie selbst.
+</Aside>
+
+## Themen
+
+- [Mehr-Faktor-Anmeldung](/wissen/mfa/)
+- [Verschlüsselung von Datenträgern](/wissen/verschluesselung/)
+- [Updates und Patchmanagement](/wissen/updates/)
+- [Schutz vor Schadprogrammen](/wissen/schadprogramme/)
+- [Datensicherung](/wissen/datensicherung/)
+- [Netz und Fernzugriff](/wissen/netz/)

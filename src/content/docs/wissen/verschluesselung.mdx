@@ -1,0 +1,21 @@
+---
+title: "Verschlüsselung von Datenträgern"
+description: "Warum mobile Geräte und Server verschlüsselte Datenträger brauchen und was dabei häufig vergessen wird."
+sidebar:
+  order: 3
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Ein verlorener Laptop ohne Verschlüsselung gibt alle Daten preis: Die Festplatte lässt sich ausbauen und anderswo lesen. Der IT-Grundschutz verlangt deshalb für Laptops und mobile Datenträger eine Verschlüsselung (Bausteine SYS.3.1, SYS.2.1) und ein Konzept dafür, welche Verfahren eingesetzt werden (CON.1).
+
+## Worauf es ankommt
+
+- **Alle festen Laufwerke**, nicht nur das Systemlaufwerk, und auch Server, deren Platten getauscht und entsorgt werden.
+- **Wiederherstellungsschlüssel zentral verwahren**, sonst sind die Daten nach einem Defekt auch für Sie verloren.
+- **Aktuelle Verfahren** nach der Technischen Richtlinie TR-02102 des BSI.
+- **Kontrolle:** welche Geräte verschlüsselt sind und welche nicht; der Agent von SentryAssets meldet das für Windows (BitLocker) und Linux (dm-crypt).
+
+<Aside type="tip" title="Im ISMS-Add-on">
+Die Umsetzungshilfe des ISMS-Add-ons beschreibt die Maßnahmen dazu Schritt für Schritt je Plattform, zeigt die betroffenen Assets Ihrer Organisation und, wo SentryAssets es erkennen kann, wie weit sie sind. Siehe [Umsetzungshilfe](/wissen/umsetzungshilfe/).
+</Aside>

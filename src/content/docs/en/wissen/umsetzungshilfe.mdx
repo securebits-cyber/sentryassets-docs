@@ -1,0 +1,31 @@
+---
+title: "Implementation aid"
+description: "Technical measures for the requirements of IT-Grundschutz: what to do, where it concerns your assets and how far you are."
+sidebar:
+  order: 1
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The requirements of IT-Grundschutz say **what** must be achieved, not **how**. The implementation aid of the ISMS add-on closes this gap with technical measures: a measure such as “encrypt disks” is described once and mapped to the requirements of both editions, the Edition 2023 and Grundschutz++.
+
+## What the aid shows
+
+- **Below each matching requirement** on “check implementation”: the goal, steps per platform (Windows and Active Directory, Microsoft 365 with Entra ID and Intune, Linux, macOS, network), how to tell it is in place, what serves as evidence, effort and prerequisites.
+- **Where it applies to you:** the target objects of your modelling and the assets in operation behind them, from the Edition 2023 and through the target object categories of the Grundschutz++ information domain.
+- **Detection:** for encryption, Secure Boot, screen lock, operating system updates, malware protection, firewall and multi-factor sign-in the aid says how far the devices are according to their agents, with the compliance from Intune and the number of accounts with MFA from Entra ID (Enterprise). From that follows a **suggestion** for the state of implementation, never set by itself.
+- **Into the implementation plan:** take a measure up with a person responsible, a date and the assets.
+- **Knowledge base** under **ISMS › Knowledge: technical measures:** per measure the background, common pitfalls, the requirements it supports and sources, arranged by module or practice.
+
+<Aside type="caution" title="A recommendation, not a prescription">
+The measures are recommendations of SentryAssets, not prescriptions of the BSI and no legal advice. Whether a requirement is met is for you to judge.
+</Aside>
+
+## Topics
+
+- [Multi-factor sign-in](/en/wissen/mfa/)
+- [Disk encryption](/en/wissen/verschluesselung/)
+- [Updates and patch management](/en/wissen/updates/)
+- [Protection against malware](/en/wissen/schadprogramme/)
+- [Backup](/en/wissen/datensicherung/)
+- [Network and remote access](/en/wissen/netz/)

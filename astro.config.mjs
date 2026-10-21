@@ -79,6 +79,19 @@ export default defineConfig({
 						],
 					},
 					{
+						label: 'Wissen',
+						translations: { en: 'Knowledge' },
+						items: [
+							{ icon: 'i-ph:lightbulb-duotone', slug: 'wissen/umsetzungshilfe' },
+							{ icon: 'i-ph:fingerprint-duotone', slug: 'wissen/mfa' },
+							{ icon: 'i-ph:lock-duotone', slug: 'wissen/verschluesselung' },
+							{ icon: 'i-ph:arrows-clockwise-duotone', slug: 'wissen/updates' },
+							{ icon: 'i-ph:bug-beetle-duotone', slug: 'wissen/schadprogramme' },
+							{ icon: 'i-ph:database-duotone', slug: 'wissen/datensicherung' },
+							{ icon: 'i-ph:graph-duotone', slug: 'wissen/netz' },
+						],
+					},
+					{
 						label: 'Pro und Enterprise',
 						translations: { en: 'Pro and Enterprise' },
 						items: [
