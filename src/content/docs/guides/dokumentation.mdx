@@ -59,7 +59,7 @@ flowchart LR
 Mit **Markdown-Datei laden** übernehmen Sie eine vorhandene `.md`-Datei in den Editor. Sie wird vorher auf Größe, Kodierung und offene Codeblöcke geprüft.
 
 <Aside type="note" title="Kein HTML">
-HTML ist in einer Dokumentation nicht erlaubt. Spitze Klammern vor Buchstaben, etwa `<VirtualHost>`, schreiben Sie in `Code` oder in einen Codeblock. Links führen nur zu `https:` und `mailto:`, Bilder aus dem Netz werden nicht geladen.
+HTML ist in einer Dokumentation nicht erlaubt, damit die Datei auch in anderen Markdown-Anzeigen kein Skript ausführt. Spitze Klammern vor Buchstaben, etwa in Konfigurationsbeispielen wie `VirtualHost`, gehören in einen Codeblock, der am Zeilenanfang mit drei Backticks beginnt und mit genau denselben drei Backticks endet; in einem Code-Abschnitt innerhalb einer Zeile oder in einem eingerückten Block nimmt der Server sie nicht an. Links führen nur zu `https:`, `http:`, `mailto:` und Pfaden, Bilder aus dem Netz werden nicht geladen.
 </Aside>
 
 ## Versionen
