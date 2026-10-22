@@ -74,6 +74,34 @@ The matches are suggestions only; nothing moves until a person confirms it.
 
 A blocked agent is refused at every request; its certificate is on the revocation list. A rollout token is **revoked** under **Agents** as well; devices already enrolled are not affected.
 
+## Uninstalling an agent
+
+When a device is retired or should no longer run an agent, the commands are under **Agents** on the card **Uninstall an agent**.
+
+<Steps>
+
+1. Block the agent under **Agents** with **Block**. Its certificate is then invalid and it can send no more data, even while it still runs. This cannot be undone; if the device is to get an agent again later, it enrols anew.
+
+2. Remove it on the device with the command for its system, with administrator rights. The command stops the service and deletes the program, certificate and keys. It uses only what the operating system brings along.
+
+   **Linux**, in a terminal with `sudo`:
+
+   ```bash
+   sudo systemctl disable --now sentryassets-agent && sudo rm -f /etc/systemd/system/sentryassets-agent.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-agent /var/lib/sentryassets-agent
+   ```
+
+   **Windows**, in a PowerShell started as administrator:
+
+   ```powershell
+   Stop-Service SentryAssetsAgent -ErrorAction SilentlyContinue; sc.exe delete SentryAssetsAgent; Remove-Item -Recurse -Force (Join-Path $env:ProgramFiles 'SentryAssets\Agent'), (Join-Path $env:ProgramData 'SentryAssets\Agent') -ErrorAction SilentlyContinue
+   ```
+
+3. The asset stays with its history. Retire or delete it if the device is gone as well.
+
+</Steps>
+
+Block the agent before removing it: an agent deleted only on the device keeps a valid certificate until it expires. A collector is removed the same way, see [Uninstalling a collector](/en/guides/collector/#uninstalling-a-collector).
+
 ## Certificates and renewal
 
 Each agent creates its own key pair (ECDSA P-256), which never leaves the device, and receives a certificate for 30 days. From day 20 it renews it itself, each time with a **new** key. Connections use only mTLS with TLS 1.3 against the CA pinned at enrolment.

@@ -64,6 +64,22 @@ Die Schnittstellen eines Switches übernehmen Sie unter **Racks** auf einen Klic
 Richten Sie auf den Geräten einen eigenen SNMPv3-Benutzer nur mit Leserechten ein. SentryAssets schreibt nie per SNMP.
 </Aside>
 
+## Collector deinstallieren
+
+<Steps>
+
+1. Sperren Sie den Collector unter **Agents** mit **Sperren**. Sein Zertifikat wird sofort ungültig, und er scannt nicht mehr. Hatte er SNMPv3-Zugänge, ändern Sie deren Passphrasen auf den Geräten: Er kannte sie bis zuletzt.
+
+2. Entfernen Sie ihn auf seinem Host im Terminal mit `sudo`. Der Befehl steht unter **Agents** in der Karte **Agent deinstallieren** unter **Collector**; er stoppt den Dienst, löscht Programm, Zertifikat und Schlüssel und entfernt auch den Systembenutzer des Collectors.
+
+   ```bash
+   sudo systemctl disable --now sentryassets-collector && sudo rm -f /etc/systemd/system/sentryassets-collector.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-collector /var/lib/sentryassets-collector && sudo userdel sentryassets-collector
+   ```
+
+</Steps>
+
+Die Funde des Collectors sind danach nicht mehr sichtbar; Assets, die Sie aus ihnen übernommen haben, bleiben im Inventar.
+
 ## Fehlerbehebung
 
 - **Keine MAC-Adressen:** Der Collector steht in einem anderen Segment als die Geräte. Die ARP-Tabelle kennt nur das eigene Segment; richten Sie dort einen eigenen Collector ein.

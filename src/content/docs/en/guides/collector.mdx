@@ -64,6 +64,22 @@ Under **Racks** you take a switch's interfaces over as ports in one click; LLDP 
 Set up an SNMPv3 user with read rights only on the devices. SentryAssets never writes over SNMP.
 </Aside>
 
+## Uninstalling a collector
+
+<Steps>
+
+1. Block the collector under **Agents** with **Block**. Its certificate stops working immediately and it no longer scans. If it had SNMPv3 users, change their passphrases on the devices: it knew them until now.
+
+2. Remove it on its host in a terminal with `sudo`. The command is under **Agents** on the card **Uninstall an agent**, under **Collector**; it stops the service, deletes the program, certificate and keys and also removes the collector's system user.
+
+   ```bash
+   sudo systemctl disable --now sentryassets-collector && sudo rm -f /etc/systemd/system/sentryassets-collector.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-collector /var/lib/sentryassets-collector && sudo userdel sentryassets-collector
+   ```
+
+</Steps>
+
+The collector's findings are no longer visible afterwards; assets you took over from them stay in the inventory.
+
 ## Troubleshooting
 
 - **No MAC addresses:** the collector is in another segment than the devices. The ARP table only knows its own segment; set up a collector of its own there.

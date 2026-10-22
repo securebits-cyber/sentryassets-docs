@@ -74,6 +74,34 @@ Die Treffer sind nur Vorschläge; übertragen wird erst, wenn eine Person es bes
 
 Ein gesperrter Agent wird bei jeder Anfrage abgewiesen; sein Zertifikat steht auf der Sperrliste. Ein Rollout-Token **widerrufen** Sie ebenso unter **Agents**; bereits registrierte Geräte bleiben davon unberührt.
 
+## Agent deinstallieren
+
+Wenn ein Gerät ausgemustert wird oder keinen Agent mehr haben soll, finden Sie die Befehle unter **Agents** in der Karte **Agent deinstallieren**.
+
+<Steps>
+
+1. Sperren Sie den Agent unter **Agents** mit **Sperren**. Damit wird sein Zertifikat ungültig, und er kann keine Daten mehr senden, auch wenn er noch läuft. Das lässt sich nicht rückgängig machen; soll das Gerät später wieder einen Agent bekommen, registriert es sich neu.
+
+2. Entfernen Sie ihn auf dem Gerät mit dem Befehl für sein System, mit Administratorrechten. Der Befehl stoppt den Dienst und löscht Programm, Zertifikat und Schlüssel. Er nutzt nur, was das Betriebssystem mitbringt.
+
+   **Linux**, im Terminal mit `sudo`:
+
+   ```bash
+   sudo systemctl disable --now sentryassets-agent && sudo rm -f /etc/systemd/system/sentryassets-agent.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-agent /var/lib/sentryassets-agent
+   ```
+
+   **Windows**, in einer PowerShell, die als Administrator gestartet wurde:
+
+   ```powershell
+   Stop-Service SentryAssetsAgent -ErrorAction SilentlyContinue; sc.exe delete SentryAssetsAgent; Remove-Item -Recurse -Force (Join-Path $env:ProgramFiles 'SentryAssets\Agent'), (Join-Path $env:ProgramData 'SentryAssets\Agent') -ErrorAction SilentlyContinue
+   ```
+
+3. Das Asset bleibt mit seinem Verlauf erhalten. Mustern Sie es aus oder löschen Sie es, wenn auch das Gerät nicht mehr da ist.
+
+</Steps>
+
+Sperren Sie den Agent vor dem Entfernen: Ein Agent, der nur auf dem Gerät gelöscht wurde, hat weiter ein gültiges Zertifikat, bis es abläuft. Ein Collector wird ebenso entfernt, siehe [Collector deinstallieren](/guides/collector/#collector-deinstallieren).
+
 ## Zertifikate und Erneuerung
 
 Jeder Agent erzeugt sein eigenes Schlüsselpaar (ECDSA P-256), das das Gerät nie verlässt, und erhält ein Zertifikat für 30 Tage. Ab Tag 20 erneuert er es selbst, jedes Mal mit einem **neuen** Schlüssel. Verbindungen laufen ausschließlich über mTLS mit TLS 1.3 gegen die bei der Registrierung gepinnte CA.
