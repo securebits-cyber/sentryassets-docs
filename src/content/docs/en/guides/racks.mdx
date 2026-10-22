@@ -1,0 +1,119 @@
+---
+title: Racks and ports
+description: Fill racks to scale, document ports and cables, print the port list and make port labels for label printers.
+sidebar:
+  label: Racks and ports
+  order: 6
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Under **Inventory › Racks** you document server and network cabinets: what sits in which unit, which ports a device has, where each cable leads and where there is room. From this, SentryAssets prints a port list and labels for the label fields of patch panels and switches.
+
+Racks are part of the Community edition.
+
+## Prerequisites
+
+- Read access is enough for the view, the print view, the port list and the port labels.
+- Adding racks, mounting, ports, cables and editing in the port list need a role that may change racks: **Administrator**, **Information security** or **Editor** (see [Roles and rights](/en/reference/rollen/)).
+- A location, mostly the room the rack stands in.
+
+## Adding and filling a rack
+
+<Steps>
+
+1. Open **Inventory › Racks** and choose **Add rack**.
+
+2. Choose the **Location** and enter the **Name** (such as “R01”), the **Rack units** and the **Numbering** (**from the bottom (U1 at the bottom)** or **from the top (U1 at the top)**). **Depth in mm**, **Power feed** and **Note** are optional.
+
+3. Click a free unit in the rack. Under **Kind**, choose a **Device from the inventory**, a **Patch panel**, **Cable management**, a **Blank panel**, a **Shelf** or **Other**, together with **Lowest unit**, **Height in U** and **Side** (**full depth**, **front** or **rear**), and choose **Mount**.
+
+</Steps>
+
+Mounts can be dragged or moved one unit with the arrow keys; the rack never takes an occupied unit twice. **Print** shows front and rear to print or save as a PDF, **As PNG** saves the view as an image. A rack can be deleted only once nothing is mounted any more.
+
+## Ports and cables
+
+<Steps>
+
+1. Choose a mount in the rack. Under **Ports of …**, **Add ports** adds a row: **Prefix** and a running number, such as “Gi1/0/” with 1 to 24, at most 128 ports at once.
+
+2. If the device reports its interfaces by SNMP through the [collector](/en/guides/collector/#snmpv3-and-lldp), take them over with **Take over … ports**.
+
+3. For a cable, choose **Connect to …** at a port, then the mount and port at the other end, also in another rack. **Cable ID**, **Cable type**, **Colour** and **Length in cm** are optional. Confirm with **Connect**.
+
+</Steps>
+
+Connected ports show in the colour of their cable. **Suggestions from LLDP** lists cables the switches report themselves; you accept each suggestion with **Take over** or reject it with **Dismiss**; dismissed suggestions do not come back. Nothing is ever cabled by itself.
+
+## Printing the port list
+
+The port list shows the ports of one device or of all devices with ports, each with **Type**, **Label** and **Description** and, if wanted, the other end and the cable.
+
+<Steps>
+
+1. Choose **Print port list** in the rack, or the same button at the ports of a mount for that device only.
+
+2. Under **Device**, choose a single device or **All devices with ports**.
+
+3. Leave **Show connections and cables** on if the list should also name **Connected to** and **Cable** (ID, type, colour, length).
+
+4. Choose **Print**. To save it as a PDF, choose “Save as PDF” in the print dialog.
+
+</Steps>
+
+For each device the list names kind, units, side and number of ports, and it carries the date it was printed.
+
+### Changing labels and descriptions in place
+
+Those who may change racks change a port's **Label** and **Description** right in the port list:
+
+- The change is saved when you leave the field or press Enter; `Esc` drops it.
+- A notice confirms the save and offers **Undo**.
+- In print, the fields appear as plain text.
+
+This helps to check and correct a port list on site before you print labels.
+
+## Port labels for label printers
+
+Patch panels and switches have label fields above their ports. **Port labels** prints labels for them on the tape of a label printer, such as the Brother P-touch series with the Brother PT-E560BT.
+
+<Steps>
+
+1. Choose **Port labels** in the rack, or the same button at the ports of a mount for that device only.
+
+2. Under **Device**, choose one device or **All devices with ports**.
+
+3. Choose the **Kind**:
+   - **Strip for the label field:** fields of equal width, one per port, with a dividing line between them and 4 mm of blank tape at both ends. The last strip of a device is filled up with blank fields to the same length.
+   - **One label per port:** such as a flag on a cable.
+
+4. Choose the **Tape width**: **24 mm**, **18 mm**, **12 mm** (default) or **9 mm**.
+
+5. Choose the **Content**: **Label, else port name**, **Port name** only, or **Port name and label** in two lines.
+
+6. Set the dimensions:
+   - for strips, **Width per port (mm)**, the distance from port centre to port centre on the device, 5 to 40 mm in steps of 0.5 mm (default 15 mm, mostly 12 to 20 mm), and **Ports per strip**, 1 to 48 (default 12), as many as one label field spans, such as 6, 12 or 24;
+   - for one label per port, **Length per label (mm)**, at least 25 mm, so the printer cuts cleanly.
+
+7. Choose **Print**. In the print dialog choose the label printer, the tape width as paper, margins “None” and 100 %.
+
+</Steps>
+
+A strip is as long as ports per strip times width per port plus 8 mm. Each label is a page of its own. The text sits in the middle of the tape, black on white, also in the dark colour scheme. The browser remembers your last settings for next time.
+
+<Aside type="note" title="Printing through the driver">
+Labels print through the browser's print dialog and the label printer's driver. Print from the computer through the driver over USB for printers such as the Brother PT-E560BT; a printer that otherwise prints only from a phone app needs the driver on the computer. Whether the label's length arrives depends on the driver taking the page size from the document.
+</Aside>
+
+## Check the result
+
+- The preview of the port labels names the number, tape width and length of the labels, such as “4 labels on 12 mm tape, 188 mm long each”.
+- A printed strip fits the ports of the label field with its dividing lines.
+
+## Troubleshooting
+
+- **“A strip would be longer than 1000 mm.”** A label may be at most 1,000 mm long; the page does not print then. Choose fewer ports per strip or a smaller width per port.
+- **The fields do not match the ports:** measure the distance from port centre to port centre on the device again and enter it as **Width per port (mm)**. Check in the print dialog that scaling is 100 % and no margins are set.
+- **The print is cut off or has the wrong length:** the driver does not take the document's page size. Check in the print dialog that the tape width is chosen as paper, margins “None” and 100 %. {/* offen: driver settings per printer (such as Brother P-touch on Windows) for a variable length are not described. */}
+- **“No device in this rack has ports yet.”** Add ports at a mount first.

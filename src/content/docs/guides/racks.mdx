@@ -1,0 +1,119 @@
+---
+title: Racks und Ports
+description: Racks maßstabsgetreu belegen, Ports und Kabel dokumentieren, die Portliste drucken und Port-Etiketten für Beschriftungsgeräte erzeugen.
+sidebar:
+  label: Racks und Ports
+  order: 6
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Unter **Inventar › Racks** dokumentieren Sie Serverschränke und Technikschränke: was in welcher Höheneinheit steckt, welche Ports ein Gerät hat, welches Kabel wohin führt und wo noch Platz ist. Aus diesen Angaben druckt SentryAssets eine Portliste und Etiketten für die Beschriftungsfelder von Patchpanels und Switches.
+
+Racks gehören zur Community-Edition.
+
+## Voraussetzungen
+
+- Lesen genügt für Ansicht, Druckansicht, Portliste und Port-Etiketten.
+- Anlegen, Einbauen, Ports, Kabel und das Bearbeiten in der Portliste brauchen eine Rolle mit Schreibrecht für Racks: **Administrator**, **Informationssicherheit** oder **Bearbeitung** (siehe [Rollen und Rechte](/reference/rollen/)).
+- Ein Standort, meist der Raum, in dem das Rack steht.
+
+## Rack anlegen und belegen
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Racks** und wählen Sie **Rack anlegen**.
+
+2. Wählen Sie den **Standort** und tragen Sie **Bezeichnung** (etwa „R01“), **Höheneinheiten** und **Zählung** ein (**von unten (HE 1 unten)** oder **von oben (HE 1 oben)**). **Tiefe in mm**, **Stromzufuhr** und **Notiz** sind optional.
+
+3. Klicken Sie im Rack auf eine freie Höheneinheit. Wählen Sie unter **Art** ein **Gerät aus dem Inventar**, ein **Patchpanel**, eine **Kabelführung**, eine **Blindblende**, einen **Fachboden** oder **Sonstiges**, dazu **Unterste Höheneinheit**, **Höhe in HE** und **Seite** (**ganze Tiefe**, **vorne** oder **hinten**), und wählen Sie **Einbauen**.
+
+</Steps>
+
+Einbauten lassen sich ziehen oder mit den Pfeiltasten um eine Einheit verschieben; belegte Höheneinheiten nimmt das Rack nicht doppelt an. **Drucken** zeigt Vorder- und Rückseite zum Drucken oder Speichern als PDF, **Als PNG** speichert die Ansicht als Bild. Ein Rack lässt sich erst löschen, wenn nichts mehr eingebaut ist.
+
+## Ports und Kabel
+
+<Steps>
+
+1. Wählen Sie im Rack einen Einbau. Unter **Ports von …** legen Sie mit **Ports anlegen** eine Reihe an: **Präfix** und fortlaufende Nummer, etwa „Gi1/0/“ mit 1 bis 24, höchstens 128 Ports auf einmal.
+
+2. Meldet das Gerät seine Schnittstellen per SNMP über den [Collector](/guides/collector/#snmpv3-und-lldp), übernehmen Sie sie mit **… Ports übernehmen**.
+
+3. Für ein Kabel wählen Sie an einem Port **Verbinden mit …**, dann Einbau und Port der Gegenseite, auch in einem anderen Rack. **Kabel-ID**, **Kabeltyp**, **Farbe** und **Länge in cm** sind optional. Bestätigen Sie mit **Verbinden**.
+
+</Steps>
+
+Verbundene Ports erscheinen in der Farbe ihres Kabels. Unter **Vorschläge aus LLDP** stehen Kabel, die die Switches selbst melden; jeden Vorschlag nehmen Sie mit **Übernehmen** an oder mit **Verwerfen** zurück; verworfene Vorschläge kommen nicht wieder. Verkabelt wird nie von selbst.
+
+## Portliste drucken
+
+Die Portliste zeigt die Ports eines Geräts oder aller Geräte mit Ports, je mit **Typ**, **Beschriftung** und **Beschreibung**, auf Wunsch mit der Gegenseite und dem Kabel.
+
+<Steps>
+
+1. Wählen Sie im Rack **Portliste drucken**, oder an den Ports eines Einbaus dieselbe Schaltfläche für nur dieses Gerät.
+
+2. Wählen Sie unter **Gerät** ein einzelnes Gerät oder **Alle Geräte mit Ports**.
+
+3. Lassen Sie **Verbindungen und Kabel zeigen** eingeschaltet, wenn die Liste auch **Verbunden mit** und **Kabel** (Kennung, Typ, Farbe, Länge) nennen soll.
+
+4. Wählen Sie **Drucken**. Zum Speichern als PDF wählen Sie im Druckdialog „Als PDF speichern“.
+
+</Steps>
+
+Die Liste nennt je Gerät Art, Höheneinheiten, Seite und Zahl der Ports und trägt den Stand mit Datum.
+
+### Beschriftung und Beschreibung direkt ändern
+
+Mit Schreibrecht für Racks ändern Sie **Beschriftung** und **Beschreibung** eines Ports direkt in der Portliste:
+
+- Gespeichert wird, wenn Sie das Feld verlassen oder die Eingabetaste drücken; `Esc` verwirft die Änderung.
+- Ein Hinweis bestätigt das Speichern und bietet **Rückgängig** an.
+- Im Druck erscheinen die Felder als einfacher Text.
+
+Das eignet sich, um eine Portliste vor Ort abzugleichen und zu berichtigen, bevor Sie Etiketten drucken.
+
+## Port-Etiketten für Beschriftungsgeräte
+
+Patchpanels und Switches haben über ihren Ports Beschriftungsfelder. **Port-Etiketten** druckt dafür Etiketten auf das Band eines Beschriftungsgeräts, etwa der Brother-P-touch-Reihe wie dem Brother PT-E560BT.
+
+<Steps>
+
+1. Wählen Sie im Rack **Port-Etiketten**, oder an den Ports eines Einbaus dieselbe Schaltfläche für nur dieses Gerät.
+
+2. Wählen Sie unter **Gerät** ein Gerät oder **Alle Geräte mit Ports**.
+
+3. Wählen Sie die **Art**:
+   - **Streifen für das Beschriftungsfeld:** gleich breite Felder, ein Feld je Port, mit Trennstrich dazwischen und 4 mm leerem Band an beiden Enden. Der letzte Streifen eines Geräts wird mit leeren Feldern auf die gleiche Länge gebracht.
+   - **Ein Etikett je Port:** etwa als Fahne am Kabel.
+
+4. Wählen Sie die **Bandbreite**: **24 mm**, **18 mm**, **12 mm** (Vorgabe) oder **9 mm**.
+
+5. Wählen Sie den **Inhalt**: **Beschriftung, sonst Portname**, nur **Portname** oder **Portname und Beschriftung** in zwei Zeilen.
+
+6. Legen Sie die Maße fest:
+   - bei Streifen **Breite je Port (mm)**, der Abstand von Portmitte zu Portmitte am Gerät, 5 bis 40 mm in Schritten von 0,5 mm (Vorgabe 15 mm, meist 12 bis 20 mm), und **Ports je Streifen**, 1 bis 48 (Vorgabe 12), so viele, wie ein Beschriftungsfeld überspannt, etwa 6, 12 oder 24;
+   - bei einem Etikett je Port **Länge je Etikett (mm)**, mindestens 25 mm, damit das Gerät sauber schneidet.
+
+7. Wählen Sie **Drucken**. Wählen Sie im Druckdialog das Beschriftungsgerät, als Papier die Bandbreite, Ränder „Keine“ und 100 %.
+
+</Steps>
+
+Ein Streifen ist so lang wie Ports je Streifen mal Breite je Port plus 8 mm. Jedes Etikett ist eine eigene Seite. Der Text steht in der Mitte des Bandes, schwarz auf weiß, auch im dunklen Farbschema. Ihre zuletzt gewählten Einstellungen merkt sich der Browser für das nächste Mal.
+
+<Aside type="note" title="Druck über den Treiber">
+Gedruckt wird über den Druckdialog des Browsers und den Treiber des Beschriftungsgeräts. Geräte wie das Brother PT-E560BT drucken Sie dafür vom Computer über den Treiber per USB; ein Gerät, das sonst nur über eine App am Telefon druckt, braucht den Treiber am Computer. Ob die Länge des Etiketts ankommt, hängt davon ab, dass der Treiber die Seitengröße aus dem Dokument übernimmt.
+</Aside>
+
+## Ergebnis prüfen
+
+- Die Vorschau der Port-Etiketten nennt Zahl, Bandbreite und Länge der Etiketten, etwa „4 Etiketten auf 12-mm-Band, je 188 mm lang“.
+- Ein gedruckter Streifen passt mit seinen Trennstrichen auf die Ports des Beschriftungsfelds.
+
+## Fehlerbehebung
+
+- **„So wird ein Streifen länger als 1000 mm.“** Ein Etikett darf höchstens 1 000 mm lang sein; die Seite druckt dann nicht. Wählen Sie weniger Ports je Streifen oder eine kleinere Breite je Port.
+- **Die Felder passen nicht zu den Ports:** Messen Sie den Abstand von Portmitte zu Portmitte am Gerät nach und tragen Sie ihn als **Breite je Port (mm)** ein. Prüfen Sie im Druckdialog, dass die Skalierung 100 % beträgt und keine Ränder eingestellt sind.
+- **Der Druck wird abgeschnitten oder hat eine falsche Länge:** Der Treiber übernimmt die Seitengröße des Dokuments nicht. Prüfen Sie im Druckdialog, dass als Papier die Bandbreite gewählt ist, Ränder „Keine“ und 100 %. {/* offen: Einstellungen je Treiber (etwa Brother P-touch unter Windows) für eine variable Länge sind nicht beschrieben. */}
+- **„In diesem Rack hat noch kein Gerät Ports.“** Legen Sie zuerst Ports an einem Einbau an.
