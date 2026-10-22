@@ -70,6 +70,21 @@ HTML is not allowed in a documentation, so that the file runs no script in other
 
 A documentation is a document of the kind **Documentation**. The same rules as for files apply: encryption, confidentiality, location rights, retention and history. The roles administrator, information security and editor may write; whoever may see the asset reads its documentation up to the confidentiality their role allows. Every read is in the activity log.
 
+## Using it as evidence
+
+Many documentation entries show that requirements of the IT-Grundschutz are met, such as documenting servers, backups or recovery.
+
+**In every edition** you link a documentation as evidence like any other document: in the Grundschutz check under **Evidence** with **Add evidence** and **Link an existing document**. At most 20 pieces of evidence count per requirement.
+
+**With the [ISMS add-on](/en/pro/isms/)**, the aid below a requirement on **Check the implementation** proposes the matching documentation, in a collapsed section **Documentation of the assets as evidence**:
+
+- It lists the documentation of the assets the requirement applies to, each with title, assets and last change. In the Edition 2023 these are the assets in operation the target object stands for (a single asset or a category with its subcategories); the information domain and locations have no proposals. In Grundschutz++ they are the assets in operation of the categories the requirement applies to in the information domain.
+- **Read** opens the documentation on the **Documentation** tab of its asset. **Link as evidence** attaches it to the requirement; one already linked is marked **Linked as evidence**.
+- The proposals load only when you open the section. At most 50 documentation entries are shown.
+- You see only documentation up to your confidentiality level, and only with the rights to read the Grundschutz, the inventory and the documents.
+
+Whether a documentation shows that the requirement is met is a person's decision; nothing is linked by itself. A linked documentation is evidence like any document: it appears among the ISMS evidence with a review date, a new version is marked “new version unchecked” there, and the document's page shows what it serves as evidence for. Without a license for the add-on the proposals go; existing links stay.
+
 ## Diagrams
 
 Write diagrams in a `mermaid` code block (flowcharts, sequences, states and more). They are drawn in an isolated frame without access to your session. If a diagram cannot be drawn, its source is shown.

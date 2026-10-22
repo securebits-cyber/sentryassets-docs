@@ -70,6 +70,21 @@ HTML ist in einer Dokumentation nicht erlaubt, damit die Datei auch in anderen M
 
 Eine Dokumentation ist ein Dokument der Art **Dokumentation**. Es gelten dieselben Regeln wie für Dateien: Verschlüsselung, Vertraulichkeit, Standortrechte, Aufbewahrung und Verlauf. Schreiben dürfen die Rollen Administrator, Informationssicherheit und Bearbeitung; wer das Asset sehen darf, liest die Dokumentation bis zu der Vertraulichkeit, die seine Rolle erlaubt. Jedes Lesen steht im Aktivitätsprotokoll.
 
+## Als Nachweis verwenden
+
+Viele Dokumentationen belegen Anforderungen des IT-Grundschutzes, etwa zur Dokumentation von Servern, zur Datensicherung oder zum Wiederanlauf.
+
+**In jeder Edition** verknüpfen Sie eine Dokumentation wie jedes andere Dokument als Nachweis: im Grundschutz-Check unter **Nachweise** mit **Nachweis hinzufügen** und **Vorhandenes Dokument verknüpfen**. Höchstens 20 Nachweise gelten je Anforderung.
+
+**Mit dem [ISMS-Add-on](/pro/isms/)** schlägt die Hilfe unter einer Anforderung bei **Umsetzung prüfen** die passenden Dokumentationen vor, in einem zugeklappten Abschnitt **Dokumentation der Assets als Nachweis**:
+
+- Er nennt die Dokumentationen der Assets, für die die Anforderung gilt, je mit Titel, Assets und letzter Änderung. In der Edition 2023 sind das die Assets in Betrieb, für die das Zielobjekt steht (ein einzelnes Asset oder eine Kategorie mit ihren Unterkategorien); der Informationsverbund und Standorte haben keine Vorschläge. In Grundschutz++ sind es die Assets in Betrieb der Kategorien, für die die Anforderung im Informationsverbund gilt.
+- **Lesen** öffnet die Dokumentation im Reiter **Dokumentation** am Asset. **Als Nachweis verknüpfen** hängt sie an die Anforderung; eine schon verknüpfte ist als **Als Nachweis verknüpft** gekennzeichnet.
+- Die Vorschläge laden erst, wenn Sie den Abschnitt öffnen. Gezeigt werden höchstens 50 Dokumentationen.
+- Sie sehen nur Dokumentationen bis zu Ihrer Vertraulichkeitsstufe und nur mit dem Recht, Grundschutz, Inventar und Dokumente zu lesen.
+
+Ob eine Dokumentation die Anforderung belegt, entscheidet eine Person; verknüpft wird nie von selbst. Eine verknüpfte Dokumentation ist ein Nachweis wie jedes Dokument: Sie erscheint unter den Nachweisen des ISMS mit Wiedervorlage, eine neue Fassung ist dort als „neue Fassung ungeprüft“ markiert, und die Seite des Dokuments zeigt, wofür es als Nachweis dient. Ohne Lizenz des Add-ons entfallen die Vorschläge; vorhandene Verknüpfungen bleiben.
+
 ## Diagramme
 
 Diagramme schreiben Sie in einem Codeblock `mermaid` (Flussdiagramme, Abläufe, Zustände und mehr). Gezeichnet werden sie in einem abgeschotteten Rahmen ohne Zugriff auf Ihre Sitzung. Lässt sich ein Diagramm nicht zeichnen, erscheint sein Quelltext.
