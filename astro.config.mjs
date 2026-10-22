@@ -56,6 +56,7 @@ export default defineConfig({
 							{ icon: 'i-ph:sliders-duotone', slug: 'guides/einrichtung' },
 							{ icon: 'i-ph:desktop-tower-duotone', slug: 'guides/agents' },
 							{ icon: 'i-ph:network-duotone', slug: 'guides/collector' },
+							{ icon: 'i-ph:shopping-cart-duotone', slug: 'guides/beschaffung' },
 							{ icon: 'i-ph:shield-check-duotone', slug: 'guides/grundschutz' },
 							{ icon: 'i-ph:archive-duotone', slug: 'guides/sicherung' },
 							{ icon: 'i-ph:key-duotone', slug: 'guides/lizenz' },
