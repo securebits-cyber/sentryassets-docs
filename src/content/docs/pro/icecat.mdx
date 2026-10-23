@@ -1,0 +1,153 @@
+---
+title: Vorschläge aus Open Icecat
+description: Mit Pro schlägt SentryAssets beim Zugang per Scan zu einer unbekannten EAN Bezeichnung, Hersteller, Kategorie und Artikelnummer aus dem freien Produktkatalog Open Icecat vor; so richten Sie das Konto ein.
+sidebar:
+  label: Icecat
+  order: 18
+---
+
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Scannen Sie beim [Zugang per Scan](/guides/verbrauchsmaterial/#zugang-per-scan) eine EAN, zu der es noch keinen Artikel gibt, fragt SentryAssets den Produktkatalog Open Icecat. Kennt Icecat das Produkt, sind Bezeichnung, Hersteller, Kategorie und Artikelnummer für den neuen Artikel schon eingetragen. Sie prüfen den Vorschlag und speichern, statt alles abzutippen.
+
+## Was Open Icecat liefert
+
+Icecat ist ein Katalog mit Datenblättern zu IT- und Elektronikprodukten. **Open Icecat** ist der kostenlose Teil davon. Er enthält die Produkte der Hersteller, die Icecat unterstützen; Produkte anderer Hersteller stehen nur im kostenpflichtigen **Full Icecat**. Für solche Produkte meldet SentryAssets „Dieses Produkt gibt es nur im kostenpflichtigen Full Icecat.“ und schlägt nichts vor.
+
+SentryAssets übernimmt aus einem Datenblatt nur:
+
+| Angabe | Wird zu | Höchstlänge |
+|---|---|---|
+| Titel, ersatzweise Marke und Produktname | **Bezeichnung** | 200 Zeichen |
+| Marke | **Hersteller** (nur angezeigt, nicht als Lieferant angelegt) | 100 Zeichen |
+| Kategorie | **Kategorie** | 100 Zeichen |
+| Artikelnummer des Herstellers | **Artikelnummer** | 100 Zeichen |
+
+Längere Angaben werden gekürzt. Die Sprache wählen Sie in den Einstellungen (Deutsch oder Englisch). Ob Icecat ein Produkt in dieser Sprache beschreibt, liegt beim Katalog; manche Datenblätter gibt es nur in einer Sprache.
+
+## Voraussetzungen
+
+- Lizenz der Edition Pro.
+- Ein eigenes, kostenloses Konto Ihrer Organisation bei Open Icecat. Die Bedingungen von Icecat verlangen ein Konto je Organisation; ein gemeinsames Konto gibt es nicht.
+- Einrichten darf nur die Rolle **Administrator**. Vorschläge sehen alle, die Verbrauchsmaterial ändern dürfen.
+- Der Job-Worker erreicht `live.icecat.biz` auf Port 443 direkt im Internet. Ein Proxy aus der Umgebung wird nicht genutzt.
+- Für ein optionales API-Token ein eingerichteter Master-Schlüssel, wie für andere gespeicherte Geheimnisse (siehe [Konfiguration](/reference/konfiguration/)). Die Oberfläche nennt ihn Hauptschlüssel.
+
+## Konto bei Open Icecat anlegen
+
+Die Schritte beschreiben die Seiten von Icecat im Oktober 2026. Icecat kann sie ändern; maßgeblich ist, was dort steht.
+
+<Steps>
+
+1. Öffnen Sie `https://icecat.biz`. In SentryAssets führt **Bei Icecat registrieren** unter **Einstellungen › System › Icecat** dorthin.
+
+2. Öffnen Sie die Anmeldeseite `https://icecat.biz/en/authorization` und wählen Sie **Register as new user (free)**. Das Formular steht unter `https://icecat.biz/en/registration`.
+
+3. Füllen Sie das Formular **Channel Partner Registration** aus: unter **Generic Details** **E-mail**, **User name**, **Password** und **Confirm password**, unter **Contact Details** **Organization**, **Name**, **Country**, **Website**, **Verticals** und **Phone number**. Der Benutzername darf keine Leerzeichen enthalten, sonst nimmt SentryAssets ihn nicht an.
+   {/* offen: Welche Angabe unter „Verticals“ für eine Organisation passt, die Icecat nur für das eigene Inventar nutzt, ist auf den Seiten von Icecat nicht beschrieben. */}
+
+4. Lesen Sie die **Registration Terms** und wählen Sie **Submit**.
+
+5. Bestätigen Sie Ihre E-Mail-Adresse über den Link in der Mail von Icecat. Kommt keine Mail, sehen Sie im Spam-Ordner nach. Danach ist Open Icecat freigeschaltet.
+
+6. Melden Sie sich bei Icecat an. Ihr Benutzername steht oben unter **My Profile** in MyIcecat.
+
+7. Optional: Legen Sie in MyIcecat unter **Access Tokens** ein **API token** an. Für Open Icecat ist es nach Angabe von Icecat nicht nötig, wird aber empfohlen.
+   {/* offen: Die genaue Bezeichnung der Schaltfläche zum Anlegen eines Tokens nennt Icecat in seinen Anleitungen nicht. */}
+
+</Steps>
+
+<Aside type="caution" title="Token wie ein Passwort behandeln">
+Wer das API-Token kennt, fragt Datenblätter mit Ihrem Konto ab. Geben Sie es nur in SentryAssets ein und widerrufen Sie es unter **Access Tokens** bei Icecat, wenn es bekannt geworden sein könnte.
+</Aside>
+
+## In SentryAssets einrichten
+
+<Steps>
+
+1. Öffnen Sie **Einstellungen › System › Icecat**.
+
+2. Tragen Sie unter **Konto bei Open Icecat** den **Benutzername** ein, also Ihren Benutzernamen bei Open Icecat, ohne Leerzeichen.
+
+3. Tragen Sie bei Bedarf das **API-Token (optional)** ein. Es wird verschlüsselt gespeichert und nie wieder angezeigt.
+
+4. Wählen Sie die **Sprache der Angaben**: **Deutsch** oder **Englisch**.
+
+5. Schalten Sie **Vorschläge von Icecat einschalten** ein und wählen Sie **Speichern**.
+
+6. Wählen Sie unter **Verbindung testen** die Schaltfläche **Verbindung testen**. SentryAssets fragt Icecat mit Ihrem Konto nach einem bekannten Produkt.
+
+</Steps>
+
+Das Ergebnis steht danach auf der Seite: **Verbindung erfolgreich** oder **Verbindung fehlgeschlagen** mit der Ursache, dazu **Getestet am …**. Ändern Sie danach Benutzername, Sprache oder Token, erscheint „Die Einstellungen wurden seit dem Test geändert. Testen Sie erneut.“ Der Test ist empfohlen, aber keine Bedingung: Vorschläge gibt es, sobald sie eingeschaltet sind und ein Benutzername gespeichert ist.
+
+Ein hinterlegtes Token zeigt die Seite nur als „Ein Token ist hinterlegt. Leer lassen, um es zu behalten, oder ein neues eintragen.“ **Token entfernen** löscht es beim nächsten Speichern, **Token behalten** nimmt das zurück.
+
+## Nutzung beim Zugang per Scan
+
+<Steps>
+
+1. Scannen Sie unter **Inventar › Zugang per Scan** eine Packung, deren EAN noch keinem Artikel gehört.
+
+2. Unter **Unbekannte EAN …** steht kurz „Wird bei Icecat nachgeschlagen …“, danach der **Vorschlag von Icecat** mit **Bezeichnung**, **Hersteller**, **Kategorie** und **Artikelnummer** und dem Vermerk von Icecat.
+
+3. Wählen Sie **Artikel anlegen**. Der Dialog ist mit dem Vorschlag und der EAN vorbelegt; ändern Sie, was nicht passt, und speichern Sie.
+
+</Steps>
+
+Antwortet Icecat nicht binnen etwa 20 Sekunden, erscheint „Icecat hat noch nicht geantwortet. Legen Sie den Artikel von Hand an oder scannen Sie später erneut.“ Ohne Einrichtung sieht nur die Administration den Hinweis **Icecat einrichten**; alle anderen arbeiten wie gewohnt ohne Vorschlag. Andere Stellen, an denen Sie scannen, fragen Icecat nicht.
+
+## Zwischenspeicher und Grenzen
+
+- **Zwischenspeicher je Organisation:** Ein gefundenes Datenblatt und „nur in Full Icecat“ gelten 30 Tage, „nicht gefunden“ 7 Tage. Fehler werden nicht gespeichert, der nächste Scan fragt neu. Eine andere Sprache in den Einstellungen fragt ebenfalls neu.
+- Höchstens 5 000 Codes je Organisation im Zwischenspeicher; die am längsten nicht geänderten fallen zuerst heraus.
+- Höchstens 60 Abfragen je Minute und Person, 1 000 an Icecat gehende Codes je Stunde und Organisation und 200 gleichzeitig wartende Codes. Antworten aus dem Zwischenspeicher zählen nicht zur Grenze je Stunde.
+- Ein Vorschlag ist eine Hilfe, keine Prüfung: Kontrollieren Sie Bezeichnung und Artikelnummer, bevor Sie speichern.
+- Der Hersteller aus Icecat wird nicht als Lieferant angelegt. Den Lieferanten wählen Sie selbst.
+
+## Datenschutz und Sicherheit
+
+- **Nur die EAN geht an Icecat**, zusammen mit Ihrem Benutzernamen, der gewählten Sprache und gegebenenfalls dem Token. Lagerort, Bestand, Personen oder andere Daten aus SentryAssets verlassen die Installation nicht.
+- **Nur der Job-Worker fragt**, nicht der Browser und nicht die API. Er verbindet sich nur mit dem festen Host `live.icecat.biz`, nur mit **TLS 1.3** und Prüfung des Zertifikats, nur zu öffentlichen Adressen, ohne Weiterleitungen und mit höchstens 256 KiB je Antwort. Das Token geht in einem Header mit, nie in der Adresse.
+- **Token verschlüsselt:** Das API-Token liegt per Envelope Encryption in der Datenbank, wird nie zurückgegeben und steht weder im Log noch im Audit-Log. Das Audit-Log nennt nur, welche Einstellungen geändert und ob das Token ersetzt, entfernt oder behalten wurde.
+- **Antworten sind nicht vertrauenswürdig:** SentryAssets liest nur die genannten Felder, prüft ihre Typen, entfernt Steuerzeichen und zeigt alles als Text, nie als HTML. Ein Datenblatt zu einer anderen EAN wird verworfen.
+- **Nie an eine KI:** Die Bedingungen von Icecat untersagen, die Daten an generative KI zu geben. Der Zwischenspeicher geht deshalb weder an den [Daten-Assistenten](/pro/daten-assistent/) noch an den [Hilfe-Assistenten](/reference/ki-assistent/).
+
+## Lizenzvermerk
+
+Zu jedem Vorschlag steht der Vermerk, den Icecat verlangt, mit dem aktuellen Jahr:
+
+```text
+Database Right data-sheet <Jahr> Icecat. All rights reserved.
+```
+
+Der Vermerk gehört zu den Nutzungsbedingungen von Open Icecat. Die vollständigen Bedingungen finden Sie bei Icecat.
+
+## Ergebnis prüfen
+
+- Unter **Einstellungen › System › Icecat** steht **Verbindung erfolgreich** mit dem Datum des Tests.
+- Ein Scan einer unbekannten EAN unter **Inventar › Zugang per Scan** zeigt den **Vorschlag von Icecat** oder „Icecat kennt zu dieser EAN kein Produkt.“
+
+## Fehlerbehebung
+
+| Meldung | Ursache und Abhilfe |
+|---|---|
+| „Icecat kennt diesen Benutzernamen nicht.“ | Der Benutzername ist falsch geschrieben. Vergleichen Sie ihn mit **My Profile** in MyIcecat und prüfen Sie, ob Sie die E-Mail-Adresse bei Icecat bestätigt haben. |
+| „Icecat kennt dieses Token nicht.“ | Das Token ist falsch eingetragen oder bei Icecat widerrufen. Tragen Sie ein neues ein oder entfernen Sie es. |
+| „Icecat ist nicht erreichbar.“ | Der Job-Worker kommt nicht ins Internet. Prüfen Sie Firewall und ausgehende Verbindungen zu `live.icecat.biz:443`. |
+| „Der Name von Icecat ließ sich nicht auflösen.“ | Der Worker hat keine funktionierende Namensauflösung für öffentliche Namen. |
+| „Die Adresse von Icecat ist nicht freigegeben.“ | Der Name löst auf eine private oder sonst nicht öffentliche Adresse auf, etwa durch einen DNS-Filter. SentryAssets verbindet sich nur mit öffentlichen Adressen. |
+| „Die verschlüsselte Verbindung zu Icecat ist fehlgeschlagen.“ | TLS 1.3 oder die Zertifikatsprüfung scheitert, oft durch TLS-Inspektion einer Firewall. Nehmen Sie `live.icecat.biz` davon aus. |
+| „Icecat hat nicht rechtzeitig geantwortet.“ | Icecat oder die Leitung ist langsam. Versuchen Sie es später erneut. |
+| „Icecat bittet um eine Pause. Versuchen Sie es später erneut.“ | Icecat begrenzt die Abfragen. Warten Sie einige Minuten. |
+| „Icecat hat eine unerwartete Antwort gesendet.“, „Die Antwort von Icecat war zu groß.“, „Icecat hat die Anfrage abgelehnt.“ | Die Antwort passte nicht zum erwarteten Format. Bleibt der Fehler, prüfen Sie, ob Icecat Änderungen angekündigt hat. |
+| „Gerade warten zu viele Abfragen. Versuchen Sie es gleich erneut.“ | 200 Codes warten schon auf den Worker. Läuft der Worker? Siehe **Systemzustand**. |
+| „Ohne Hauptschlüssel lässt sich das Token nicht lesen.“, „Auf diesem Server ist kein Hauptschlüssel eingerichtet; ein Token lässt sich nicht speichern.“ | Richten Sie den Hauptschlüssel ein oder arbeiten Sie ohne Token. |
+| „Das gespeicherte Token lässt sich nicht lesen. Tragen Sie es neu ein.“ | Etwa weil sich der Hauptschlüssel geändert hat. Tragen Sie das Token neu ein. |
+| „Speichern Sie zuerst einen Benutzernamen.“ | Der Test braucht einen gespeicherten Benutzernamen. |
+| „Die Einstellungen wurden inzwischen geändert. Laden Sie die Seite neu.“ | Jemand anderes hat gleichzeitig gespeichert. Laden Sie die Seite neu und prüfen Sie die Angaben. |
+| „Dieses Produkt gibt es nur im kostenpflichtigen Full Icecat.“ | Der Hersteller gehört nicht zu Open Icecat. Legen Sie den Artikel von Hand an. |
+| „Icecat kennt zu dieser EAN kein Produkt.“ | Das Produkt fehlt im Katalog. Legen Sie den Artikel von Hand an; nach 7 Tagen fragt ein neuer Scan erneut. |
+| „Dafür ist eine gültige Lizenz nötig.“ | Die Lizenz der Edition Pro fehlt oder ist abgelaufen, siehe [Lizenz](/guides/lizenz/). |

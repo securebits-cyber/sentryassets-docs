@@ -1,0 +1,153 @@
+---
+title: Suggestions from Open Icecat
+description: With Pro, SentryAssets suggests name, manufacturer, category and article number from the free Open Icecat product catalogue for an unknown EAN when receiving by scan; this is how you set up the account.
+sidebar:
+  label: Icecat
+  order: 18
+---
+
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature applies from the Pro edition.
+
+When you scan an EAN that no item has yet while [receiving by scan](/en/guides/verbrauchsmaterial/#receive-by-scan), SentryAssets asks the Open Icecat product catalogue. If Icecat knows the product, name, manufacturer, category and article number for the new item are filled in already. You check the suggestion and save instead of typing everything.
+
+## What Open Icecat provides
+
+Icecat is a catalogue of data-sheets on IT and electronics products. **Open Icecat** is its free part. It holds the products of the manufacturers that support Icecat; products of other manufacturers are only in the paid **Full Icecat**. For such products SentryAssets reports “This product is only in the paid Full Icecat.” and suggests nothing.
+
+From a data-sheet SentryAssets takes only:
+
+| Detail | Becomes | Maximum length |
+|---|---|---|
+| Title, or else brand and product name | **Name** | 200 characters |
+| Brand | **Manufacturer** (shown only, not created as a supplier) | 100 characters |
+| Category | **Category** | 100 characters |
+| Manufacturer's part number | **Article number** | 100 characters |
+
+Longer details are shortened. You choose the language in the settings (German or English). Whether Icecat describes a product in that language is up to the catalogue; some data-sheets exist in one language only.
+
+## Prerequisites
+
+- A licence of the Pro edition.
+- A free Open Icecat account of your own organisation. Icecat's terms require one account per organisation; there is no shared account.
+- Only the **Administrator** role may set it up. Suggestions are shown to everyone who may change consumables.
+- The job worker reaches `live.icecat.biz` on port 443 directly on the internet. A proxy from the environment is not used.
+- For an optional API token, a master key set up as for other stored secrets (see [Configuration](/en/reference/konfiguration/)).
+
+## Creating an Open Icecat account
+
+The steps describe Icecat's pages as of October 2026. Icecat may change them; what is shown there takes precedence.
+
+<Steps>
+
+1. Open `https://icecat.biz`. In SentryAssets, **Register at Icecat** under **Settings › System › Icecat** leads there.
+
+2. Open the login page `https://icecat.biz/en/authorization` and choose **Register as new user (free)**. The form is at `https://icecat.biz/en/registration`.
+
+3. Fill in the **Channel Partner Registration** form: under **Generic Details** **E-mail**, **User name**, **Password** and **Confirm password**, under **Contact Details** **Organization**, **Name**, **Country**, **Website**, **Verticals** and **Phone number**. The user name must not contain spaces, or SentryAssets will not accept it.
+   {/* offen: Icecat's pages do not say which "Verticals" entry fits an organisation that uses Icecat for its own inventory only. */}
+
+4. Read the **Registration Terms** and choose **Submit**.
+
+5. Confirm your e-mail address with the link in Icecat's mail. If no mail arrives, look in the spam folder. Open Icecat is then available.
+
+6. Sign in to Icecat. Your user name is shown at the top of **My Profile** in MyIcecat.
+
+7. Optional: create an **API token** in MyIcecat under **Access Tokens**. According to Icecat it is not needed for Open Icecat, but recommended.
+   {/* offen: Icecat's guides do not name the exact button for creating a token. */}
+
+</Steps>
+
+<Aside type="caution" title="Treat the token like a password">
+Anyone who knows the API token can request data-sheets with your account. Enter it only in SentryAssets, and revoke it under **Access Tokens** at Icecat if it may have become known.
+</Aside>
+
+## Setting up in SentryAssets
+
+<Steps>
+
+1. Open **Settings › System › Icecat**.
+
+2. Under **Open Icecat account**, enter the **User name**, your Open Icecat user name without spaces.
+
+3. If needed, enter the **API token (optional)**. It is stored encrypted and never shown again.
+
+4. Choose the **Language of the details**: **German** or **English**.
+
+5. Switch on **Switch on suggestions from Icecat** and choose **Save**.
+
+6. Under **Test connection**, choose the **Test connection** button. SentryAssets asks Icecat for a well-known product with your account.
+
+</Steps>
+
+The result then shows on the page: **Connection succeeded** or **Connection failed** with the cause, and **Tested on …**. If you change the user name, language or token afterwards, the page says “The settings changed since the test. Test again.” The test is recommended but not required: suggestions start as soon as they are switched on and a user name is saved.
+
+A stored token is only shown as “A token is stored. Leave empty to keep it, or enter a new one.” **Remove token** deletes it on the next save; **Keep token** undoes that.
+
+## Use when receiving by scan
+
+<Steps>
+
+1. Under **Inventory › Receive by scan**, scan a package whose EAN belongs to no item yet.
+
+2. Under **Unknown EAN …** you briefly see “Looking up on Icecat …”, then the **Suggestion from Icecat** with **Name**, **Manufacturer**, **Category** and **Article number** and Icecat's notice.
+
+3. Choose **Add item**. The dialog is filled in with the suggestion and the EAN; change what does not fit and save.
+
+</Steps>
+
+If Icecat does not answer within about 20 seconds, the page says “Icecat has not answered yet. Create the item by hand or scan again later.” Without a setup only the administration sees the hint **Set up Icecat**; everyone else works as usual without a suggestion. The other places where you scan do not ask Icecat.
+
+## Cache and limits
+
+- **Cache per organisation:** a data-sheet found and “only in Full Icecat” are kept for 30 days, “not found” for 7 days. Errors are not kept; the next scan asks again. Another language in the settings asks again as well.
+- At most 5,000 codes per organisation in the cache; those unchanged the longest drop out first.
+- At most 60 lookups per minute and person, 1,000 codes sent to Icecat per hour and organisation, and 200 codes waiting at a time. Answers from the cache do not count towards the hourly limit.
+- A suggestion is support, not a check: verify the name and article number before you save.
+- The manufacturer from Icecat is not created as a supplier. You choose the supplier yourself.
+
+## Privacy and security
+
+- **Only the EAN goes to Icecat**, together with your user name, the chosen language and the token, if any. Storage location, stock, persons or other data from SentryAssets do not leave the installation.
+- **Only the job worker asks**, not the browser and not the API. It connects only to the fixed host `live.icecat.biz`, only with **TLS 1.3** and certificate verification, only to public addresses, without redirects and with at most 256 KiB per answer. The token goes in a header, never in the address.
+- **Token encrypted:** the API token is kept in the database with envelope encryption, never returned and in neither the log nor the audit log. The audit log only names which settings changed and whether the token was replaced, removed or kept.
+- **Answers are untrusted:** SentryAssets reads only the fields listed above, checks their types, removes control characters and shows everything as text, never as HTML. A data-sheet for another EAN is discarded.
+- **Never to an AI:** Icecat's terms forbid passing the data to generative AI. The cache therefore goes neither to the [data assistant](/en/pro/daten-assistent/) nor to the [help assistant](/en/reference/ki-assistent/).
+
+## Licence notice
+
+Every suggestion carries the notice Icecat requires, with the current year:
+
+```text
+Database Right data-sheet <year> Icecat. All rights reserved.
+```
+
+The notice is part of the Open Icecat terms of use. You find the full terms at Icecat.
+
+## Check the result
+
+- **Settings › System › Icecat** shows **Connection succeeded** with the date of the test.
+- Scanning an unknown EAN under **Inventory › Receive by scan** shows the **Suggestion from Icecat** or “Icecat knows no product for this EAN.”
+
+## Troubleshooting
+
+| Message | Cause and remedy |
+|---|---|
+| “Icecat does not know this user name.” | The user name is misspelt. Compare it with **My Profile** in MyIcecat and check that you confirmed your e-mail address at Icecat. |
+| “Icecat does not know this token.” | The token is mistyped or revoked at Icecat. Enter a new one or remove it. |
+| “Icecat cannot be reached.” | The job worker cannot reach the internet. Check the firewall and outgoing connections to `live.icecat.biz:443`. |
+| “Icecat's name could not be resolved.” | The worker has no working name resolution for public names. |
+| “Icecat's address is not allowed.” | The name resolves to a private or otherwise non-public address, for instance through a DNS filter. SentryAssets only connects to public addresses. |
+| “The encrypted connection to Icecat failed.” | TLS 1.3 or the certificate check fails, often because a firewall inspects TLS. Exempt `live.icecat.biz` from it. |
+| “Icecat did not answer in time.” | Icecat or the line is slow. Try again later. |
+| “Icecat asks for a pause. Please try again later.” | Icecat limits the requests. Wait a few minutes. |
+| “Icecat sent an unexpected answer.”, “Icecat's answer was too large.”, “Icecat refused the request.” | The answer did not match the expected format. If the error stays, check whether Icecat announced changes. |
+| “Too many lookups are waiting. Please try again in a moment.” | 200 codes are already waiting for the worker. Is the worker running? See **System health**. |
+| “Without a master key the token cannot be read.”, “This server has no master key; a token cannot be saved.” | Set up the master key, or work without a token. |
+| “The stored token cannot be read. Enter it again.” | For instance because the master key changed. Enter the token again. |
+| “Save a user name first.” | The test needs a saved user name. |
+| “The settings were changed meanwhile. Reload the page.” | Someone else saved at the same time. Reload the page and check the details. |
+| “This product is only in the paid Full Icecat.” | The manufacturer is not part of Open Icecat. Create the item by hand. |
+| “Icecat knows no product for this EAN.” | The product is missing from the catalogue. Create the item by hand; after 7 days a new scan asks again. |
+| “This needs a valid license.” | The Pro licence is missing or has expired, see [Licence](/en/guides/lizenz/). |

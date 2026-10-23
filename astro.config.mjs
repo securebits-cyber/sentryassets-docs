@@ -117,6 +117,7 @@ export default defineConfig({
 							{ icon: 'i-ph:shield-star-duotone', slug: 'pro/isms' },
 							{ icon: 'i-ph:user-focus-duotone', slug: 'pro/datenschutz-add-on' },
 							{ icon: 'i-ph:shield-warning-duotone', slug: 'pro/nis2' },
+							{ icon: 'i-ph:database-duotone', slug: 'pro/icecat' },
 						],
 					},
 				],
