@@ -61,6 +61,14 @@ Der Bericht wird **nicht gesendet**, sondern als JSON-Datei gespeichert, die Sie
 | Speicher voll | Die Summe aller Versionen je Organisation ist begrenzt (`SA_DOCUMENT_QUOTA_BYTES`). |
 | Katalog des BSI lässt sich nicht einlesen | Die Datei ist größer als 16 MiB, oder ein vorgeschalteter Proxy begrenzt die Größe. |
 
+## Etiketten und Bilder
+
+| Problem | Ursache und Lösung |
+|---|---|
+| Etikett zu klein, abgeschnitten oder verdreht gedruckt | Im Druckdialog den Drucker des Etiketts wählen, als Papier genau das gewählte Etikett (beim DYMO LabelWriter etwa „99012 Large Address“), Ränder „Keine“ und Skalierung 100 %. Die Ausrichtung legt die Seite selbst fest; Browser bieten dann keine Wahl zwischen Hoch- und Querformat. |
+| Kein Strichcode auf dem DYMO-Etikett | Das Asset hat keine Inventarnummer, die Nummer enthält Zeichen außerhalb von ASCII (etwa Umlaute), oder sie ist zu lang für eine lesbare Breite auf diesem Etikett. Der QR-Code bleibt in jedem Fall; ein größeres Etikett nimmt längere Nummern. |
+| Bild lässt sich nicht hochladen | Der Browser kann das Format nicht anzeigen, oder das Bild ist nach dem Verkleinern noch größer als 2 MB. Ein Foto als JPEG oder PNG hilft. |
+
 ## Verbindungen nach außen
 
 Benachrichtigungen, Verzeichnisdienst, KI-Assistent und Konnektoren erreichen nur Netze, die Sie freigeben. Ein Ziel im eigenen Netz braucht die passende Variable, etwa `SA_NOTIFICATION_ALLOWED_NETWORKS=public,192.168.10.5/32` ([Konfiguration](/reference/konfiguration/#netzfreigaben)). Ziele brauchen TLS 1.3 und ein gültiges Zertifikat; für eine eigene CA hinterlegen Sie deren Zertifikat in der jeweiligen Verbindung.

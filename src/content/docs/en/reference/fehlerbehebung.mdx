@@ -61,6 +61,14 @@ The report is **not sent**; it is saved as a JSON file you pass on yourself. Ses
 | Storage full | The sum of all versions per organisation is limited (`SA_DOCUMENT_QUOTA_BYTES`). |
 | A BSI catalogue cannot be imported | The file is larger than 16 MiB, or a proxy in front limits the size. |
 
+## Labels and pictures
+
+| Problem | Cause and fix |
+|---|---|
+| Label printed too small, cut off or turned | In the print dialog, choose the label's printer, exactly the chosen label as paper (for the DYMO LabelWriter, for example, "99012 Large Address"), no margins and 100 % scale. The page sets the orientation itself; browsers then offer no choice between portrait and landscape. |
+| No barcode on the DYMO label | The asset has no inventory number, the number holds characters outside ASCII (such as umlauts), or it is too long for a readable width on this label. The QR code remains in any case; a larger label takes longer numbers. |
+| Picture cannot be uploaded | The browser cannot show the format, or the picture is still larger than 2 MB after shrinking. A photo as JPEG or PNG helps. |
+
 ## Outgoing connections
 
 Notifications, directory service, AI assistant and connectors reach only networks you allow. A target in your own network needs the matching variable, such as `SA_NOTIFICATION_ALLOWED_NETWORKS=public,192.168.10.5/32` ([Configuration](/en/reference/konfiguration/#network-allowances)). Targets need TLS 1.3 and a valid certificate; for an own CA, add its certificate to the connection.
