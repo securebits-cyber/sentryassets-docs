@@ -6,7 +6,7 @@ sidebar:
   order: 6
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 Under **Inventory › Procurement** you take procurement requests from the request to the inventory: what is to be bought, for which department and location, at what price, and how the management decided. A request can be printed for signature, saved as a PDF or sent as a prepared e-mail. Once approved, you link it to the assets and consumables it brought.
 
@@ -214,6 +214,31 @@ The receipt and its bookings happen in one step: if a booking fails, the receipt
 - **Origin:** each booking names the request or order it came from. In the [consumables](/en/guides/verbrauchsmaterial/), the **Voucher** column under **Bookings** shows the number, such as `BE-0003`, with a link back. Only the server sets it.
 - **Rights:** booking in needs the right to change consumables. Without it the dialog says “You may not change consumables, so nothing is booked in; the receipt is recorded without bookings.” With [rights per location](/en/pro/standortrechte/) (from Pro) you also need write access at the storage location.
 
+### Scan the delivery
+
+<Badge text="Pro" variant="note" /> This section applies from the Pro edition.
+
+Instead of typing the quantities, you scan the packages delivered. The **Receipt** section of the dialog has a field **Scan the delivery** for this. An item is recognised by its [EAN](/en/guides/verbrauchsmaterial/#ean-of-an-item).
+
+<Steps>
+
+1. Choose **Mark as received** and put the cursor in the **Scan the delivery** field.
+
+2. Scan every package delivered once. After each scan the count shows below the field, such as “Toner HP 26X: 3 of 5”.
+
+3. Check the **Storage location** and **Quantity** of each position and choose **Mark as received** in the dialog.
+
+</Steps>
+
+How it counts:
+
+- **Each package counts one** for the position with that item. If you order in boxes but count in pieces, adjust the quantity by hand afterwards.
+- **From the first scan on, only what is scanned counts:** the first scan clears the tick **Book … in** of every position and sets the quantities to 0. Afterwards only the positions you scanned something of are booked in. A partial delivery thus books only what arrived.
+- **At most what was ordered:** once a position is full, the field says “… all … counted already.” and counts no further. Book an excess delivery in the consumables as a separate **Receipt**.
+- An item that is not part of the order is not counted (“… is not part of this order.”), nor is a code without an item (“There is no item for ….”). For a new code, first add the item with its EAN or use [receive by scan](/en/guides/verbrauchsmaterial/#receive-by-scan).
+
+When booking in, the server checks rights and quantities as without scanning.
+
 <Aside type="caution" title="A receipt taken back keeps its bookings">
 **Take back receipt** only resets the status. The bookings stay, because bookings are never changed or deleted. A second receipt of the same order therefore books nothing. Correct a wrong booking in the consumables with a counter-booking, such as a **Withdrawal** or a **Stocktaking**.
 </Aside>
@@ -281,4 +306,5 @@ Allowed are **PNG** and **JPEG** of at most **512 KB** and **4096 × 4096 pixels
 - **“Please choose a storage location”:** every position ticked **Book … in** needs a **Storage location**.
 - **Characters show as “?” in the PDF:** the PDF uses the standard fonts, which know Western European characters. It replaces others with “?”; the file stays readable. The printed form from **Print** shows all characters.
 - **Outlook does not open the mail file as a draft:** use **without attachment** and attach the file from **As PDF** yourself.
+- **“The code could not be looked up just now. Please scan it again.”** The connection to the server was briefly interrupted. Scan the package again; it was not counted.
 - **The logo is refused:** check format, size and dimensions. The server does not accept a damaged or truncated file.

@@ -6,7 +6,7 @@ sidebar:
   order: 6
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 Unter **Inventar › Beschaffung** führen Sie Beschaffungsanträge vom Antrag bis zur Aufnahme ins Inventar: was beschafft werden soll, für welche Abteilung und welchen Standort, zu welchem Preis, und wie die Geschäftsleitung entschieden hat. Ein Antrag lässt sich zur Unterschrift drucken, als PDF speichern oder als vorbereitete E-Mail verschicken. Nach der Freigabe verknüpfen Sie ihn mit den Assets und dem Verbrauchsmaterial, die er gebracht hat.
 
@@ -214,6 +214,31 @@ Eingang und Buchungen geschehen in einem Schritt: Gelingt eine Buchung nicht, wi
 - **Herkunft:** Jede Buchung nennt den Antrag oder die Bestellung, aus dem sie kam. Im [Verbrauchsmaterial](/guides/verbrauchsmaterial/) zeigt die Spalte **Beleg** unter **Buchungen** die Nummer, etwa `BE-0003`, mit Link zurück. Diese Angabe setzt nur der Server.
 - **Rechte:** Einbuchen darf, wer Verbrauchsmaterial ändern darf. Fehlt Ihnen dieses Recht, steht im Dialog „Zum Einbuchen fehlt Ihnen das Recht, Verbrauchsmaterial zu ändern; der Eingang wird ohne Buchung erfasst.“ Mit [Rechten je Standort](/pro/standortrechte/) (ab Pro) brauchen Sie zusätzlich Schreibrecht am Lagerort.
 
+### Lieferung scannen
+
+<Badge text="Pro" variant="note" /> Dieser Abschnitt gilt ab der Edition Pro.
+
+Statt die Mengen abzutippen, scannen Sie die gelieferten Packungen. Dafür steht im Abschnitt **Wareneingang** des Dialogs das Feld **Lieferung scannen**. Erkannt wird ein Artikel an seiner [EAN](/guides/verbrauchsmaterial/#ean-eines-artikels).
+
+<Steps>
+
+1. Wählen Sie **Als aufgenommen markieren** und setzen Sie den Cursor in das Feld **Lieferung scannen**.
+
+2. Scannen Sie jede gelieferte Packung einmal. Unter dem Feld steht nach jedem Scan der Stand, etwa „Toner HP 26X: 3 von 5“.
+
+3. Prüfen Sie **Lagerort** und **Menge** je Position und wählen Sie im Dialog **Als aufgenommen markieren**.
+
+</Steps>
+
+So wird gezählt:
+
+- **Jede Packung zählt eins** für die Position mit diesem Artikel. Bestellen Sie in Kartons, aber zählen Sie in Stück, passen Sie die Menge danach von Hand an.
+- **Ab dem ersten Scan zählt nur, was gescannt ist:** Der erste Scan nimmt bei allen Positionen den Haken **… einbuchen** heraus und setzt die Mengen auf 0. Eingebucht werden danach nur die Positionen, von denen Sie etwas gescannt haben. Eine Teillieferung bucht so von selbst nur, was angekommen ist.
+- **Höchstens bestellt:** Ist eine Position voll, meldet das Feld „… schon alle … gezählt.“ und zählt nicht weiter. Eine Mehrlieferung buchen Sie im Verbrauchsmaterial als eigenen **Zugang**.
+- Ein Artikel, der nicht in der Bestellung steht, wird nicht gezählt („… gehört nicht zu dieser Bestellung.“), ebenso ein Code ohne Artikel („Zu … gibt es keinen Artikel.“). Legen Sie für einen neuen Code zuerst den Artikel mit EAN an oder nutzen Sie den [Zugang per Scan](/guides/verbrauchsmaterial/#zugang-per-scan).
+
+Der Server prüft beim Einbuchen Rechte und Mengen wie ohne Scan.
+
 <Aside type="caution" title="Ein zurückgenommener Eingang behält seine Buchungen">
 **Aufnahme zurücknehmen** setzt nur den Status zurück. Die Buchungen bleiben stehen, denn Buchungen werden nie geändert oder gelöscht. Ein erneuter Eingang derselben Bestellung bucht deshalb nichts mehr. Eine falsche Buchung berichtigen Sie im Verbrauchsmaterial mit einer Gegenbuchung, etwa einer **Entnahme** oder einer **Inventur**.
 </Aside>
@@ -281,4 +306,5 @@ Erlaubt sind **PNG** und **JPEG** mit höchstens **512 KB** und **4096 × 4096 P
 - **„Bitte einen Lagerort wählen“:** Für jede Position mit Haken bei **… einbuchen** braucht der Wareneingang einen **Lagerort**.
 - **Zeichen erscheinen im PDF als „?“:** Das PDF nutzt die Standardschriften, die westeuropäische Zeichen kennen. Andere Zeichen ersetzt es durch „?“; die Datei bleibt lesbar. Die Druckvorlage über **Drucken** zeigt alle Zeichen.
 - **Outlook öffnet die Mail-Datei nicht als Entwurf:** Nutzen Sie **ohne Anhang** und hängen Sie die Datei aus **Als PDF** selbst an.
+- **„Der Code ließ sich gerade nicht nachschlagen. Bitte noch einmal scannen.“** Die Verbindung zum Server war kurz unterbrochen. Scannen Sie die Packung erneut; gezählt wurde sie nicht.
 - **Das Logo wird abgelehnt:** Prüfen Sie Format, Größe und Maße. Eine beschädigte oder abgeschnittene Datei nimmt der Server nicht an.
