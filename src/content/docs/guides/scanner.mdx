@@ -1,0 +1,104 @@
+---
+title: Handscanner
+description: Welcher Handscanner zu SentryAssets passt, wie Sie ihn ohne Treiber einrichten und die Tastaturbelegung einstellen und wo Sie in der Oberfläche überall scannen können.
+sidebar:
+  label: Handscanner
+  order: 8
+---
+
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
+
+Mit einem Handscanner lesen Sie Asset-Etiketten und die EAN auf Packungen, statt Nummern abzutippen. SentryAssets braucht dafür keinen bestimmten Scanner und keine Software auf dem Rechner: Der Scanner meldet sich wie eine Tastatur an und tippt den gelesenen Code in das Feld, in dem der Cursor steht.
+
+Handscanner funktionieren in der Community-Edition. Einige Stellen, an denen Sie scannen, gehören zur Edition Pro; sie sind unten gekennzeichnet.
+
+## Welcher Scanner passt
+
+Achten Sie auf diese Eigenschaften:
+
+| Anforderung | Warum |
+|---|---|
+| **USB-HID-Tastatur** (oft „Keyboard Wedge“ oder „HID Keyboard“ genannt) | Der Rechner erkennt den Scanner als Tastatur. Treiber oder Zusatzsoftware sind nicht nötig, und der Browser bekommt den Code wie getippten Text. |
+| **Sendet nach dem Code ein Enter** (Suffix „CR“ oder „Enter“) | Erst das Enter löst die Suche aus. Bei den meisten Scannern ist das ab Werk eingestellt. |
+| **2D-Imager** | Die Asset-Etiketten tragen einen QR-Code. Ein reiner 1D-Scanner (Laser oder Linear-Imager) liest nur Strichcodes: die EAN auf Packungen und die Inventarnummer als Code 128 auf DYMO-Etiketten, aber keinen QR-Code. |
+| **Kabellos am besten mit Lade- oder Funkbasis** | Die Basis steckt am USB-Anschluss und meldet sich dort als Tastatur. Der Scanner muss nicht mit dem Rechner gekoppelt werden, und er lädt, wenn er in der Basis steht. |
+
+Kabelgebundene Scanner erfüllen dieselben Anforderungen und sind die einfachste Wahl für einen festen Arbeitsplatz wie den Wareneingang.
+
+### Beispiele
+
+Getestet haben wir keines dieser Geräte, und die Liste ist keine Kaufempfehlung. Sie nennt Bauarten, die nach den Angaben ihrer Hersteller als USB-Tastatur arbeiten und 2D-Codes lesen:
+
+- Zebra DS2278 (kabellos, mit Basis)
+- Honeywell Voyager 1472g, in der 2D-Variante (kabellos, mit Basis)
+- Datalogic QuickScan QBT2500 (kabellos, mit Basis)
+- günstige 2D-Funkscanner mit USB-Empfänger oder Basis
+
+Prüfen Sie vor dem Kauf die genaue Variante: Manche Modellreihen gibt es als 1D- und als 2D-Ausführung.
+
+## Einrichten ohne Treiber
+
+<Steps>
+
+1. Stecken Sie den Scanner oder seine Basis an einen USB-Anschluss. Das Betriebssystem richtet ihn als Tastatur ein; Sie installieren nichts.
+
+2. Stellen Sie die Tastaturbelegung des Scanners auf die des Rechners, meist Deutsch (siehe [Tastaturbelegung](#tastaturbelegung)).
+
+3. Prüfen Sie, ob der Scanner nach dem Code ein Enter sendet. Scannen Sie dazu einen Code in einen Texteditor: Der Cursor springt danach in die nächste Zeile.
+
+</Steps>
+
+Eingestellt wird ein Scanner am Gerät selbst, meist indem Sie Konfigurations-Strichcodes aus seiner Kurzanleitung scannen. Programme des Herstellers auf dem Rechner sind dafür nicht nötig.
+
+## Tastaturbelegung
+
+Ein Scanner tippt nicht Zeichen, sondern Tasten. Ab Werk geht er meist von einer amerikanischen Tastatur aus. Steht der Rechner auf einer deutschen Tastatur, kommen manche Zeichen falsch an:
+
+| Im Code | Kommt an als |
+|---|---|
+| `/` | `-` |
+| `-` | `ß` |
+| `:` | `Ö` |
+| `Y` und `Z` | vertauscht |
+
+Das betrifft vor allem die QR-Codes der Asset-Etiketten, denn sie enthalten die Adresse des Assets mit `:`, `/` und `-`. SentryAssets erkennt das Etikett dann nicht und sucht den Code als Text. Stellen Sie deshalb die Tastaturbelegung des Scanners auf **Deutsch**, mit dem passenden Konfigurations-Strichcode aus seiner Anleitung (oft unter „Country“, „Keyboard Language“ oder „Ländereinstellung“).
+
+Eine EAN besteht nur aus Ziffern und kommt mit jeder Belegung richtig an.
+
+<Aside title="Mit dem Texteditor prüfen">
+Scannen Sie ein Asset-Etikett in einen Texteditor. Stimmt die Adresse mit `https://` und den Schrägstrichen, ist die Belegung richtig.
+</Aside>
+
+## Wo Sie scannen können
+
+| Stelle | Was Sie scannen | Edition |
+|---|---|---|
+| **Assets › Scannen** (Seite **Assets scannen**) | Asset-Etikett (QR-Code oder Strichcode der Inventarnummer); das Asset erscheint sofort, die Seite ist bereit für den nächsten Scan | Community |
+| Befehlspalette (`Strg + K`) | Asset-Etikett oder EAN; der Treffer steht oben, Enter öffnet das Asset oder den Artikel | Community |
+| Feld **EAN** eines Artikels unter **Inventar › Verbrauchsmaterial** | EAN der Packung, siehe [EAN eines Artikels](/guides/verbrauchsmaterial/#ean-eines-artikels) | Community |
+| **Inventar › Zugang per Scan** | EAN jeder gelieferten Packung, alles in einem Schritt einbuchen, siehe [Zugang per Scan](/guides/verbrauchsmaterial/#zugang-per-scan) | <Badge text="Pro" variant="note" /> |
+| Wareneingang, Feld **Lieferung scannen** | EAN jeder Packung einer Bestellung, siehe [Lieferung scannen](/guides/beschaffung/#lieferung-scannen) | <Badge text="Pro" variant="note" /> |
+
+Auf der Seite **Assets scannen** liest auch die Kamera von Smartphone, Tablet oder Laptop ein Etikett, in Chromium-basierten Browsern. Das Bild bleibt auf dem Gerät.
+
+## Ergebnis prüfen
+
+<Steps>
+
+1. Wählen Sie in der Asset-Liste ein Asset aus und **Etiketten drucken**. Die Seite zeigt das Etikett mit QR-Code.
+
+2. Öffnen Sie in einem zweiten Tab **Assets › Scannen** und scannen Sie den QR-Code vom Bildschirm oder von einem gedruckten Etikett. Viele 2D-Imager lesen Codes auch vom Bildschirm; gelingt es nicht, drucken Sie das Etikett aus.
+
+3. Das Asset erscheint mit Kategorie, Standort, Status und Inventarnummer.
+
+4. Scannen Sie mit Pro unter **Inventar › Zugang per Scan** die EAN einer Packung. Die Seite nennt den Artikel oder meldet **Unbekannte EAN …**. Ohne Pro scannen Sie die EAN stattdessen in die Befehlspalette (`Strg + K`) oder in das Feld **EAN** eines Artikels.
+
+</Steps>
+
+## Fehlerbehebung
+
+- **„Das ist kein Etikett dieser Installation; der Code wurde weder aufgerufen noch gesucht.“** Der QR-Code enthält eine fremde Adresse, oder die Tastaturbelegung verfälscht sie. Prüfen Sie die [Tastaturbelegung](#tastaturbelegung) im Texteditor.
+- **Statt des Assets erscheinen Suchtreffer oder die Meldung, es sei kein Asset gefunden worden:** Meist kommen `/`, `-` oder `:` falsch an. Stellen Sie die Tastaturbelegung des Scanners auf Deutsch.
+- **Nach dem Scan passiert nichts:** Der Scanner sendet kein Enter. Aktivieren Sie das Suffix „Enter“ oder „CR“ mit dem Konfigurations-Strichcode aus seiner Anleitung, oder drücken Sie selbst Enter.
+- **Der Scanner liest das Etikett nicht:** Ein 1D-Scanner liest keine QR-Codes. Auf DYMO-Etiketten steht die Inventarnummer zusätzlich als Strichcode; sonst brauchen Sie einen 2D-Imager.
+- **Der Code landet im falschen Feld:** Der Scanner tippt dorthin, wo der Cursor steht. Klicken Sie vor dem Scan in das Feld.

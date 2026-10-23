@@ -1,0 +1,104 @@
+---
+title: Handheld scanners
+description: Which handheld scanner suits SentryAssets, how to set it up without drivers and set its keyboard layout, and everywhere in the interface you can scan.
+sidebar:
+  label: Handheld scanners
+  order: 8
+---
+
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
+
+With a handheld scanner you read asset labels and the EAN on packages instead of typing numbers. SentryAssets needs no particular scanner and no software on the computer for this: the scanner registers as a keyboard and types the code it reads into the field where the cursor is.
+
+Handheld scanners work in the Community edition. Some of the places where you scan belong to the Pro edition; they are marked below.
+
+## Which scanner suits
+
+Look for these properties:
+
+| Requirement | Why |
+|---|---|
+| **USB HID keyboard** (often called “keyboard wedge” or “HID keyboard”) | The computer sees the scanner as a keyboard. No driver or extra software is needed, and the browser receives the code like typed text. |
+| **Sends Enter after the code** (suffix “CR” or “Enter”) | Only the Enter starts the lookup. Most scanners do this out of the box. |
+| **2D imager** | Asset labels carry a QR code. A 1D-only scanner (laser or linear imager) reads bar codes only: the EAN on packages and the inventory number as Code 128 on DYMO labels, but no QR code. |
+| **Wireless, ideally with a charging or radio base** | The base plugs into a USB port and registers there as a keyboard. The scanner does not need to be paired with the computer, and it charges while it sits in the base. |
+
+Corded scanners meet the same requirements and are the simplest choice for a fixed workplace such as goods receiving.
+
+### Examples
+
+We have not tested any of these devices, and the list is no buying recommendation. It names models that, according to their manufacturers, work as a USB keyboard and read 2D codes:
+
+- Zebra DS2278 (wireless, with base)
+- Honeywell Voyager 1472g, in its 2D variant (wireless, with base)
+- Datalogic QuickScan QBT2500 (wireless, with base)
+- low-cost 2D wireless scanners with a USB receiver or base
+
+Check the exact variant before buying: some model ranges come in a 1D and a 2D version.
+
+## Setting up without drivers
+
+<Steps>
+
+1. Plug the scanner or its base into a USB port. The operating system sets it up as a keyboard; you install nothing.
+
+2. Set the scanner's keyboard layout to that of the computer, usually German on German systems (see [Keyboard layout](#keyboard-layout)).
+
+3. Check that the scanner sends Enter after the code. Scan a code into a text editor: the cursor then moves to the next line.
+
+</Steps>
+
+A scanner is configured on the device itself, usually by scanning configuration bar codes from its quick start guide. No manufacturer software on the computer is needed for that.
+
+## Keyboard layout
+
+A scanner does not type characters but keys. Out of the box it usually assumes a US keyboard. If the computer uses a German keyboard, some characters arrive wrong:
+
+| In the code | Arrives as |
+|---|---|
+| `/` | `-` |
+| `-` | `ß` |
+| `:` | `Ö` |
+| `Y` and `Z` | swapped |
+
+This mainly affects the QR codes on asset labels, because they hold the asset's address with `:`, `/` and `-`. SentryAssets then does not recognise the label and searches for the code as text. Set the scanner's keyboard layout to match the computer, on German systems to **German**, with the matching configuration bar code from its guide (often under “Country” or “Keyboard language”).
+
+An EAN consists of digits only and arrives correctly with any layout.
+
+<Aside title="Check in a text editor">
+Scan an asset label into a text editor. If the address with `https://` and its slashes is right, so is the layout.
+</Aside>
+
+## Where you can scan
+
+| Place | What you scan | Edition |
+|---|---|---|
+| **Assets › Scan** (page **Scan assets**) | Asset label (QR code or bar code of the inventory number); the asset shows at once and the page is ready for the next scan | Community |
+| Command palette (`Ctrl + K`) | Asset label or EAN; the match is at the top, Enter opens the asset or the item | Community |
+| **EAN** field of an item under **Inventory › Consumables** | EAN of the package, see [EAN of an item](/en/guides/verbrauchsmaterial/#ean-of-an-item) | Community |
+| **Inventory › Receive by scan** | EAN of every package delivered, booked in at once, see [Receive by scan](/en/guides/verbrauchsmaterial/#receive-by-scan) | <Badge text="Pro" variant="note" /> |
+| Receipt, field **Scan the delivery** | EAN of every package of an order, see [Scan the delivery](/en/guides/beschaffung/#scan-the-delivery) | <Badge text="Pro" variant="note" /> |
+
+On the **Scan assets** page the camera of a phone, tablet or laptop can read a label too, in Chromium-based browsers. The picture stays on the device.
+
+## Check the result
+
+<Steps>
+
+1. Select an asset in the asset list and choose **Print labels**. The page shows the label with its QR code.
+
+2. Open **Assets › Scan** in a second tab and scan the QR code from the screen or from a printed label. Many 2D imagers read codes from a screen as well; if yours does not, print the label.
+
+3. The asset shows with category, location, status and inventory number.
+
+4. With Pro, scan the EAN of a package under **Inventory › Receive by scan**. The page names the item or reports **Unknown EAN …**. Without Pro, scan the EAN into the command palette (`Ctrl + K`) or into the **EAN** field of an item instead.
+
+</Steps>
+
+## Troubleshooting
+
+- **“This is no label of this installation; the code was neither opened nor searched for.”** The QR code holds another address, or the keyboard layout garbles it. Check the [keyboard layout](#keyboard-layout) in a text editor.
+- **Search results or “No asset was found for …” instead of the asset:** usually `/`, `-` or `:` arrive wrong. Set the scanner's keyboard layout to match the computer.
+- **Nothing happens after a scan:** the scanner sends no Enter. Switch on the suffix “Enter” or “CR” with the configuration bar code from its guide, or press Enter yourself.
+- **The scanner does not read the label:** a 1D scanner reads no QR codes. DYMO labels also carry the inventory number as a bar code; otherwise you need a 2D imager.
+- **The code lands in the wrong field:** the scanner types where the cursor is. Click into the field before scanning.
