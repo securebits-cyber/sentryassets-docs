@@ -22,6 +22,7 @@ The **Overview** is the start page: the next sensible step, progress in the IT-G
 - **Scan assets** under **Assets › Scan**: a handheld scanner or the camera reads the label, the asset shows at once with category, location, status and inventory number, and the page is ready for the next scan. The camera uses the browser's barcode reader (Chromium-based browsers); the picture stays on the device. A bare inventory number read by the camera is searched for only once confirmed.
 - **Asset list** with search, filters (category, device class, location, health), bulk editing with "Undo" and CSV export with formula protection.
 - **Asset detail** with profile, relations, history without personal values and health.
+- **Documentation on the asset:** in the **Documentation** tab you write installation guides, runbooks and the like as Markdown with Mermaid diagrams, stored in versions like other documents; existing Markdown files can be imported, see [Documentation on the asset](/en/guides/dokumentation/).
 - **Picture of an asset** on the overview, such as a photo of the device so it can be recognised on site: **Upload picture** takes any picture the browser can show, phone photos included. The browser shrinks it to at most 1600 pixels before the upload; stored are PNG or JPEG up to 2 MB. Browser and server remove where it was taken and other metadata. One picture per asset; whoever may edit the asset may change it, every role may view it. Removing can be undone, and deleting an asset deletes its picture too.
 - **Dependencies:** every relation between assets on one page, filtered by kind and searchable.
 - **GLPI import:** CSV exports with proposals for category, status and location, a check of every row and creation all or nothing.
@@ -40,6 +41,8 @@ The **Active Directory** sync reads computer objects over LDAPS (port 636) from 
 ## Asset health
 
 A traffic light per asset (healthy, warning, critical, unknown) with its reasons, from the agent's last heartbeat with fixed thresholds (silence by device class, disk from 90 %, memory from 95 %) and from states an existing monitoring reports. Assets needing attention are on a page of their own and appear as tasks in the overview. The **Health** tab of an asset shows CPU, memory, disks, network throughput and graphics card.
+
+**Security state of devices:** once a day the agent reports for each protective function whether it is on, off, partly on or unknown: disk encryption, antivirus (with the age of its signatures), firewall, automatic updates (with the day of the last updates), Secure Boot and screen lock. It reads states only, never keys, rules, findings or names of updates; what cannot be determined reliably with built-in means stays "unknown". The state shows in the **Health** tab and serves the implementation help in IT-Grundschutz as a suggestion. On macOS it follows with the macOS agent.
 
 **Status tokens** (under **Settings**) let a monitoring report states only (`POST /api/v1/status-reports`), without reading or changing anything; they are shown once, kept as a hash, expire and can be revoked. See [API](/en/reference/api/).
 
@@ -67,6 +70,14 @@ Grundschutz++ and Edition 2023 with a guided process, the Grundschutz check and 
 ## Notifications
 
 Webhook and Gotify for chosen events, such as new or blocked agents, sign-ins with local accounts, changes to local accounts, sign-in changes, failed directory syncs or a broken audit chain. Messages carry no personal details. Targets over https with TLS 1.3 only; by default only addresses in the internet, a server in your own network needs `SA_NOTIFICATION_ALLOWED_NETWORKS`. Set up under **Settings › Notifications**.
+
+## Add-ons
+
+Add-ons are licensed separately and appear as their own group in the navigation.
+
+- **ISMS add-on** (with Pro or Enterprise): guides you through an information security management system according to BSI standards 200-1 to 200-3, see [ISMS add-on](/en/pro/isms/).
+- **Data protection add-on** (with any edition): guides you step by step through the duties of the GDPR, from the record of processing activities to the activity report, see [Data protection add-on](/en/pro/datenschutz-add-on/).
+- **NIS2 add-on** (with any edition): guides you through the duties under NIS2 and the BSIG, from checking whether you are covered through registration, measures and reports to the evidence, see [NIS2 add-on](/en/pro/nis2/).
 
 ## Operations
 
