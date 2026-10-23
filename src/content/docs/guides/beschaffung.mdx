@@ -1,6 +1,6 @@
 ---
 title: Beschaffung
-description: Beschaffungsanträge für Geräte, Verbrauchsmaterial und Dienstleistungen anlegen, zur Unterschrift drucken, die Freigabe erfassen und das Beschaffte mit dem Inventar verknüpfen.
+description: Beschaffungsanträge und Bestellungen für Geräte, Verbrauchsmaterial und Dienstleistungen anlegen, zur Unterschrift drucken, die Freigabe erfassen, den Wareneingang einbuchen und das Beschaffte mit dem Inventar verknüpfen.
 sidebar:
   label: Beschaffung
   order: 6
@@ -9,6 +9,8 @@ sidebar:
 import { Aside, Steps } from '@astrojs/starlight/components';
 
 Unter **Inventar › Beschaffung** führen Sie Beschaffungsanträge vom Antrag bis zur Aufnahme ins Inventar: was beschafft werden soll, für welche Abteilung und welchen Standort, zu welchem Preis, und wie die Geschäftsleitung entschieden hat. Ein Antrag lässt sich zur Unterschrift drucken, als PDF speichern oder als vorbereitete E-Mail verschicken. Nach der Freigabe verknüpfen Sie ihn mit den Assets und dem Verbrauchsmaterial, die er gebracht hat.
+
+Was ohne Antrag sofort bestellt wird, etwa Toner oder Kabel, erfassen Sie als [Bestellung](#bestellungen-ohne-antrag). Beim [Wareneingang](#wareneingang-einbuchen) buchen Antrag und Bestellung das gelieferte Verbrauchsmaterial gleich in den Bestand.
 
 Die Beschaffung gehört zur Community-Edition.
 
@@ -30,6 +32,7 @@ Die Beschaffung gehört zur Community-Edition.
 
 4. Legen Sie unter **Positionen** jede Position an. Mit **Position hinzufügen** kommt eine weitere dazu, mit **Entfernen** fällt eine weg. Je Position:
    - **Bezeichnung** und **Art** (**Gerät oder Asset**, **Verbrauchsmaterial**, **Dienstleistung** oder **Sonstiges**);
+   - bei der Art **Verbrauchsmaterial** optional den Artikel unter **Verbrauchsmaterial** (siehe [Positionen mit Verbrauchsmaterial](#positionen-mit-verbrauchsmaterial));
    - **Artikelnummer** und **Artikelbeschreibung**;
    - **Anzahl** und **Einzelpreis**.
 
@@ -45,7 +48,9 @@ Ein Antrag hat 1 bis 100 Positionen; die Anzahl liegt je Position zwischen 1 und
 
 ### Nummern
 
-Jeder Antrag bekommt eine laufende Nummer in Ihrer Organisation. Eine Nummer wird nie ein zweites Mal vergeben, auch nicht nach dem Löschen eines Antrags, weil ein unterschriebenes Papier sie nennen kann. Die Suche findet Anträge über Betreff, Abteilung und Antragsteller sowie über Bezeichnung und Artikelnummer ihrer Positionen; der Filter **Status** grenzt die Liste ein.
+Jeder Antrag bekommt eine laufende Nummer in Ihrer Organisation, etwa `BA-0001`. [Bestellungen](#bestellungen-ohne-antrag) werden getrennt davon gezählt und tragen das Kürzel `BE`, etwa `BE-0001`; am Kürzel sehen Sie, ob eine Freigabe dahintersteht. Eine Nummer wird nie ein zweites Mal vergeben, auch nicht nach dem Löschen, weil ein unterschriebenes Papier oder eine Buchung im Verbrauchsmaterial sie nennen kann.
+
+Die Suche findet Anträge und Bestellungen über Betreff, Abteilung und Antragsteller sowie über Bezeichnung und Artikelnummer ihrer Positionen. Der Filter **Art** zeigt **Alle**, nur **Anträge** oder nur **Bestellungen**, der Filter **Status** grenzt die Liste weiter ein.
 
 ## Status und erlaubte Wechsel
 
@@ -74,6 +79,56 @@ Die Schritte stehen auf der Seite des Antrags unter **Stand**: **Freigabe erfass
 Je Status gibt es außerdem genau einen Schritt zurück, damit sich ein Versehen beheben lässt, etwa **Freigabe zurücknehmen**, **Bestellung zurücknehmen** oder **Wieder öffnen** für einen zurückgezogenen Antrag.
 
 **Löschen** lässt sich ein Antrag nur, solange nichts bestellt ist: als **Beantragt**, **Abgelehnt** oder **Zurückgezogen**. Im Audit-Log bleibt er vermerkt.
+
+## Positionen mit Verbrauchsmaterial
+
+Eine Position der Art **Verbrauchsmaterial** kann den Artikel nennen, den sie meint, etwa „Toner HP 26X“. Wählen Sie ihn im Dialog des Antrags oder der Bestellung unter **Verbrauchsmaterial**; **Nicht zugeordnet** lässt die Position ohne Artikel. Zur Auswahl stehen die Artikel Ihrer Organisation, die Sie sehen dürfen.
+
+Eine zugeordnete Position bucht der [Wareneingang](#wareneingang-einbuchen) in den Bestand des Artikels ein. Ohne Zuordnung bleibt sie eine reine Zeile der Kostenaufstellung.
+
+## Bestellungen ohne Antrag
+
+Verbrauchsmaterial und Kleinbedarf werden oft sofort bestellt, ohne dass die Geschäftsleitung zustimmen muss. Dafür gibt es neben dem Antrag die Bestellung. Sie hat dieselben Angaben wie ein Antrag, aber keine Freigabe.
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Beschaffung** und wählen Sie **Bestellung anlegen**.
+
+2. Tragen Sie unter **Abteilung und Standort** die **Abteilung**, den **Standort**, **Bestellt von** und **Bestellt am** ein. Die Bestellung gilt ab diesem Datum als bestellt.
+
+3. Füllen Sie **Worum es geht**, **Positionen** und **Kosten** aus wie bei einem [Antrag](#antrag-anlegen). Ordnen Sie Positionen der Art **Verbrauchsmaterial** ihrem Artikel zu, wenn der Wareneingang sie einbuchen soll.
+
+4. Wählen Sie **Bestellung anlegen**.
+
+</Steps>
+
+Die Bestellung bekommt eine Nummer mit dem Kürzel `BE` und steht in der Liste neben den Anträgen.
+
+### Status einer Bestellung
+
+| Status | Bedeutung |
+|---|---|
+| **Bestellt** | Die Bestellung ist aufgegeben; so beginnt jede Bestellung. |
+| **Im Inventar aufgenommen** | Geliefert und ins Inventar übernommen. |
+| **Storniert** | Die Bestellung wird nicht weiter verfolgt. |
+
+```mermaid
+stateDiagram-v2
+  [*] --> Bestellt
+  Bestellt --> Aufgenommen: Als aufgenommen markieren
+  Bestellt --> Storniert: Bestellung stornieren
+  Aufgenommen --> Bestellt: Aufnahme zurücknehmen
+  Storniert --> Bestellt: Bestellung fortsetzen
+```
+
+- **Bestellung stornieren** beendet eine Bestellung, **Bestellung fortsetzen** holt sie zurück auf **Bestellt**.
+- **Als aufgenommen markieren** erfasst den [Wareneingang](#wareneingang-einbuchen); **Aufnahme zurücknehmen** nimmt ihn zurück.
+- Bis zum Eingang ändern Sie den Inhalt frei. Ist die Bestellung aufgenommen oder storniert, bleiben Positionen, Lieferant, Angebot und Preis, wie sie waren; **Abteilung**, **Standort** und **Bestellt von** können Sie weiter ändern.
+- **Löschen** lässt sich eine Bestellung erst, wenn sie storniert ist. Im Audit-Log bleibt sie vermerkt.
+
+### Drucken, PDF und E-Mail
+
+Eine Bestellung druckt, speichert und versendet sich wie ein Antrag mit **Drucken**, **Als PDF** und **Per E-Mail senden** (siehe [Als PDF und per E-Mail](#als-pdf-und-per-e-mail)). Die Vorlage heißt **Bestellung**, die Datei etwa `Bestellung-BE-0003.pdf`. Einen Kasten **Genehmigung** gibt es dort nicht, und ein unterschriebenes Exemplar lässt sich an eine Bestellung nicht hängen.
 
 ## Freigabe auf Papier
 
@@ -120,7 +175,7 @@ Auf der Seite des Antrags stehen neben **Drucken** zwei weitere Wege. Beide erze
 
 ## Mit dem Inventar verknüpfen
 
-Ab der Freigabe zeigt der Antrag die Karte **Im Inventar**: was er gebracht hat.
+Ab der Freigabe zeigt der Antrag die Karte **Im Inventar**: was er gebracht hat. Eine Bestellung zeigt sie von Anfang an.
 
 <Steps>
 
@@ -134,6 +189,44 @@ Ab der Freigabe zeigt der Antrag die Karte **Im Inventar**: was er gebracht hat.
 
 Ein Antrag nennt höchstens 1 000 Assets und Artikel, jeden einmal. Verknüpfen ändert das Asset nicht. **Entfernen** löst eine Verknüpfung; wird ein verknüpftes Asset oder ein Artikel gelöscht, verschwindet die Verknüpfung mit einem Eintrag im Audit-Log des Antrags.
 
+## Wareneingang einbuchen
+
+Ist geliefert, wählen Sie bei einem Antrag oder einer Bestellung **Als aufgenommen markieren**. Nennt der Antrag oder die Bestellung Positionen mit [zugeordnetem Verbrauchsmaterial](#positionen-mit-verbrauchsmaterial), zeigt der Dialog darunter den Abschnitt **Wareneingang**.
+
+<Steps>
+
+1. Wählen Sie bei einem Antrag oder einer Bestellung **Als aufgenommen markieren** und tragen Sie das **Datum der Aufnahme** ein.
+
+2. Prüfen Sie unter **Wareneingang** je Position den Haken **… einbuchen**. Ohne Haken wird für diese Position nichts gebucht.
+
+3. Wählen Sie den **Lagerort**. Vorbelegt ist der Standort des Antrags oder der Bestellung.
+
+4. Prüfen Sie die **Menge**. Vorbelegt ist die bestellte Menge, die unter dem Feld als **bestellt: …** steht; mehr als bestellt lässt sich nicht bestätigen.
+
+5. Wählen Sie im Dialog **Als aufgenommen markieren**.
+
+</Steps>
+
+Eingang und Buchungen geschehen in einem Schritt: Gelingt eine Buchung nicht, wird auch der Eingang nicht erfasst. Jede Buchung ist ein **Zugang** am gewählten Lagerort mit dem Datum der Aufnahme. Der gebuchte Artikel wird dabei mit dem Antrag oder der Bestellung verknüpft und erscheint in der Karte **Im Inventar**.
+
+- **Menge:** je Position zusammen höchstens die bestellte; weniger geht, etwa bei einer Teillieferung.
+- **Nur einmal:** Ein Antrag oder eine Bestellung bucht nur einmal ein.
+- **Herkunft:** Jede Buchung nennt den Antrag oder die Bestellung, aus dem sie kam. Im [Verbrauchsmaterial](/guides/verbrauchsmaterial/) zeigt die Spalte **Beleg** unter **Buchungen** die Nummer, etwa `BE-0003`, mit Link zurück. Diese Angabe setzt nur der Server.
+- **Rechte:** Einbuchen darf, wer Verbrauchsmaterial ändern darf. Fehlt Ihnen dieses Recht, steht im Dialog „Zum Einbuchen fehlt Ihnen das Recht, Verbrauchsmaterial zu ändern; der Eingang wird ohne Buchung erfasst.“ Mit [Rechten je Standort](/pro/standortrechte/) (ab Pro) brauchen Sie zusätzlich Schreibrecht am Lagerort.
+
+<Aside type="caution" title="Ein zurückgenommener Eingang behält seine Buchungen">
+**Aufnahme zurücknehmen** setzt nur den Status zurück. Die Buchungen bleiben stehen, denn Buchungen werden nie geändert oder gelöscht. Ein erneuter Eingang derselben Bestellung bucht deshalb nichts mehr. Eine falsche Buchung berichtigen Sie im Verbrauchsmaterial mit einer Gegenbuchung, etwa einer **Entnahme** oder einer **Inventur**.
+</Aside>
+
+## Nachbestellen
+
+**Nachbestellen** öffnet eine neue Bestellung, in der der Artikel schon als erste Position der Art **Verbrauchsmaterial** steht, mit seiner Artikelnummer und seinem Lieferanten. Sie finden die Schaltfläche an zwei Stellen:
+
+- auf der Seite eines Artikels unter **Inventar › Verbrauchsmaterial**;
+- auf der Seite eines Assets in der Karte **Verbrauchsmaterial**, bei jedem zugeordneten Artikel (siehe [Verbrauchsmaterial einem Asset zuordnen](/guides/verbrauchsmaterial/#verbrauchsmaterial-einem-asset-zuordnen)).
+
+Ergänzen Sie Menge und Preis und wählen Sie **Bestellung anlegen**. **Nachbestellen** erscheint nur, wenn Sie Beschaffungen schreiben dürfen und der Artikel nicht archiviert ist.
+
 ## Karte „Beschaffung“ auf der Übersicht
 
 Die **Übersicht** zeigt eine Karte **Beschaffung** mit den Anträgen, über die noch nicht entschieden ist. Dazu kommt drei Tage lang jeder Antrag, dessen Status sich geändert hat (freigegeben, abgelehnt, bestellt, aufgenommen, zurückgezogen); danach verschwindet er dort von selbst. Die Karte zeigt höchstens acht Anträge, die zuletzt geänderten zuerst, und führt mit **Zur Beschaffung** zur ganzen Liste.
@@ -142,9 +235,9 @@ Maßgeblich ist der letzte Statuswechsel, nicht die letzte Bearbeitung: Eine Än
 
 ## Rechte
 
-| Rolle | Beschaffungsanträge |
+| Rolle | Beschaffungsanträge und Bestellungen |
 |---|---|
-| Administrator, Informationssicherheit, Bearbeitung | ansehen, anlegen, ändern, Stand erfassen, löschen, verknüpfen |
+| Administrator, Informationssicherheit, Bearbeitung | ansehen, anlegen, ändern, Stand erfassen, löschen, verknüpfen, nachbestellen |
 | Datenschutz, Prüfung, Lesend | ansehen, drucken, als PDF oder Mail-Datei speichern |
 
 Das unterschriebene Exemplar sehen nur Personen, deren Vertraulichkeitsstufe das Dokument erlaubt; andere sehen den Hinweis „Ein Dokument über Ihrer Vertraulichkeitsstufe“. Mit [Rechten je Standort](/pro/standortrechte/) (ab Pro) braucht ein Antrag mit Standort Schreibrecht an diesem Standort, ein Umzug an beiden; eine an Standorte gebundene Person schreibt keinen Antrag ohne Standort.
@@ -172,12 +265,20 @@ Erlaubt sind **PNG** und **JPEG** mit höchstens **512 KB** und **4096 × 4096 P
 - Der Antrag steht unter **Inventar › Beschaffung** mit Nummer, **Abteilung / Standort** und **Status**.
 - Nach **Freigabe erfassen** zeigt die Seite **Freigegeben am** und die Karte **Im Inventar**.
 - Die Karte **Beschaffung** auf der Übersicht zeigt offene Anträge und frische Entscheidungen.
+- Eine Bestellung steht mit dem Kürzel `BE` und dem Status **Bestellt** in der Liste; der Filter **Art** › **Bestellungen** zeigt nur sie.
+- Nach dem Wareneingang zeigt der Artikel unter **Bestand je Standort** den neuen Bestand und unter **Buchungen** einen **Zugang** mit der Nummer in der Spalte **Beleg**.
 
 ## Fehlerbehebung
 
 - **„Dieser Schritt geht vom aktuellen Status aus nicht.“** Der Wechsel ist im Ablauf nicht vorgesehen, etwa von **Beantragt** direkt zu **Bestellt**. Erfassen Sie zuerst die Freigabe.
-- **„Ein bestellter Antrag lässt sich nicht löschen.“** Ziehen Sie ihn stattdessen zurück oder nehmen Sie die Bestellung zurück.
+- **„Ein bestellter Antrag lässt sich nicht löschen.“** Ziehen Sie ihn stattdessen zurück oder nehmen Sie die Bestellung zurück. Eine Bestellung stornieren Sie zuerst mit **Bestellung stornieren**; danach lässt sie sich löschen.
 - **„Verknüpfen geht erst nach der Freigabe.“** Assets und Verbrauchsmaterial lassen sich erst einem freigegebenen Antrag zuordnen.
+- **„Für diesen Eingang wurde schon gebucht. Eine falsche Buchung berichtigen Sie im Verbrauchsmaterial mit einer Gegenbuchung.“** Der Eingang wurde zurückgenommen und erneut erfasst; die ersten Buchungen stehen noch. Erfassen Sie den Eingang ohne Haken bei **… einbuchen** und berichtigen Sie den Bestand im Verbrauchsmaterial.
+- **„Mehr als bestellt lässt sich nicht einbuchen.“** Die **Menge** einer Position liegt über der bestellten Anzahl. Buchen Sie höchstens die bestellte Menge ein; eine Mehrlieferung buchen Sie im Verbrauchsmaterial als eigenen **Zugang**.
+- **„Diese Position ist kein Verbrauchsmaterial.“** Eingebucht werden nur Positionen der Art **Verbrauchsmaterial**, die einem Artikel zugeordnet sind. Laden Sie die Seite neu, wenn sich die Positionen inzwischen geändert haben.
+- **„Das Verbrauchsmaterial ist archiviert und nimmt nichts mehr auf.“** Der Artikel einer Position ist archiviert. Wählen Sie am Artikel **Wieder verwenden** oder lassen Sie den Haken bei dieser Position weg.
+- **„Eine Bestellung braucht keine unterschriebene Freigabe.“** An eine Bestellung lässt sich kein unterschriebenes Exemplar hängen. Braucht die Beschaffung eine Freigabe, legen Sie einen Antrag an.
+- **„Bitte einen Lagerort wählen“:** Für jede Position mit Haken bei **… einbuchen** braucht der Wareneingang einen **Lagerort**.
 - **Zeichen erscheinen im PDF als „?“:** Das PDF nutzt die Standardschriften, die westeuropäische Zeichen kennen. Andere Zeichen ersetzt es durch „?“; die Datei bleibt lesbar. Die Druckvorlage über **Drucken** zeigt alle Zeichen.
 - **Outlook öffnet die Mail-Datei nicht als Entwurf:** Nutzen Sie **ohne Anhang** und hängen Sie die Datei aus **Als PDF** selbst an.
 - **Das Logo wird abgelehnt:** Prüfen Sie Format, Größe und Maße. Eine beschädigte oder abgeschnittene Datei nimmt der Server nicht an.

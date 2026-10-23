@@ -1,0 +1,101 @@
+---
+title: Verbrauchsmaterial
+description: Toner, Kabel und Batterien mit Bestand je Standort führen, Zugänge und Entnahmen buchen, Artikel den Assets zuordnen, mit denen sie verwendet werden, und rechtzeitig nachbestellen.
+sidebar:
+  label: Verbrauchsmaterial
+  order: 7
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Unter **Inventar › Verbrauchsmaterial** führen Sie, was nicht einzeln inventarisiert, aber gezählt wird: Toner, Kabel, Adapter und Batterien. Je Artikel sehen Sie, was an welchem Standort liegt, wann nachbestellt werden muss und zu welchen Assets der Artikel gehört, etwa ein Toner zu den Druckern, in die er passt.
+
+Verbrauchsmaterial gehört zur Community-Edition.
+
+## Voraussetzungen
+
+- Ansehen dürfen alle Rollen, denn Bestände sind keine personenbezogenen Daten.
+- Artikel anlegen, buchen und Assets zuordnen braucht eine Rolle mit Schreibrecht für Verbrauchsmaterial: **Administrator**, **Informationssicherheit** oder **Bearbeitung** (siehe [Rollen und Rechte](/reference/rollen/)).
+- Mindestens ein Standort, an dem der Bestand liegt.
+
+## Artikel anlegen und Bestand buchen
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Verbrauchsmaterial** und wählen Sie **Artikel anlegen**.
+
+2. Tragen Sie die **Bezeichnung** ein, etwa „Toner HP 26X“, dazu **Kategorie** und **Einheit** (**Stück**, **Packung**, **Karton**, **Kartusche**, **Rolle** oder **Meter**). **Lieferant**, **Artikelnummer** und **Notiz** sind optional; die Notiz enthält keine Zugangsdaten und keine Angaben zu Personen.
+
+3. Wählen Sie auf der Seite des Artikels **Buchen**, die Art (**Zugang**, **Entnahme** oder **Inventur**), den **Standort**, die **Menge** (bei einer Inventur das Feld **Gezählter Bestand**) und das **Datum**. **Grund (optional)** und bei einer Entnahme **Empfangen von (optional)** ergänzen die Buchung.
+
+4. Legen Sie unter **Bestand je Standort** den **Mindestbestand** fest. 0 bedeutet: keine Erinnerung für diesen Standort.
+
+</Steps>
+
+Fällt ein Bestand unter den Mindestbestand, erscheint der Artikel auf der Übersicht als Aufgabe und in der Liste unter der Ansicht **Unter Mindestbestand**. Eine Inventur setzt den gezählten Bestand und bucht die Differenz. Gelieferte Ware aus einer [Bestellung](/guides/beschaffung/#bestellungen-ohne-antrag) buchen Sie am einfachsten gleich beim [Wareneingang](/guides/beschaffung/#wareneingang-einbuchen) ein.
+
+### Buchungen und Beleg
+
+Buchungen werden nie geändert oder gelöscht. Eine falsche Buchung berichtigen Sie mit einer Gegenbuchung. Die Tabelle **Buchungen** zeigt je Buchung Datum, Standort, Menge und den Bestand danach. Die Spalte **Beleg** nennt den Antrag oder die Bestellung, aus deren Wareneingang die Buchung stammt, etwa `BE-0003`, mit Link dorthin; bei Buchungen von Hand bleibt sie leer.
+
+Grund und empfangende Person sehen nur Rollen, die personenbezogene Feldwerte lesen dürfen; die übrigen sehen „vorhanden“. Diese Rollen können einen Grund auch entfernen, etwa weil er eine Person nennt.
+
+Ein Artikel ohne Buchungen lässt sich löschen. Einen Artikel mit Buchungen archivieren Sie, sobald sein Bestand ausgebucht ist; ein archivierter Artikel nimmt keine Buchung an, bis Sie **Wieder verwenden** wählen.
+
+## Verbrauchsmaterial einem Asset zuordnen
+
+Ein Artikel lässt sich den Assets zuordnen, mit denen er verwendet wird, etwa ein Toner den Druckern oder eine Trommel dem Multifunktionsgerät. Die Zuordnung zeigt am Asset, was dazugehört und wie viel davon da ist.
+
+### Vom Artikel aus
+
+<Steps>
+
+1. Öffnen Sie den Artikel unter **Inventar › Verbrauchsmaterial**.
+
+2. Wählen Sie in der Karte **Verwendet mit** die Schaltfläche **Asset zuordnen**.
+
+3. Suchen Sie das Asset unter **Asset suchen** und wählen Sie bei einem Treffer **Zuordnen**.
+
+</Steps>
+
+### Vom Asset aus
+
+<Steps>
+
+1. Öffnen Sie das Asset. Die Karte **Verbrauchsmaterial** steht im Reiter **Übersicht**.
+
+2. Wählen Sie **Verbrauchsmaterial zuordnen**, suchen Sie den Artikel und wählen Sie **Zuordnen**.
+
+</Steps>
+
+### Was die Karten zeigen
+
+- **Verwendet mit** am Artikel nennt die zugeordneten Assets mit Link. Ein Asset, das Sie nicht lesen dürfen, erscheint als „Asset (kein Lesezugriff)“.
+- **Verbrauchsmaterial** am Asset nennt je Artikel den Gesamtbestand über alle Standorte, bei Bedarf mit dem Hinweis **Unter Mindestbestand**, und die Schaltfläche **Nachbestellen**.
+- **Nachbestellen** öffnet eine neue Bestellung mit dem Artikel als erster Position, seiner Artikelnummer und seinem Lieferanten (siehe [Nachbestellen](/guides/beschaffung/#nachbestellen)). Die Schaltfläche erscheint nur, wenn Sie Beschaffungen schreiben dürfen und der Artikel nicht archiviert ist.
+- **Entfernen** löst eine Zuordnung, in beiden Karten. Die Meldung „Zuordnung entfernt“ bietet **Rückgängig** an.
+
+### Rechte und Grenzen
+
+- Zuordnen und Entfernen darf, wer Verbrauchsmaterial ändern darf, und nur für Assets der eigenen Organisation, die die Person sehen kann.
+- Mit [Rechten je Standort](/pro/standortrechte/) (ab Pro) gilt die Standortbindung des Assets: Zuordnen und Entfernen gehen nur bei Assets an Standorten, an denen die Person schreiben darf. Der Grund: Die Zuordnung ändert, was die Seite des Assets zeigt.
+- Ein Artikel lässt sich höchstens 200 Assets zuordnen.
+- Zuordnen und Entfernen stehen im Audit-Log.
+
+<Aside title="Löschen nimmt die Zuordnung mit">
+Wird ein Asset oder ein Artikel gelöscht, verschwindet die Zuordnung mit. Das Audit-Log hält sie fest: beim Löschen eines Assets je Zuordnung, beim Löschen eines Artikels mit den zugeordneten Assets im Eintrag der Löschung.
+</Aside>
+
+## Ergebnis prüfen
+
+- Der Artikel steht unter **Inventar › Verbrauchsmaterial** mit **Bestand** und **Standorte**.
+- Die Karte **Verwendet mit** nennt die zugeordneten Assets; das Asset zeigt den Artikel in seiner Karte **Verbrauchsmaterial**.
+- Nach einem Wareneingang steht unter **Buchungen** ein **Zugang** mit der Nummer in der Spalte **Beleg**.
+
+## Fehlerbehebung
+
+- **„So viel ist an diesem Standort nicht vorrätig.“** Eine Entnahme kann den Bestand nicht unter 0 senken. Prüfen Sie den Standort oder zählen Sie mit einer **Inventur** nach.
+- **„Ein Artikel mit Bestand lässt sich nicht archivieren. Buchen Sie den Bestand zuerst aus.“** Buchen Sie den Restbestand als **Entnahme** aus und archivieren Sie den Artikel danach.
+- **„Für diesen Artikel gibt es Buchungen. Archivieren Sie ihn stattdessen.“** Ein Artikel mit Buchungen wird nicht gelöscht, damit die Historie bleibt.
+- **„Der Artikel ist archiviert.“** Wählen Sie **Wieder verwenden**, bevor Sie buchen.
+- **Asset zuordnen bleibt ohne Treffer oder scheitert:** Sie sehen das Asset nicht, oder es liegt an einem Standort, an dem Sie nicht schreiben dürfen.

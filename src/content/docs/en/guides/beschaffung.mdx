@@ -1,6 +1,6 @@
 ---
 title: Procurement
-description: Add procurement requests for devices, consumables and services, print them for signature, record the approval and link what was bought to the inventory.
+description: Add procurement requests and orders for devices, consumables and services, print them for signature, record the approval, book the receipt into stock and link what was bought to the inventory.
 sidebar:
   label: Procurement
   order: 6
@@ -9,6 +9,8 @@ sidebar:
 import { Aside, Steps } from '@astrojs/starlight/components';
 
 Under **Inventory › Procurement** you take procurement requests from the request to the inventory: what is to be bought, for which department and location, at what price, and how the management decided. A request can be printed for signature, saved as a PDF or sent as a prepared e-mail. Once approved, you link it to the assets and consumables it brought.
+
+What is ordered at once without a request, such as toner or cables, you record as an [order](#orders-without-a-request). On [receipt](#booking-a-receipt-into-stock), requests and orders book the delivered consumables straight into stock.
 
 Procurement is part of the Community edition.
 
@@ -30,6 +32,7 @@ Procurement is part of the Community edition.
 
 4. Under **Positions**, add each position. **Add position** adds another, **Remove** takes one away. For each position:
    - **Item** and **Kind** (**Device or asset**, **Consumable**, **Service** or **Other**);
+   - for the kind **Consumable**, optionally the item under **Consumable** (see [Positions with consumables](#positions-with-consumables));
    - **Article number** and **Item description**;
    - **Quantity** and **Unit price**.
 
@@ -45,7 +48,9 @@ A request has 1 to 100 positions; the quantity per position is between 1 and 100
 
 ### Numbers
 
-Each request gets a running number within your organisation. A number is never given twice, not even after a request is deleted, because a signed paper may name it. The search finds requests by subject, department and requester, and by the item and article number of their positions; the **Status** filter narrows the list.
+Each request gets a running number within your organisation, such as `BA-0001`. [Orders](#orders-without-a-request) are counted apart and carry the prefix `BE`, such as `BE-0001`; the prefix tells you whether an approval stands behind it. A number is never given twice, not even after deletion, because a signed paper or a booking in the consumables may name it.
+
+The search finds requests and orders by subject, department and requester, and by the item and article number of their positions. The **Kind** filter shows **All**, only **Requests** or only **Orders**; the **Status** filter narrows the list further.
 
 ## Status and allowed changes
 
@@ -74,6 +79,56 @@ The steps are on the request's page under **Progress**: **Record approval**, **R
 Each status also allows exactly one step back, so a slip can be undone, such as **Take back approval**, **Take back order** or **Reopen** for a withdrawn request.
 
 A request can be **deleted** only while nothing has been ordered: as **Requested**, **Rejected** or **Withdrawn**. The audit log keeps a record of it.
+
+## Positions with consumables
+
+A position of the kind **Consumable** can name the item it means, such as “Toner HP 26X”. Choose it in the dialog of the request or order under **Consumable**; **Not assigned** leaves the position without an item. You can choose from your organisation's items that you may see.
+
+An assigned position is booked into the item's stock on [receipt](#booking-a-receipt-into-stock). Without an assignment it stays a plain line of the cost breakdown.
+
+## Orders without a request
+
+Consumables and small items are often ordered at once, without the management having to agree. For that there is the order next to the request. It has the same details as a request, but no approval.
+
+<Steps>
+
+1. Open **Inventory › Procurement** and choose **Add order**.
+
+2. Under **Department and location**, enter the **Department**, the **Location**, **Ordered by** and **Ordered on**. The order counts as ordered from this date.
+
+3. Fill in **What it is about**, **Positions** and **Costs** as for a [request](#adding-a-request). Assign positions of the kind **Consumable** to their item if the receipt is to book them in.
+
+4. Choose **Add order**.
+
+</Steps>
+
+The order gets a number with the prefix `BE` and is listed next to the requests.
+
+### Status of an order
+
+| Status | Meaning |
+|---|---|
+| **Ordered** | The order has been placed; every order starts here. |
+| **Taken into the inventory** | Delivered and taken into the inventory. |
+| **Cancelled** | The order is no longer pursued. |
+
+```mermaid
+stateDiagram-v2
+  [*] --> Ordered
+  Ordered --> Received: Mark as received
+  Ordered --> Cancelled: Cancel order
+  Received --> Ordered: Take back receipt
+  Cancelled --> Ordered: Resume order
+```
+
+- **Cancel order** ends an order, **Resume order** brings it back to **Ordered**.
+- **Mark as received** records the [receipt](#booking-a-receipt-into-stock); **Take back receipt** takes it back.
+- Until the receipt you can change the content freely. Once the order is received or cancelled, positions, supplier, offer and price stay as they were; you can still change **Department**, **Location** and **Ordered by**.
+- An order can be **deleted** only once it is cancelled. The audit log keeps a record of it.
+
+### Print, PDF and e-mail
+
+An order is printed, saved and sent like a request with **Print**, **As PDF** and **Send by e-mail** (see [As PDF and by e-mail](#as-pdf-and-by-e-mail)). The form is called **Order**, the file something like `Order-BE-0003.pdf`. It has no **Approval** box, and no signed copy can be attached to an order.
 
 ## Approval on paper
 
@@ -120,7 +175,7 @@ Next to **Print**, the request's page offers two more ways. Both make the PDF in
 
 ## Linking to the inventory
 
-From the approval on, the request shows the card **In the inventory**: what it brought.
+From the approval on, the request shows the card **In the inventory**: what it brought. An order shows it from the start.
 
 <Steps>
 
@@ -134,6 +189,44 @@ From the approval on, the request shows the card **In the inventory**: what it b
 
 A request names at most 1,000 assets and items, each once. Linking does not change the asset. **Remove** detaches a link; if a linked asset or item is deleted, the link goes with an entry in the request's audit log.
 
+## Booking a receipt into stock
+
+Once delivered, choose **Mark as received** on a request or an order. If it has positions with an [assigned consumable](#positions-with-consumables), the dialog shows a **Receipt** section below.
+
+<Steps>
+
+1. On a request or an order, choose **Mark as received** and enter the **Date of receipt**.
+
+2. Under **Receipt**, check the tick **Book … in** for each position. Without the tick nothing is booked for that position.
+
+3. Choose the **Storage location**. The location of the request or order is filled in.
+
+4. Check the **Quantity**. The quantity ordered is filled in and shown below the field as **ordered: …**; more than ordered cannot be confirmed.
+
+5. Choose **Mark as received** in the dialog.
+
+</Steps>
+
+The receipt and its bookings happen in one step: if a booking fails, the receipt is not recorded either. Each booking is a **Receipt** at the chosen storage location, dated with the date of receipt. The booked item is linked to the request or order and shows in the card **In the inventory**.
+
+- **Quantity:** per position at most the quantity ordered in total; less works, for a partial delivery for instance.
+- **Only once:** a request or an order books in only once.
+- **Origin:** each booking names the request or order it came from. In the [consumables](/en/guides/verbrauchsmaterial/), the **Voucher** column under **Bookings** shows the number, such as `BE-0003`, with a link back. Only the server sets it.
+- **Rights:** booking in needs the right to change consumables. Without it the dialog says “You may not change consumables, so nothing is booked in; the receipt is recorded without bookings.” With [rights per location](/en/pro/standortrechte/) (from Pro) you also need write access at the storage location.
+
+<Aside type="caution" title="A receipt taken back keeps its bookings">
+**Take back receipt** only resets the status. The bookings stay, because bookings are never changed or deleted. A second receipt of the same order therefore books nothing. Correct a wrong booking in the consumables with a counter-booking, such as a **Withdrawal** or a **Stocktaking**.
+</Aside>
+
+## Reordering
+
+**Reorder** opens a new order with the item already as its first position of the kind **Consumable**, with its article number and supplier. You find it in two places:
+
+- on an item's page under **Inventory › Consumables**;
+- on an asset's page in the **Consumables** card, at each assigned item (see [Assigning consumables to an asset](/en/guides/verbrauchsmaterial/#assigning-consumables-to-an-asset)).
+
+Add quantity and price and choose **Add order**. **Reorder** shows only if you may write procurement and the item is not archived.
+
 ## The “Procurement” card on the overview
 
 The **Overview** shows a **Procurement** card with the requests not yet decided. In addition, every request whose status changed (approved, rejected, ordered, received, withdrawn) stays there for three days and then disappears by itself. The card shows at most eight requests, the most recently changed first, and leads to the full list with **To procurement**.
@@ -142,9 +235,9 @@ What counts is the last change of status, not the last edit: a change to the dep
 
 ## Rights
 
-| Role | Procurement requests |
+| Role | Procurement requests and orders |
 |---|---|
-| Administrator, Information security, Editor | view, add, change, record progress, delete, link |
+| Administrator, Information security, Editor | view, add, change, record progress, delete, link, reorder |
 | Data protection, Auditor, Read only | view, print, save as PDF or mail file |
 
 The signed copy shows only to people whose confidentiality level allows the document; others see the note “A document above your confidentiality level”. With [rights per location](/en/pro/standortrechte/) (from Pro), a request with a location needs write access at that location, a move at both; a person bound to locations writes no request without a location.
@@ -172,12 +265,20 @@ Allowed are **PNG** and **JPEG** of at most **512 KB** and **4096 × 4096 pixels
 - The request is listed under **Inventory › Procurement** with its number, **Department / location** and **Status**.
 - After **Record approval**, the page shows **Approved on** and the card **In the inventory**.
 - The **Procurement** card on the overview shows open requests and recent decisions.
+- An order is listed with the prefix `BE` and the status **Ordered**; the **Kind** filter › **Orders** shows only orders.
+- After the receipt, the item shows the new stock under **Stock per location** and a **Receipt** under **Bookings** with the number in the **Voucher** column.
 
 ## Troubleshooting
 
 - **“This step is not possible from the current status.”** The change is not part of the flow, such as from **Requested** straight to **Ordered**. Record the approval first.
-- **“An ordered request cannot be deleted.”** Withdraw it instead, or take back the order.
+- **“An ordered request cannot be deleted.”** Withdraw it instead, or take back the order. Cancel an order first with **Cancel order**; then it can be deleted.
 - **“Linking is possible once the request is approved.”** Assets and consumables can be assigned only to an approved request.
+- **“This receipt was booked already. Correct a wrong booking in the consumables with a counter-booking.”** The receipt was taken back and recorded again; the first bookings still stand. Record the receipt without the tick **Book … in** and correct the stock in the consumables.
+- **“No more than was ordered can be booked in.”** The **Quantity** of a position is above the quantity ordered. Book in at most what was ordered; book an over-delivery in the consumables as a separate **Receipt**.
+- **“This position is no consumable.”** Only positions of the kind **Consumable** that are assigned to an item are booked in. Reload the page if the positions changed meanwhile.
+- **“The consumable is archived and takes nothing in.”** A position's item is archived. Choose **Use again** on the item, or leave out the tick for this position.
+- **“An order needs no signed approval.”** No signed copy can be attached to an order. If the purchase needs an approval, add a request.
+- **“Please choose a storage location”:** every position ticked **Book … in** needs a **Storage location**.
 - **Characters show as “?” in the PDF:** the PDF uses the standard fonts, which know Western European characters. It replaces others with “?”; the file stays readable. The printed form from **Print** shows all characters.
 - **Outlook does not open the mail file as a draft:** use **without attachment** and attach the file from **As PDF** yourself.
 - **The logo is refused:** check format, size and dimensions. The server does not accept a damaged or truncated file.

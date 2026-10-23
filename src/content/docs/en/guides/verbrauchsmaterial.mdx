@@ -1,0 +1,101 @@
+---
+title: Consumables
+description: Keep toner, cables and batteries with their stock per location, book receipts and withdrawals, assign items to the assets they are used with, and reorder in time.
+sidebar:
+  label: Consumables
+  order: 7
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Under **Inventory › Consumables** you keep what is not inventoried one by one but counted: toner, cables, adapters and batteries. For each item you see what lies at which location, when to reorder, and which assets the item belongs to, such as a toner and the printers it fits.
+
+Consumables are part of the Community edition.
+
+## Prerequisites
+
+- All roles may view, because stock is not personal data.
+- Adding items, booking and assigning assets need a role that may write consumables: **Administrator**, **Information security** or **Editor** (see [Roles and rights](/en/reference/rollen/)).
+- At least one location where the stock lies.
+
+## Adding an item and booking stock
+
+<Steps>
+
+1. Open **Inventory › Consumables** and choose **Add item**.
+
+2. Enter the **Name**, such as “Toner HP 26X”, plus **Category** and **Unit** (**Piece**, **Pack**, **Box**, **Cartridge**, **Roll** or **Metre**). **Supplier**, **Article number** and **Note** are optional; the note holds no credentials and nothing about persons.
+
+3. On the item's page, choose **Book**, the kind (**Receipt**, **Withdrawal** or **Stocktaking**), the **Location**, the **Quantity** (for a stocktaking the field **Counted stock**) and the **Date**. **Reason (optional)** and, for a withdrawal, **Received by (optional)** complete the booking.
+
+4. Under **Stock per location**, set the **Minimum**. 0 means: no reminder for this location.
+
+</Steps>
+
+When stock falls below its minimum, the item shows on the overview as a task and in the list under the view **Below minimum**. A stocktaking sets the counted stock and books the difference. Goods delivered for an [order](/en/guides/beschaffung/#orders-without-a-request) are easiest booked in right at the [receipt](/en/guides/beschaffung/#booking-a-receipt-into-stock).
+
+### Bookings and voucher
+
+Bookings are never changed or deleted. Correct a wrong booking with a counter-booking. The **Bookings** table shows the date, location, quantity and the stock after each booking. The **Voucher** column names the request or order whose receipt the booking came from, such as `BE-0003`, with a link to it; for bookings made by hand it stays empty.
+
+Only roles that may read personal field values see the reason and the person who received something; the others see “given”. These roles can also remove a reason, for instance because it names a person.
+
+An item without bookings can be deleted. Archive an item with bookings once its stock is booked out; an archived item takes no booking until you choose **Use again**.
+
+## Assigning consumables to an asset
+
+An item can be assigned to the assets it is used with, such as a toner to the printers or a drum to the multifunction device. The assignment shows on the asset what belongs to it and how much of it there is.
+
+### From the item
+
+<Steps>
+
+1. Open the item under **Inventory › Consumables**.
+
+2. In the **Used with** card, choose **Assign asset**.
+
+3. Find the asset under **Search asset** and choose **Assign** at a match.
+
+</Steps>
+
+### From the asset
+
+<Steps>
+
+1. Open the asset. The **Consumables** card is in the **Overview** tab.
+
+2. Choose **Assign consumable**, find the item and choose **Assign**.
+
+</Steps>
+
+### What the cards show
+
+- **Used with** on the item lists the assigned assets with a link. An asset you may not read shows as “Asset (no read access)”.
+- **Consumables** on the asset lists, per item, the total stock across all locations, marked **Below minimum** where that applies, and the **Reorder** button.
+- **Reorder** opens a new order with the item as its first position, with its article number and supplier (see [Reordering](/en/guides/beschaffung/#reordering)). It shows only if you may write procurement and the item is not archived.
+- **Remove** detaches an assignment, in both cards. The message “Assignment removed” offers **Undo**.
+
+### Rights and limits
+
+- Assigning and removing are for those who may change consumables, and only for assets of their own organisation that they can see.
+- With [rights per location](/en/pro/standortrechte/) (from Pro), the asset's location binding applies: assigning and removing work only for assets at locations where the person may write. The reason: the assignment changes what the asset's page shows.
+- An item can be assigned to at most 200 assets.
+- Assigning and removing are recorded in the audit log.
+
+<Aside title="Deleting takes the assignment along">
+If an asset or an item is deleted, the assignment goes with it. The audit log keeps it: for a deleted asset one entry per assignment, for a deleted item the assigned assets in the entry of the deletion.
+</Aside>
+
+## Check the result
+
+- The item is listed under **Inventory › Consumables** with **Stock** and **Locations**.
+- The **Used with** card names the assigned assets; the asset shows the item in its **Consumables** card.
+- After a receipt, **Bookings** shows a **Receipt** with the number in the **Voucher** column.
+
+## Troubleshooting
+
+- **“There is not that much in stock at this location.”** A withdrawal cannot take the stock below 0. Check the location, or count again with a **Stocktaking**.
+- **“An item with stock cannot be archived. Book the stock out first.”** Book the remaining stock out as a **Withdrawal**, then archive the item.
+- **“This item has bookings. Archive it instead.”** An item with bookings is not deleted, so that its history stays.
+- **“The item is archived.”** Choose **Use again** before booking.
+- **Assigning an asset finds nothing or fails:** you cannot see the asset, or it is at a location where you may not write.
