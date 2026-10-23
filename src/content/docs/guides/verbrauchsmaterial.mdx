@@ -1,12 +1,12 @@
 ---
 title: Verbrauchsmaterial
-description: Toner, Kabel und Batterien mit Bestand je Standort führen, Zugänge und Entnahmen buchen, Artikel den Assets zuordnen, mit denen sie verwendet werden, und rechtzeitig nachbestellen.
+description: Toner, Kabel und Batterien mit Bestand je Standort führen, Zugänge und Entnahmen buchen, Artikel über ihre EAN finden und per Scan einbuchen, den Assets zuordnen und rechtzeitig nachbestellen.
 sidebar:
   label: Verbrauchsmaterial
   order: 7
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 Unter **Inventar › Verbrauchsmaterial** führen Sie, was nicht einzeln inventarisiert, aber gezählt wird: Toner, Kabel, Adapter und Batterien. Je Artikel sehen Sie, was an welchem Standort liegt, wann nachbestellt werden muss und zu welchen Assets der Artikel gehört, etwa ein Toner zu den Druckern, in die er passt.
 
@@ -41,6 +41,69 @@ Buchungen werden nie geändert oder gelöscht. Eine falsche Buchung berichtigen 
 Grund und empfangende Person sehen nur Rollen, die personenbezogene Feldwerte lesen dürfen; die übrigen sehen „vorhanden“. Diese Rollen können einen Grund auch entfernen, etwa weil er eine Person nennt.
 
 Ein Artikel ohne Buchungen lässt sich löschen. Einen Artikel mit Buchungen archivieren Sie, sobald sein Bestand ausgebucht ist; ein archivierter Artikel nimmt keine Buchung an, bis Sie **Wieder verwenden** wählen.
+
+## EAN eines Artikels
+
+Die EAN ist die Nummer unter dem Strichcode der Packung. Hinterlegt am Artikel, finden Sie ihn damit per Scan wieder, statt ihn in der Liste zu suchen.
+
+<Steps>
+
+1. Öffnen Sie den Artikel und wählen Sie **Bearbeiten**, oder legen Sie ihn mit **Artikel anlegen** neu an.
+
+2. Setzen Sie den Cursor in das Feld **EAN** und scannen Sie den Strichcode der Packung mit einem [Handscanner](/guides/scanner/). Sie können die Ziffern auch eintippen; Leerzeichen zählen nicht.
+
+3. Speichern Sie den Artikel.
+
+</Steps>
+
+Was beim Speichern geprüft wird:
+
+- **Format und Prüfziffer:** Erlaubt sind EAN-8, EAN-13, UPC-A (12 Ziffern) und GTIN-14, nur Ziffern und mit gültiger Prüfziffer. Ein Tippfehler fällt damit fast immer auf. Eine zwölfstellige UPC wird als die EAN-13 gespeichert, die sie ist, also mit einer führenden 0; so hat ein Produkt nur einen Code.
+- **Eindeutig:** Eine EAN gehört in Ihrer Organisation zu höchstens einem Artikel. Dieselbe Packung an zwei Lagerorten ist ein Artikel mit Bestand an zwei Standorten, kein zweiter Artikel.
+- **Optional:** Artikel ohne EAN, etwa selbst konfektionierte Kabel, funktionieren wie bisher.
+
+Wo die EAN hilft:
+
+- Die Suche unter **Inventar › Verbrauchsmaterial** findet Artikel auch über ihre EAN.
+- In der Befehlspalette (`Strg + K`) öffnet eine gescannte EAN den Artikel: Der Treffer steht mit „EAN …“ oben, Enter öffnet ihn.
+- Beim [Zugang per Scan](#zugang-per-scan) (ab Pro) und beim [Scannen einer Lieferung](/guides/beschaffung/#lieferung-scannen) im Wareneingang erkennt SentryAssets den Artikel an seiner EAN.
+
+## Zugang per Scan
+
+<Badge text="Pro" variant="note" /> Dieser Abschnitt gilt ab der Edition Pro.
+
+Unter **Inventar › Zugang per Scan** buchen Sie gelieferte Ware ein, indem Sie Packung für Packung scannen. Am Ende bucht ein Klick alles auf einmal ein.
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Zugang per Scan**.
+
+2. Wählen Sie unter **Wohin** den **Lagerort**. Das **Datum des Zugangs** ist mit heute vorbelegt.
+
+3. Scannen Sie die Packungen in das Feld **EAN**. Das Feld bleibt nach jedem Scan bereit; ohne Handscanner tippen Sie die Ziffern ein und drücken Enter.
+
+4. Prüfen Sie unter **Gescannt** die Artikel und ihre **Menge**. Jeder weitere Scan desselben Artikels erhöht die Menge um eins. Die Menge ändern Sie mit **−** und **+** oder direkt im Feld, **Entfernen** nimmt einen Artikel aus der Liste.
+
+5. Wählen Sie **Einbuchen (…)**. Die Zahl in Klammern nennt die Artikel in der Liste.
+
+</Steps>
+
+Das Einbuchen geschieht in einem Schritt: Entweder werden alle Artikel der Liste als **Zugang** am gewählten Lagerort gebucht, oder keiner. Die Meldung nennt, wie viele Artikel mit wie vielen Stück eingebucht sind. Bis dahin ist nichts gebucht; die Liste besteht nur auf dieser Seite.
+
+### Unbekannte EAN
+
+Gibt es zu einem gescannten Code noch keinen Artikel, zeigt die Seite **Unbekannte EAN …** mit drei Möglichkeiten:
+
+- **Artikel anlegen** öffnet den Dialog für einen neuen Artikel mit der EAN schon eingetragen. Ist [Icecat](/pro/icecat/) eingerichtet, sind Bezeichnung, Hersteller, Kategorie und Artikelnummer aus dem Produktkatalog vorgeschlagen; alles bleibt änderbar. Nach dem Speichern steht der Artikel mit Menge 1 in der Liste.
+- **Vorhandenem Artikel zuordnen** trägt die EAN bei einem Artikel ein, den es schon gibt, etwa weil er bisher ohne EAN geführt wurde oder der Hersteller die Packung geändert hat. Suchen Sie ihn unter **Artikel suchen** und wählen Sie bei einem Treffer **Zuordnen**. Hatte der Artikel schon eine EAN, wird sie ersetzt.
+- **Verwerfen** übergeht den Code, etwa bei einem versehentlich gescannten Strichcode.
+
+### Rechte und Grenzen
+
+- Die Seite sehen **Administrator**, **Informationssicherheit** und **Bearbeitung**. Einbuchen, Artikel anlegen und zuordnen braucht das Recht, Verbrauchsmaterial zu ändern; der Server prüft es wie bei einer Buchung von Hand.
+- Mit [Rechten je Standort](/pro/standortrechte/) brauchen Sie zusätzlich Schreibrecht am Lagerort.
+- Höchstens 200 verschiedene Artikel je Einbuchen und höchstens 100 000 Stück je Artikel.
+- Jede Buchung steht wie jede andere unter **Buchungen** des Artikels und im Audit-Log.
 
 ## Verbrauchsmaterial einem Asset zuordnen
 
@@ -91,6 +154,7 @@ Wird ein Asset oder ein Artikel gelöscht, verschwindet die Zuordnung mit. Das A
 - Der Artikel steht unter **Inventar › Verbrauchsmaterial** mit **Bestand** und **Standorte**.
 - Die Karte **Verwendet mit** nennt die zugeordneten Assets; das Asset zeigt den Artikel in seiner Karte **Verbrauchsmaterial**.
 - Nach einem Wareneingang steht unter **Buchungen** ein **Zugang** mit der Nummer in der Spalte **Beleg**.
+- Eine gescannte EAN in der Befehlspalette (`Strg + K`) zeigt den Artikel als ersten Treffer.
 
 ## Fehlerbehebung
 
@@ -99,3 +163,9 @@ Wird ein Asset oder ein Artikel gelöscht, verschwindet die Zuordnung mit. Das A
 - **„Für diesen Artikel gibt es Buchungen. Archivieren Sie ihn stattdessen.“** Ein Artikel mit Buchungen wird nicht gelöscht, damit die Historie bleibt.
 - **„Der Artikel ist archiviert.“** Wählen Sie **Wieder verwenden**, bevor Sie buchen.
 - **Asset zuordnen bleibt ohne Treffer oder scheitert:** Sie sehen das Asset nicht, oder es liegt an einem Standort, an dem Sie nicht schreiben dürfen.
+- **„Das ist keine gültige EAN; bitte die Ziffern unter dem Strichcode prüfen.“** Länge oder Prüfziffer stimmen nicht. Scannen Sie erneut oder prüfen Sie die Ziffern; erscheinen andere Zeichen als Ziffern, sehen Sie unter [Handscanner](/guides/scanner/#tastaturbelegung) nach.
+- **„Diese EAN hat schon ein anderer Artikel.“** Suchen Sie die EAN unter **Inventar › Verbrauchsmaterial** und pflegen Sie den vorhandenen Artikel, statt einen zweiten anzulegen.
+- **„… ist keine gültige EAN.“** beim Zugang per Scan: Der Code ist keine EAN, etwa ein Strichcode mit Seriennummer auf derselben Packung. Scannen Sie den Strichcode mit der EAN.
+- **„Das Einbuchen ist fehlgeschlagen; nichts wurde gebucht.“** Prüfen Sie Lagerort und Rechte und wählen Sie **Einbuchen (…)** erneut; die Liste bleibt erhalten.
+- **„Die EAN ließ sich nicht zuordnen. Hat schon ein anderer Artikel diese EAN, ordnen Sie sie dort.“** Die EAN gehört schon zu einem anderen Artikel.
+- **„Zum Einbuchen fehlt Ihnen das Recht, Verbrauchsmaterial zu ändern.“** Eine Person mit der Rolle **Administrator**, **Informationssicherheit** oder **Bearbeitung** bucht ein.

@@ -1,12 +1,12 @@
 ---
 title: Consumables
-description: Keep toner, cables and batteries with their stock per location, book receipts and withdrawals, assign items to the assets they are used with, and reorder in time.
+description: Keep toner, cables and batteries with their stock per location, book receipts and withdrawals, find items by their EAN and book them in by scanning, assign them to assets and reorder in time.
 sidebar:
   label: Consumables
   order: 7
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 Under **Inventory › Consumables** you keep what is not inventoried one by one but counted: toner, cables, adapters and batteries. For each item you see what lies at which location, when to reorder, and which assets the item belongs to, such as a toner and the printers it fits.
 
@@ -41,6 +41,69 @@ Bookings are never changed or deleted. Correct a wrong booking with a counter-bo
 Only roles that may read personal field values see the reason and the person who received something; the others see “given”. These roles can also remove a reason, for instance because it names a person.
 
 An item without bookings can be deleted. Archive an item with bookings once its stock is booked out; an archived item takes no booking until you choose **Use again**.
+
+## EAN of an item
+
+The EAN is the number under the bar code on the package. Stored on the item, it lets you find the item again by scanning instead of searching the list.
+
+<Steps>
+
+1. Open the item and choose **Edit**, or create it with **Add item**.
+
+2. Put the cursor in the **EAN** field and scan the package's bar code with a [handheld scanner](/en/guides/scanner/). You can also type the digits; spaces do not count.
+
+3. Save the item.
+
+</Steps>
+
+What is checked when you save:
+
+- **Format and check digit:** EAN-8, EAN-13, UPC-A (12 digits) and GTIN-14 are accepted, digits only and with a valid check digit, so a typo is almost always caught. A 12-digit UPC is stored as the EAN-13 it is, with a leading 0, so that one product has one code.
+- **Unique:** within your organisation an EAN belongs to at most one item. The same package at two storage locations is one item with stock at two locations, not a second item.
+- **Optional:** items without an EAN, such as cables made up in-house, work as before.
+
+Where the EAN helps:
+
+- The search under **Inventory › Consumables** also finds items by their EAN.
+- In the command palette (`Ctrl + K`) a scanned EAN opens the item: the match appears at the top as “EAN …”, and Enter opens it.
+- When [receiving by scan](#receive-by-scan) (from Pro) and when [scanning a delivery](/en/guides/beschaffung/#scan-the-delivery) at a receipt, SentryAssets recognises the item by its EAN.
+
+## Receive by scan
+
+<Badge text="Pro" variant="note" /> This section applies from the Pro edition.
+
+Under **Inventory › Receive by scan** you book delivered goods in by scanning them package by package. At the end one click books everything in at once.
+
+<Steps>
+
+1. Open **Inventory › Receive by scan**.
+
+2. Under **Where to**, choose the **Storage location**. The **Date of receipt** is set to today.
+
+3. Scan the packages into the **EAN** field. The field stays ready after every scan; without a handheld scanner, type the digits and press Enter.
+
+4. Check the items and their **Quantity** under **Scanned**. Each further scan of the same item adds one. Change the quantity with **−** and **+** or right in the field; **Remove** takes an item off the list.
+
+5. Choose **Book in (…)**. The number in brackets is the number of items on the list.
+
+</Steps>
+
+Booking in happens in one step: either every item on the list is booked as a **Receipt** at the chosen storage location, or none is. The message says how many items with how many pieces were booked in. Until then nothing is booked; the list exists on this page only.
+
+### Unknown EAN
+
+If no item has a scanned code yet, the page shows **Unknown EAN …** with three choices:
+
+- **Add item** opens the dialog for a new item with the EAN filled in. If [Icecat](/en/pro/icecat/) is set up, name, manufacturer, category and article number are suggested from the product catalogue; everything stays editable. Once saved, the item is on the list with quantity 1.
+- **Assign to an existing item** stores the EAN on an item that exists already, for instance because it was kept without an EAN so far or the manufacturer changed the package. Find it under **Search item** and choose **Assign** on a match. If the item had an EAN already, it is replaced.
+- **Discard** skips the code, for instance a bar code scanned by mistake.
+
+### Rights and limits
+
+- The page is shown to **Administrator**, **Information security** and **Editor**. Booking in, adding items and assigning codes need the right to change consumables; the server checks it as for a booking by hand.
+- With [location rights](/en/pro/standortrechte/) you also need the right to write at the storage location.
+- At most 200 different items per booking and at most 100,000 pieces per item.
+- Each booking appears like any other under the item's **Bookings** and in the audit log.
 
 ## Assigning consumables to an asset
 
@@ -91,6 +154,7 @@ If an asset or an item is deleted, the assignment goes with it. The audit log ke
 - The item is listed under **Inventory › Consumables** with **Stock** and **Locations**.
 - The **Used with** card names the assigned assets; the asset shows the item in its **Consumables** card.
 - After a receipt, **Bookings** shows a **Receipt** with the number in the **Voucher** column.
+- A scanned EAN in the command palette (`Ctrl + K`) shows the item as the first match.
 
 ## Troubleshooting
 
@@ -99,3 +163,9 @@ If an asset or an item is deleted, the assignment goes with it. The audit log ke
 - **“This item has bookings. Archive it instead.”** An item with bookings is not deleted, so that its history stays.
 - **“The item is archived.”** Choose **Use again** before booking.
 - **Assigning an asset finds nothing or fails:** you cannot see the asset, or it is at a location where you may not write.
+- **“This is no valid EAN; please check the digits under the bar code.”** The length or the check digit is wrong. Scan again or check the digits; if characters other than digits appear, see [handheld scanners](/en/guides/scanner/#keyboard-layout).
+- **“Another item has this EAN already.”** Search for the EAN under **Inventory › Consumables** and keep the existing item instead of adding a second one.
+- **“… is no valid EAN.”** when receiving by scan: the code is not an EAN, such as a bar code with a serial number on the same package. Scan the bar code holding the EAN.
+- **“Booking in failed; nothing was booked.”** Check the storage location and your rights and choose **Book in (…)** again; the list is kept.
+- **“The EAN could not be assigned. If another item has this EAN already, change it there.”** The EAN belongs to another item already.
+- **“You may not change consumables, so you cannot book in.”** A person with the role **Administrator**, **Information security** or **Editor** books in.
