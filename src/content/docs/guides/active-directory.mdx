@@ -74,4 +74,5 @@ Der Server muss den Domänencontroller erreichen dürfen: Sein Netz steht in `SA
 | Die Anmeldung des Dienstkontos ist fehlgeschlagen. | Name oder Passwort falsch, Konto gesperrt oder abgelaufen. |
 | Diese Adresse ist nicht erlaubt (Loopback, Link-Local, Metadaten oder außerhalb der erlaubten Netze). | Das Netz des Domänencontrollers fehlt in `SA_DIRECTORY_ALLOWED_NETWORKS`. |
 | Mindestens eine OU gibt es nicht. | Tippfehler in einem Basis-DN. |
+| Mindestens eine Gruppe hat keine Mitglieder. | Die Gruppe wurde umbenannt oder verschoben, oder das Dienstkonto darf ihre Mitglieder nicht lesen. Der Abgleich ändert dann nichts, damit nicht alle Personen als Austritt erscheinen. DN prüfen oder die Gruppe aus den Einstellungen nehmen. |
 | Personen: keine oder zu wenige gefunden | Die OUs der Benutzer fehlen unter den Basis-DNs, oder der DN der Gruppe stimmt nicht. |

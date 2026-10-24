@@ -74,4 +74,5 @@ The server must be allowed to reach the domain controller: its network is listed
 | The service account could not sign in. | Wrong name or password, account locked or expired. |
 | This address is not allowed (loopback, link-local, metadata or outside the allowed networks). | The domain controller's network is missing in `SA_DIRECTORY_ALLOWED_NETWORKS`. |
 | At least one OU does not exist. | Typo in a base DN. |
+| At least one group has no members. | The group was renamed or moved, or the service account may not read its members. The reconciliation then changes nothing, so not everyone shows up as leaving. Check the DN or take the group out of the settings. |
 | People: none or too few found | The users' OUs are missing among the base DNs, or the group's DN is wrong. |
