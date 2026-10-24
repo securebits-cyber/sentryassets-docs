@@ -1,14 +1,14 @@
 ---
-title: Asset documentation
-description: Write installation guides, runbooks and disaster recovery plans right at the asset in Markdown, with templates, versions and diagrams.
+title: Documentation of assets and locations
+description: Write installation guides, runbooks, recovery and emergency plans right at the asset or location in Markdown, with templates, versions and diagrams.
 sidebar:
-  label: Asset documentation
+  label: Asset and location documentation
   order: 5
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
 
-Every asset has a **Documentation** tab. There you write guides, runbooks and recovery plans in Markdown, with diagrams and a preview beside the text. Every save creates a new version.
+Every asset and every location (building, floor, room) has a **Documentation** tab. There you write guides, runbooks and recovery plans in Markdown, with diagrams and a preview beside the text. Every save creates a new version.
 
 ## Create a documentation
 
@@ -30,6 +30,16 @@ Every asset has a **Documentation** tab. There you write guides, runbooks and re
 | Disaster recovery | RTO and RPO, the flow as a diagram, backups, recovery, checks, last test |
 | Maintenance and updates | maintenance window, preparation, steps, fallback plan, log |
 | Decommissioning | reason, data, access and contracts, disposal |
+
+Locations have templates of their own:
+
+| Template | Content |
+|---|---|
+| Site description | address and access, contacts, rooms, network and uplink with diagram |
+| Server room or technical room | access, fire protection, cooling, power and UPS, monitoring, cabling, checks; following modules INF.2 and INF.5 of the IT-Grundschutz Compendium |
+| Site emergency plan | emergency numbers, assembly point and evacuation, loss of power, network or cooling, restart |
+
+Files such as floor plans, photos or inspection reports go under **Documents** at the location.
 
 The templates come in German and English, matching the language of the interface.
 

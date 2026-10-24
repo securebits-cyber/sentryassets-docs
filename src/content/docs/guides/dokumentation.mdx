@@ -1,14 +1,14 @@
 ---
-title: Dokumentation am Asset
-description: Installationsanleitungen, Runbooks und Pläne für die Notfallwiederherstellung direkt am Asset in Markdown schreiben, mit Vorlagen, Versionen und Diagrammen.
+title: Dokumentation an Asset und Standort
+description: Installationsanleitungen, Runbooks, Wiederherstellungs- und Notfallpläne direkt am Asset oder Standort in Markdown schreiben, mit Vorlagen, Versionen und Diagrammen.
 sidebar:
-  label: Dokumentation am Asset
+  label: Dokumentation an Asset und Standort
   order: 5
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
 
-Zu jedem Asset gehört der Reiter **Dokumentation**. Dort schreiben Sie Anleitungen, Runbooks und Wiederherstellungspläne in Markdown, mit Diagrammen und einer Vorschau neben dem Text. Jedes Speichern legt eine neue Version an.
+Zu jedem Asset und jedem Standort (Gebäude, Etage, Raum) gehört der Reiter **Dokumentation**. Dort schreiben Sie Anleitungen, Runbooks und Wiederherstellungspläne in Markdown, mit Diagrammen und einer Vorschau neben dem Text. Jedes Speichern legt eine neue Version an.
 
 ## Eine Dokumentation anlegen
 
@@ -30,6 +30,16 @@ Zu jedem Asset gehört der Reiter **Dokumentation**. Dort schreiben Sie Anleitun
 | Notfallwiederherstellung | RTO und RPO, Ablauf als Diagramm, Sicherungen, Wiederherstellung, Prüfung, letzter Test |
 | Wartung und Updates | Wartungsfenster, Vorbereitung, Vorgehen, Rückfallplan, Protokoll |
 | Außerbetriebnahme | Anlass, Daten, Zugänge und Verträge, Entsorgung |
+
+Für Standorte gibt es eigene Vorlagen:
+
+| Vorlage | Inhalt |
+|---|---|
+| Standortbeschreibung | Adresse und Zugang, Ansprechpersonen, Räume, Netz und Anbindung mit Diagramm |
+| Serverraum oder Technikraum | Zutritt, Brandschutz, Klima, Strom und USV, Überwachung, Verkabelung, Prüfungen; orientiert an den Bausteinen INF.2 und INF.5 des IT-Grundschutz-Kompendiums |
+| Notfallplan des Standorts | Notrufnummern, Sammelplatz und Räumung, Ausfall von Strom, Netz oder Klima, Wiederanlauf |
+
+Dateien wie Grundrisse, Fotos oder Prüfberichte laden Sie am Standort unter **Dokumente** hoch.
 
 Die Vorlagen gibt es auf Deutsch und Englisch, passend zur Sprache der Oberfläche.
 
