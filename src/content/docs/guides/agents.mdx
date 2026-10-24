@@ -65,7 +65,7 @@ Für Ansible, Skripte und ähnliche Werkzeuge legen Sie das Token vorher in der 
 
 ## Gerät neu installiert
 
-Jede Installation mit einem Rollout-Token ist eine eigene Registrierung; die alte meldet beim Deinstallieren nichts ab. Meldet sich ein Gerät mit demselben Hostnamen neu an, zeigt die ältere Registrierung **Ersetzt durch neuere Registrierung** und den Knopf **Ersetzen**. Er sperrt die alte, und die neue übernimmt ihr Asset mit Verlauf; das Asset, das die neue selbst angelegt hat, löscht er auf Wunsch gleich mit. SentryAssets sperrt nichts von selbst, denn den Hostnamen nennt das Gerät selbst.
+Jede Installation mit einem Rollout-Token ist eine eigene Registrierung; die alte meldet beim Deinstallieren nichts ab. Meldet sich ein Gerät mit demselben Hostnamen neu an, ist die neue Registrierung freigegeben und hat die alte seitdem nichts mehr gemeldet, zeigt die ältere Registrierung **Ersetzt durch neuere Registrierung** und den Knopf **Ersetzen**. Er sperrt die alte, und die neue übernimmt ihr Asset mit Verlauf; das Asset, das die neue selbst angelegt hat, löscht er auf Wunsch gleich mit. SentryAssets sperrt nichts von selbst, denn den Hostnamen nennt das Gerät selbst. Meldet die alte Registrierung weiter, ist es ein zweites Gerät mit gleichem Namen, und es gibt keinen Hinweis. Ein Asset, das Sie für die neue Registrierung gewählt haben, wird nie gelöscht.
 
 ## Agent für ein bestehendes Asset
 
