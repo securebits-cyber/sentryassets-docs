@@ -51,7 +51,8 @@ for (const [file, html] of pages) {
 			findings.push(`${relative(DIST, file)}: link to missing page ${href}`);
 			continue;
 		}
-		if (anchor && found.endsWith('.html') && !ids(pages.get(found) ?? readFileSync(found, 'utf8')).has(anchor)) {
+		// Hrefs carry ids percent-encoded (umlauts in German headings); the ids in the HTML do not.
+		if (anchor && found.endsWith('.html') && !ids(pages.get(found) ?? readFileSync(found, 'utf8')).has(decodeURIComponent(anchor))) {
 			findings.push(`${relative(DIST, file)}: link to missing anchor ${href}`);
 		}
 	}
