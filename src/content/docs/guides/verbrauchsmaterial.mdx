@@ -88,6 +88,18 @@ Unter **Inventar › Zugang per Scan** buchen Sie gelieferte Ware ein, indem Sie
 
 </Steps>
 
+### Mit der Kamera scannen
+
+Statt mit dem Handscanner lesen Sie die Strichcodes auch mit der Kamera von Smartphone, Tablet oder Laptop. Wählen Sie unter **Scannen** die Schaltfläche **Kamera einschalten**, erlauben Sie dem Browser den Zugriff und halten Sie den Strichcode der Ware vor die Kamera.
+
+- Jede erkannte EAN zählt wie ein Scan mit dem Handscanner.
+- Derselbe Code, den Sie im Bild halten, zählt nur einmal. Für die nächste Packung nehmen Sie den Code kurz aus dem Bild.
+- Gelesen werden nur EAN; QR-Codes und andere Formate übergeht die Kamera.
+- Das Bild bleibt auf dem Gerät und geht nicht an den Server.
+- Die Kamera nutzt die Barcode-Erkennung des Browsers, die Chromium-basierte Browser bieten. Kann der Browser das nicht, meldet die Seite es; nutzen Sie dann einen Handscanner.
+
+**Kamera ausschalten** beendet den Zugriff.
+
 Das Einbuchen geschieht in einem Schritt: Entweder werden alle Artikel der Liste als **Zugang** am gewählten Lagerort gebucht, oder keiner. Die Meldung nennt, wie viele Artikel mit wie vielen Stück eingebucht sind. Bis dahin ist nichts gebucht; die Liste besteht nur auf dieser Seite.
 
 ### Unbekannte EAN
@@ -104,6 +116,10 @@ Gibt es zu einem gescannten Code noch keinen Artikel, zeigt die Seite **Unbekann
 - Mit [Rechten je Standort](/pro/standortrechte/) brauchen Sie zusätzlich Schreibrecht am Lagerort.
 - Höchstens 200 verschiedene Artikel je Einbuchen und höchstens 100 000 Stück je Artikel.
 - Jede Buchung steht wie jede andere unter **Buchungen** des Artikels und im Audit-Log.
+
+## Nachbestellen und Bestellvorschlag
+
+Fällt ein Bestand unter den Mindestbestand, erinnert die Übersicht ans Nachbestellen, und der Filter **Unter Mindestbestand** zeigt die betroffenen Artikel. **Nachbestellen** an einem Artikel öffnet eine neue Bestellung mit diesem Artikel, siehe [Nachbestellen](/guides/beschaffung/#nachbestellen). Ab Pro fasst der [Bestellvorschlag](/guides/beschaffung/#bestellvorschlag) alle Artikel unter Mindestbestand nach Lieferant zusammen, zieht ab, was schon bestellt ist, und legt je Lieferant eine Bestellung an; beim Filter **Unter Mindestbestand** führt **Bestellvorschlag für … Artikel** dorthin.
 
 ## Verbrauchsmaterial einem Asset zuordnen
 

@@ -88,6 +88,18 @@ Under **Inventory › Receive by scan** you book delivered goods in by scanning 
 
 </Steps>
 
+### Scanning with the camera
+
+Instead of the hand scanner, the camera of a phone, tablet or laptop can read the barcodes too. Under **Scan**, choose **Switch the camera on**, allow the browser access and hold the item's barcode in front of the camera.
+
+- Each EAN it reads counts as one scan with the hand scanner.
+- The same code held in view counts once only. For the next package, take the code out of view for a moment.
+- Only EAN codes are read; the camera passes over QR codes and other formats.
+- The picture stays on the device and is not sent to the server.
+- The camera uses the browser's barcode detection, which Chromium-based browsers offer. If the browser cannot do this, the page says so; use a hand scanner then.
+
+**Switch the camera off** ends the access.
+
 Booking in happens in one step: either every item on the list is booked as a **Receipt** at the chosen storage location, or none is. The message says how many items with how many pieces were booked in. Until then nothing is booked; the list exists on this page only.
 
 ### Unknown EAN
@@ -104,6 +116,10 @@ If no item has a scanned code yet, the page shows **Unknown EAN …** with three
 - With [location rights](/en/pro/standortrechte/) you also need the right to write at the storage location.
 - At most 200 different items per booking and at most 100,000 pieces per item.
 - Each booking appears like any other under the item's **Bookings** and in the audit log.
+
+## Reordering and the reorder proposal
+
+When stock falls below its minimum, the overview reminds you to reorder, and the filter **Below minimum** shows the items concerned. **Reorder** on an item opens a new order with that item, see [Reordering](/en/guides/beschaffung/#reordering). From Pro, the [reorder proposal](/en/guides/beschaffung/#reorder-proposal) gathers every item below its minimum by supplier, subtracts what is already on order and creates one order per supplier; with the filter **Below minimum**, **Reorder proposal for … items** leads there.
 
 ## Assigning consumables to an asset
 
