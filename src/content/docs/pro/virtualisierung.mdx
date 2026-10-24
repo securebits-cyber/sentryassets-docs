@@ -1,8 +1,8 @@
 ---
-title: Virtualisierung
+title: Hypervisor
 description: Mit Pro liest SentryAssets Hosts und virtuelle Maschinen aus Proxmox VE, vCenter und Hyper-V, nur lesend, und ordnet VMs ihrem Host zu.
 sidebar:
-  label: Virtualisierung
+  label: Hypervisor
   order: 5
 ---
 
@@ -24,7 +24,7 @@ SentryAssets liest Hosts und virtuelle Maschinen im Hintergrund in einem Abstand
 
 1. Legen Sie in Proxmox VE unter „Rechenzentrum › Berechtigungen“ einen Benutzer an, etwa `sentryassets@pve`, und geben Sie ihm auf `/` die Rolle `PVEAuditor`. Er liest nur.
 2. Erzeugen Sie für ihn unter „API-Token“ ein Token ohne „Privilege Separation“ oder geben Sie dem Token selbst die Rolle `PVEAuditor`.
-3. Öffnen Sie in SentryAssets **Discovery › Virtualisierung › Verbindungen** und wählen Sie **Verbindung hinzufügen**. Tragen Sie als **Host** den Namen oder die Adresse eines Knotens ein, dazu die **Token-ID** (`benutzer@realm!token`) und das **Geheimnis des Tokens**.
+3. Öffnen Sie in SentryAssets **Discovery › Hypervisor › Verbindungen** und wählen Sie **Verbindung hinzufügen**. Tragen Sie als **Host** den Namen oder die Adresse eines Knotens ein, dazu die **Token-ID** (`benutzer@realm!token`) und das **Geheimnis des Tokens**.
 4. Hinterlegen Sie das Zertifikat wie im nächsten Abschnitt beschrieben, speichern Sie und wählen Sie **Testen**. Erst nach einem erfolgreichen Test lässt sich die Verbindung einschalten.
 
 ### Welches Zertifikat?

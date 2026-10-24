@@ -123,6 +123,7 @@ export default defineConfig({
 							{ icon: 'i-ph:shield-warning-duotone', slug: 'pro/nis2' },
 							{ icon: 'i-ph:database-duotone', slug: 'pro/icecat' },
 							{ icon: 'i-ph:user-switch-duotone', slug: 'pro/ein-und-austritte' },
+							{ icon: 'i-ph:devices-duotone', slug: 'pro/selbstbedienung' },
 						],
 					},
 				],

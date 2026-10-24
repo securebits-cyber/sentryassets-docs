@@ -1,0 +1,72 @@
+---
+title: Meine Geräte
+description: Mit Pro sehen Mitarbeitende unter „Meine Geräte“, was an sie ausgegeben ist, melden Schäden und melden Bedarf an; die IT bearbeitet beides unter „Meldungen und Bedarfe“.
+sidebar:
+  label: Meine Geräte
+  order: 20
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Unter **Meine Geräte** sieht jede angemeldete Person, was an sie ausgegeben ist und wofür sie verantwortlich ist. Von dort meldet sie einen Schaden oder einen Bedarf, ohne eine E-Mail zu schreiben. Die IT findet beides unter **Inventar › Meldungen und Bedarfe**.
+
+**Meine Geräte** steht unten in der Seitenleiste unter **Wiki / Doku** und **Fehler melden**, über Ihrem Namen. Die Seite ist für das Smartphone gebaut.
+
+## Voraussetzungen
+
+- Eine Lizenz für Pro oder Enterprise.
+- **Meine Geräte** steht allen Rollen offen; jede Person sieht dort nur sich selbst.
+- Das Konto ist mit einer Person unter **Stammdaten › Verantwortliche** verknüpft (siehe [Konto verknüpfen](#konto-verknüpfen)).
+- **Meldungen und Bedarfe** bearbeiten **Administrator**, **Informationssicherheit** und **Bearbeitung**.
+
+## Was Mitarbeitende sehen
+
+Je Eintrag stehen Name, Art (**Ausgegeben**, Sicherheitsschlüssel, **Verantwortlich** oder Lizenz), Kategorie, **Inventarnummer**, **Seriennummer** und **Ausgegeben am** bzw. **Zugewiesen am**. **Rückgabe bis** erscheint nur, solange für die Person ein [Austritt](/pro/ein-und-austritte/) läuft. Ein eingetragener letzter Arbeitstag allein wird nie gezeigt, weil er auf eine Kündigung hinweisen kann, die noch nicht eröffnet ist.
+
+Keine Standorte, keine Dokumente und keine Daten anderer Personen. Dazu die eigenen Meldungen und Bedarfe mit ihrem Stand.
+
+## Schaden melden
+
+<Steps>
+
+1. Wählen Sie am Gerät **Schaden melden**.
+
+2. Wählen Sie unter **Was ist passiert?** **Defekt**, **Verloren**, **Gestohlen** oder **Sonstiges** und beschreiben Sie es (höchstens 2.000 Zeichen).
+
+3. Wählen Sie **Meldung senden**.
+
+</Steps>
+
+Bei **Verloren** oder **Gestohlen** rufen Sie zusätzlich sofort die IT an; der Dialog weist darauf hin. Die Meldung erscheint bei der IT in der Liste, am Asset und als Aufgabe in der Glocke, bei Verlust oder Diebstahl rot.
+
+## Bedarf anmelden
+
+<Steps>
+
+1. Wählen Sie **Bedarf anmelden**.
+
+2. Tragen Sie ein, **Was benötigen Sie?**, die **Anzahl** und bei Bedarf **Wofür?** und einen **Link zu einem Angebot** (nur `https://`).
+
+3. Wählen Sie **Bedarf senden**.
+
+</Steps>
+
+Ein Bedarf ist noch kein Beschaffungsantrag. Die IT prüft ihn und übernimmt ihn mit **In Antrag übernehmen** in die [Beschaffung](/guides/beschaffung/), mit ihren eigenen Rechten, oder lehnt ihn ab (mit **Rückgängig**). Den Link zeigt SentryAssets der IT nur als Text und ruft ihn nie auf.
+
+## Konto verknüpfen
+
+SentryAssets ermittelt die Person immer aus dem angemeldeten Konto, nie aus einer Eingabe:
+
+- **Von Hand:** Die Administration wählt an der Person unter **Konto für die Selbstbedienung** **Mit Konto verknüpfen**. Lösen lässt sich die Verknüpfung mit **Rückgängig** umkehren.
+- **Über die E-Mail-Adresse:** Ohne Verknüpfung von Hand gilt die Adresse des Kontos, wenn sie genau eine Person und genau ein Konto nennt. Bei OIDC zählt nur eine bestätigte Adresse. Personen nach ihrem letzten Arbeitstag werden nie über die Adresse verknüpft, nur von Hand.
+
+Ist nichts verknüpft, sieht die Person den Hinweis **Ihr Konto ist noch nicht verknüpft**.
+
+## Rechte und Datenschutz
+
+- Je Konto höchstens 20 Meldungen und 20 Bedarfe je Stunde, je Person höchstens 50 offene von jedem.
+- Meldungen ändert die IT nur an Standorten, an denen sie schreiben darf ([Standortrechte](/pro/standortrechte/)).
+- Das Audit-Log hält Meldungen, Bedarfe, Übernahmen und Verknüpfungen fest, nie Beschreibung, Titel, Link oder Vermerk im Wortlaut.
+- Wird die Person gelöscht, gehen Verknüpfung, Meldungen und Bedarfe mit.

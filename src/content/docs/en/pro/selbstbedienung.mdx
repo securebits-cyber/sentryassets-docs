@@ -1,0 +1,72 @@
+---
+title: My devices
+description: With Pro, employees see under "My devices" what has been handed to them, report damage and request what they need; IT handles both under "Reports and requests".
+sidebar:
+  label: My devices
+  order: 20
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+Under **My devices**, every signed-in person sees what has been handed to them and what they are responsible for. From there they report damage or request something, without writing an email. IT finds both under **Inventory › Reports and requests**.
+
+**My devices** sits at the bottom of the sidebar, below **Wiki / docs** and **Report a problem**, above your name. The page is built for smartphones.
+
+## Requirements
+
+- A licence for Pro or Enterprise.
+- **My devices** is open to every role; each person sees only themselves there.
+- The account is linked to a person under **Master data › Responsible persons** (see [Linking the account](#linking-the-account)).
+- **Reports and requests** are handled by **Administrator**, **Information security** and **Editor**.
+
+## What employees see
+
+Each entry shows the name, the kind (handed over, security key, responsible or licence), category, inventory number, serial number and the date of the handover or assignment. A return date appears only while a [leaving case](/en/pro/ein-und-austritte/) runs for the person. A recorded last working day alone is never shown, as it may point to a notice that has not been given yet.
+
+No locations, no documents and no data of other people. Below that, the person's own reports and requests with their state.
+
+## Reporting damage
+
+<Steps>
+
+1. Choose **Report damage** at the device.
+
+2. Choose what happened (defect, lost, stolen or other) and describe it (at most 2,000 characters).
+
+3. Send the report.
+
+</Steps>
+
+For a lost or stolen device, also call IT at once; the dialog points this out. The report appears for IT in the list, at the asset and as a task in the bell, in red for loss or theft.
+
+## Requesting something
+
+<Steps>
+
+1. Choose **Request something**.
+
+2. Enter what you need, the quantity and, if you like, what for and a link to an offer (`https://` only).
+
+3. Send the request.
+
+</Steps>
+
+A request is not yet a procurement request. IT reviews it and turns it into one in [procurement](/en/guides/beschaffung/) with its own permissions, or declines it (with undo). SentryAssets shows the link to IT as text only and never opens it.
+
+## Linking the account
+
+SentryAssets always finds the person from the signed-in account, never from an input:
+
+- **By hand:** an administrator links the account at the person under the self-service account card. Unlinking can be undone.
+- **By email address:** without a link by hand, the account's address counts if it names exactly one person and exactly one account. With OIDC, only a verified address counts. People past their last working day are never linked by address, only by hand.
+
+Without a link, the person sees a note to ask IT to link their account.
+
+## Permissions and data protection
+
+- Per account at most 20 reports and 20 requests per hour, per person at most 50 open of each.
+- IT changes reports only at locations where it may write ([location permissions](/en/pro/standortrechte/)).
+- The audit log records reports, requests, conversions and links, never description, title, link or note in full.
+- When the person is deleted, the link, reports and requests go with them.
