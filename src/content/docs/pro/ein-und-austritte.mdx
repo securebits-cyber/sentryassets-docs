@@ -1,0 +1,154 @@
+---
+title: Ein- und Austritte
+description: Mit Pro führt SentryAssets durch Ein- und Austritte von Mitarbeitenden, gibt Geräte aus, ermittelt beim Austritt von selbst, was noch zurück muss, und druckt das Protokoll zum Unterschreiben.
+sidebar:
+  label: Ein- und Austritte
+  order: 19
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Beim Eintritt bekommt eine Person Geräte, Schlüssel und Zugänge, beim Austritt muss alles zurück. Unter **Inventar › Ein- und Austritte** führt SentryAssets beides als Vorgang mit Schritten: Ein **Eintritt** folgt den Schritten seiner Vorlage, ein **Austritt** ermittelt zusätzlich von selbst, was die Person noch hat. Am Ende steht ein Protokoll zum Unterschreiben.
+
+Das entspricht dem Baustein ORP.2 „Personal“ im IT-Grundschutz-Kompendium, der eine geregelte Einarbeitung und eine geregelte Verfahrensweise beim Weggang verlangt (Quelle: BSI, IT-Grundschutz-Kompendium, Edition 2023, Baustein ORP.2). SentryAssets unterstützt den Ablauf; ob alles erledigt ist, prüfen Sie selbst. Unterstützung, keine Prüfung.
+
+## Voraussetzungen
+
+- Eine Lizenz für Pro oder Enterprise.
+- Eine Rolle mit Recht auf Ein- und Austritte: Vorgänge beginnen und bearbeiten **Administrator**, **Informationssicherheit** und **Bearbeitung** (siehe [Rechte und Datenschutz](#rechte-und-datenschutz)).
+- Vorgänge nennen, wer kommt oder geht. Sie sehen sie nur mit dem Recht auf personenbezogene Felder.
+- Die Person steht unter **Stammdaten › Verantwortliche**; beim Beginn lässt sie sich auch neu anlegen.
+- Optional: eine eingerichtete [Anbindung an Entra ID](/pro/entra/) für den Hinweis auf das Konto beim Austritt.
+
+## Vorlagen anlegen
+
+Vorlagen legen fest, welche Schritte ein Vorgang hat, etwa „Zugang zum Gebäude einrichten“ oder „Konto sperren“.
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Ein- und Austritte** und den Reiter **Vorlagen**.
+
+2. Wählen Sie **Vorlage anlegen**, tragen Sie den **Namen** ein und wählen Sie unter **Für** **Eintritt** oder **Austritt**.
+
+3. Setzen Sie bei Bedarf **Standardvorlage für diese Art**. Je Art gibt es eine Standardvorlage.
+
+4. Wählen Sie **Schritt hinzufügen** und tragen Sie Titel und bei Bedarf eine Beschreibung ein.
+
+5. Wählen Sie die Art des Schritts: **Aufgabe zum Abhaken** oder, nur beim Eintritt, **Gerät ausgeben**. Setzen Sie **Pflicht**, wenn der Vorgang ohne diesen Schritt nicht abgeschlossen werden darf.
+
+6. Ordnen Sie die Schritte mit den Pfeilen und wählen Sie **Speichern**.
+
+</Steps>
+
+Beim Austritt tragen Sie nur weitere Aufgaben ein, etwa Zugänge sperren: Was die Person zurückgibt, ermittelt der Vorgang von selbst. Höchstens 50 Vorlagen mit je 100 Schritten. Vorlagen gelten an allen Standorten; ein Vorgang kopiert die Schritte beim Beginn, spätere Änderungen und das Entfernen einer Vorlage lassen laufende Vorgänge unberührt.
+
+## Eintritt
+
+<Steps>
+
+1. Wählen Sie im Reiter **Vorgänge** die Schaltfläche **Vorgang beginnen** und als Art **Eintritt**.
+
+2. Wählen Sie die **Person aus dem Verzeichnis** oder **Neue Person im Verzeichnis anlegen**.
+
+3. Tragen Sie den **Ersten Arbeitstag** ein (höchstens zwei Jahre entfernt) und wählen Sie die **Vorlage**; vorbelegt ist die **Standardvorlage**.
+
+4. Tragen Sie bei Bedarf eine **Notiz** ein, ohne sensible Angaben, etwa zu Gesundheit.
+
+5. Wählen Sie **Beginnen**.
+
+6. Haken Sie im Vorgang jede erledigte Aufgabe ab. Bei einem Schritt **Gerät ausgeben** suchen Sie das Asset, tragen **Ausgegeben am** ein und wählen **Ausgeben**.
+
+</Steps>
+
+**Gerät ausgeben** legt eine Ausgabe in den Asset-Ausgaben an, mit denselben Prüfungen wie dort: Recht, Standort, Lebenszyklus und ob das Asset schon an jemanden ausgegeben ist. Verantwortlich für den Vorgang ist zunächst, wer ihn beginnt; mit **Übernehmen** wechselt die Verantwortung zu Ihnen.
+
+## Austritt
+
+<Steps>
+
+1. Wählen Sie **Vorgang beginnen** und als Art **Austritt**.
+
+2. Wählen Sie die Person, tragen Sie den **Letzten Arbeitstag** ein und wählen Sie die Vorlage.
+
+3. Setzen Sie bei Bedarf **Letzten Arbeitstag im Verzeichnis eintragen**. Dann erinnert die Übersicht an Assets, die noch ausgegeben sind. Das geht nur mit Schreibrecht im Inventar und ohne Standortbindung.
+
+4. Wählen Sie **Beginnen**.
+
+5. Arbeiten Sie unter **Was die Person zurückgibt** die ermittelten Punkte ab und haken Sie die Schritte der Vorlage ab.
+
+</Steps>
+
+### Was von selbst ermittelt wird
+
+Beim Beginn, mit **Erneut ermitteln** und vor dem Abschluss sucht der Vorgang im Inventar, was die Person noch hat:
+
+| Punkt | Aktion | Erledigt, wenn |
+|---|---|---|
+| **Rücknahme**: offene Ausgaben | **Zurücknehmen** mit Datum, **Zustand** (**In Ordnung**, **Beschädigt**, **Verloren**) und Notiz | das Asset zurückgenommen ist |
+| **Sicherheitsschlüssel** unter diesen Ausgaben | **Schlüssel öffnen** und die Registrierungen am Schlüssel entfernen | er bei keinem Dienst mehr registriert ist |
+| **Verantwortung**: Assets mit der Person als Verantwortlicher | **Neu zuordnen** an eine andere Person oder niemanden | die Person nicht mehr verantwortlich ist |
+| **Lizenzplatz**: zugewiesene Plätze | **Freigeben** | der Platz frei ist |
+
+Der Stand jedes Punkts kommt bei jedem Öffnen direkt aus dem Inventar. Was Sie an anderer Stelle erledigen, etwa eine Rücknahme auf der Seite des Assets, zählt sofort. Jede Aktion läuft mit Ihren Rechten im Inventar, in den Ausgaben und Lizenzen und mit der Standortbindung des Assets; einen Punkt, den Sie nicht lesen dürfen, zeigt der Vorgang als **Nicht einsehbar**.
+
+### Konto in Entra ID
+
+Ist eine getestete [Verbindung zu Entra ID](/pro/entra/) eingerichtet und dürfen Sie personenbezogene Angaben aus Entra ID lesen, zeigt der Austritt die Karte **Konto in Entra ID**: ob das Konto, mit dem die Person verknüpft ist, laut letztem Abgleich noch aktiv ist, und wie viele Geräte in Intune sie noch als Hauptbenutzer nennen. SentryAssets liest Entra ID nur; es sperrt und ändert dort nichts. Sperren Sie das Konto in Entra ID selbst. Der Hinweis hält den Abschluss nicht auf und hat den Stand des letzten Abgleichs.
+
+## Abschließen
+
+Wählen Sie **Abschließen**, wenn alles erledigt ist:
+
+- beim **Eintritt**, sobald alle Pflichtschritte erledigt sind;
+- beim **Austritt** zusätzlich, wenn keine Ausgabe mehr offen ist und alle ermittelten Punkte erledigt sind. Einen Austritt schließt nur ab, wer Ausgaben, Inventar, Lizenzen und Sicherheitsschlüssel lesen darf; sonst könnte etwas übersehen werden.
+
+Danach lässt sich der Vorgang nicht mehr ändern. Einen laufenden Vorgang entfernt **Vorgang abbrechen** nach Bestätigung mit seinen abgehakten Schritten; Ausgaben und Änderungen im Inventar bleiben.
+
+## Protokoll
+
+**Protokoll drucken** öffnet das **Eintrittsprotokoll** bzw. das **Austritts- und Rückgabeprotokoll** mit dem Logo der Organisation: Person, Abteilung, Funktion, Datum, die Punkte mit **Inventar- und Seriennummer**, Datum und Stand, eine Bestätigung und Felder für die Unterschriften der Mitarbeitenden und der IT. Drucken Sie es und lassen Sie es unterschreiben. Das unterschriebene Exemplar legen Sie bei Bedarf als Dokument ab; es hat dann seine eigene Aufbewahrung.
+
+Auf der Seite der Person unter **Stammdaten › Verantwortliche** zeigt die Karte **Ein- und Austritte** den laufenden oder letzten Vorgang.
+
+## Rechte und Datenschutz
+
+| Rolle | Vorlagen | Vorgänge |
+|---|---|---|
+| Administrator, Informationssicherheit, Bearbeitung | ansehen, anlegen, ändern | ansehen, beginnen, bearbeiten, abschließen, abbrechen |
+| Datenschutz | ansehen | ansehen |
+| Prüfung | ansehen | – |
+| Lesend | – | – |
+
+- **Vorgänge** brauchen zusätzlich das Recht auf personenbezogene Felder, denn wer kommt oder geht und wann, ist personenbezogen. Die Prüfung sieht deshalb nur die Vorlagen.
+- **Namen von Benutzern** (verantwortlich, erledigt von) erscheinen nur für Rollen, die Namen von Personen im Audit-Log sehen: Administrator, Informationssicherheit, Datenschutz und Prüfung.
+- Vorlagen ändert nur, wer an keine Standorte gebunden ist. Vorgänge sind an keinen Standort gebunden; jede Aktion an einem Asset prüft aber dessen Standort ([Rechte je Standort](/pro/standortrechte/)).
+- **Audit-Log:** Beginn mit Person und Vorlage, ohne Art und Datum; Änderungen des Datums nur als „geändert“, Notizen nur als „vermerkt“, nie Titel oder Namen. Aktionen im Inventar schreiben zusätzlich dessen Einträge.
+- **Löschen:** Wird eine Person aus den Verantwortlichen gelöscht, gehen ihre Vorgänge mit. Es besteht kein Zweck, den Namen danach aufzubewahren (Art. 5 und Art. 17 DSGVO). Die Asset-Ausgaben halten weiter fest, dass ein Asset ausgegeben war und zurückkam, nur nicht mehr an wen.
+- Tragen Sie in Notizen keine sensiblen Angaben ein, etwa zu Gesundheit oder Kündigungsgründen.
+
+## Grenzen
+
+- Je Person läuft höchstens ein Vorgang je Art.
+- Je Bereich werden höchstens 200 Punkte ermittelt, je Vorgang höchstens 500 Schritte gespeichert. Die Liste zeigt die neuesten 500 Vorgänge.
+- Archivieren einer Person nach dem Austritt gibt es nicht; sie bleibt mit ihrem letzten Arbeitstag unter den Verantwortlichen, bis sie gelöscht wird.
+- Zugänge in anderen Systemen sperrt SentryAssets nicht. Tragen Sie sie als Aufgaben in die Vorlage ein, oder nutzen Sie [SCIM](/pro/scim/). {/* offen: Übergabe von Zugängen an SCIM oder Tickets */}
+
+## Ergebnis prüfen
+
+- Der Vorgang steht im Reiter **Vorgänge** mit **Art**, **Datum**, **Schritte** („… von …“) und dem **Stand** **Abgeschlossen**.
+- Nach einem Austritt zeigt die Person in den Asset-Ausgaben keine offenen Ausgaben mehr.
+- Das Protokoll nennt alle Geräte mit Inventar- und Seriennummer.
+
+## Fehlerbehebung
+
+- **„Für diese Person läuft schon ein Vorgang dieser Art.“** Öffnen Sie den laufenden Vorgang, etwa über die Karte auf der Seite der Person.
+- **„Es sind noch Assets ausgegeben.“** Nehmen Sie die Assets unter **Was die Person zurückgibt** mit **Zurücknehmen** zurück.
+- **„Es sind noch Pflichtschritte offen.“** oder **„Es sind noch ermittelte Punkte offen.“** Erledigen Sie die offenen Schritte und wählen Sie **Erneut ermitteln**.
+- **„Einige Punkte können Sie nicht einsehen.“** Ihnen fehlt das Leserecht für Ausgaben, Inventar, Lizenzen oder Sicherheitsschlüssel. Eine Person mit diesen Rechten schließt ab.
+- **„Das Asset ist schon an jemanden ausgegeben.“** Wählen Sie ein anderes Asset oder nehmen Sie die bestehende Ausgabe zuerst zurück.
+- **„Das Asset ist außer Betrieb.“** Ausgesonderte Assets lassen sich nicht ausgeben.
+- **„Dafür fehlen Ihnen die Rechte oder der Standort.“** Die Aktion braucht Schreibrecht am Standort des Assets.
+- **„Das Datum liegt zu weit entfernt.“** Der Tag darf höchstens zwei Jahre von heute entfernt sein.
+- **Keine Vorgänge sichtbar:** Ihnen fehlt das Recht auf personenbezogene Felder.

@@ -1,0 +1,154 @@
+---
+title: Joiners and leavers
+description: With Pro, SentryAssets leads through staff joining and leaving, issues devices, finds by itself what must come back when someone leaves, and prints the protocol to sign.
+sidebar:
+  label: Joiners and leavers
+  order: 19
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature applies from the Pro edition.
+
+When a person joins, they receive devices, keys and access; when they leave, everything must come back. Under **Inventory › Joiners and leavers**, SentryAssets handles both as a case with steps: a **joining** case follows the steps of its template, a **leaving** case also finds by itself what the person still has. At the end there is a protocol to sign.
+
+This matches module ORP.2 “Personnel” of the IT-Grundschutz Compendium, which asks for a controlled induction and a controlled procedure when staff leave (source: BSI, IT-Grundschutz Compendium, Edition 2023, module ORP.2). SentryAssets supports the procedure; whether everything is done, you check yourself. Support, not an audit.
+
+## Prerequisites
+
+- A Pro or Enterprise license.
+- A role with the right to joiners and leavers: **Administrator**, **Information security** and **Editor** start and work on cases (see [Rights and data protection](#rights-and-data-protection)).
+- Cases name who joins or leaves. You see them only with the right to read personal fields.
+- The person is listed under **Master data › Responsible persons**; they can also be added when starting.
+- Optional: a configured [Entra ID connection](/en/pro/entra/) for the account note when someone leaves.
+
+## Adding templates
+
+Templates set which steps a case has, such as “Set up building access” or “Disable account”.
+
+<Steps>
+
+1. Open **Inventory › Joiners and leavers** and the **Templates** tab.
+
+2. Choose **Add template**, enter the **Name** and choose **Joining** or **Leaving** under **For**.
+
+3. Tick **Default template for this kind** if needed. There is one default template per kind.
+
+4. Choose **Add step** and enter a title and, if you like, a description.
+
+5. Choose the kind of step: **Task to check off** or, for joining only, **Issue device**. Tick **Required** if the case must not complete without this step.
+
+6. Order the steps with the arrows and choose **Save**.
+
+</Steps>
+
+For leaving, list only further tasks such as blocking access: what the person returns is found by the case itself. At most 50 templates with 100 steps each. Templates apply at every location; a case copies the steps when it starts, so later changes and removing a template leave running cases untouched.
+
+## Joining
+
+<Steps>
+
+1. On the **Cases** tab, choose **Start case** and the kind **Joining**.
+
+2. Choose the **Person from the directory**, or **Add a new person to the directory**.
+
+3. Enter the **First working day** (at most two years away) and choose the **Template**; the **Default template** is preselected.
+
+4. Add a **Note** if needed, without sensitive details such as health.
+
+5. Choose **Start**.
+
+6. In the case, check off each task done. For an **Issue device** step, search the asset, enter **Issued on** and choose **Issue**.
+
+</Steps>
+
+**Issue device** records a handover in the asset handovers, with the same checks as there: right, location, lifecycle and whether the asset is already handed over to someone. Whoever starts the case is responsible for it at first; **Take over** makes you responsible.
+
+## Leaving
+
+<Steps>
+
+1. Choose **Start case** and the kind **Leaving**.
+
+2. Choose the person, enter the **Last working day** and choose the template.
+
+3. Tick **Enter the last working day in the directory** if needed. The overview then reminds of assets still handed over. This needs write access to the inventory and no location binding.
+
+4. Choose **Start**.
+
+5. Work through the points found under **What the person returns** and check off the template's steps.
+
+</Steps>
+
+### What is found by itself
+
+When it starts, on **Look again** and before completing, the case searches the inventory for what the person still has:
+
+| Point | Action | Done when |
+|---|---|---|
+| **Return**: open handovers | **Take back** with date, **Condition** (**Fine**, **Damaged**, **Lost**) and note | the asset is taken back |
+| **Security key** among these handovers | **Open key** and remove the registrations at the key | it is no longer registered with any service |
+| **Responsibility**: assets the person is responsible for | **Reassign** to another person or nobody | the person is no longer responsible |
+| **Licence seat**: assigned seats | **Free** | the seat is free |
+
+The state of each point comes straight from the inventory every time you open the case. What you do elsewhere, such as taking an asset back on its own page, counts at once. Each action runs with your rights in inventory, handovers and licences and with the asset's location binding; a point you may not read is shown as **Not visible**.
+
+### Account in Entra ID
+
+If a tested [Entra ID connection](/en/pro/entra/) is set up and you may read personal details from Entra ID, the leaving case shows the card **Account in Entra ID**: whether the account linked to the person is still enabled as of the last reconciliation, and how many Intune devices still name them as primary user. SentryAssets only reads Entra ID; it disables or changes nothing there. Disable the account in Entra ID yourself. The note does not hold up completing and reflects the last reconciliation.
+
+## Completing
+
+Choose **Complete** once everything is done:
+
+- for **joining**, as soon as all required steps are done;
+- for **leaving**, in addition when no handover is open any more and every point found is done. Only someone who may read handovers, inventory, licences and security keys completes a leaving case; otherwise something could be overlooked.
+
+Afterwards the case can no longer be changed. **Cancel case** removes a running case with its checked steps after confirmation; handovers and changes in the inventory stay.
+
+## Protocol
+
+**Print protocol** opens the **Joining protocol** or the **Leaving and return protocol** with the organisation's logo: person, department, job title, date, the points with **Inventory and serial number**, date and state, a confirmation and fields for the signatures of the employee and of IT. Print it and have it signed. File the signed copy as a document if needed; it then has its own retention.
+
+On the person's page under **Master data › Responsible persons**, the card **Joiners and leavers** shows the running or last case.
+
+## Rights and data protection
+
+| Role | Templates | Cases |
+|---|---|---|
+| Administrator, Information security, Editor | view, add, change | view, start, work on, complete, cancel |
+| Data protection | view | view |
+| Auditor | view | – |
+| Read only | – | – |
+
+- **Cases** also need the right to read personal fields, because who joins or leaves, and when, is personal. The auditor therefore sees only the templates.
+- **Names of users** (responsible, done by) show only to roles that see the names of persons in the audit log: Administrator, Information security, Data protection and Auditor.
+- Only someone not bound to locations changes templates. Cases are not bound to locations; every action on an asset still checks its location ([rights per location](/en/pro/standortrechte/)).
+- **Audit log:** start with person and template, without kind and date; date changes only as “changed”, notes only as “noted”, never titles or names. Actions in the inventory write its entries as well.
+- **Deleting:** if a person is deleted from the responsible persons, their cases go with them. There is no purpose for keeping the name afterwards (Art. 5 and Art. 17 GDPR). The asset handovers still record that an asset was handed out and came back, only no longer to whom.
+- Do not put sensitive details into notes, such as health or reasons for leaving.
+
+## Limits
+
+- At most one case of each kind runs per person.
+- At most 200 points are found per area and at most 500 steps stored per case. The list shows the newest 500 cases.
+- Archiving a person after leaving is not available; they stay among the responsible persons with their last working day until deleted.
+- SentryAssets does not block access in other systems. Add such tasks to the template, or use [SCIM](/en/pro/scim/). {/* open: handing access over to SCIM or tickets */}
+
+## Check the result
+
+- The case is listed on the **Cases** tab with **Kind**, **Date**, **Steps** (“… of …”) and the **State** **Completed**.
+- After a leaving case, the person has no open handovers left in the asset handovers.
+- The protocol names every device with inventory and serial number.
+
+## Troubleshooting
+
+- **“A case of this kind is already running for this person.”** Open the running case, for example from the card on the person's page.
+- **“Assets are still handed over.”** Take the assets back under **What the person returns** with **Take back**.
+- **“Required steps are still open.”** or **“Points found are still open.”** Finish the open steps and choose **Look again**.
+- **“Some points are not visible to you.”** You lack read access to handovers, inventory, licences or security keys. Someone with these rights completes the case.
+- **“The asset is already handed over to someone.”** Choose another asset, or take the existing handover back first.
+- **“The asset is out of use.”** Disposed assets cannot be issued.
+- **“You lack the rights or the location for this.”** The action needs write access at the asset's location.
+- **“The date is too far away.”** The day may be at most two years from today.
+- **No cases visible:** you lack the right to read personal fields.
