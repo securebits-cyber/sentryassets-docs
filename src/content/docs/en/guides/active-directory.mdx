@@ -1,0 +1,77 @@
+---
+title: Connecting Active Directory
+description: What to prepare on the domain controller and how to set up the read-only LDAPS connection, for matching computers and, from Pro, people.
+sidebar:
+  label: Connecting Active Directory
+---
+
+import { Steps, Aside, Badge } from '@astrojs/starlight/components';
+
+SentryAssets only reads Active Directory, over LDAPS with an ordinary domain account. It writes, changes and disables nothing in AD, and nothing is installed on the domain controllers. The same connection serves matching the **computers** (Community) and, from Pro, the [people from AD](/en/pro/active-directory/).
+
+## What you need
+
+- A domain controller with **LDAPS** on port 636 (or the global catalog on 3269).
+- A **service account** without special rights.
+- The certificate of the **CA** that issued the domain controller's LDAPS certificate, such as your AD CS.
+- A network path from the SentryAssets server to the domain controller.
+
+## Preparing the domain controller
+
+<Steps>
+
+1. **Create a service account.** An ordinary user account such as `svc-sentryassets`, member only of **Domain Users**. It needs no administrator rights and must not have any. Recommended: a long random password and no interactive logon (group policy “Deny log on locally”).
+
+2. **Check LDAPS.** A domain controller speaks LDAPS once it has a suitable certificate. With AD CS it usually gets one automatically (template “Domain Controller Authentication” or “Kerberos Authentication”). Check from an admin machine:
+
+   ```powershell
+   Test-NetConnection dc01.company.local -Port 636
+   ```
+
+   The name you will enter for the domain controller must be in the certificate (subject or subject alternative name).
+
+3. **Export the CA certificate.** On the domain controller open `certlm.msc`, choose your root CA under **Trusted Root Certification Authorities › Certificates** and save it via **All Tasks › Export** as **Base-64 encoded X.509 (.cer)**. You will enter its content (starting with `-----BEGIN CERTIFICATE-----`) as your own CA.
+
+4. **Open the firewall:** from the SentryAssets server to the domain controller, TCP 636 (or 3269). Nothing inbound is needed on the SentryAssets server.
+
+5. **People only (Pro):** decide on the **groups** whose members are read, such as a group “Staff”. **Active Directory Users and Computers** shows its distinguished name with **View › Advanced Features** on the **Attribute Editor** tab under `distinguishedName`, or:
+
+   ```powershell
+   Get-ADGroup Staff | Select-Object DistinguishedName
+   ```
+
+</Steps>
+
+<Aside title="Read rights">
+With default permissions an ordinary domain account may read computers, users and group memberships. If you hardened read permissions, for example removed them on some OUs, give the service account **Read** on computer and user objects there. Nothing more is needed.
+</Aside>
+
+## Setting up in SentryAssets
+
+The server must be allowed to reach the domain controller: its network is listed in `SA_DIRECTORY_ALLOWED_NETWORKS` (default: private networks), see [Installation](/en/guides/installation/).
+
+<Steps>
+
+1. Open **Settings › Directory services** and fill in the draft:
+   - **Domain controller:** the name as in the certificate, such as `dc01.company.local`.
+   - **Port:** 636, or 3269 for the global catalog.
+   - **OUs (base DNs):** one per line; the search runs below them. For people, the users' OUs must be listed too, not only the computers'; simplest is the domain itself, such as `DC=company,DC=local`.
+   - **Service account:** as UPN (`svc-sentryassets@company.local`), `COMPANY\svc-sentryassets` or DN, with its **password**. It is stored encrypted and never shown again.
+   - **Own CA (PEM):** the content of the exported `.cer` file.
+2. **Save draft** and **Test connection.** The test names the reason if something is missing, such as a name that does not match the certificate.
+3. **Activate.** The first reconciliation of computers runs; results are under **Discovery › Active Directory**.
+4. <Badge text="Pro" variant="note" /> For people, enter the groups under **Discovery › People from AD › Settings** and choose **Save and reconcile**, see [People from Active Directory](/en/pro/active-directory/).
+
+</Steps>
+
+## Common errors
+
+| Message | Cause and fix |
+|---|---|
+| The domain controller is not reachable on this port. | Firewall or wrong port; test with `Test-NetConnection`. |
+| The certificate is not trusted or does not match the host name. Check host name and own CA. | Own CA missing or a different one, or the name entered is not in the certificate. |
+| No secure connection possible. At least TLS 1.2 with modern suites is needed. | The domain controller has no LDAPS certificate or only outdated ciphers. Windows Server 2022 or later brings TLS 1.3. |
+| The service account could not sign in. | Wrong name or password, account locked or expired. |
+| This address is not allowed (loopback, link-local, metadata or outside the allowed networks). | The domain controller's network is missing in `SA_DIRECTORY_ALLOWED_NETWORKS`. |
+| At least one OU does not exist. | Typo in a base DN. |
+| People: none or too few found | The users' OUs are missing among the base DNs, or the group's DN is wrong. |

@@ -1,0 +1,77 @@
+---
+title: Active Directory anbinden
+description: Was auf dem Domänencontroller vorzubereiten ist und wie Sie die nur lesende LDAPS-Verbindung einrichten, für den Abgleich der Computer und ab Pro der Personen.
+sidebar:
+  label: Active Directory anbinden
+---
+
+import { Steps, Aside, Badge } from '@astrojs/starlight/components';
+
+SentryAssets liest das Active Directory nur, per LDAPS mit einem gewöhnlichen Domänenkonto. Es schreibt, ändert und sperrt im AD nichts, und auf den Domänencontrollern wird nichts installiert. Dieselbe Verbindung nutzen der Abgleich der **Computer** (Community) und ab Pro die [Personen aus dem AD](/pro/active-directory/).
+
+## Was Sie brauchen
+
+- Einen Domänencontroller mit **LDAPS** auf Port 636 (oder den globalen Katalog auf 3269).
+- Ein **Dienstkonto** ohne besondere Rechte.
+- Das Zertifikat der **CA**, die das LDAPS-Zertifikat des Domänencontrollers ausgestellt hat, etwa Ihrer AD CS.
+- Einen Netzweg vom SentryAssets-Server zum Domänencontroller.
+
+## Auf dem Domänencontroller vorbereiten
+
+<Steps>
+
+1. **Dienstkonto anlegen.** Ein normales Benutzerkonto, etwa `svc-sentryassets`, Mitglied nur von **Domänen-Benutzer**. Es braucht keine Administratorrechte und darf keine haben. Empfohlen: ein langes, zufälliges Passwort und keine interaktive Anmeldung erlauben (Gruppenrichtlinie „Lokal anmelden verweigern“).
+
+2. **LDAPS prüfen.** Ein Domänencontroller spricht LDAPS, sobald er ein passendes Zertifikat hat. Mit AD CS bekommt er es meist automatisch (Vorlage „Domänencontroller-Authentifizierung“ oder „Kerberos-Authentifizierung“). Prüfen Sie es auf einem Admin-Rechner:
+
+   ```powershell
+   Test-NetConnection dc01.firma.local -Port 636
+   ```
+
+   Der Name, mit dem Sie den Domänencontroller später eintragen, muss im Zertifikat stehen (Antragstellername oder alternativer Name).
+
+3. **CA-Zertifikat exportieren.** Auf dem Domänencontroller `certlm.msc` öffnen, unter **Vertrauenswürdige Stammzertifizierungsstellen › Zertifikate** Ihre Stamm-CA wählen und über **Alle Aufgaben › Exportieren** als **Base-64-codiert X.509 (.cer)** speichern. Den Inhalt (beginnt mit `-----BEGIN CERTIFICATE-----`) tragen Sie später als eigene CA ein.
+
+4. **Firewall öffnen:** vom SentryAssets-Server zum Domänencontroller TCP 636 (bzw. 3269). Eingehend auf dem SentryAssets-Server ist nichts nötig.
+
+5. **Nur für Personen (Pro):** die **Gruppen** festlegen, deren Mitglieder gelesen werden, etwa eine Gruppe „Mitarbeitende“. Ihren Distinguished Name zeigt **Active Directory-Benutzer und -Computer** mit **Ansicht › Erweiterte Features** im Reiter **Attribut-Editor** unter `distinguishedName`, oder:
+
+   ```powershell
+   Get-ADGroup Mitarbeitende | Select-Object DistinguishedName
+   ```
+
+</Steps>
+
+<Aside title="Leserechte">
+Ein gewöhnliches Domänenkonto darf in einem AD mit Standardrechten Computer, Benutzer und Gruppenmitgliedschaften lesen. Haben Sie die Leserechte gehärtet, etwa auf einzelnen OUs entzogen, geben Sie dem Dienstkonto dort **Lesen** auf Computer- und Benutzerobjekte. Mehr braucht es nicht.
+</Aside>
+
+## In SentryAssets einrichten
+
+Der Server muss den Domänencontroller erreichen dürfen: Sein Netz steht in `SA_DIRECTORY_ALLOWED_NETWORKS` (Standard: private Netze), siehe [Installation](/guides/installation/).
+
+<Steps>
+
+1. **Einstellungen › Verzeichnisdienste** öffnen und den Entwurf ausfüllen:
+   - **Domänencontroller:** der Name wie im Zertifikat, etwa `dc01.firma.local`.
+   - **Port:** 636, oder 3269 für den globalen Katalog.
+   - **OUs (Basis-DNs):** eine je Zeile, darunter wird gesucht. Für Personen müssen hier auch die OUs der Benutzer stehen, nicht nur die der Computer; am einfachsten die Domäne selbst, etwa `DC=firma,DC=local`.
+   - **Dienstkonto:** als UPN (`svc-sentryassets@firma.local`), `FIRMA\svc-sentryassets` oder DN, dazu das **Passwort**. Es wird verschlüsselt gespeichert und nie wieder angezeigt.
+   - **Eigene CA (PEM):** der Inhalt der exportierten `.cer`-Datei.
+2. **Entwurf speichern** und **Verbindung testen.** Der Test nennt den Grund, falls etwas fehlt, etwa einen Namen, der nicht zum Zertifikat passt.
+3. **Aktivieren.** Der erste Abgleich der Computer läuft; die Ergebnisse stehen unter **Discovery › Active Directory**.
+4. <Badge text="Pro" variant="note" /> Für Personen unter **Discovery › Personen aus dem AD › Einstellungen** die Gruppen eintragen und **Speichern und abgleichen**, siehe [Personen aus dem Active Directory](/pro/active-directory/).
+
+</Steps>
+
+## Häufige Fehler
+
+| Meldung | Ursache und Abhilfe |
+|---|---|
+| Der Domänencontroller ist auf diesem Port nicht erreichbar. | Firewall oder falscher Port; Test mit `Test-NetConnection`. |
+| Das Zertifikat ist nicht vertrauenswürdig oder passt nicht zum Hostnamen. Prüfen Sie Hostname und eigene CA. | Eigene CA fehlt oder ist eine andere, oder der eingetragene Name steht nicht im Zertifikat. |
+| Keine sichere Verbindung möglich. Nötig ist mindestens TLS 1.2 mit modernen Verfahren. | Der Domänencontroller hat kein LDAPS-Zertifikat oder nur veraltete Verfahren. Ein Update auf Windows Server 2022 oder neuer bringt TLS 1.3. |
+| Die Anmeldung des Dienstkontos ist fehlgeschlagen. | Name oder Passwort falsch, Konto gesperrt oder abgelaufen. |
+| Diese Adresse ist nicht erlaubt (Loopback, Link-Local, Metadaten oder außerhalb der erlaubten Netze). | Das Netz des Domänencontrollers fehlt in `SA_DIRECTORY_ALLOWED_NETWORKS`. |
+| Mindestens eine OU gibt es nicht. | Tippfehler in einem Basis-DN. |
+| Personen: keine oder zu wenige gefunden | Die OUs der Benutzer fehlen unter den Basis-DNs, oder der DN der Gruppe stimmt nicht. |

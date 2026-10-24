@@ -1,0 +1,66 @@
+---
+title: Personen aus dem Active Directory
+description: Mit Pro liest SentryAssets die Mitglieder gewählter AD-Gruppen über die vorhandene AD-Verbindung, gleicht sie mit den Verantwortlichen ab und erkennt Ein- und Austritte.
+sidebar:
+  label: Personen aus dem AD
+  order: 5
+---
+
+import { Badge, Steps, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Die Community-Edition gleicht die Computer des Active Directory mit dem Inventar ab. Pro liest zusätzlich die **Personen** gewählter Gruppen, ordnet sie den Verantwortlichen zu und meldet, wer neu ist und wer geht.
+
+Gelesen wird über die Verbindung, die Sie unter **Einstellungen › Verzeichnisdienste** eingerichtet und getestet haben, mit demselben Dienstkonto und nur lesend. Ein zweites Dienstkonto ist nicht nötig. SentryAssets ändert und sperrt im AD nichts.
+
+## Einrichten
+
+<Steps>
+
+1. Die [Verbindung zum Active Directory](/guides/active-directory/) einrichten, testen und aktivieren, falls noch nicht geschehen. Wichtig: Unter den Basis-DNs der Verbindung müssen auch die OUs der Benutzer stehen.
+2. **Discovery › Personen aus dem AD › Einstellungen** öffnen und die Gruppen als Distinguished Name eintragen, eine je Zeile, etwa `CN=Mitarbeitende,OU=Gruppen,DC=firma,DC=de`. Mitglieder verschachtelter Gruppen zählen mit; höchstens 20 Gruppen.
+3. Bei Bedarf **Regeln für die Abteilung** anlegen (siehe unten) und den Abstand des Abgleichs wählen.
+4. **Speichern und abgleichen.** Der erste Abgleich läuft sofort.
+
+</Steps>
+
+Gelesen werden nur feste Angaben: Name, Anmeldename, `userPrincipalName`, E-Mail, Abteilung, Funktion, Büro, Firma, OU, ob das Konto deaktiviert ist, und wann es angelegt wurde. Höchstens 20 000 Personen je Abgleich.
+
+## Abteilung aus Regeln
+
+Pflegt Ihr AD das Feld **Abteilung** nicht, sondern ordnet Abteilungen über OUs oder Büros, setzen Regeln die Abteilung:
+
+| Regel | Beispiel | Passt zu |
+|---|---|---|
+| OU enthält | `OU=Vertrieb` | `OU=Team,OU=Vertrieb,DC=firma,DC=de`, nicht `OU=Vertriebsinnendienst` |
+| Büro ist | `Werk Nord` | Büro „Werk Nord“ (`physicalDeliveryOfficeName`) |
+
+Die erste passende Regel gilt; eine im AD gepflegte Abteilung geht immer vor. Groß- und Kleinschreibung zählen nicht. Die Abteilung aus einer Regel ist ein Vorschlag: Sie kommt nur ins Inventar, wenn Sie Personen anlegen oder Angaben übernehmen.
+
+## Abgleich mit den Verantwortlichen
+
+- Eine Person passt zu einem Verantwortlichen, wenn dessen E-Mail-Adresse der E-Mail oder dem `userPrincipalName` im AD entspricht.
+- **Nichts gelangt von selbst ins Inventar:** Neue Personen legen Sie gesammelt als Verantwortliche an; abweichende Angaben (Name, E-Mail, Abteilung, Funktion) übernehmen Sie Feld für Feld. Leere Angaben im AD überschreiben nichts.
+- Jeden Eintrag können Sie von Hand zuordnen, als „passt nicht“ markieren, ignorieren oder zurücksetzen. Ihre Entscheidung gilt auch bei späteren Abgleichen.
+
+## Ein- und Austritte
+
+Zusammen mit den [Ein- und Austritten](/pro/ein-und-austritte/) zeigt die Seite zwei Listen, und die Glocke zählt sie:
+
+- **Austritt fällig:** Das Konto ist im AD deaktiviert oder in keiner Gruppe mehr, die Person ist im Inventar zugeordnet, und es läuft noch kein Austritt. **Austritt beginnen** öffnet den Vorgang mit dieser Person und dem Tag der Deaktivierung. Ein Austritt, der bis zu 30 Tage vor der Deaktivierung abgeschlossen wurde, zählt ebenfalls.
+- **Neu eingetreten:** Das Konto wurde in den letzten 30 Tagen im AD angelegt, und es läuft noch kein Eintritt. Zuerst **Als Verantwortliche anlegen**, dann **Eintritt beginnen**.
+
+Die Listen und die Aufgaben der Glocke sehen nur Administration, ISB und Bearbeitung. Mail-Benachrichtigungen dazu stehen in der Kategorie „Ausgaben und Sicherheitsschlüssel“.
+
+## Rechte
+
+| Rolle | Darf |
+|---|---|
+| Administration | Gruppen, Regeln, Abgleich, alles Weitere |
+| ISB, Bearbeitung | Personen sehen, zuordnen, anlegen, Angaben übernehmen, Vorgänge beginnen |
+| Prüfung, Datenschutz, Lesen | nichts; die Personen sind personenbezogen |
+
+<Aside>
+**Entfernen** löscht Gruppen, Regeln und alle gelesenen Personen samt Entscheidungen. Die Verantwortlichen im Inventar bleiben erhalten. Ein gescheiterter Abgleich ändert nichts; der Grund steht unter **Einstellungen**.
+</Aside>

@@ -1,0 +1,66 @@
+---
+title: People from Active Directory
+description: With Pro, SentryAssets reads the members of chosen AD groups over the existing AD connection, matches them with the responsible persons and spots joiners and leavers.
+sidebar:
+  label: People from AD
+  order: 5
+---
+
+import { Badge, Steps, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+The Community edition matches the computers of Active Directory with the inventory. Pro also reads the **people** of chosen groups, links them to responsible persons and tells you who is new and who is leaving.
+
+Reading uses the connection you set up and tested under **Settings › Directory services**, with the same service account and read-only. No second service account is needed. SentryAssets changes and disables nothing in AD.
+
+## Setting up
+
+<Steps>
+
+1. Set up, test and activate the [connection to Active Directory](/en/guides/active-directory/) if you have not yet. Important: the connection's base DNs must include the users' OUs too.
+2. Open **Discovery › People from AD › Settings** and enter the groups as distinguished names, one per line, such as `CN=Staff,OU=Groups,DC=company,DC=com`. Members of nested groups count too; at most 20 groups.
+3. Add **rules for the department** if needed (see below) and choose the reconciliation interval.
+4. **Save and reconcile.** The first reconciliation runs at once.
+
+</Steps>
+
+Only fixed details are read: name, logon name, `userPrincipalName`, email, department, job title, office, company, OU, whether the account is disabled, and when it was created. At most 20,000 people per reconciliation.
+
+## Department from rules
+
+If your AD does not keep the **Department** field but places departments by OU or office, rules set the department:
+
+| Rule | Example | Matches |
+|---|---|---|
+| OU contains | `OU=Sales` | `OU=Team,OU=Sales,DC=company,DC=com`, not `OU=Presales` |
+| Office is | `North plant` | office “North plant” (`physicalDeliveryOfficeName`) |
+
+The first matching rule applies; a department kept in AD always comes first. Case does not matter. A department from a rule is a proposal: it reaches the inventory only when you create people or take over details.
+
+## Matching with responsible persons
+
+- A person matches a responsible person whose email address equals the email or the `userPrincipalName` in AD.
+- **Nothing enters the inventory on its own:** you create new people as responsible persons in bulk and take over differing details (name, email, department, job title) field by field. Empty values in AD overwrite nothing.
+- You can link any entry by hand, mark it as “not this one”, ignore it or reset it. Your decision holds over later reconciliations.
+
+## Joiners and leavers
+
+Together with [joiners and leavers](/en/pro/ein-und-austritte/), the page shows two lists, and the bell counts them:
+
+- **Leaving:** the account is disabled in AD or no longer in any group, the person is linked in the inventory, and no leaving is running yet. **Start leaving** opens the case with this person and the day the account was disabled. A leaving completed up to 30 days before the account was disabled counts as well.
+- **New joiners:** the account was created in AD within the last 30 days, and no joining is running yet. First **Create as responsible person**, then **Start joining**.
+
+Only administration, ISB and editors see the lists and the bell's tasks. Mail notifications for them are in the category “Handovers and security keys”.
+
+## Rights
+
+| Role | May |
+|---|---|
+| Administration | groups, rules, reconciliation and everything else |
+| ISB, editor | see, link and create people, take over details, start cases |
+| Auditor, data protection, viewer | nothing; the people are personal data |
+
+<Aside>
+**Remove** deletes groups, rules and every person read, with all decisions. The responsible persons in the inventory stay. A failed reconciliation changes nothing; the reason is shown under **Settings**.
+</Aside>
