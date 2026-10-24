@@ -1,0 +1,170 @@
+---
+title: Notifications by e-mail
+description: Set up your organisation's mail server with TLS 1.3, send a test mail and choose in your profile what you are told about by e-mail, at once or once a day; with the rules for addresses under OIDC.
+sidebar:
+  label: Notifications
+  order: 12
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The bell in the header shows open tasks: expiring warranties, licences and certificates, notice periods, consumables below their minimum and more. Anyone who does not look into SentryAssets every day can receive the same tasks by e-mail, at once or as a daily summary. Mails go out through your organisation's mail server.
+
+E-mail notifications are part of the Community edition. Notifications by webhook or Gotify for services are set up separately under **Settings › Notifications**, see [Features](/en/reference/funktionen/#notifications).
+
+## Prerequisites
+
+- The mail server is set up by the **Administrator** role, with a recent confirmation of the sign-in.
+- A mail server offering **STARTTLS** or **TLS from the first byte** with **TLS 1.3** and a valid certificate for its name. SentryAssets never sends unencrypted.
+- For a mail server password: the installation's master key.
+- If the mail server is in your own network, its network allowed in `SA_MAIL_ALLOWED_NETWORKS` (see [Configuration](/en/reference/konfiguration/#network-allowances)). The default is addresses on the internet.
+- `SA_PUBLIC_URL` points to the address of the web UI; the links in the mails lead there.
+- Each person who should receive mails has a confirmed e-mail address in their account (see [Which address applies](#which-address-applies)).
+
+## Setting up the mail server
+
+<Steps>
+
+1. Open **Settings › E-mail**. Confirm your sign-in if the page asks for it; until then the fields stay locked.
+
+2. Under **Mail server**, enter the **Server**, such as `mail.example.test`, and the **Port**.
+
+3. Choose the **Encryption**: **STARTTLS (usually port 587)** or **TLS from the first byte (usually port 465)**.
+
+4. Enter **User name** and **Password**. Leave both empty if the server accepts mails without signing in.
+
+5. Enter the **Sender address** and, if you like, the **Sender name**. Without one the sender is called “SentryAssets”.
+
+6. Under **Daily summary at**, choose the time and the **Time zone**. The defaults are 07:00, Berlin.
+
+7. Tick **Sending switched on** and choose **Save**.
+
+</Steps>
+
+The password is stored encrypted and never shown again; the page only says “Stored”. Leave the field empty to keep it. If you change server, port, encryption or user, enter the password again: a stored password only goes to the server it was entered for.
+
+### How SentryAssets connects
+
+- **TLS 1.3 only**, with the certificate and host name checked against the system's certificates, for STARTTLS and TLS from the first byte alike. If a server offers no STARTTLS, SentryAssets sends nothing further, not even the user name.
+- Mails are sent by the job worker, never directly from the web UI, and only into the networks allowed for mail servers.
+- A custom CA for an internal mail server is not provided yet; the certificate must come from an authority the system trusts. {/* open: custom CA for internal mail servers */}
+
+## Sending a test mail
+
+<Steps>
+
+1. Below the saved mail server, choose **Send test mail**.
+
+2. Wait for the result. The page shows “Test mail delivered to …” or “Test mail not delivered: …” with the reason.
+
+</Steps>
+
+The test mail always goes to the address of your own account, never to an address typed in, so nobody can use the test to mail arbitrary recipients. At most 10 test mails per hour. Result and time are shown under **Last test** and in the audit log.
+
+## Subscribing to notifications
+
+Each person chooses what they are told about. Everything is **Off** by default.
+
+<Steps>
+
+1. Open **Profile** in the user menu.
+
+2. In the **E-mail notifications** card, choose **Off**, **At once** or **Daily** for each category.
+
+3. Choose the **Language of the mails**: German or English.
+
+4. Choose **Save choice**.
+
+</Steps>
+
+Under **Sent to** the card shows your address and when the daily summary arrives. If sending is not switched on yet, your choice applies as soon as it runs.
+
+### Categories
+
+| Category | Examples |
+|---|---|
+| Warranty and lifecycle | warranty or support ending, replacement age reached, not seen for a long time, backup proof due |
+| Licences | licence expiring, over-assigned |
+| Certificates | certificate or CA expiring, certificate revoked, revocation list running out |
+| Contracts | notice period approaching, contract ending |
+| Consumables below their minimum | stock below its minimum |
+| Procurement requests awaiting approval | request waiting for a decision |
+| Due checks in the Grundschutz | check due or overdue |
+| State of the devices | disk nearly full, report from the monitoring |
+| Agents | agent pending, silent or its certificate expiring |
+| Inventory and directory sync | without owner, orphaned, shadow IT, sync failed or with conflicts |
+| Handovers and security keys | assets handed out before the last working day, lost keys, spare key missing |
+| Expiring proofs | proof expiring |
+
+The profile only shows categories whose area your role may read. Deviations found by [check rules](/en/pro/pruefregeln/) (from Pro) and the security state of devices are not yet tasks of the bell, so they cannot be subscribed to by e-mail yet.
+
+### At once and daily
+
+- **At once:** every 5 minutes SentryAssets compares the tasks with the previous round. If a task of an at-once category is new or has grown, a mail goes out with these tasks and their current count. The first round after subscribing only records what is open already: subscribing is no news in itself.
+- **Daily:** once a day after the time set, all open tasks of the daily categories, at most 100 per mail, the rest as a count with a link. Without open tasks no mail is sent.
+
+## Who receives what
+
+- A mail names only tasks the person also sees in the bell: with **their own role** and, with [rights per location](/en/pro/standortrechte/) (from Pro), their location binding. If the role changes, the new one applies from the next round. If an account is disabled or loses rights, its waiting mails are dropped at once.
+- **Content:** per task its title, count and a link into the app, a link to all tasks, and at the end a link to unsubscribe in the profile. No names, no assets, no attachments, no secrets. Details are visible only after signing in.
+- **No mail** goes to disabled accounts, accounts without access, local accounts not yet set up, and anyone who could not sign in right now, such as an OIDC account while no OIDC sign-in is active.
+- Each mail goes out once per person and occasion. If sending breaks off midway, a mail may in rare cases arrive twice; it then carries the same ID, which lets a mail server spot the duplicate.
+
+## Which address applies
+
+The recipient is always the address of the person's own account.
+
+- **Local accounts:** the administration enters the address when creating the account under **Settings › Users** as **Email (optional)**.
+- **OIDC accounts:** SentryAssets takes the `email` claim at every sign-in, but only if the provider reports the address as confirmed (`email_verified` is `true`). An unconfirmed address is not stored at all; otherwise anyone able to enter someone else's address at the provider would receive that account's notifications. An address over 320 characters is dropped, not shortened.
+
+Without a confirmed address nothing is sent; the profile then says “Your account has no confirmed e-mail address.”
+
+### Declaring a provider's addresses confirmed
+
+Some providers do not send `email_verified`, such as **Microsoft Entra ID** depending on its setup. If your IT maintains the addresses there and users cannot change them, declare this provider's addresses confirmed:
+
+<Steps>
+
+1. Open **Settings › Sign-in** and edit the draft of the OIDC sign-in.
+
+2. At **Addresses of this provider count as confirmed**, choose **Yes, even without confirmation by the provider**.
+
+3. Save the draft, check it with a **trial sign-in** and **activate** it.
+
+</Steps>
+
+The switch applies from each person's next sign-in; switched off, the address is dropped again at the next sign-in. It only stands in for a missing claim, never for a statement of the provider: if the provider explicitly reports an address as unconfirmed, it stays out. Guest accounts and addresses whose domain the owner has not verified with the provider stay excluded as well. Only the administration, with a recent confirmation, changes the switch; the audit log records its value. If OIDC is set in the server configuration, set `SA_OIDC_TRUST_EMAIL=true` instead.
+
+<Aside type="caution" title="Only for providers with maintained addresses">
+Do not switch the option on if users can enter their own address at the provider. Someone could then enter another person's address and redirect that account's notifications to it.
+</Aside>
+
+## Following the sending
+
+Under **Settings › E-mail**, **Sending** shows the number of mails **Waiting to be sent**, **Sent in 24 hours** and the **Recent failures** with **Time**, **Reason** and masked **Recipient**.
+
+- Temporary failures (not reachable, timeout, temporary refusal) are retried after 5 and 15 minutes and after 1, 3 and 6 hours; after that the mail counts as failed. Permanent failures, such as TLS, certificate or sign-in, count at once.
+- Mails older than 2 days are no longer sent.
+- At most 500 mails per hour and organisation; sent and failed entries are deleted after 30 days.
+- The rounds run every 5 minutes (`SA_MAIL_COLLECT_MINUTES`, `0` switches them off).
+
+The audit log records saving the settings (without the password, only that it changed), test mails and changes to one's own subscription, with no content and no addresses in plain text.
+
+## Check the result
+
+- **Send test mail** reports “Test mail delivered to …”, and the mail is in your mailbox.
+- Your profile shows your address under **Sent to**.
+- After the next summary, **Sent in 24 hours** counts the mails.
+
+## Troubleshooting
+
+- **“Address not allowed”:** the mail server is in a network that is not allowed, such as your own LAN. Add its address to `SA_MAIL_ALLOWED_NETWORKS`, for example `public,192.168.10.25/32`.
+- **“No connection with TLS 1.3”:** the server cannot do TLS 1.3. Switch it on at the mail server; there is no exception for TLS 1.2 when sending.
+- **“Certificate invalid or for another name”:** under **Server**, enter the name the certificate is issued for, not the IP address.
+- **“Server offers no STARTTLS”:** choose **TLS from the first byte** and the matching port, usually 465.
+- **“Sign-in refused”:** check user name and password; some providers require a separate app password.
+- **“For another server, port, user or encryption, enter the password again.”** Enter the password again and save.
+- **“Without a master key no password can be stored.”** Set up the installation's master key, or use a server without sign-in.
+- **“Your account has no confirmed e-mail address.”** For a local account the address is missing. Under OIDC the provider does not report it as confirmed; check the provider's configuration or the switch [Addresses of this provider count as confirmed](#declaring-a-providers-addresses-confirmed). Then sign in once more.
+- **“Too many test mails. Please try again later.”** Wait until the next hour.
+- **No mails arrive although subscribed:** check **Sending switched on**, the failures under **Sending**, and whether the chosen category has open tasks. With **At once**, a mail only comes when something new is added after subscribing.

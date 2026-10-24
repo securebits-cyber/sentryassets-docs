@@ -47,6 +47,7 @@ Connections SentryAssets opens to the outside go only into networks you allow. L
 |---|---|---|
 | `SA_DIRECTORY_ALLOWED_NETWORKS` | private networks | domain controllers (Active Directory) |
 | `SA_NOTIFICATION_ALLOWED_NETWORKS` | `public` | notification targets |
+| `SA_MAIL_ALLOWED_NETWORKS` | `public` | mail servers for [notifications by e-mail](/en/guides/benachrichtigungen/) and the mailbox of the data protection add-on |
 | `SA_ASSISTANT_ALLOWED_NETWORKS` | `public` | the AI assistant's model |
 | `SA_HYPERVISOR_ALLOWED_NETWORKS` | private networks | Proxmox VE and vCenter (Pro) |
 | `SA_SIEM_ALLOWED_NETWORKS` | private networks | SIEM targets (Pro) |
@@ -104,11 +105,13 @@ secrets:
 | `SA_OIDC_CLIENT_SECRET_FILE` | – | file with the client secret |
 | `SA_OIDC_ROLE_CLAIM` | `groups` | claim with the groups |
 | `SA_OIDC_ROLE_MAPPING` | – | pairs `group=role`, comma-separated |
+| `SA_OIDC_TRUST_EMAIL` | `false` | the provider's addresses count as confirmed even without `email_verified`, see [Notifications](/en/guides/benachrichtigungen/#declaring-a-providers-addresses-confirmed) |
 | `SA_LOCAL_ACCOUNTS` | `enabled` | local accounts with password and TOTP: `enabled` (next to OIDC) or `disabled` (OIDC only) |
 | `SA_CONTACT_RETENTION_DAYS` | `365` | propose archived contacts for deletion after this time (30–3650) |
 | `SA_DOCUMENT_QUOTA_BYTES` | 20 GiB | sum of all document versions per organisation |
 | `SA_DOCUMENT_TRANSFERS` | `2` | concurrent uploads and downloads per API instance; each holds a file in memory, so raise the API's `mem_limit` as well |
 | `SA_DOCUMENT_UPKEEP_MINUTES` | `60` | interval of the document storage upkeep; `0` switches it off |
+| `SA_MAIL_COLLECT_MINUTES` | `5` | interval of the rounds for e-mail notifications (0–60); `0` switches them off |
 
 OIDC can also be set up in the web UI ([Setup](/en/guides/einrichtung/)); the server configuration then takes precedence.
 

@@ -100,6 +100,7 @@ With OIDC, SentryAssets signs people in through your identity provider (OpenID C
 - **Several groups:** the first role in the order administrator, information security, editor, data protection, auditor, read only applies (see [Roles and permissions](/en/reference/rollen/)).
 - **Role:** for OIDC accounts, change the role through the groups at the identity provider, not in SentryAssets.
 - **Permissions revoked:** at every session renewal SentryAssets checks that the account is still active. Revoked groups take effect at the next sign-in at the latest. With [SCIM](/en/pro/scim/) a block applies at once.
+- **E-mail address:** SentryAssets takes the `email` claim only if the provider reports the address as confirmed. If it does not send `email_verified`, as Microsoft Entra ID depending on its setup, and your IT maintains the addresses there, switch on **Addresses of this provider count as confirmed** in the draft (`SA_OIDC_TRUST_EMAIL` in the server configuration). Without a confirmed address the account receives no [notifications by e-mail](/en/guides/benachrichtigungen/#which-address-applies).
 - **Sessions:** idle 30 minutes, absolute lifetime 12 hours (`SA_SESSION_IDLE_MINUTES`, `SA_SESSION_ABSOLUTE_HOURS`).
 - **Switching off:** OIDC can only be switched off when a local administrator account is set up. If the identity provider fails, `docker compose run --rm cli admin disable-oidc` switches the configuration stored in the web UI off.
 
