@@ -29,16 +29,16 @@ Only fixed details are read: name, logon name, `userPrincipalName`, email, depar
 
 With [several domains or forests](/en/guides/active-directory/#several-domains-or-forests) connected, each group is read over the connection of its domain. A group whose domain belongs to no connection fails the reconciliation, so nobody is wrongly taken as gone.
 
-## Department from rules
+## Department and location from rules
 
-If your AD does not keep the **Department** field but places departments by OU or office, rules set the department:
+If your AD does not keep the **Department** field, or people should be placed at a location, rules set a department, a location from the location tree or both from the OU or office:
 
 | Rule | Example | Matches |
 |---|---|---|
 | OU contains | `OU=Sales` | `OU=Team,OU=Sales,DC=company,DC=com`, not `OU=Presales` |
 | Office is | `North plant` | office “North plant” (`physicalDeliveryOfficeName`) |
 
-The first matching rule applies; a department kept in AD always comes first. Case does not matter. A department from a rule is a proposal: it reaches the inventory only when you create people or take over details.
+The first matching rule applies, for the department and for the location the first one naming it; a department kept in AD always comes first. Case does not matter. Department and location from a rule are proposals: they reach the inventory only when you create people or take over details (difference **Location**). You also see and change a person's location under **Master data › Responsible persons**.
 
 ## Matching with responsible persons
 

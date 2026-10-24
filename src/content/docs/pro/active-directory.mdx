@@ -29,16 +29,16 @@ Gelesen werden nur feste Angaben: Name, Anmeldename, `userPrincipalName`, E-Mail
 
 Sind [mehrere Domänen oder Forests](/guides/active-directory/#mehrere-domänen-oder-forests) angebunden, wird jede Gruppe über die Verbindung ihrer Domäne gelesen. Eine Gruppe, deren Domäne zu keiner Verbindung gehört, lässt den Abgleich scheitern, damit niemand fälschlich als entfernt gilt.
 
-## Abteilung aus Regeln
+## Abteilung und Standort aus Regeln
 
-Pflegt Ihr AD das Feld **Abteilung** nicht, sondern ordnet Abteilungen über OUs oder Büros, setzen Regeln die Abteilung:
+Pflegt Ihr AD das Feld **Abteilung** nicht, oder sollen Personen einem Standort zugeordnet werden, setzen Regeln aus OU oder Büro eine Abteilung, einen Standort aus dem Standortbaum oder beides:
 
 | Regel | Beispiel | Passt zu |
 |---|---|---|
 | OU enthält | `OU=Vertrieb` | `OU=Team,OU=Vertrieb,DC=firma,DC=de`, nicht `OU=Vertriebsinnendienst` |
 | Büro ist | `Werk Nord` | Büro „Werk Nord“ (`physicalDeliveryOfficeName`) |
 
-Die erste passende Regel gilt; eine im AD gepflegte Abteilung geht immer vor. Groß- und Kleinschreibung zählen nicht. Die Abteilung aus einer Regel ist ein Vorschlag: Sie kommt nur ins Inventar, wenn Sie Personen anlegen oder Angaben übernehmen.
+Die erste passende Regel gilt, für die Abteilung und für den Standort jeweils die erste, die ihn nennt; eine im AD gepflegte Abteilung geht immer vor. Groß- und Kleinschreibung zählen nicht. Abteilung und Standort aus einer Regel sind Vorschläge: Sie kommen nur ins Inventar, wenn Sie Personen anlegen oder Angaben übernehmen (Abweichung **Standort**). Den Standort einer Person sehen und ändern Sie auch unter **Stammdaten › Verantwortliche**.
 
 ## Abgleich mit den Verantwortlichen
 
