@@ -64,6 +64,17 @@ Der Server muss den Domänencontroller erreichen dürfen: Sein Netz steht in `SA
 
 </Steps>
 
+## Mehrere Domänen oder Forests
+
+<Badge text="Pro" variant="note" /> Ab Pro binden Sie bis zu 20 Domänen oder Forests an, etwa nach einem Zukauf. Jede bekommt unter **Einstellungen › Verzeichnisdienste** über **Weitere Domäne anbinden** eine eigene Verbindung mit eigenem Dienstkonto, eigener CA und eigenen OUs; Vorbereitung und Test wie oben, je Domänencontroller.
+
+- **Ein Abgleich für alle:** Jede aktive Verbindung wird in ihrem Abstand gelesen, auf Knopfdruck alle. Scheitert eine, behalten ihre Computer ihren Stand; die anderen werden trotzdem gespeichert.
+- **Herkunft:** Unter **Discovery › Active Directory** steht bei jedem Computer, aus welcher Verbindung er kommt.
+- **Konflikte löst die Reihenfolge:** Wird ein Computer über zwei Verbindungen gefunden, gehört er zur oberen. Passen Computer zweier Domänen zu demselben Asset, bekommt es der Computer der oberen Verbindung; der andere wird zum Konflikt. Zuordnungen von Hand gehen immer vor. Die Reihenfolge ändern Sie mit den Pfeilen.
+- **Entfernen** einer Verbindung löscht ihre Konfiguration; ihre Computer gelten beim nächsten Abgleich als entfernt, Assets bleiben unverändert.
+- **Ohne Lizenz für Pro** liest der Abgleich nur die erste Verbindung; die übrigen bleiben gespeichert.
+- **Personen (Pro):** Eine Gruppe wird über die Verbindung ihrer Domäne gelesen (die `DC=`-Teile ihres DN). Wer in eine andere Domäne umgezogen ist und dort ein aktives Konto hat, erscheint weder als Austritt noch als Eintritt.
+
 ## Häufige Fehler
 
 | Meldung | Ursache und Abhilfe |

@@ -27,6 +27,8 @@ Gelesen wird über die Verbindung, die Sie unter **Einstellungen › Verzeichnis
 
 Gelesen werden nur feste Angaben: Name, Anmeldename, `userPrincipalName`, E-Mail, Abteilung, Funktion, Büro, Firma, OU, ob das Konto deaktiviert ist, und wann es angelegt wurde. Höchstens 20 000 Personen je Abgleich.
 
+Sind [mehrere Domänen oder Forests](/guides/active-directory/#mehrere-domänen-oder-forests) angebunden, wird jede Gruppe über die Verbindung ihrer Domäne gelesen. Eine Gruppe, deren Domäne zu keiner Verbindung gehört, lässt den Abgleich scheitern, damit niemand fälschlich als entfernt gilt.
+
 ## Abteilung aus Regeln
 
 Pflegt Ihr AD das Feld **Abteilung** nicht, sondern ordnet Abteilungen über OUs oder Büros, setzen Regeln die Abteilung:
@@ -43,6 +45,14 @@ Die erste passende Regel gilt; eine im AD gepflegte Abteilung geht immer vor. Gr
 - Eine Person passt zu einem Verantwortlichen, wenn dessen E-Mail-Adresse der E-Mail oder dem `userPrincipalName` im AD entspricht.
 - **Nichts gelangt von selbst ins Inventar:** Neue Personen legen Sie gesammelt als Verantwortliche an; abweichende Angaben (Name, E-Mail, Abteilung, Funktion) übernehmen Sie Feld für Feld. Leere Angaben im AD überschreiben nichts.
 - Jeden Eintrag können Sie von Hand zuordnen, als „passt nicht“ markieren, ignorieren oder zurücksetzen. Ihre Entscheidung gilt auch bei späteren Abgleichen.
+
+## Geräte und Verantwortliche
+
+Nennt im AD **Verwaltet von** (`managedBy`) eines Computers eine Person aus den gewählten Gruppen, und ist der Computer einem Asset zugeordnet, schlägt der Bereich **Geräte** diese Person als Verantwortliche des Assets vor, sofern sie im Inventar zugeordnet ist und das Asset einen anderen oder keinen Verantwortlichen hat.
+
+- **Vorschlag übernehmen** setzt den Verantwortlichen am Asset, mit Ihren Rechten im Inventar.
+- **Nicht übernehmen** merkt sich den Vorschlag; Sie können es sofort rückgängig machen. Nennt das AD später jemand anderen, erscheint ein neuer Vorschlag.
+- Gezählt, aber nicht vorgeschlagen werden Computer, deren Verwalter niemand aus den gewählten Gruppen ist oder noch keinem Verantwortlichen zugeordnet.
 
 ## Ein- und Austritte
 

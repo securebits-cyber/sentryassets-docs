@@ -64,6 +64,17 @@ The server must be allowed to reach the domain controller: its network is listed
 
 </Steps>
 
+## Several domains or forests
+
+<Badge text="Pro" variant="note" /> From Pro you connect up to 20 domains or forests, for example after an acquisition. Each gets a connection of its own under **Settings › Directory services** via **Connect another domain**, with its own service account, CA and OUs; preparation and test as above, per domain controller.
+
+- **One reconciliation for all:** each active connection is read at its interval, all of them on request. If one fails, its computers keep their state; the others are stored anyway.
+- **Origin:** under **Discovery › Active Directory** each computer shows the connection it came from.
+- **The order resolves conflicts:** a computer found over two connections belongs to the upper one. If computers of two domains match the same asset, the computer of the upper connection gets it; the other becomes a conflict. Manual links always come first. Change the order with the arrows.
+- **Removing** a connection deletes its configuration; its computers count as removed with the next reconciliation, assets stay unchanged.
+- **Without a Pro licence** only the first connection is read; the others stay saved.
+- **People (Pro):** a group is read over the connection of its domain (the `DC=` parts of its DN). Someone who moved to another domain and has an active account there shows up neither as leaving nor as joining.
+
 ## Common errors
 
 | Message | Cause and fix |

@@ -27,6 +27,8 @@ Reading uses the connection you set up and tested under **Settings › Directory
 
 Only fixed details are read: name, logon name, `userPrincipalName`, email, department, job title, office, company, OU, whether the account is disabled, and when it was created. At most 20,000 people per reconciliation.
 
+With [several domains or forests](/en/guides/active-directory/#several-domains-or-forests) connected, each group is read over the connection of its domain. A group whose domain belongs to no connection fails the reconciliation, so nobody is wrongly taken as gone.
+
 ## Department from rules
 
 If your AD does not keep the **Department** field but places departments by OU or office, rules set the department:
@@ -43,6 +45,14 @@ The first matching rule applies; a department kept in AD always comes first. Cas
 - A person matches a responsible person whose email address equals the email or the `userPrincipalName` in AD.
 - **Nothing enters the inventory on its own:** you create new people as responsible persons in bulk and take over differing details (name, email, department, job title) field by field. Empty values in AD overwrite nothing.
 - You can link any entry by hand, mark it as “not this one”, ignore it or reset it. Your decision holds over later reconciliations.
+
+## Devices and responsible persons
+
+If **Managed by** (`managedBy`) of a computer in AD names a person of the chosen groups, and the computer is linked to an asset, the **Devices** section proposes that person as the asset's responsible person, provided they are linked in the inventory and the asset has another responsible person or none.
+
+- **Take over proposal** sets the asset's responsible person, with your rights in the inventory.
+- **Do not take over** remembers the proposal; you can undo it at once. If AD names someone else later, a new proposal appears.
+- Computers whose manager is nobody of the chosen groups, or not linked to a responsible person yet, are counted but not proposed.
 
 ## Joiners and leavers
 
