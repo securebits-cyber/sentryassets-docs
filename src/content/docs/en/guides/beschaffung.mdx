@@ -167,11 +167,27 @@ If two people edit the same request at the same time, the server accepts only th
 
 ## As PDF and by e-mail
 
-Next to **Print**, the request's page offers two more ways. Both make the PDF in the browser, laid out like the printed form with logo, positions and **Approval** box. The data do not leave your device for this, and the server sends nothing.
+Beside **Print**, the request's page offers further ways. The PDF is always built in the browser, laid out like the printed form with logo, positions and the **Approval** box.
 
-- **As PDF** saves the request as a PDF file, such as `Procurement-request-BA-0001.pdf`.
-- **Send by e-mail** saves a mail file (`.eml`) with subject, summary, a link to the request and the PDF attached. The file is marked as unsent: when you open it, Outlook shows it as a draft and you only add the recipient.
-- **without attachment** opens your mail program with subject, summary and link, but without the PDF. Use it with mail programs that do not open mail files as drafts, and attach the PDF yourself.
+- **As PDF** saves the request as a PDF file, for example `Procurement-request-BA-0001.pdf`.
+- **Send by e-mail** sends the request with the PDF attached through your organisation's mail server. The button appears once the [mail server is set up](/en/guides/benachrichtigungen/) and domains are allowed for sending, and only for roles that may change the request.
+- **without attachment** opens your own mail program with subject, summary and link, but without the PDF. It is there as long as sending through the mail server is not set up; a hint beside **Status** then says what is missing.
+
+### Sending by e-mail
+
+<Steps>
+
+1. On the request's page, choose **Send by e-mail**.
+
+2. Under **Recipients**, enter one to five addresses separated by commas. Only addresses in the domains the administration allowed are accepted; the dialog names them.
+
+3. Add a **Message** if you like, at most 1,000 characters, and choose **Send**.
+
+</Steps>
+
+SentryAssets writes subject and text from the request: number, subject, requester, total and a link to the request, plus your message and your name. Replies go to your own address; the sender stays the configured one. Sending runs in the background; a notice tells you once the mail server has the mail, or why not. If the mail server accepts only some recipients, the notice says so.
+
+The limits: at most 5 recipients per sending, 20 sendings per person and hour and 200 per organisation and day; addresses with `%` or `!` before the `@` are refused. The PDF is checked like an uploaded document, kept encrypted until it went out and deleted afterwards. The audit log names the number of recipients and their domains, never an address or the message.
 
 ## Linking to the inventory
 
@@ -328,8 +344,8 @@ What counts is the last change of status, not the last edit: a change to the dep
 
 | Role | Procurement requests and orders |
 |---|---|
-| Administrator, Information security, Editor | view, add, change, record progress, delete, link, reorder |
-| Data protection, Auditor, Read only | view, print, save as PDF or mail file |
+| Administrator, Information security, Editor | view, add, change, record progress, delete, link, reorder, send by e-mail |
+| Data protection, Auditor, Read only | view, print, save as PDF |
 
 The signed copy shows only to people whose confidentiality level allows the document; others see the note “A document above your confidentiality level”. With [rights per location](/en/pro/standortrechte/) (from Pro), a request with a location needs write access at that location, a move at both; a person bound to locations writes no request without a location.
 
@@ -371,7 +387,8 @@ Allowed are **PNG** and **JPEG** of at most **512 KB** and **4096 × 4096 pixels
 - **“An order needs no signed approval.”** No signed copy can be attached to an order. If the purchase needs an approval, add a request.
 - **“Please choose a storage location”:** every position ticked **Book … in** needs a **Storage location**.
 - **Characters show as “?” in the PDF:** the PDF uses the standard fonts, which know Western European characters. It replaces others with “?”; the file stays readable. The printed form from **Print** shows all characters.
-- **Outlook does not open the mail file as a draft:** use **without attachment** and attach the file from **As PDF** yourself.
+- **"An address is not in an allowed domain."** Sending works only to domains allowed under **Settings › E-mail**, subdomains not included. Ask the administration to add the domain.
+- **No "Send by e-mail", only "without attachment":** the mail server or the allowed domains are missing; the hint beside **Status** names what.
 - **“The code could not be looked up just now. Please scan it again.”** The connection to the server was briefly interrupted. Scan the package again; it was not counted.
 - **“An existing asset has this serial number already.”** Check whether the code was read twice. If it really is another device, tick **Take known serial numbers anyway**.
 - **“The category has required fields. Create these assets one by one.”** Use **Add asset** for each piece.
