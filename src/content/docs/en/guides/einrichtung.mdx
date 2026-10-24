@@ -112,6 +112,8 @@ Alternatively, set OIDC in a `docker-compose.override.yml` with `SA_OIDC_ISSUER`
 
 Under **Settings › Users** you see all accounts with role, sign-in method, status and last sign-in. **Disable** revokes access at once, with "Undo" in the notice. You do not change your own account there; that is what the profile is for. One administrator and one way to sign in always remain.
 
+**Email address:** for local accounts, choose **Change** in the **Email** column, enter the address and choose **Save**; an empty field removes it. This works for your own account too, for example the account from `cli admin create-admin`, which is created without an address. The page asks you to confirm your sign-in first. [Email notifications](/en/guides/benachrichtigungen/) go to this address, and [My devices](/en/pro/selbstbedienung/) finds the person in the directory through it; that is why only administrators set it, never the account itself. OIDC accounts take their address from the identity provider.
+
 ## Further settings
 
 - **Directory services:** syncing computers with Active Directory over LDAPS, see [Features](/en/reference/funktionen/#directory).

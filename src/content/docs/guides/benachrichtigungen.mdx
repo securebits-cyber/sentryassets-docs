@@ -114,7 +114,7 @@ Das Profil zeigt nur die Kategorien, deren Bereich Ihre Rolle lesen darf. Abweic
 
 Empfänger ist immer die Adresse des eigenen Kontos.
 
-- **Lokale Konten:** Die Administration trägt die Adresse beim Anlegen unter **Einstellungen › Benutzer** als **E-Mail (optional)** ein.
+- **Lokale Konten:** Die Administration trägt die Adresse beim Anlegen unter **Einstellungen › Benutzer** als **E-Mail (optional)** ein oder später mit **Ändern** in der Spalte **E-Mail**, auch am eigenen Konto (siehe [Benutzer verwalten](/guides/einrichtung/#benutzer-verwalten)).
 - **OIDC-Konten:** SentryAssets übernimmt den Claim `email` bei jeder Anmeldung, aber nur, wenn der Anbieter die Adresse als bestätigt meldet (`email_verified` ist `true`). Eine unbestätigte Adresse wird gar nicht gespeichert; sonst erhielte, wer beim Anbieter eine fremde Adresse eintragen kann, die Benachrichtigungen dieses Kontos. Eine Adresse über 320 Zeichen wird verworfen, nicht gekürzt.
 
 Ohne bestätigte Adresse wird nichts gesendet; das Profil sagt dann „Ihr Konto hat keine bestätigte E-Mail-Adresse.“

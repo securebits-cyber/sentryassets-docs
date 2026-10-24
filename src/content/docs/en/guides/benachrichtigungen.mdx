@@ -114,7 +114,7 @@ The profile only shows categories whose area your role may read. Deviations foun
 
 The recipient is always the address of the person's own account.
 
-- **Local accounts:** the administration enters the address when creating the account under **Settings › Users** as **Email (optional)**.
+- **Local accounts:** the administration enters the address when creating the account under **Settings › Users** as **Email (optional)**, or later with **Change** in the **Email** column, also for its own account (see [Managing users](/en/guides/einrichtung/#managing-users)).
 - **OIDC accounts:** SentryAssets takes the `email` claim at every sign-in, but only if the provider reports the address as confirmed (`email_verified` is `true`). An unconfirmed address is not stored at all; otherwise anyone able to enter someone else's address at the provider would receive that account's notifications. An address over 320 characters is dropped, not shortened.
 
 Without a confirmed address nothing is sent; the profile then says “Your account has no confirmed e-mail address.”

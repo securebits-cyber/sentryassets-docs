@@ -112,6 +112,8 @@ Alternativ legen Sie OIDC in einer `docker-compose.override.yml` mit `SA_OIDC_IS
 
 Unter **Einstellungen › Benutzer** sehen Sie alle Konten mit Rolle, Anmeldeart, Status und letzter Anmeldung. **Deaktivieren** entzieht den Zugriff sofort, mit „Rückgängig“ im Hinweis. Ihr eigenes Konto ändern Sie dort nicht; dafür gibt es das Profil. Eine Administration und ein Weg zur Anmeldung bleiben immer bestehen.
 
+**E-Mail-Adresse:** Bei lokalen Konten wählen Sie in der Spalte **E-Mail** **Ändern**, tragen die Adresse ein und wählen **Speichern**; ein leeres Feld entfernt sie. Das geht auch für Ihr eigenes Konto, etwa für das Konto aus `cli admin create-admin`, das ohne Adresse angelegt wird. Die Seite fragt vorher nach einer Bestätigung Ihrer Anmeldung. An die Adresse gehen die [Benachrichtigungen per E-Mail](/guides/benachrichtigungen/), und über sie findet [Meine Geräte](/pro/selbstbedienung/) die Person im Verzeichnis; deshalb setzt nur die Administration sie, nie das Konto selbst. Bei OIDC-Konten kommt die Adresse vom Identitätsanbieter.
+
 ## Weitere Einstellungen
 
 - **Verzeichnisdienste:** Abgleich der Computer mit dem Active Directory per LDAPS, siehe [Funktionen](/reference/funktionen/#verzeichnis).
