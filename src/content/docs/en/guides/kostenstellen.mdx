@@ -1,0 +1,101 @@
+---
+title: Cost centers
+description: Create your accounting's cost centers, assign assets, licences, contracts and procurement to them, filter lists by them and analyse costs by cost center in the cost report, with a CSV export.
+sidebar:
+  label: Cost centers
+  order: 11
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+Cost centers assign costs to accounting. In SentryAssets you keep them once under **Master data › Cost centers** and then choose them on assets, software licences, contracts and procurement requests and orders. The cost report then sums up what each cost center costs.
+
+Cost centers are part of the Community edition.
+
+## Prerequisites
+
+- Creating and changing cost centers: **Administrator** or **Information security**, not bound to locations (see [Rights](#rights)).
+- Assigning a cost center: the right to change the object concerned.
+- The codes and names used by your accounting.
+
+## Creating a cost center
+
+<Steps>
+
+1. Open **Master data › Cost centers** and choose **Create cost center**.
+
+2. Enter the **Code**, the number used by accounting, such as `4100`. It has at most 20 characters and is unique within the organisation.
+
+3. Enter the **Name**, such as “Sales” (at most 100 characters).
+
+4. If you like, choose a person from the responsible persons under **Responsible**.
+
+5. Save.
+
+</Steps>
+
+The list is sorted by code, with a search and the filter **Active**, **Archived** or **All**. **Edit** changes code, name and person. An organisation has at most 2,000 cost centers.
+
+### Archiving instead of deleting
+
+**Delete** only works while nothing is assigned to a cost center. Otherwise SentryAssets says it is still assigned and offers **Archive**: existing assignments stay, but it can no longer be chosen, and saving other fields does not object to it. **Restore** makes it selectable again.
+
+## Assigning a cost center
+
+Assets, software licences, contracts and procurement requests and orders have the field **Cost center**.
+
+<Steps>
+
+1. Open the object's form, for example **Edit** on an asset, or create a new one.
+
+2. Under **Cost center**, choose the matching cost center or **None**.
+
+3. Save.
+
+</Steps>
+
+The object's details show the cost center with code and name, an archived one marked “archived”. In procurement the free-text field **Department** stays next to it; the printout and PDF of a request name the cost center. A request's cost center is not part of what the management approves: it can still be changed after ordering or receipt, for example to correct a wrong booking. Every change is in the audit log.
+
+## Filtering lists
+
+The lists of assets, licences, contracts and procurement have a filter set to **All cost centers** by default. Choose a cost center there and the list shows only objects with it.
+
+The CSV export of the asset list has the column **Cost center** with code and name and keeps a filter you set.
+
+## Cost report by cost center
+
+Under **Reports › Costs**, next to **Costs by area**, the table **Costs by cost center** shows:
+
+- **Licences and contracts:** the running costs per cost center and currency, as in the rest of the report **Per month**, **Per year** and **One-time in** this year.
+- **Procurement:** per cost center, this year's requests and orders with the status **Ordered** or **Taken into the inventory**, counted by order date, or by receipt date if there is no order date. Positions with a price are summed, kept apart by what the request states: gross, net or unspecified, never mixed. Rejected, withdrawn and not yet ordered requests do not count.
+- The row **Without cost center** comes last.
+
+Procurement sums are deliberately not added to the monthly and yearly costs, as one-off purchases would otherwise mix with running costs. Only roles that may read procurement see the procurement column.
+
+**Export CSV** adds the cost center to every line of the report and appends a section with the sums by cost center.
+
+## Rights
+
+| Role | Cost centers | Assigning |
+|---|---|---|
+| Administrator, Information security | view, create, change, archive, delete | where they may change the object |
+| Editor | view | where they may change the object |
+| Data protection, Auditor, Read only | view | – |
+
+- Cost centers apply to the whole organisation. With [rights per location](/en/pro/standortrechte/) (from Pro), creating and changing them is therefore possible only without a location binding. Assigning follows the location binding of the object, such as the asset.
+- The **responsible person** is a personal detail. It shows only to roles allowed to read personal fields, and only these roles set it. If the person is deleted, the assignment is cleared and recorded in the audit log.
+- **Audit log:** creating, changing and deleting with the changed fields; assignments are in the objects' entries.
+
+## Check the result
+
+- The cost center is listed under **Master data › Cost centers** with code and name.
+- An assigned asset appears in the asset list when you filter by the cost center.
+- **Reports › Costs** shows the cost center in **Costs by cost center**.
+
+## Troubleshooting
+
+- **“This code is already taken.”** Each code exists once per organisation. Check the filter **All**; the code may belong to an archived cost center.
+- **“… is still assigned and cannot be deleted.”** Archive the cost center instead.
+- **“This cost center is archived and can no longer be chosen.”** Choose an active one, or restore the archived one.
+- **“At most 2000 cost centers are possible.”** Delete cost centers you no longer need and that have nothing assigned.
+- **A request is missing from the cost report:** it is not ordered yet, or its order date lies in another year. Positions without a price do not count.

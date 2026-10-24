@@ -1,0 +1,101 @@
+---
+title: Kostenstellen
+description: Kostenstellen der Buchhaltung anlegen, Assets, Lizenzen, Verträgen und der Beschaffung zuordnen, Listen danach filtern und die Kosten im Kostenbericht nach Kostenstelle auswerten und als CSV exportieren.
+sidebar:
+  label: Kostenstellen
+  order: 11
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+Kostenstellen ordnen Kosten der Buchhaltung zu. In SentryAssets pflegen Sie sie einmal unter **Stammdaten › Kostenstellen** und wählen sie dann an Assets, Software-Lizenzen, Verträgen sowie Beschaffungsanträgen und Bestellungen. Der Kostenbericht summiert danach, was jede Kostenstelle kostet.
+
+Kostenstellen gehören zur Community-Edition.
+
+## Voraussetzungen
+
+- Kostenstellen anlegen und ändern: **Administrator** oder **Informationssicherheit**, ohne Bindung an Standorte (siehe [Rechte](#rechte)).
+- Eine Kostenstelle zuordnen: das Recht, das jeweilige Objekt zu ändern.
+- Die Kennungen und Bezeichnungen aus Ihrer Buchhaltung.
+
+## Kostenstelle anlegen
+
+<Steps>
+
+1. Öffnen Sie **Stammdaten › Kostenstellen** und wählen Sie **Kostenstelle anlegen**.
+
+2. Tragen Sie die **Kennung** ein, die Nummer aus der Buchhaltung, etwa `4100`. Sie hat höchstens 20 Zeichen und ist in der Organisation eindeutig.
+
+3. Tragen Sie die **Bezeichnung** ein, etwa „Vertrieb“ (höchstens 100 Zeichen).
+
+4. Wählen Sie bei Bedarf unter **Verantwortlich** eine Person aus den Verantwortlichen.
+
+5. Speichern Sie.
+
+</Steps>
+
+Die Liste ist nach Kennung sortiert, mit Suche und dem Filter **Aktiv**, **Archiviert** oder **Alle**. **Bearbeiten** ändert Kennung, Bezeichnung und Person. Eine Organisation hat höchstens 2 000 Kostenstellen.
+
+### Archivieren statt löschen
+
+**Löschen** gelingt nur, solange einer Kostenstelle nichts zugeordnet ist. Sonst meldet SentryAssets, dass sie noch zugeordnet ist, und bietet **Archivieren** an: Bestehende Zuordnungen bleiben, neu wählbar ist sie dann nicht mehr, und beim Speichern anderer Felder wird sie nicht beanstandet. **Reaktivieren** macht sie wieder wählbar.
+
+## Kostenstelle zuordnen
+
+Assets, Software-Lizenzen, Verträge sowie Beschaffungsanträge und Bestellungen haben das Feld **Kostenstelle**.
+
+<Steps>
+
+1. Öffnen Sie das Formular des Objekts, etwa **Bearbeiten** an einem Asset, oder legen Sie ein neues an.
+
+2. Wählen Sie unter **Kostenstelle** die passende Kostenstelle oder **Keine**.
+
+3. Speichern Sie.
+
+</Steps>
+
+Die Details des Objekts zeigen die Kostenstelle mit Kennung und Bezeichnung, eine archivierte mit dem Zusatz „archiviert“. In der Beschaffung bleibt das Freitextfeld **Abteilung** daneben bestehen; der Ausdruck und das PDF eines Antrags nennen die Kostenstelle. Die Kostenstelle eines Antrags gehört nicht zu dem, was die Geschäftsleitung freigibt: Sie lässt sich auch nach Bestellung oder Eingang ändern, etwa um eine Fehlbuchung zu korrigieren. Jede Änderung steht im Audit-Log.
+
+## Listen filtern
+
+Die Listen der Assets, Lizenzen, Verträge und der Beschaffung haben einen Filter mit **Alle Kostenstellen** als Voreinstellung. Wählen Sie dort eine Kostenstelle, zeigt die Liste nur Objekte mit ihr.
+
+Der CSV-Export der Asset-Liste hat die Spalte **Kostenstelle** mit Kennung und Bezeichnung und übernimmt einen gesetzten Filter.
+
+## Kostenbericht nach Kostenstelle
+
+Unter **Berichte › Kosten** steht neben **Kosten nach Bereichen** die Tabelle **Kosten nach Kostenstelle**:
+
+- **Lizenzen und Verträge:** die laufenden Kosten je Kostenstelle und Währung, wie im übrigen Bericht **Je Monat**, **Je Jahr** und **Einmalig in** diesem Jahr.
+- **Beschaffung:** je Kostenstelle die Anträge und Bestellungen dieses Jahres mit dem Status **Bestellt** oder **Im Inventar aufgenommen**, gezählt nach dem Bestelldatum, ohne Bestelldatum nach dem Eingangsdatum. Summiert werden die Positionen mit Preis, getrennt nach der Angabe im Antrag: brutto, netto oder ohne Angabe, nie vermischt. Abgelehnte, zurückgezogene und noch nicht bestellte Anträge zählen nicht.
+- Die Zeile **Ohne Kostenstelle** steht zuletzt.
+
+Beschaffungssummen werden bewusst nicht in die Monats- und Jahreskosten eingerechnet: Einmalige Käufe würden sonst mit laufenden Kosten vermischt. Die Beschaffungsspalte sehen nur Rollen, die die Beschaffung lesen dürfen.
+
+**CSV exportieren** hängt die Kostenstelle an jede Zeile des Berichts und fügt einen Abschnitt mit den Summen nach Kostenstelle an.
+
+## Rechte
+
+| Rolle | Kostenstellen | Zuordnen |
+|---|---|---|
+| Administrator, Informationssicherheit | ansehen, anlegen, ändern, archivieren, löschen | wenn sie das Objekt ändern dürfen |
+| Bearbeitung | ansehen | wenn sie das Objekt ändern darf |
+| Datenschutz, Prüfung, Lesend | ansehen | – |
+
+- Kostenstellen gelten für die ganze Organisation. Anlegen und Ändern ist deshalb mit [Rechten je Standort](/pro/standortrechte/) (ab Pro) nur ohne Standortbindung möglich. Für das Zuordnen gilt die Standortbindung des Objekts, etwa des Assets.
+- Die **verantwortliche Person** ist eine personenbezogene Angabe. Sie erscheint nur für Rollen mit dem Recht auf personenbezogene Felder, und nur diese Rollen setzen sie. Wird die Person gelöscht, wird die Zuordnung geleert und im Audit-Log vermerkt.
+- **Audit-Log:** Anlegen, Ändern und Löschen mit den geänderten Feldern; Zuordnungen stehen in den Einträgen der Objekte.
+
+## Ergebnis prüfen
+
+- Die Kostenstelle steht unter **Stammdaten › Kostenstellen** mit Kennung und Bezeichnung.
+- Ein zugeordnetes Asset erscheint in der Asset-Liste, wenn Sie nach der Kostenstelle filtern.
+- **Berichte › Kosten** zeigt die Kostenstelle in **Kosten nach Kostenstelle**.
+
+## Fehlerbehebung
+
+- **„Diese Kennung ist schon vergeben.“** Jede Kennung gibt es je Organisation nur einmal. Prüfen Sie den Filter **Alle**; die Kennung kann zu einer archivierten Kostenstelle gehören.
+- **„… ist noch zugeordnet und kann nicht gelöscht werden.“** Archivieren Sie die Kostenstelle stattdessen.
+- **„Diese Kostenstelle ist archiviert und nicht mehr wählbar.“** Wählen Sie eine aktive oder reaktivieren Sie die archivierte.
+- **„Es sind höchstens 2000 Kostenstellen möglich.“** Löschen Sie nicht mehr benötigte Kostenstellen ohne Zuordnung.
+- **Ein Antrag fehlt im Kostenbericht:** Er ist noch nicht bestellt, oder sein Bestelldatum liegt in einem anderen Jahr. Positionen ohne Preis zählen nicht mit.
