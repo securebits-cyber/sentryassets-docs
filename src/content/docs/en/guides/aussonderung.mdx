@@ -1,0 +1,169 @@
+---
+title: Disposal with proof of erasure
+description: Take a device out of service traceably, record how its data media were erased or destroyed after BSI CON.6 and DIN 66399, keep the proof and close the disposal with a protocol.
+sidebar:
+  label: Disposal
+  order: 10
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+When a device leaves your stock because it is defective, obsolete or sold, SentryAssets disposes of it in steps: you record why it leaves, what happened to its data media, who did that and who checked it, where the proof is kept and where the device went. At the end there is a protocol to sign.
+
+Disposal is part of the Community edition.
+
+## What for: CON.6 and DIN 66399
+
+Module **CON.6 “Deleting and destroying”** of the IT-Grundschutz Compendium requires that information on data media is erased in a controlled way, or the media destroyed, before they are passed on or discarded, and that this can be traced (source: BSI, IT-Grundschutz Compendium, Edition 2023, module CON.6). The GDPR likewise requires personal data to be erased once no longer needed, and the measures taken to be demonstrable (Art. 5(1)(e) and (f), Art. 32 GDPR).
+
+The standard **DIN 66399** “Office and data technology – Destruction of data carriers” grades physical destruction by three properties (source: DIN 66399-1 and -2):
+
+- **Material class:** the kind of medium, such as `H` for hard disks, `E` for electronic media like SSDs and USB sticks, `T` for magnetic media like tapes and `O` for optical media.
+- **Protection class:** how sensitive the data are, from 1 (normal) through 2 (high) to 3 (very high).
+- **Security level:** how small the remains are, from 1 to 7. Protection class 1 goes with levels 1 to 3, class 2 with 3 to 5, class 3 with 4 to 7. Common are `H-3` to `H-5` or `E-3` to `E-5`.
+
+For erasing without destruction, SentryAssets names the methods of **NIST SP 800-88** (Clear and Purge, source: NIST Special Publication 800-88 Rev. 1, Guidelines for Media Sanitization). Overwriting is enough for hard disks with a normal protection requirement; erase SSDs and phones with secure erase or cryptographically, and destroy them for a high one.
+
+SentryAssets records what you enter; it does not check that the erasure worked. Support, not an audit.
+
+## Prerequisites
+
+- A role that may write disposals and the inventory: **Administrator**, **Information security** or **Editor** (see [Rights](#rights)).
+- For persons and notes: the right to read personal fields (Administrator, Information security, Editor).
+- The device is no longer handed out to a person, at the latest when closing.
+- For the proof: a configured document store; for a protocol with a letterhead, a [logo of the organisation](/en/guides/beschaffung/#logo-of-the-organisation-for-the-printed-form).
+
+## Beginning a disposal
+
+<Steps>
+
+1. Open the asset. The **Disposal** card reads “Take out of service with proof of erasure”.
+
+2. Choose **Dispose of**.
+
+3. Choose the **Reason**: **Defective**, **Obsolete**, **Replaced**, **Lost or stolen**, **Returned to the lessor**, **Sale or donation** or **Other**.
+
+4. Add a **Note (optional)** if needed, without names or other personal data.
+
+5. Confirm with **Dispose of**.
+
+</Steps>
+
+The asset is **out of service** at once and no longer handed out. Name, inventory and serial number, manufacturer and model are frozen for the disposal. Each disposal gets a number per organisation, such as `AUS-0001`. Right after beginning, **Undo** in the message takes the step back. The disposal's page shows the steps **Retiring**, **Data media**, **Proof** and **Closing** as cards.
+
+## Recording the data media
+
+<Steps>
+
+1. On the **Data media** card, choose **Change details**.
+
+2. Under **Data media present**, choose **Yes**, **No** or **Unknown**. Built-in storage counts too, as in printers, phones and routers.
+
+3. For **Yes**, choose the **Method**:
+   - **Overwriting (NIST SP 800-88 Clear)**
+   - **Secure erasure (NIST SP 800-88 Purge)**
+   - **Drive secure erase (ATA/NVMe)**
+   - **Cryptographic erase (key destroyed)**
+   - **Physical destruction (DIN 66399)**
+   - **Handed over to a certified disposer**
+
+4. For destruction or a disposer, choose the **Security level after DIN 66399** as material class and level, such as `H-4`.
+
+5. Enter the **Number of data media** (1 to 1,000) and, if you like, the **Serial numbers of the data media (optional)**, one per line, at most 100.
+
+6. Under **Performed by**, choose one of the responsible persons, enter a **Company (optional)** such as the disposer, or both, and the date under **Performed on**.
+
+7. Under **Checked by (optional)**, choose a second person. The four-eyes principle is recommended; the same person twice is refused.
+
+8. Save.
+
+</Steps>
+
+Without data media these details do not apply, and no proof of erasure is needed.
+
+## Keeping the proof
+
+You keep the proof as a document: an erasure log, a certificate of destruction or of disposal.
+
+<Steps>
+
+1. On the **Proof** card, choose **Upload the proof**.
+
+2. Choose the file and upload it. The document is called “Proof of erasure AUS-…: …” and is linked to the disposal.
+
+</Steps>
+
+The document is listed under **Documents** with versions, confidentiality and retention like any other; its page lists the disposal as a use. While the disposal is open, **Replace the proof** swaps it and **Unlink the proof** removes it. If it is above your confidentiality level, you only see that it is kept and can neither replace nor unlink it.
+
+## Closing the disposal
+
+Beforehand, the **Closing** card names what is still open: a handover of the asset, assigned licence seats and relations to other assets.
+
+<Steps>
+
+1. Take a handed-out asset back first. While it is handed out, the disposal cannot be closed.
+
+2. Choose **Close**.
+
+3. Choose the **Whereabouts**: **Scrapped**, **Sold**, **Returned to the lessor**, **Donated** or **Lost or stolen**. For a sale, donation or lease, enter the **Recipient** if needed; for private persons, “private” is enough.
+
+4. Enter the **Date**.
+
+5. Confirm with **Close for good**.
+
+</Steps>
+
+The asset is then **disposed of**. With data media “Yes”, the method and date of erasure are required, for destruction the security level as well. Licence seats and relations do not stop the closing; they only remind you to free the seats and check the relations.
+
+### Closing without proof and handing it in later
+
+A disposer's certificate often arrives weeks later. You may therefore close without proof. The disposal is then marked **Without proof**, in the list, on the asset's card and in the protocol, as long as data media are “Yes” or “Unknown”. Hand the proof in later on the same page with **Upload the proof**; the mark then disappears.
+
+<Aside type="caution" title="Unchangeable once closed">
+A closed disposal can no longer be changed, not even in the database. The one exception is handing in a missing proof. A proof once kept is then neither replaced nor unlinked, and the document can no longer be deleted, not even after its retention period. So nobody can remove the proof of an erasure afterwards.
+</Aside>
+
+## Cancelling a disposal
+
+If the disposal was a mistake, choose **Cancel the disposal** on an open one and confirm with **Confirm cancelling**. The asset gets its previous lifecycle back if it is still out of service. The cancelled disposal stays in the list and cannot be resumed; a new one can begin afterwards.
+
+## List and protocol
+
+**Inventory › Disposal** lists all disposals with **Number**, **Asset**, **Reason**, **State** and **Date**. Filter by **All**, **Open**, **Closed**, **Without proof** or **Cancelled** and search by **Name, inventory or serial number**.
+
+**Print the protocol** opens the **Disposal protocol** with the organisation's logo: **Device**, reason, **Data media** and method, **Proof**, **Whereabouts** and a **Confirmation** with the fields “Performed: date, name, signature” and “Checked: date, name, signature”. Print it or save it as a PDF, have it signed and keep it as proof. Without the right to read personal fields the names stay blank to fill in.
+
+## Rights
+
+| Role | Disposals |
+|---|---|
+| Administrator, Information security, Editor | view, begin, record data media and proof, close, cancel |
+| Data protection, Auditor, Read only | view, print the protocol |
+
+- Changing also needs write access to the inventory and, with [rights per location](/en/pro/standortrechte/) (from Pro), at the asset's location. Once the asset is deleted, only someone who may write at every location can change the disposal.
+- **Personal fields:** persons (performed, checked), the performing company, the note, the serial numbers of the data media and the recipient are seen and written only by roles allowed to read personal fields (Administrator, Information security, Editor, and Data protection for reading). The others only see “recorded”.
+- Who began and closed the disposal is visible to every role that reads it; these names are part of the proof.
+- **Audit log:** beginning, changes, proof, closing and cancelling; for free text and persons only that they changed.
+
+## Limits
+
+- At most one disposal is open per asset; at most 100,000 per organisation.
+- Disposals are never deleted. If the asset is deleted, the disposal stays with the frozen details. If a person is deleted from the directory, only the reference to them goes.
+- Setting a disposed asset back in use by hand does not change the closed disposal. It still cannot be handed out.
+- The names of those who began and closed stay, as in the audit log, until there is a way to anonymise accounts. {/* open: anonymising accounts across all modules */}
+
+## Check the result
+
+- The disposal is listed under **Inventory › Disposal** with the state **Closed** and without the mark **Without proof**.
+- The asset has the lifecycle **disposed of**; the **Disposal** card shows “Disposed of on …”.
+- The proof is listed under **Documents** and names the disposal as a use.
+
+## Troubleshooting
+
+- **“The asset is still handed out. Take it back first; then the disposal can be closed.”** Take the asset back under **Inventory › Asset handovers**.
+- **“The method for the data media is missing.”**, **“The date of the erasure is missing.”** or **“The DIN 66399 security level of the destruction is missing.”** Add the details under **Data media**.
+- **“Someone other than the person who erased should check.”** Choose another person under **Checked by**, or nobody.
+- **“There are more serial numbers than data media.”** Raise the **Number of data media** or remove serial numbers.
+- **“A disposal of this asset is already open.”** Open it from the **Disposal** card with **Continue with the disposal**.
+- **“The disposal is closed and can no longer be changed.”** Only a missing proof can still be handed in.
+- **A document cannot be deleted:** it is the proof of a closed disposal and is kept for that reason.

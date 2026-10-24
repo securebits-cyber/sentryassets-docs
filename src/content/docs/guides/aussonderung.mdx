@@ -1,0 +1,169 @@
+---
+title: Aussonderung mit Löschnachweis
+description: Ein Gerät nachvollziehbar außer Betrieb nehmen, die Löschung oder Vernichtung seiner Datenträger nach BSI CON.6 und DIN 66399 festhalten, den Nachweis ablegen und die Aussonderung mit Protokoll abschließen.
+sidebar:
+  label: Aussonderung
+  order: 10
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Geht ein Gerät aus dem Bestand, weil es defekt, veraltet oder verkauft ist, sondern Sie es unter SentryAssets in Schritten aus: Sie halten fest, warum es geht, was mit seinen Datenträgern geschah, wer das getan und geprüft hat, wo der Nachweis liegt und wohin das Gerät ging. Am Ende steht ein Protokoll zum Unterschreiben.
+
+Die Aussonderung gehört zur Community-Edition.
+
+## Wofür: CON.6 und DIN 66399
+
+Der Baustein **CON.6 „Löschen und Vernichten“** des IT-Grundschutz-Kompendiums verlangt, dass Informationen auf Datenträgern vor deren Weitergabe oder Entsorgung geregelt gelöscht oder die Datenträger vernichtet werden, und dass dies nachvollziehbar ist (Quelle: BSI, IT-Grundschutz-Kompendium, Edition 2023, Baustein CON.6). Auch die DSGVO verlangt, personenbezogene Daten zu löschen, wenn sie nicht mehr gebraucht werden, und die getroffenen Maßnahmen nachweisen zu können (Art. 5 Abs. 1 lit. e und f, Art. 32 DSGVO).
+
+Die Norm **DIN 66399** „Büro- und Datentechnik – Vernichten von Datenträgern“ ordnet die physische Vernichtung nach drei Merkmalen (Quelle: DIN 66399-1 und -2):
+
+- **Materialklasse:** welche Art Datenträger, etwa `H` für Festplatten, `E` für elektronische Datenträger wie SSDs und USB-Sticks, `T` für magnetische Datenträger wie Bänder und `O` für optische Datenträger.
+- **Schutzklasse:** wie schutzbedürftig die Daten sind, von 1 (normal) über 2 (hoch) bis 3 (sehr hoch).
+- **Sicherheitsstufe:** wie klein die Reste sind, von 1 bis 7. Schutzklasse 1 passt zu den Stufen 1 bis 3, Schutzklasse 2 zu 3 bis 5, Schutzklasse 3 zu 4 bis 7. Üblich sind `H-3` bis `H-5` bzw. `E-3` bis `E-5`.
+
+Für das Löschen ohne Vernichtung nennt SentryAssets die Verfahren nach **NIST SP 800-88** (Clear und Purge, Quelle: NIST Special Publication 800-88 Rev. 1, Guidelines for Media Sanitization). Überschreiben genügt für Festplatten mit normalem Schutzbedarf; SSDs und Telefone löschen Sie mit Secure Erase oder kryptografisch, bei hohem Schutzbedarf vernichten Sie sie.
+
+SentryAssets hält fest, was Sie angeben; ob die Löschung wirksam war, prüft es nicht. Unterstützung, keine Prüfung.
+
+## Voraussetzungen
+
+- Eine Rolle mit Schreibrecht für Aussonderungen und das Inventar: **Administrator**, **Informationssicherheit** oder **Bearbeitung** (siehe [Rechte](#rechte)).
+- Für Personen und Notizen: das Recht auf personenbezogene Felder (Administrator, Informationssicherheit, Bearbeitung).
+- Das Gerät ist nicht mehr an eine Person ausgegeben, spätestens beim Abschluss.
+- Für den Nachweis: ein eingerichteter Speicher für Dokumente; für das Protokoll mit Briefkopf ein [Logo der Organisation](/guides/beschaffung/#logo-der-organisation-für-die-druckvorlage).
+
+## Aussonderung beginnen
+
+<Steps>
+
+1. Öffnen Sie das Asset. Die Karte **Aussonderung** zeigt „Außer Betrieb nehmen mit Löschnachweis“.
+
+2. Wählen Sie **Aussondern**.
+
+3. Wählen Sie den **Grund**: **Defekt**, **Veraltet**, **Ersetzt**, **Verloren oder gestohlen**, **Rückgabe an den Leasinggeber**, **Verkauf oder Spende** oder **Sonstiges**.
+
+4. Tragen Sie bei Bedarf eine **Notiz (optional)** ein, ohne Namen oder andere personenbezogene Daten.
+
+5. Bestätigen Sie mit **Aussondern**.
+
+</Steps>
+
+Das Asset ist sofort **außer Betrieb** und wird nicht mehr ausgegeben. Name, Inventar- und Seriennummer, Hersteller und Modell werden für den Vorgang eingefroren. Jede Aussonderung bekommt eine Nummer je Organisation, etwa `AUS-0001`. Direkt nach dem Beginn nimmt **Rückgängig** im Hinweis den Schritt zurück. Die Seite der Aussonderung zeigt die Schritte **Ausmustern**, **Datenträger**, **Nachweis** und **Abschluss** als Karten.
+
+## Datenträger erfassen
+
+<Steps>
+
+1. Wählen Sie auf der Karte **Datenträger** die Schaltfläche **Angaben ändern**.
+
+2. Wählen Sie unter **Datenträger vorhanden** **Ja**, **Nein** oder **Unbekannt**. Dazu zählen auch eingebaute Speicher, etwa in Druckern, Telefonen und Routern.
+
+3. Wählen Sie bei **Ja** das **Verfahren**:
+   - **Überschreiben (NIST SP 800-88 Clear)**
+   - **Sicheres Löschen (NIST SP 800-88 Purge)**
+   - **Secure Erase des Laufwerks (ATA/NVMe)**
+   - **Kryptografisches Löschen (Schlüssel vernichtet)**
+   - **Physische Vernichtung (DIN 66399)**
+   - **Übergabe an zertifizierten Entsorger**
+
+4. Wählen Sie bei Vernichtung oder Entsorger die **Sicherheitsstufe nach DIN 66399** als Materialklasse und Stufe, etwa `H-4`.
+
+5. Tragen Sie **Anzahl Datenträger** (1 bis 1 000) und bei Bedarf die **Seriennummern der Datenträger (optional)** ein, eine je Zeile, höchstens 100.
+
+6. Wählen Sie unter **Durchgeführt von** eine Person aus den Verantwortlichen, tragen Sie eine **Firma (optional)** ein, etwa den Entsorger, oder beides, und das Datum unter **Durchgeführt am**.
+
+7. Wählen Sie unter **Geprüft von (optional)** eine zweite Person. Empfohlen ist das Vier-Augen-Prinzip; dieselbe Person zweimal wird abgelehnt.
+
+8. Speichern Sie.
+
+</Steps>
+
+Ohne Datenträger entfallen diese Angaben; ein Löschnachweis ist dann nicht nötig.
+
+## Nachweis ablegen
+
+Den Nachweis legen Sie als Dokument ab: ein Löschprotokoll, einen Vernichtungs- oder Entsorgungsnachweis.
+
+<Steps>
+
+1. Wählen Sie auf der Karte **Nachweis** die Schaltfläche **Nachweis hochladen**.
+
+2. Wählen Sie die Datei und laden Sie sie hoch. Das Dokument heißt „Löschnachweis AUS-…: …“ und ist mit der Aussonderung verknüpft.
+
+</Steps>
+
+Das Dokument steht unter **Dokumente** mit Versionen, Vertraulichkeit und Aufbewahrung wie jedes andere; auf seiner Seite erscheint die Aussonderung als Verwendung. Solange die Aussonderung offen ist, lässt sich der Nachweis mit **Nachweis ersetzen** austauschen oder mit **Nachweis lösen** entfernen. Liegt er über Ihrer Vertraulichkeitsstufe, sehen Sie nur, dass er abgelegt ist, und können ihn weder ersetzen noch lösen.
+
+## Aussonderung abschließen
+
+Die Karte **Abschluss** nennt vorher, was noch offen ist: eine Ausgabe des Assets, zugewiesene Lizenzplätze und Beziehungen zu anderen Assets.
+
+<Steps>
+
+1. Nehmen Sie ein noch ausgegebenes Asset zuerst zurück. Solange es ausgegeben ist, lässt sich nicht abschließen.
+
+2. Wählen Sie **Abschließen**.
+
+3. Wählen Sie den **Verbleib**: **Entsorgt**, **Verkauft**, **Zurück an den Leasinggeber**, **Gespendet** oder **Verloren oder gestohlen**. Bei Verkauf, Spende und Leasing tragen Sie bei Bedarf den **Empfänger** ein; bei Privatpersonen genügt „privat“.
+
+4. Tragen Sie das **Datum** ein.
+
+5. Bestätigen Sie mit **Endgültig abschließen**.
+
+</Steps>
+
+Das Asset ist danach **entsorgt**. Bei Datenträgern „Ja“ sind Verfahren und Datum der Löschung Pflicht, bei Vernichtung zusätzlich die Sicherheitsstufe. Lizenzplätze und Beziehungen hindern den Abschluss nicht; sie sind nur ein Hinweis, die Plätze freizugeben und die Beziehungen zu prüfen.
+
+### Ohne Nachweis abschließen und nachreichen
+
+Das Zertifikat eines Entsorgers kommt oft erst Wochen später. Sie dürfen deshalb ohne Nachweis abschließen. Die Aussonderung heißt dann **Ohne Nachweis**, in der Liste, auf der Karte am Asset und im Protokoll, solange Datenträger „Ja“ oder „Unbekannt“ sind. Den Nachweis reichen Sie später auf derselben Seite mit **Nachweis hochladen** nach; danach verschwindet die Kennzeichnung.
+
+<Aside type="caution" title="Nach dem Abschluss unveränderlich">
+Eine abgeschlossene Aussonderung lässt sich nicht mehr ändern, auch nicht in der Datenbank. Einzige Ausnahme ist das Nachreichen eines fehlenden Nachweises. Ein abgelegter Nachweis wird danach weder ersetzt noch gelöst, und das Dokument lässt sich nicht mehr löschen, auch nicht nach Ablauf seiner Aufbewahrungsfrist. So kann niemand den Nachweis einer Löschung nachträglich beseitigen.
+</Aside>
+
+## Aussonderung abbrechen
+
+War die Aussonderung ein Irrtum, wählen Sie bei einer offenen Aussonderung **Aussonderung abbrechen** und bestätigen mit **Abbrechen bestätigen**. Das Asset bekommt seinen vorigen Lebenszyklus zurück, sofern es noch außer Betrieb ist. Die abgebrochene Aussonderung bleibt in der Liste und lässt sich nicht fortsetzen; eine neue kann danach beginnen.
+
+## Liste und Protokoll
+
+Unter **Inventar › Aussonderung** stehen alle Aussonderungen mit **Nummer**, **Asset**, **Grund**, **Stand** und **Datum**. Filtern Sie nach **Alle**, **Offen**, **Abgeschlossen**, **Ohne Nachweis** oder **Abgebrochen** und suchen Sie nach **Name, Inventar- oder Seriennummer**.
+
+**Protokoll drucken** öffnet das **Aussonderungsprotokoll** mit dem Logo der Organisation: **Gerät**, Grund, **Datenträger** und Verfahren, **Nachweis**, **Verbleib** und eine **Bestätigung** mit den Feldern „Durchgeführt: Datum, Name, Unterschrift“ und „Geprüft: Datum, Name, Unterschrift“. Drucken Sie es oder speichern Sie es als PDF, lassen Sie es unterschreiben und legen Sie es als Nachweis ab. Ohne das Recht auf personenbezogene Felder bleiben die Namen leer zum Ausfüllen.
+
+## Rechte
+
+| Rolle | Aussonderungen |
+|---|---|
+| Administrator, Informationssicherheit, Bearbeitung | ansehen, beginnen, Datenträger und Nachweis erfassen, abschließen, abbrechen |
+| Datenschutz, Prüfung, Lesend | ansehen, Protokoll drucken |
+
+- Ändern braucht zusätzlich das Schreibrecht im Inventar und, mit [Rechten je Standort](/pro/standortrechte/) (ab Pro), am Standort des Assets. Ist das Asset gelöscht, ändert nur noch, wer an allen Standorten schreiben darf.
+- **Personenbezogene Felder:** Personen (durchgeführt, geprüft), die durchführende Firma, die Notiz, die Seriennummern der Datenträger und der Empfänger sehen und schreiben nur Rollen mit dem Recht auf personenbezogene Felder (Administrator, Informationssicherheit, Bearbeitung, Datenschutz zum Lesen). Die anderen sehen nur „vorhanden“.
+- Wer die Aussonderung begonnen und abgeschlossen hat, sieht jede Rolle, die sie liest; diese Namen sind Teil des Nachweises.
+- **Audit-Log:** Beginn, Änderungen, Nachweis, Abschluss und Abbruch; bei Freitext und Personen nur, dass sie sich geändert haben.
+
+## Grenzen
+
+- Je Asset ist höchstens eine Aussonderung offen; je Organisation höchstens 100 000.
+- Aussonderungen werden nie gelöscht. Wird das Asset gelöscht, bleibt die Aussonderung mit den eingefrorenen Angaben. Wird eine Person im Verzeichnis gelöscht, fällt nur der Verweis auf sie weg.
+- Wer ein ausgesondertes Asset von Hand wieder in Betrieb nimmt, ändert die abgeschlossene Aussonderung nicht. Ausgeben lässt es sich trotzdem nicht mehr.
+- Die Namen derer, die begonnen und abgeschlossen haben, bleiben wie im Audit-Log stehen, bis es ein Verfahren zum Anonymisieren von Konten gibt. {/* offen: Anonymisieren von Konten über alle Module */}
+
+## Ergebnis prüfen
+
+- Die Aussonderung steht unter **Inventar › Aussonderung** mit dem Stand **Abgeschlossen**, ohne die Kennzeichnung **Ohne Nachweis**.
+- Das Asset hat den Lebenszyklus **entsorgt**; die Karte **Aussonderung** zeigt „Entsorgt am …“.
+- Der Nachweis steht unter **Dokumente** und nennt die Aussonderung als Verwendung.
+
+## Fehlerbehebung
+
+- **„Das Asset ist noch ausgegeben. Nehmen Sie es zuerst zurück, dann lässt sich die Aussonderung abschließen.“** Nehmen Sie das Asset unter **Inventar › Asset-Ausgaben** zurück.
+- **„Bei Datenträgern fehlt das Verfahren.“**, **„… fehlt das Datum der Löschung.“** oder **„Für die Vernichtung fehlt die Sicherheitsstufe nach DIN 66399.“** Ergänzen Sie die Angaben unter **Datenträger**.
+- **„Prüfen sollte eine andere Person als die, die gelöscht hat.“** Wählen Sie unter **Geprüft von** eine andere Person oder niemanden.
+- **„Es sind mehr Seriennummern als Datenträger angegeben.“** Erhöhen Sie die **Anzahl Datenträger** oder entfernen Sie Seriennummern.
+- **„Für dieses Asset läuft schon eine Aussonderung.“** Öffnen Sie die laufende über die Karte **Aussonderung** mit **Weiter zur Aussonderung**.
+- **„Die Aussonderung ist abgeschlossen und lässt sich nicht mehr ändern.“** Nur ein fehlender Nachweis lässt sich noch nachreichen.
+- **Ein Dokument lässt sich nicht löschen:** Es ist der Nachweis einer abgeschlossenen Aussonderung und bleibt deshalb erhalten.
