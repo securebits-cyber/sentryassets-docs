@@ -59,7 +59,13 @@ Für Ansible, Skripte und ähnliche Werkzeuge legen Sie das Token vorher in der 
 
 - Das Gerät erscheint unter **Agents**, mit Freigabe zunächst als **ausstehend**. Geben Sie es frei; ohne Freigabe sperrt das System einen ausstehenden Agent nach 7 Tagen und widerruft sein Zertifikat (die Frist ist bis 30 Tage einstellbar).
 - Nach dem ersten Inventar erscheint das Gerät als Asset mit Hardware, Software und Zustand.
-- Die Liste zeigt standardmäßig nur Agents, die Aufmerksamkeit brauchen (Freigabe ausstehend, seit einem Tag keine Meldung, Zertifikat läuft bald ab), alle auf Wunsch.
+- Die Liste zeigt standardmäßig nur Agents, die Aufmerksamkeit brauchen (Freigabe ausstehend, seit einem Tag keine Meldung, Zertifikat läuft bald ab, durch eine neuere Registrierung ersetzt), alle auf Wunsch. Gesperrte stehen unter einem eigenen Reiter **Gesperrt**.
+- **Status:** **Aktiv** heißt registriert und nicht gesperrt. Hat ein aktiver Agent drei Meldungen verpasst (15 Minuten), steht dort **Keine Meldung**: ausgeschaltet, nicht erreichbar oder deinstalliert.
+- Collectors tragen das Kennzeichen **Collector**. Ein Agent und ein Collector auf demselben Rechner sind zwei Registrierungen, kein Doppel.
+
+## Gerät neu installiert
+
+Jede Installation mit einem Rollout-Token ist eine eigene Registrierung; die alte meldet beim Deinstallieren nichts ab. Meldet sich ein Gerät mit demselben Hostnamen neu an, zeigt die ältere Registrierung **Ersetzt durch neuere Registrierung** und den Knopf **Ersetzen**. Er sperrt die alte, und die neue übernimmt ihr Asset mit Verlauf; das Asset, das die neue selbst angelegt hat, löscht er auf Wunsch gleich mit. SentryAssets sperrt nichts von selbst, denn den Hostnamen nennt das Gerät selbst.
 
 ## Agent für ein bestehendes Asset
 

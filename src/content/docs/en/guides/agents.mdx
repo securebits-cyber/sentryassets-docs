@@ -70,6 +70,10 @@ If the device is in the inventory already, created by hand or as a virtual machi
 
 The matches are suggestions only; nothing moves until a person confirms it.
 
+## Device installed again
+
+Every installation with a rollout token is a registration of its own; the old one does not sign off when it is uninstalled. When a device with the same host name registers again, the older registration shows **Replaced by a newer registration** and the button **Replace**. It blocks the old one, and the new one takes over its asset with its history; the asset the new one created itself can be deleted at the same time. SentryAssets blocks nothing by itself, as the device names its host name itself. **Active** means registered and not blocked; an active agent that missed three heartbeats (15 minutes) shows **No heartbeat**. Blocked registrations have their own tab **Blocked**, and collectors carry the badge **Collector**: an agent and a collector on one host are two registrations, not a duplicate.
+
 ## Blocking
 
 A blocked agent is refused at every request; its certificate is on the revocation list. A rollout token is **revoked** under **Agents** as well; devices already enrolled are not affected.
