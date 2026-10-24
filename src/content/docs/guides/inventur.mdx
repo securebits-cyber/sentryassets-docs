@@ -1,0 +1,152 @@
+---
+title: Inventur
+description: Je Standort prüfen, ob die Assets dort stehen, wo das Inventar sie führt, Abweichungen festhalten, die Inventur abschließen und das Protokoll drucken oder als PDF speichern.
+sidebar:
+  label: Inventur
+  order: 9
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+Unter **Inventar › Inventur** prüfen Sie, ob Ihre Geräte noch dort stehen, wo das Inventar sie führt: einmal im Jahr für die Buchhaltung, als Nachweis des Bestands im IT-Grundschutz oder vor einem Umzug. Eine Inventur gilt für einen Standort mit allem darunter, also etwa für ein Gebäude mit seinen Etagen und Räumen. Beim Start hält SentryAssets fest, was dort stehen soll (das **Soll**); danach erfassen Sie, was Sie vorfinden. Abweichungen stehen am Ende im Protokoll.
+
+Die Inventur gehört zur Community-Edition. Ab Pro kommt ein [Scan-Feld](#inventur-scannen) dazu, das jeden Scan sofort erfasst.
+
+## Voraussetzungen
+
+- Eine Rolle mit Schreibrecht für Inventuren und das Inventar: **Administrator**, **Informationssicherheit** oder **Bearbeitung**. Alle anderen Rollen sehen Inventuren nur (siehe [Rechte](#rechte)).
+- Der Standort steht im Standortbaum, und die Assets sind ihm zugeordnet.
+- Für schnelles Erfassen: [Etiketten](/reference/funktionen/#inventar) mit QR-Code oder Inventarnummer an den Geräten, dazu ein [Handscanner](/guides/scanner/) oder die Tastatur.
+- Für das Protokoll mit Briefkopf: ein [Logo der Organisation](/guides/beschaffung/#logo-der-organisation-für-die-druckvorlage).
+
+## Inventur starten
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Inventur** und wählen Sie **Inventur starten**.
+
+2. Wählen Sie den **Standort**. Gezählt wird dieser Standort mit allem darunter.
+
+3. Tragen Sie bei Bedarf einen **Titel (optional)** ein, zum Beispiel „Jahresinventur 2026“.
+
+4. Wählen Sie **Inventur starten**.
+
+</Steps>
+
+Beim Start wird das Soll eingefroren: jedes Asset im Standort und darunter, dessen Lebenszyklus **geplant**, **in Betrieb** oder **in Wartung** ist. Ausgemusterte und entsorgte Assets gehören nicht dazu. Was danach angelegt wird oder umzieht, ändert das Soll nicht mehr; so hängt das Ergebnis nicht davon ab, wann Sie abschließen.
+
+Jede Inventur bekommt eine Nummer je Organisation, etwa `INV-0001`. Die Liste zeigt je Inventur Nummer, Standort, **Status**, **Zeitraum** und den Fortschritt („… von … gefunden“).
+
+## Erfassen, was Sie vorfinden
+
+Öffnen Sie die Inventur aus der Liste. Unter **Erfassen** steht ein Suchfeld für **Name, Inventarnummer oder Adresse eines Etiketts**; darunter die Einträge der Inventur.
+
+<Steps>
+
+1. Geben Sie Name oder Inventarnummer ein oder scannen Sie das Etikett in das Suchfeld. Die Liste zeigt die passenden Einträge.
+
+2. Wählen Sie beim Treffer **Gefunden**. Der Eintrag zeigt danach Zeitpunkt und Person der Erfassung.
+
+3. Steht ein Asset vor Ihnen, das nicht zum Soll gehört, nennt das Suchfeld, wo es laut Inventar steht. Wählen Sie **Als gefunden aufnehmen**.
+
+4. Gibt es zu einem Code kein Asset, meldet das Suchfeld „Zu „…“ gibt es kein Asset.“ Wählen Sie **Als unbekannt aufnehmen**, um den Code festzuhalten.
+
+</Steps>
+
+Enter erfasst im Suchfeld nichts; Sie wählen jeden Treffer selbst. Unter **Einträge zeigen** filtern Sie die Liste, etwa nach **Offen** oder **Abweichungen**. Eine falsche Erfassung nehmen Sie mit **Rückgängig** zurück, solange die Inventur offen ist: Ein Eintrag des Solls ist dann wieder offen, jeder andere verschwindet.
+
+### Ergebnisse
+
+| Ergebnis | Bedeutung |
+|---|---|
+| **Gefunden** | Das Asset gehört zum Soll und wurde vorgefunden. |
+| **Fehlt** | Das Asset gehört zum Soll, wurde bis zum Abschluss aber nicht gefunden. |
+| **An anderem Ort gefunden** | Das Asset wurde hier gefunden, steht laut Inventar aber an einem Standort außerhalb der Inventur oder ohne Standort. Der eingetragene Standort wird festgehalten. |
+| **Nicht im Soll** | Das Asset steht laut Inventar hier, gehörte beim Start aber nicht zum Soll, etwa weil es danach angelegt wurde oder ausgemustert ist. |
+| **Unbekannt** | Ein Code ohne Asset, nur als Text festgehalten. |
+
+Ein Asset und ein Code stehen je Inventur höchstens einmal darin; eine zweite Erfassung wird nicht doppelt gezählt.
+
+### Inventur scannen
+
+<Badge text="Pro" variant="note" /> Dieser Abschnitt gilt ab der Edition Pro.
+
+Mit Pro steht unter **Erfassen** das Feld **Inventur scannen**. Jeder Scan wird dort sofort erfasst, ohne dass Sie einen Treffer anklicken. Das abschließende Enter des Handscanners löst nichts anderes aus; ohne Scanner tippen Sie eine Inventarnummer ein und drücken Enter.
+
+Nach jedem Scan meldet das Feld das Ergebnis:
+
+- „Gefunden: …“, „An anderem Ort gefunden: …“ oder „Nicht im Soll: …“ für ein Asset,
+- „Unbekannt aufgenommen: …“ für einen Code ohne Asset,
+- „Schon erfasst: …“, wenn das Asset schon in der Inventur steht,
+- „Kein Code dieser Installation; nichts erfasst.“ für das Etikett einer anderen Installation.
+
+Der Server prüft Rechte, Standort und Grenzen wie bei der Erfassung von Hand. Das Scan-Feld spart Klicks, gibt aber keine zusätzlichen Rechte.
+
+## Inventur abschließen
+
+<Steps>
+
+1. Wählen Sie **Inventur abschließen**.
+
+2. Der Dialog nennt, wie viele Assets noch offen sind. Diese werden als **Fehlt** festgehalten.
+
+3. Bestätigen Sie mit **Abschließen**.
+
+</Steps>
+
+Danach lässt sich die Inventur nicht mehr ändern, auch nicht in der Datenbank. Einzige Ausnahme ist **Standort übernehmen**.
+
+### Standort übernehmen
+
+Nach dem Abschluss lassen sich Assets, die **an anderem Ort gefunden** wurden, an den Standort der Inventur übernehmen. Wählen Sie dafür beim Eintrag **Standort übernehmen**. Das Asset zieht damit im Inventar um; der Eintrag zeigt **Standort übernommen**. Erst nach dem Abschluss geht das, damit alle Abweichungen zuerst vollständig im Protokoll stehen.
+
+Für den Umzug brauchen Sie das Recht, das Asset zu ändern, und mit [Rechten je Standort](/pro/standortrechte/) (ab Pro) Schreibrecht am alten und am neuen Standort.
+
+## Protokoll
+
+**Protokoll** öffnet das **Inventurprotokoll** als Druckseite mit dem Logo der Organisation:
+
+- Kopf mit Nummer, Titel, **Standort mit allem darunter**, **Zeitraum**, **Gestartet von** und **Abgeschlossen von**,
+- **Beteiligte Personen** (wer gestartet, erfasst, abgeschlossen und Standorte übernommen hat), nur für Rollen mit Recht auf personenbezogene Angaben,
+- **Zusammenfassung** mit Soll, gefunden, fehlt, anderer Ort, nicht im Soll und unbekannt,
+- Tabellen je Ergebnis und Felder für **Ort, Datum** und **Unterschrift**.
+
+**Drucken** öffnet den Druckdialog des Browsers; dort speichern Sie das Protokoll auch als PDF. Das Protokoll lässt sich schon während der Inventur drucken; der Zeitraum steht dann als „läuft noch“.
+
+## Rechte
+
+| Rolle | Inventuren |
+|---|---|
+| Administrator, Informationssicherheit, Bearbeitung | ansehen, starten, erfassen, zurücknehmen, abschließen, Standort übernehmen |
+| Datenschutz, Prüfung, Lesend | ansehen, Protokoll drucken |
+
+- Starten, Erfassen, Zurücknehmen und Abschließen brauchen zusätzlich das Schreibrecht im Inventar und, mit [Rechten je Standort](/pro/standortrechte/) (ab Pro), am Standort der Inventur. Fehlt es, zeigt die Inventur den Hinweis, dass Sie sie nur ansehen können.
+- Erfasst wird nur ein Asset, das Sie sehen dürfen.
+- **Personennamen:** Wer einen Eintrag erfasst oder seinen Standort übernommen hat, sehen nur Rollen mit dem Recht auf personenbezogene Felder: **Administrator**, **Informationssicherheit**, **Bearbeitung** und **Datenschutz**. Die Einträge zeigen sonst, wer wann wie schnell gearbeitet hat. Wer die Inventur gestartet und abgeschlossen hat, sieht jede Rolle, die Inventuren liest, wie die Handelnden im Audit-Log.
+- **Audit-Log:** Start (Standort, Zahl des Solls), Abschluss (Zahlen je Ergebnis), zurückgenommene Erfassungen und übernommene Standorte, nie Titel, Codes oder Namen. Einzelne Erfassungen stehen nicht im Audit-Log, sondern mit Person und Zeit in der Inventur selbst.
+
+## Grenzen
+
+- Je Standort ist höchstens eine Inventur offen. Ein Standort mit offener Inventur lässt sich nicht löschen.
+- Eine Inventur hat höchstens 20 000 Einträge. Stehen mehr Assets am Standort, starten Sie die Inventur für einen Teilbereich, etwa je Gebäude.
+- Je Organisation höchstens 5 000 Inventuren; je Person höchstens 10 Starts in der Stunde.
+- Inventuren werden nie gelöscht. Wird ein Asset gelöscht, bleibt es mit Name und Inventarnummer im Protokoll; ein gelöschter Standort bleibt mit seinem Namen in einer abgeschlossenen Inventur.
+- Die Namen der beteiligten Personen bleiben mit der Inventur erhalten, damit ein abgelegtes Protokoll nachvollziehbar bleibt. Für Benutzerkonten gibt es noch kein Verfahren, diese Namen zu anonymisieren. {/* offen: Anonymisieren von Konten in der Inventur, sobald die Benutzerverwaltung es anbietet */}
+- Ein Asset, das genau während des Starts umzieht oder angelegt wird, steht mit dem Stand kurz vor dem Start im Soll.
+
+## Ergebnis prüfen
+
+- Die Inventur steht unter **Inventar › Inventur** mit Nummer, Standort und **Status** **Offen** bzw. **Abgeschlossen**.
+- Der Fortschritt zeigt „… von … gefunden“, nach dem Abschluss die Zahl der **Abweichungen**.
+- Ein übernommenes Asset steht in der Asset-Liste am Standort der Inventur.
+- Das Protokoll zeigt Zusammenfassung und Tabellen je Ergebnis.
+
+## Fehlerbehebung
+
+- **„Für diesen Standort läuft schon eine Inventur.“** Schließen Sie die offene Inventur ab oder arbeiten Sie in ihr weiter.
+- **„Am Standort stehen mehr als 20 000 Assets. Starten Sie die Inventur für einen Teilbereich.“** Wählen Sie einen Standort weiter unten im Baum.
+- **„Die Inventur hat die Höchstzahl von 20 000 Einträgen erreicht.“** Schließen Sie die Inventur ab und erfassen Sie den Rest in einer weiteren für einen Teilbereich.
+- **„Das ist kein Code dieser Installation.“** Das Etikett stammt aus einer anderen Installation, oder die Tastaturbelegung des Scanners verfälscht den Code; siehe [Tastaturbelegung](/guides/scanner/#tastaturbelegung).
+- **„Gleichzeitig wurde dasselbe erfasst. Bitte laden Sie die Seite neu.“** Zwei Personen haben dasselbe Asset zur selben Zeit erfasst. Nach dem Neuladen steht es einmal in der Inventur.
+- **Sie können nicht erfassen:** Die Inventur zeigt „Sie können diese Inventur ansehen, aber nicht erfassen …“. Es fehlt das Schreibrecht im Inventar oder am Standort.
+- **„Der Standort wurde schon übernommen.“** Das Asset ist schon umgezogen; der Eintrag zeigt **Standort übernommen**.

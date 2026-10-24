@@ -1,0 +1,152 @@
+---
+title: Stocktaking
+description: Check per location that assets stand where the inventory has them, record deviations, close the stocktaking and print the protocol or save it as a PDF.
+sidebar:
+  label: Stocktaking
+  order: 9
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+Under **Inventory › Stocktaking** you check whether your devices still stand where the inventory has them: once a year for accounting, as proof of your assets for IT-Grundschutz, or before a move. A stocktaking covers a location with everything below it, such as a building with its floors and rooms. When it starts, SentryAssets records what should be there (the **target**); then you record what you find. Deviations end up in the protocol.
+
+Stocktaking is part of the Community edition. Pro adds a [scan field](#scan-for-the-stocktaking) that records every scan at once.
+
+## Prerequisites
+
+- A role that may write stocktakings and the inventory: **Administrator**, **Information security** or **Editor**. All other roles can only view stocktakings (see [Rights](#rights)).
+- The location is in the location tree and the assets are assigned to it.
+- For fast recording: [labels](/en/reference/funktionen/#inventory) with a QR code or inventory number on the devices, plus a [hand scanner](/en/guides/scanner/) or the keyboard.
+- For a protocol with a letterhead: a [logo of the organisation](/en/guides/beschaffung/#logo-of-the-organisation-for-the-printed-form).
+
+## Starting a stocktaking
+
+<Steps>
+
+1. Open **Inventory › Stocktaking** and choose **Start stocktaking**.
+
+2. Choose the **Location**. The location is counted with everything below it.
+
+3. Enter a **Title (optional)** if you like, for example “Annual stocktaking 2026”.
+
+4. Choose **Start stocktaking**.
+
+</Steps>
+
+Starting freezes the target: every asset at the location and below whose lifecycle is **planned**, **in use** or **in maintenance**. Retired and disposed assets are not part of it. Anything added or moved afterwards no longer changes the target, so the result does not depend on when you close.
+
+Each stocktaking gets a number per organisation, such as `INV-0001`. The list shows number, location, **Status**, **Period** and progress (“… of … found”) for each.
+
+## Recording what you find
+
+Open the stocktaking from the list. Under **Record** there is a search field for **Name, inventory number or address of a label**, with the stocktaking's entries below it.
+
+<Steps>
+
+1. Type a name or inventory number, or scan the label into the search field. The list shows the matching entries.
+
+2. Choose **Found** at the match. The entry then shows the time and the person who recorded it.
+
+3. If an asset in front of you is not part of the target, the search field says where the inventory has it. Choose **Take in as found**.
+
+4. If a code has no asset, the search field reports “There is no asset for “…”.” Choose **Take in as unknown** to keep the code.
+
+</Steps>
+
+Enter in the search field records nothing; you choose each match yourself. **Show entries** filters the list, for example by **Open** or **Deviations**. You take back a wrong record with **Undo** while the stocktaking is open: a target entry is then open again, any other entry disappears.
+
+### Results
+
+| Result | Meaning |
+|---|---|
+| **Found** | The asset is part of the target and was found. |
+| **Missing** | The asset is part of the target but was not found before closing. |
+| **Found elsewhere** | The asset was found here, but the inventory has it at a location outside the stocktaking or at no location. The recorded location is kept. |
+| **Not in target** | The inventory has the asset here, but it was not part of the target at the start, for example because it was added afterwards or is retired. |
+| **Unknown** | A code without an asset, kept as text only. |
+
+An asset and a code appear at most once per stocktaking; recording one again does not count it twice.
+
+### Scan for the stocktaking
+
+<Badge text="Pro" variant="note" /> This section applies from the Pro edition.
+
+With Pro, **Record** has the field **Scan for the stocktaking**. Each scan is recorded there at once, without clicking a match. The closing Enter of the hand scanner triggers nothing else; without a scanner, type an inventory number and press Enter.
+
+After each scan the field reports the result:
+
+- “Found: …”, “Found elsewhere: …” or “Not in target: …” for an asset,
+- “Taken in as unknown: …” for a code without an asset,
+- “Recorded already: …” if the asset is in the stocktaking already,
+- “No code of this installation; nothing recorded.” for a label of another installation.
+
+The server checks rights, location and limits as for recording by hand. The scan field saves clicks but grants no extra rights.
+
+## Closing the stocktaking
+
+<Steps>
+
+1. Choose **Close stocktaking**.
+
+2. The dialog says how many assets are still open. They are recorded as **Missing**.
+
+3. Confirm with **Close**.
+
+</Steps>
+
+Afterwards the stocktaking can no longer be changed, not even in the database. The one exception is **Take over location**.
+
+### Taking over the location
+
+Once closed, assets **found elsewhere** can be moved to the stocktaking's location. Choose **Take over location** at the entry. The asset then moves in the inventory, and the entry shows **Location taken over**. This only works after closing, so that every deviation is in the protocol first.
+
+Moving needs the right to change the asset and, with [rights per location](/en/pro/standortrechte/) (from Pro), write access at both the old and the new location.
+
+## Protocol
+
+**Protocol** opens the **Stocktaking protocol** as a print page with the organisation's logo:
+
+- a header with number, title, **Location with everything below**, **Period**, **Started by** and **Closed by**,
+- **Persons involved** (who started, recorded, closed and took over locations), only for roles allowed to read personal values,
+- a **Summary** with target, found, missing, elsewhere, not in target and unknown,
+- tables per result and fields for **Place, date** and **Signature**.
+
+**Print** opens the browser's print dialog, where you can also save the protocol as a PDF. The protocol prints during the stocktaking as well; the period then reads “still running”.
+
+## Rights
+
+| Role | Stocktakings |
+|---|---|
+| Administrator, Information security, Editor | view, start, record, undo, close, take over location |
+| Data protection, Auditor, Read only | view, print the protocol |
+
+- Starting, recording, undoing and closing also need write access to the inventory and, with [rights per location](/en/pro/standortrechte/) (from Pro), at the stocktaking's location. Without it, the stocktaking says you can only view it.
+- Only assets you may see can be recorded.
+- **Names of persons:** who recorded an entry or took over its location is shown only to roles allowed to read personal fields: **Administrator**, **Information security**, **Editor** and **Data protection**. Otherwise the entries would show who worked when and how fast. Who started and closed the stocktaking is visible to every role that reads stocktakings, like the actors in the audit log.
+- **Audit log:** start (location, size of the target), closing (counts per result), records taken back and locations taken over, never titles, codes or names. Single records are not in the audit log but in the stocktaking itself, with person and time.
+
+## Limits
+
+- At most one stocktaking is open per location. A location with an open stocktaking cannot be deleted.
+- A stocktaking has at most 20,000 entries. If more assets stand at the location, start the stocktaking for a part of it, such as one building at a time.
+- At most 5,000 stocktakings per organisation; at most 10 starts per person and hour.
+- Stocktakings are never deleted. A deleted asset stays in the protocol with its name and inventory number; a deleted location keeps its name in a closed stocktaking.
+- The names of the persons involved stay with the stocktaking so that a filed protocol remains traceable. There is no way yet to anonymise these names for user accounts. {/* open: anonymising accounts in stocktakings once user management offers it */}
+- An asset that moves or is added exactly while the stocktaking starts is in the target as it was just before the start.
+
+## Check the result
+
+- The stocktaking is listed under **Inventory › Stocktaking** with number, location and **Status** **Open** or **Closed**.
+- Progress shows “… of … found”, and after closing the number of **Deviations**.
+- An asset taken over stands at the stocktaking's location in the asset list.
+- The protocol shows the summary and the tables per result.
+
+## Troubleshooting
+
+- **“A stocktaking is already running for this location.”** Close the open stocktaking or continue working in it.
+- **“More than 20,000 assets stand at the location. Start the stocktaking for a part of it.”** Choose a location further down the tree.
+- **“The stocktaking has reached the maximum of 20,000 entries.”** Close the stocktaking and record the rest in another one for a part of the location.
+- **“This is no code of this installation.”** The label comes from another installation, or the scanner's keyboard layout garbles the code; see [Keyboard layout](/en/guides/scanner/#keyboard-layout).
+- **“The same was recorded at the same time. Please reload the page.”** Two persons recorded the same asset at the same moment. After reloading it is in the stocktaking once.
+- **You cannot record:** the stocktaking shows “You can view this stocktaking but not record …”. Write access to the inventory or at the location is missing.
+- **“The location was taken over already.”** The asset has moved already; the entry shows **Location taken over**.
