@@ -12,7 +12,7 @@ Unter **Inventar › Beschaffung** führen Sie Beschaffungsanträge vom Antrag b
 
 Was ohne Antrag sofort bestellt wird, etwa Toner oder Kabel, erfassen Sie als [Bestellung](#bestellungen-ohne-antrag). Beim [Wareneingang](#wareneingang-einbuchen) buchen Antrag und Bestellung das gelieferte Verbrauchsmaterial gleich in den Bestand.
 
-Die Beschaffung gehört zur Community-Edition.
+Die Beschaffung gehört zur Community-Edition. Ab Pro kommen der [Bestellvorschlag](#bestellvorschlag) aus dem Mindestbestand und das [Anlegen von Geräten als Assets](#geräte-als-assets-anlegen) beim Wareneingang dazu. Kostenstellen ordnen Sie Anträgen und Bestellungen wie unter [Kostenstellen](/guides/kostenstellen/) beschrieben zu.
 
 ## Voraussetzungen
 
@@ -189,6 +189,41 @@ Ab der Freigabe zeigt der Antrag die Karte **Im Inventar**: was er gebracht hat.
 
 Ein Antrag nennt höchstens 1 000 Assets und Artikel, jeden einmal. Verknüpfen ändert das Asset nicht. **Entfernen** löst eine Verknüpfung; wird ein verknüpftes Asset oder ein Artikel gelöscht, verschwindet die Verknüpfung mit einem Eintrag im Audit-Log des Antrags.
 
+### Geräte als Assets anlegen
+
+<Badge text="Pro" variant="note" /> Dieser Abschnitt gilt ab der Edition Pro.
+
+Kommen zehn Notebooks, legen Sie sie in einem Schritt als zehn Assets an. Ab **Freigegeben**, also auch bei **Bestellt** und **Im Inventar aufgenommen**, zeigt die Karte **Im Inventar** den Abschnitt **Geräte als Assets anlegen** mit jeder Position der Art **Gerät oder Asset** und ihrem Stand „… von … angelegt“. Geräte lassen sich so schon bei der Lieferung anlegen, vor dem formalen Eingang.
+
+<Steps>
+
+1. Wählen Sie bei der Position **… Assets anlegen**.
+
+2. Wählen Sie die **Kategorie**. Vorgeschlagen ist keine; wählen Sie sie bewusst.
+
+3. Prüfen Sie den **Standort**. Vorgeschlagen ist der Standort der Bestellung.
+
+4. Prüfen Sie den **Namen**. Vorbelegt ist der Titel der Position; jedes Asset bekommt eine laufende Nummer dahinter.
+
+5. Tragen Sie bei Bedarf **Hersteller**, **Modell** und das **Kaufdatum** ein. Das Kaufdatum ist mit dem Eingangsdatum, sonst mit heute vorbelegt und wird übernommen, wo die Kategorie ein Kaufdatum hat.
+
+6. Wählen Sie die **Anzahl** und setzen Sie bei Bedarf **… als Händler eintragen**, damit der Lieferant der Bestellung am Asset steht.
+
+7. Scannen oder tippen Sie unter **Seriennummern** die Seriennummer jedes Stücks. Enter springt zum nächsten Stück und sendet nie ab, denn ein [Handscanner](/guides/scanner/) schließt jeden Code mit Enter.
+
+8. Wählen Sie **… Assets anlegen**.
+
+</Steps>
+
+Alle Assets werden mit dem Antrag oder der Bestellung und ihrer Position verknüpft. Die Inventarnummer vergibt der Nummernkreis der Kategorie, falls eingerichtet. Assets und Verknüpfungen entstehen zusammen oder gar nicht.
+
+- **Bekannte Seriennummer:** Trägt ein vorhandenes Asset schon eine eingegebene Seriennummer, lehnt SentryAssets zuerst ab und markiert das Stück („Ein vorhandenes Asset hat diese Seriennummer schon.“). Meist ist der Code doppelt gelesen oder das Gerät zurückgekommen. Ist es wirklich ein zweites Gerät mit derselben Nummer, setzen Sie **Vorhandene Seriennummern trotzdem übernehmen** und legen erneut an. Groß- und Kleinschreibung zählt beim Vergleich nicht.
+- **Doppelt im selben Schritt:** Dieselbe Seriennummer bei zwei Stücken wird abgelehnt.
+- **Menge:** höchstens 100 Stück je Schritt und nie mehr als die noch offenen Stück der Position. Eine Verknüpfung von Hand zählt nicht mit. Wird ein angelegtes Asset gelöscht, ist sein Stück wieder offen.
+- **Pflichtfelder:** Hat die Kategorie Pflichtfelder, lehnt SentryAssets ab; legen Sie diese Assets einzeln über **Asset anlegen** an.
+- **Kein Rückgängig:** Der Hinweis nach dem Anlegen bietet kein „Rückgängig“, denn bis zu 100 Assets wieder zu löschen wäre selbst eine Massenlöschung. Ein falsch angelegtes Asset löschen Sie in der Asset-Liste; seine Verknüpfung geht mit.
+- **Rechte:** das Recht, die Beschaffung und das Inventar zu ändern; mit [Rechten je Standort](/pro/standortrechte/) Schreibrecht am Standort der Bestellung und am Zielstandort der Assets.
+
 ## Wareneingang einbuchen
 
 Ist geliefert, wählen Sie bei einem Antrag oder einer Bestellung **Als aufgenommen markieren**. Nennt der Antrag oder die Bestellung Positionen mit [zugeordnetem Verbrauchsmaterial](#positionen-mit-verbrauchsmaterial), zeigt der Dialog darunter den Abschnitt **Wareneingang**.
@@ -252,6 +287,37 @@ Der Server prüft beim Einbuchen Rechte und Mengen wie ohne Scan.
 
 Ergänzen Sie Menge und Preis und wählen Sie **Bestellung anlegen**. **Nachbestellen** erscheint nur, wenn Sie Beschaffungen schreiben dürfen und der Artikel nicht archiviert ist.
 
+## Bestellvorschlag
+
+<Badge text="Pro" variant="note" /> Dieser Abschnitt gilt ab der Edition Pro.
+
+Wer viel Verbrauchsmaterial führt, bestellt nicht Artikel für Artikel nach. Unter **Inventar › Bestellvorschlag** steht jeder aktive Artikel, der an mindestens einem Standort unter seinem Mindestbestand liegt, nach Lieferant gruppiert; Artikel ohne Lieferant stehen zuletzt unter **Ohne Lieferant**. Sie erreichen die Seite auch aus [Verbrauchsmaterial](/guides/verbrauchsmaterial/) mit dem Filter **Unter Mindestbestand** über **Bestellvorschlag für … Artikel**.
+
+Je Artikel zeigt der Vorschlag:
+
+- **Fehlbestand:** je Standort, was bis zum Mindestbestand fehlt („…: … von …“), und die Summe;
+- **Offen bestellt:** was in Anträgen und Bestellungen mit dem Status **Beantragt**, **Freigegeben** oder **Bestellt** schon unterwegs ist;
+- **Bestellmenge:** der Fehlbestand abzüglich des Offenen, nie unter null. Ist schon alles unterwegs, steht dort **Schon unterwegs**.
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Bestellvorschlag**.
+
+2. Wählen Sie in einer Gruppe die Artikel, die Sie bestellen möchten, und passen Sie bei Bedarf die **Bestellmenge** an.
+
+3. Wählen Sie bei der Gruppe **Bestellung anlegen**.
+
+4. Prüfen Sie im Dialog **Bezeichnung** (vorbelegt „Nachbestellung Verbrauchsmaterial“), **Bestellt von**, **Bestellt am** und den **Standort der Bestellung**. Vorgeschlagen ist der Standort, an dem alle gewählten Artikel fehlen.
+
+5. Wählen Sie **Bestellung anlegen**.
+
+</Steps>
+
+Es entsteht eine [Bestellung](#bestellungen-ohne-antrag) mit dem Lieferanten der Gruppe, je Artikel eine Position der Art **Verbrauchsmaterial** mit Artikelnummer und Menge, ohne Preis. Tragen Sie die Preise bei Bedarf in der Bestellung nach. **Rückgängig** im Hinweis storniert und löscht die Bestellung wieder; danach geht das mit **Bestellung stornieren** in der Beschaffung.
+
+- **Rechte:** Lesen mit dem Recht, Verbrauchsmaterial und Beschaffung zu lesen; Anlegen mit dem Recht, die Beschaffung zu ändern, und mit [Rechten je Standort](/pro/standortrechte/) Schreibrecht am Standort der Bestellung.
+- **Grenzen:** höchstens 100 Positionen je Bestellung und höchstens 2 000 Artikel im Vorschlag. Das Audit-Log hält das Anlegen wie bei jeder Bestellung fest.
+
 ## Karte „Beschaffung“ auf der Übersicht
 
 Die **Übersicht** zeigt eine Karte **Beschaffung** mit den Anträgen, über die noch nicht entschieden ist. Dazu kommt drei Tage lang jeder Antrag, dessen Status sich geändert hat (freigegeben, abgelehnt, bestellt, aufgenommen, zurückgezogen); danach verschwindet er dort von selbst. Die Karte zeigt höchstens acht Anträge, die zuletzt geänderten zuerst, und führt mit **Zur Beschaffung** zur ganzen Liste.
@@ -307,4 +373,8 @@ Erlaubt sind **PNG** und **JPEG** mit höchstens **512 KB** und **4096 × 4096 P
 - **Zeichen erscheinen im PDF als „?“:** Das PDF nutzt die Standardschriften, die westeuropäische Zeichen kennen. Andere Zeichen ersetzt es durch „?“; die Datei bleibt lesbar. Die Druckvorlage über **Drucken** zeigt alle Zeichen.
 - **Outlook öffnet die Mail-Datei nicht als Entwurf:** Nutzen Sie **ohne Anhang** und hängen Sie die Datei aus **Als PDF** selbst an.
 - **„Der Code ließ sich gerade nicht nachschlagen. Bitte noch einmal scannen.“** Die Verbindung zum Server war kurz unterbrochen. Scannen Sie die Packung erneut; gezählt wurde sie nicht.
+- **„Ein vorhandenes Asset hat diese Seriennummer schon.“** Prüfen Sie, ob der Code doppelt gelesen wurde. Ist es wirklich ein weiteres Gerät, setzen Sie **Vorhandene Seriennummern trotzdem übernehmen**.
+- **„Die Kategorie hat Pflichtfelder. Legen Sie diese Assets einzeln an.“** Nutzen Sie **Asset anlegen** für jedes Stück.
+- **„So viele Stück sind nicht mehr offen. Laden Sie die Seite neu.“** Inzwischen wurden Stück angelegt oder die Position geändert.
+- **„Die Bestellung konnte nicht angelegt werden. Laden Sie den Vorschlag neu und versuchen Sie es noch einmal.“** Der Bestand oder die offenen Mengen haben sich geändert; der neu geladene Vorschlag zeigt den aktuellen Stand.
 - **Das Logo wird abgelehnt:** Prüfen Sie Format, Größe und Maße. Eine beschädigte oder abgeschnittene Datei nimmt der Server nicht an.

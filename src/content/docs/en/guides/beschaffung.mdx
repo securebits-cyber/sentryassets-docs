@@ -12,7 +12,7 @@ Under **Inventory › Procurement** you take procurement requests from the reque
 
 What is ordered at once without a request, such as toner or cables, you record as an [order](#orders-without-a-request). On [receipt](#booking-a-receipt-into-stock), requests and orders book the delivered consumables straight into stock.
 
-Procurement is part of the Community edition.
+Procurement is part of the Community edition. Pro adds the [reorder proposal](#reorder-proposal) from the minimum stock and [creating devices as assets](#creating-devices-as-assets) on receipt. You assign cost centers to requests and orders as described under [Cost centers](/en/guides/kostenstellen/).
 
 ## Prerequisites
 
@@ -189,6 +189,41 @@ From the approval on, the request shows the card **In the inventory**: what it b
 
 A request names at most 1,000 assets and items, each once. Linking does not change the asset. **Remove** detaches a link; if a linked asset or item is deleted, the link goes with an entry in the request's audit log.
 
+### Creating devices as assets
+
+<Badge text="Pro" variant="note" /> This section applies from the Pro edition.
+
+When ten notebooks arrive, you create them as ten assets in one step. From **Approved** on, so also at **Ordered** and **Taken into the inventory**, the **In the inventory** card shows the section **Create devices as assets** with every position of the kind **Device or asset** and its state “… of … created”. Devices can thus be created on delivery, before the formal receipt.
+
+<Steps>
+
+1. At the position, choose **Create … assets**.
+
+2. Choose the **Category**. None is proposed; choose it deliberately.
+
+3. Check the **Location**. Proposed is the location of the order.
+
+4. Check the **Name**. It is preset with the position's title; each asset gets a running number after it.
+
+5. Enter **Manufacturer**, **Model** and the **Purchase date** if needed. The purchase date is preset with the date of receipt, otherwise today, and is kept where the category has a purchase date.
+
+6. Choose the **Number** and tick **Enter … as reseller** if needed, so that the order's supplier is on the asset.
+
+7. Under **Serial numbers**, scan or type the serial number of each piece. Enter moves on to the next piece and never submits, because a [hand scanner](/en/guides/scanner/) ends every code with Enter.
+
+8. Choose **Create … assets**.
+
+</Steps>
+
+All assets are linked to the request or order and its position. The inventory number comes from the category's numbering, if it has one. Assets and links are created together or not at all.
+
+- **Known serial number:** if an existing asset already carries a serial number you entered, SentryAssets refuses at first and marks the piece (“An existing asset has this serial number already.”). Usually the code was read twice or the device came back. If it really is a second device with the same number, tick **Take known serial numbers anyway** and create again. Upper and lower case do not matter in the comparison.
+- **Twice in one step:** the same serial number on two pieces is refused.
+- **Quantity:** at most 100 pieces per step and never more than the position's open pieces. A link made by hand does not count. If a created asset is deleted, its piece is open again.
+- **Required fields:** if the category has required fields, SentryAssets refuses; create these assets one by one with **Add asset**.
+- **No undo:** the message after creating offers no “Undo”, because deleting up to 100 assets again would be a mass deletion of its own. Delete a wrongly created asset in the asset list; its link goes with it.
+- **Rights:** the right to change procurement and the inventory; with [rights per location](/en/pro/standortrechte/), write access at the order's location and at the assets' target location.
+
 ## Booking a receipt into stock
 
 Once delivered, choose **Mark as received** on a request or an order. If it has positions with an [assigned consumable](#positions-with-consumables), the dialog shows a **Receipt** section below.
@@ -252,6 +287,37 @@ When booking in, the server checks rights and quantities as without scanning.
 
 Add quantity and price and choose **Add order**. **Reorder** shows only if you may write procurement and the item is not archived.
 
+## Reorder proposal
+
+<Badge text="Pro" variant="note" /> This section applies from the Pro edition.
+
+If you keep many consumables, you do not reorder item by item. **Inventory › Reorder proposal** lists every active item that is below its minimum at one location at least, grouped by supplier; items without a supplier come last under **Without supplier**. You also reach the page from [Consumables](/en/guides/verbrauchsmaterial/) with the filter **Below minimum** through **Reorder proposal for … items**.
+
+For each item the proposal shows:
+
+- **Shortfall:** per location what is missing up to the minimum (“…: … of …”), and the sum;
+- **On order:** what is already on its way in requests and orders with the status **Requested**, **Approved** or **Ordered**;
+- **Order quantity:** the shortfall less what is on order, never below zero. If everything is on its way, it reads **Already on its way**.
+
+<Steps>
+
+1. Open **Inventory › Reorder proposal**.
+
+2. In a group, choose the items you want to order and adjust the **Order quantity** if needed.
+
+3. Choose **Create order** at the group.
+
+4. In the dialog, check **Title** (preset “Reorder of consumables”), **Ordered by**, **Ordered on** and the **Location of the order**. Suggested is the location where all chosen items are short.
+
+5. Choose **Create order**.
+
+</Steps>
+
+This creates an [order](#orders-without-a-request) with the group's supplier, one position of the kind **Consumable** per item with article number and quantity, without a price. Add the prices in the order if needed. **Undo** in the message cancels and deletes the order again; afterwards, use **Cancel order** in procurement.
+
+- **Rights:** reading needs the right to read consumables and procurement; creating needs the right to change procurement and, with [rights per location](/en/pro/standortrechte/), write access at the order's location.
+- **Limits:** at most 100 positions per order and at most 2,000 items in the proposal. The audit log records the creation as for any order.
+
 ## The “Procurement” card on the overview
 
 The **Overview** shows a **Procurement** card with the requests not yet decided. In addition, every request whose status changed (approved, rejected, ordered, received, withdrawn) stays there for three days and then disappears by itself. The card shows at most eight requests, the most recently changed first, and leads to the full list with **To procurement**.
@@ -307,4 +373,8 @@ Allowed are **PNG** and **JPEG** of at most **512 KB** and **4096 × 4096 pixels
 - **Characters show as “?” in the PDF:** the PDF uses the standard fonts, which know Western European characters. It replaces others with “?”; the file stays readable. The printed form from **Print** shows all characters.
 - **Outlook does not open the mail file as a draft:** use **without attachment** and attach the file from **As PDF** yourself.
 - **“The code could not be looked up just now. Please scan it again.”** The connection to the server was briefly interrupted. Scan the package again; it was not counted.
+- **“An existing asset has this serial number already.”** Check whether the code was read twice. If it really is another device, tick **Take known serial numbers anyway**.
+- **“The category has required fields. Create these assets one by one.”** Use **Add asset** for each piece.
+- **“That many pieces are no longer open. Reload the page.”** Pieces were created meanwhile, or the position changed.
+- **“The order could not be created. Reload the proposal and try again.”** Stock or open quantities changed; the reloaded proposal shows the current state.
 - **The logo is refused:** check format, size and dimensions. The server does not accept a damaged or truncated file.
