@@ -109,7 +109,7 @@ Die Compose-Datei baut die Erweiterungen für Pro und Enterprise sowie die Add-o
 ```bash
 git pull
 ../../scripts/generate-secrets.sh   # ergänzt neue Geheimnisse und baut die Zugriffsregeln von Valkey neu, der Rest bleibt
-docker compose build
+docker compose build                # neue Version bauen; „up -d“ allein behält die alten Images
 docker compose run --rm migrate
 docker compose up -d
 ```

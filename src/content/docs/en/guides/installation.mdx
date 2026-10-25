@@ -109,7 +109,7 @@ The Compose file builds the extensions for Pro and Enterprise and the ISMS, data
 ```bash
 git pull
 ../../scripts/generate-secrets.sh   # adds new secrets and rebuilds the Valkey access rules, keeps the rest
-docker compose build
+docker compose build                # the new version; "up -d" alone keeps the old images
 docker compose run --rm migrate
 docker compose up -d
 ```
