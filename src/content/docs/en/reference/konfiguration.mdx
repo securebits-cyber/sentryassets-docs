@@ -136,7 +136,7 @@ docker compose --profile scanner up -d
 docker compose --profile scanner-update run --rm clamav-update
 ```
 
-The scanner has no network; the API reaches it through a socket. If a scanner is set but cannot be reached, uploads are refused rather than stored unchecked. Without a scanner the web UI points out unchecked files.
+The scanner has no network; the API reaches it through a socket. The message “WARNING: Clamd was NOT notified” while refreshing is harmless: the scanner checks every ten minutes for new signatures and loads them itself. If a scanner is set but cannot be reached, uploads are refused rather than stored unchecked. Without a scanner the web UI points out unchecked files.
 
 ## Proxy in front
 
