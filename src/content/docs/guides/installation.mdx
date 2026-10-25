@@ -8,87 +8,88 @@ sidebar:
 
 import { Aside, Steps } from '@astrojs/starlight/components';
 
-SentryAssets läuft als Docker-Compose-Stack auf einem eigenen Linux-Server. Diese Anleitung führt von einem leeren Server bis zur ersten Anmeldung.
+SentryAssets läuft als Docker-Compose-Stack auf einem eigenen Linux-Server. Diese Anleitung führt von einem leeren Server mit Ubuntu 24.04 oder Debian 13 bis zur ersten Anmeldung; jeder Befehl steht hier.
 
-## Voraussetzungen
+## 1. Server vorbereiten
 
-| Bereich | Anforderung |
-|---|---|
-| Server | Linux mit Docker (rootless empfohlen) oder Podman, jeweils mit Compose-Plugin, dazu Git |
-| Arbeitsspeicher | mindestens 4 GiB, empfohlen 6 GiB; mit Virenscanner für Uploads 2,5 GiB mehr |
-| DNS | zwei Namen, einer für die Weboberfläche (etwa `assets.example.test`) und einer für die Agents (etwa `agents.example.test`); beide dürfen auf denselben Server zeigen |
-| Ports | 80 und 443 von außen erreichbar; Agents und Weboberfläche teilen sich Port 443 und werden über den Hostnamen getrennt |
-| Zertifikat | entweder automatisch über ACME (Let's Encrypt, dafür eine E-Mail-Adresse) oder ein internes Zertifikat von Caddy (`internal`) |
+- **Größe:** 2 CPU-Kerne, 4 GiB Arbeitsspeicher und 20 GiB Platte zuzüglich Platz für Dokumente und Sicherungen; der optionale Virenscanner braucht weitere 2–3 GiB Arbeitsspeicher.
+- **Zwei DNS-Namen**, je ein A-Eintrag (und gern AAAA) auf die Adresse des Servers: einer für die Weboberfläche, etwa `assets.example.com`, und einer für die Agents, etwa `agents.example.com`. Beide teilen sich Port 443; der Name trennt sie, weil die Weboberfläche ein öffentliches Zertifikat und die Agents eines aus der eigenen PKI brauchen.
+- **Firewall** (beim Anbieter oder auf dem Server): eingehend nur TCP 22 (SSH), 80 (Zertifikat von Let's Encrypt, Weiterleitung) und 443. Mit `ufw` auf dem Server:
 
-<Aside type="caution" title="Niedrige Ports ohne Root-Rechte">
-Rootless Docker braucht für Ports unter 1024 einmalig `sudo setcap cap_net_bind_service=ep $(which rootlesskit)`. Bei Podman (oder als Notlösung, die allen lokalen Benutzern niedrige Ports erlaubt) setzen Sie `sysctl net.ipv4.ip_unprivileged_port_start=80`.
-</Aside>
+  ```bash
+  sudo ufw allow OpenSSH && sudo ufw allow 80/tcp && sudo ufw allow 443/tcp && sudo ufw enable
+  ```
 
-Wenn Port 443 für die Agents nicht in Frage kommt, bekommen sie mit `docker-compose.agent-port.yml` einen eigenen Port (Standard 8443).
+- **Ein normaler Benutzer mit `sudo`**, nicht `root`: Docker läuft rootless unter diesem Benutzer. Gibt es noch keinen, als `root`:
 
-## Installieren
+  ```bash
+  apt-get install -y sudo rsync     # fehlt unter Debian mitunter
+  adduser sentryassets && usermod -aG sudo sentryassets
+  rsync --archive --chown=sentryassets:sentryassets ~/.ssh /home/sentryassets   # SSH-Schlüssel übernehmen
+  ```
 
-<Steps>
+  Melden Sie sich danach als dieser Benutzer an (`ssh sentryassets@<Server>`); alle weiteren Befehle laufen als er.
 
-1. Repository holen und in das Verzeichnis der Compose-Dateien wechseln:
+## 2. Docker rootless installieren
 
-   ```bash
-   git clone https://github.com/securebits-cyber/sentryassets.git
-   cd sentryassets/deploy/compose
-   ```
+Docker aus den Paketquellen von Docker, danach ohne den Dienst mit Root-Rechten:
 
-2. Die Einstellungen anlegen und `SA_UI_HOST`, `SA_AGENT_HOST` und `SA_UI_TLS` anpassen (siehe [Konfiguration](/reference/konfiguration/)):
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl git uidmap dbus-user-session
+. /etc/os-release
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL "https://download.docker.com/linux/$ID/gpg" -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/$ID $VERSION_CODENAME stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+sudo systemctl disable --now docker.service docker.socket   # nur rootless
+sudo rm -f /var/run/docker.sock
+dockerd-rootless-setuptool.sh install                       # Docker für diesen Benutzer
+sudo loginctl enable-linger "$USER"                         # startet auch ohne Anmeldung, nach jedem Neustart
+sudo setcap cap_net_bind_service=ep "$(command -v rootlesskit)"   # Ports 80 und 443 ohne Root
+systemctl --user restart docker
+docker run --rm hello-world                                 # Probe: „Hello from Docker!“
+```
 
-   ```bash
-   cp .env.example .env
-   ```
+## 3. SentryAssets installieren
 
-3. Zufällige Geheimnisse erzeugen. Das Skript legt sie einmalig unter `./secrets` ab und erzeugt bei späteren Aufrufen nur fehlende:
+```bash
+git clone https://github.com/securebits-cyber/sentryassets.git && cd sentryassets/deploy/compose
+cp .env.example .env && chmod 600 .env
+```
 
-   ```bash
-   ../../scripts/generate-secrets.sh
-   ```
+In der `.env` drei Werte eintragen, etwa mit `nano .env` oder so:
 
-4. Images bauen und das Datenbankschema anlegen:
+```bash
+sed -i -E 's|^#? ?SA_UI_HOST=.*|SA_UI_HOST=assets.example.com|;
+           s|^#? ?SA_AGENT_HOST=.*|SA_AGENT_HOST=agents.example.com|;
+           s|^#? ?SA_UI_TLS=.*|SA_UI_TLS=it@example.com|' .env
+```
 
-   ```bash
-   docker compose build
-   docker compose run --rm migrate
-   ```
+`SA_UI_TLS` ist die E-Mail-Adresse für Let's Encrypt. Für einen Server ohne öffentlichen Namen setzen Sie `internal`; dann stellt Caddy das Zertifikat selbst aus, und der Browser warnt beim ersten Aufruf.
 
-5. Die Organisation anlegen:
+```bash
+../../scripts/generate-secrets.sh    # zufällige Geheimnisse nach ./secrets (einmalig)
+docker compose build                 # Images lokal bauen, einige Minuten
+docker compose run --rm migrate      # Datenbankschema anlegen
+docker compose run --rm cli setup --organization "Musterfirma GmbH"
+docker compose run --rm cli pki init --organization "Musterfirma GmbH" \
+  --agent-host agents.example.com --output-dir /pki   # fragt eine Passphrase für den Root-Schlüssel
+(umask 077; docker compose run --rm -T --entrypoint cat cli /pki/root-ca.p12 > /media/offline/root-ca.p12)
+docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
+docker compose run --rm cli admin create-admin --username admin
+docker compose up -d
+docker compose ps                    # alle Dienste „healthy“, migrate mit 0 beendet
+```
 
-   ```bash
-   docker compose run --rm cli setup --organization "RECPLAST GmbH"
-   ```
-
-6. Die PKI für die Agents erzeugen. Der Befehl fragt eine Passphrase für den Root-Schlüssel ab und gibt den **Fingerprint der Root-CA** aus; notieren Sie ihn, jede Agent-Installation braucht ihn:
-
-   ```bash
-   docker compose run --rm cli pki init --organization "RECPLAST GmbH" \
-     --agent-host agents.example.test --output-dir /pki
-   ```
-
-7. Den verschlüsselten Root-Schlüssel direkt auf einen Offline-Datenträger schreiben und im Volume löschen. Er wird nur zum Erneuern der CAs gebraucht:
-
-   ```bash
-   (umask 077; docker compose run --rm -T --entrypoint cat cli /pki/root-ca.p12 > /media/offline/root-ca.p12)
-   docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
-   ```
-
-8. Das erste Administratorkonto anlegen. Der Befehl fragt das Passwort ab und zeigt eine `otpauth://`-Adresse für Ihre Authenticator-App:
-
-   ```bash
-   docker compose run --rm cli admin create-admin --username admin
-   ```
-
-9. Den Stack starten:
-
-   ```bash
-   docker compose up -d
-   ```
-
-</Steps>
+- `pki init` gibt den **Fingerprint der Root-CA** aus; er gehört in jede Agent-Installation. Die verschlüsselte Datei `root-ca.p12` wird nur zum Erneuern der CAs gebraucht: direkt auf einen Offline-Datenträger schreiben (oben `/media/offline`, etwa ein USB-Stick; anpassen) und im Volume löschen. Die Passphrase gehört getrennt davon aufbewahrt.
+- `admin create-admin` legt den ersten Administrator an: Es fragt das Passwort ab (mindestens 12 Zeichen) und zeigt eine `otpauth://`-Adresse für die Authenticator-App. Danach unter `https://<SA_UI_HOST>` anmelden; der Einrichtungsassistent führt durch Standort und den ersten Agent. Weitere Personen erhalten unter **Einstellungen › Benutzer** ein lokales Konto: Die Administration legt es an und gibt einen einmaligen Einrichtungslink weiter, mit dem die Person Passwort und TOTP selbst festlegt.
+- `./secrets/master_key` verschlüsselt gespeicherte Geheimnisse (TOTP, Issuing-CA), alle Dokumente und die Sicherungen. Ohne ihn sind diese verloren: getrennt von den Sicherungen aufbewahren, etwa ausgedruckt im Tresor oder in einem Passwortmanager.
+- Mit Podman statt Docker: `sudo apt-get install -y podman podman-compose`, `sudo sysctl -w net.ipv4.ip_unprivileged_port_start=80` (dauerhaft in `/etc/sysctl.d/`) und `podman compose` statt `docker compose`.
+- Kommt Port 443 für die Agents nicht in Frage, bekommen sie mit `docker-compose.agent-port.yml` einen eigenen Port (8443).
 
 ## Ergebnis prüfen
 
@@ -101,19 +102,19 @@ Wenn Port 443 für die Agents nicht in Frage kommt, bekommen sie mit `docker-com
 
 ## Editionen im Image
 
-Die Compose-Datei baut die Erweiterungen für Pro, Enterprise und das ISMS-Add-on in die Images ein. Ohne Lizenz sind deren Bereiche sichtbar und gesperrt; mit einem Lizenzschlüssel oder dem [Testzeitraum](/guides/lizenz/) werden sie sofort frei. Wer nur die Community-Edition bauen möchte, setzt `SA_EXTENSIONS=` (leer) in der `.env`.
+Die Compose-Datei baut die Erweiterungen für Pro und Enterprise sowie die Add-ons für ISMS, Datenschutz und NIS2 in die Images ein. Ohne Lizenz sind deren Bereiche sichtbar und gesperrt; mit einem Lizenzschlüssel oder dem [Testzeitraum](/guides/lizenz/) werden sie sofort frei. Wer nur die Community-Edition bauen möchte, setzt `SA_EXTENSIONS=` (leer) in der `.env`.
 
 ## Aktualisieren
 
 ```bash
 git pull
-../../scripts/generate-secrets.sh   # baut die Zugriffsregeln von Valkey neu, Geheimnisse bleiben
+../../scripts/generate-secrets.sh   # ergänzt neue Geheimnisse und baut die Zugriffsregeln von Valkey neu, der Rest bleibt
 docker compose build
 docker compose run --rm migrate
 docker compose up -d
 ```
 
-Hinweise zu einzelnen Versionen stehen im Änderungsprotokoll (`CHANGELOG.md`). Für Updates ohne Ausfall siehe [Hochverfügbarkeit](/pro/hochverfuegbarkeit/).
+Vorher eine Sicherung anlegen (**Einstellungen › Sicherung** oder `docker compose run --rm backup create`). Hinweise zu einzelnen Versionen stehen im Änderungsprotokoll (`CHANGELOG.md`). Für Updates ohne Ausfall siehe [Hochverfügbarkeit](/pro/hochverfuegbarkeit/).
 
 ## Fehlerbehebung
 
