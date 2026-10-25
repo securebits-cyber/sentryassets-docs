@@ -1,6 +1,6 @@
 ---
 title: Sicherung und Umzug
-description: Die SentryAssets-Installation verschlüsselt sichern, prüfen, auf einem anderen Server wiederherstellen und die Agent-PKI erneuern.
+description: Die SentryAssets-Installation im Dashboard oder per Befehl verschlüsselt sichern, planen, prüfen, herunterladen und wiederherstellen, umziehen und die Agent-PKI erneuern.
 sidebar:
   label: Sicherung und Umzug
   order: 15
@@ -10,7 +10,35 @@ import { Aside, Steps } from '@astrojs/starlight/components';
 
 Eine Sicherung enthält die Datenbank, die Dokumente und die Dateien der Agent-PKI in **einer** Datei, verschlüsselt mit dem Master-Schlüssel. Mit ihr ziehen Sie auch auf einen anderen Server um.
 
-## Sichern
+## Im Dashboard
+
+Unter **Einstellungen › Sicherung** erledigen Sie alles ohne Konsole. Die Seite sieht nur die Administration der Installation; sie gehört zur Community-Edition.
+
+- **Jetzt sichern** legt sofort eine Sicherung an.
+- **Zeitplan:** einmal am Tag zur gewählten Uhrzeit, dazu die Zahl der Sicherungen, die bleiben (1 bis 90). Ältere entfernt der Dienst nach jeder neuen Sicherung. Empfehlung: täglich um 2 Uhr, 14 Sicherungen.
+- **Prüfen** liest eine Datei vollständig und entschlüsselt sie, ohne etwas zu ändern. Nur geprüfte Sicherungen lassen sich wiederherstellen.
+- **Herunterladen** speichert eine Datei auf Ihrem Rechner, etwa für die Ablage außer Haus. Die Seite listet jedes Herunterladen; die Glocke meldet es allen Administratorinnen und Administratoren sieben Tage lang.
+- **Wiederherstellen** ersetzt alle Daten durch den Stand der Sicherung, siehe unten.
+
+Zeitplan, Herunterladen und Wiederherstellen verlangen eine frische Bestätigung der Anmeldung (TOTP oder erneute Anmeldung beim Identitätsanbieter). Die Arbeit macht der Dienst `backup-runner`, der mit `docker compose up -d` startet; meldet er sich nicht, sagt die Seite das. Die Glocke warnt, wenn keine, eine alte oder eine fehlgeschlagene Sicherung vorliegt; die Meldungen lassen sich unter **Profil** als E-Mail abonnieren (Kategorie „Sicherung der Installation“).
+
+### Im Dashboard wiederherstellen
+
+<Steps>
+
+1. Wählen Sie bei einer **geprüften** Sicherung **Wiederherstellen** und geben Sie zur Bestätigung den Namen Ihrer Organisation ein.
+
+2. Der Sicherungsdienst prüft die Datei noch einmal und hält dann API, Agent-Gateway und Worker an (Wartungsmodus). SentryAssets ist einige Minuten nicht erreichbar; Agents warten und senden danach weiter.
+
+3. Vorher legt er eine **Sicherheitskopie** des jetzigen Stands an. Scheitert die Wiederherstellung, spielt er diese Kopie automatisch zurück. Wird der Dienst mittendrin beendet, setzt er beim nächsten Start mit der Sicherheitskopie fort.
+
+4. Danach startet die Anwendung von selbst; alle melden sich neu an. Die Seite führt Sie zur Anmeldung.
+
+</Steps>
+
+Wiederholen Sie danach, was seit der Sicherung geschah (siehe unten). Eine Sicherung aus einer neueren Version lässt sich nicht einspielen.
+
+## Per Befehl
 
 ```bash
 docker compose run --rm backup create --keep 14   # neue Sicherung, die 14 neuesten bleiben
@@ -19,7 +47,7 @@ docker compose run --rm backup verify <Name>      # vollständig prüfen, ohne e
 docker compose run --rm -T backup create --stdout > sentryassets.sabak   # direkt auf den Host
 ```
 
-- Am besten jede Nacht per Timer oder Cron, etwa:
+- Ohne den Sicherungsdienst am besten jede Nacht per Timer oder Cron, etwa:
 
   ```bash
   0 2 * * * cd /opt/sentryassets/deploy/compose && docker compose run --rm backup create --keep 14
@@ -33,7 +61,7 @@ docker compose run --rm -T backup create --stdout > sentryassets.sabak   # direk
 Die Sicherung ist mit `./secrets/master_key` verschlüsselt. Bewahren Sie den Schlüssel getrennt von den Sicherungen auf. Den Schlüssel der Root-CA (`root-ca.p12`) enthält keine Sicherung; er bleibt offline.
 </Aside>
 
-## Wiederherstellen oder umziehen
+## Auf einen anderen Server umziehen
 
 <Steps>
 

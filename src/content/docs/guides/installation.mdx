@@ -107,6 +107,7 @@ Die Compose-Datei baut die Erweiterungen für Pro, Enterprise und das ISMS-Add-o
 
 ```bash
 git pull
+../../scripts/generate-secrets.sh   # baut die Zugriffsregeln von Valkey neu, Geheimnisse bleiben
 docker compose build
 docker compose run --rm migrate
 docker compose up -d

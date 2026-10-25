@@ -1,6 +1,6 @@
 ---
 title: Backup and migration
-description: Back up the SentryAssets installation encrypted, verify it, restore it on another server and renew the agent PKI.
+description: Back up, schedule, check, download and restore the SentryAssets installation in the dashboard or by command, move it and renew the agent PKI.
 sidebar:
   label: Backup and migration
   order: 15
@@ -10,7 +10,35 @@ import { Aside, Steps } from '@astrojs/starlight/components';
 
 A backup holds the database, the documents and the files of the agent PKI in **one** file, encrypted with the master key. It also moves the installation to another server.
 
-## Backing up
+## In the dashboard
+
+Under **Settings › Backup** you do everything without a console. Only the administration of the installation sees the page; it is part of the Community Edition.
+
+- **Back up now** makes a backup at once.
+- **Schedule:** once a day at the chosen time, with the number of backups to keep (1 to 90). The service removes older ones after each new backup. Recommended: daily at 2 a.m., 14 backups.
+- **Check** reads and decrypts a file completely without changing anything. Only checked backups can be restored.
+- **Download** saves a file on your computer, for example for off-site storage. The page lists every download; the bell reports it to every administrator for seven days.
+- **Restore** replaces all data with the state of the backup, see below.
+
+Schedule, download and restore need a fresh confirmation of the sign-in (TOTP or a new sign-in at the identity provider). The work is done by the service `backup-runner`, which starts with `docker compose up -d`; if it does not answer, the page says so. The bell warns when there is no backup, an old or a failed one; under **Profile** you can subscribe to these by e-mail (category “Backup of the installation”).
+
+### Restoring in the dashboard
+
+<Steps>
+
+1. Choose **Restore** at a **checked** backup and type the name of your organisation to confirm.
+
+2. The backup service checks the file again and then stops API, agent gateway and worker (maintenance). SentryAssets is unavailable for a few minutes; agents wait and send again afterwards.
+
+3. First it makes a **safety backup** of the current state. Should the restore fail, it brings this copy back by itself. If the service is stopped halfway, it continues with the safety backup at its next start.
+
+4. Afterwards the application starts by itself; everyone signs in again. The page takes you to the sign-in.
+
+</Steps>
+
+Then repeat what happened since the backup (see below). A backup from a newer version cannot be restored.
+
+## By command
 
 ```bash
 docker compose run --rm backup create --keep 14   # new backup, the 14 newest are kept
@@ -19,7 +47,7 @@ docker compose run --rm backup verify <name>      # full check without writing a
 docker compose run --rm -T backup create --stdout > sentryassets.sabak   # straight to the host
 ```
 
-- Best every night from a timer or cron job, for example:
+- Without the backup service, best every night from a timer or cron job, for example:
 
   ```bash
   0 2 * * * cd /opt/sentryassets/deploy/compose && docker compose run --rm backup create --keep 14
@@ -33,7 +61,7 @@ docker compose run --rm -T backup create --stdout > sentryassets.sabak   # strai
 The backup is encrypted with `./secrets/master_key`. Keep the key apart from the backups. No backup contains the key of the root CA (`root-ca.p12`); it stays offline.
 </Aside>
 
-## Restoring or moving
+## Moving to another server
 
 <Steps>
 
