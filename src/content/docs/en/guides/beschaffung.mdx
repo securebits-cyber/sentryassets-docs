@@ -185,7 +185,7 @@ Beside **Print**, the request's page offers further ways. The PDF is always buil
 
 </Steps>
 
-SentryAssets writes subject and text from the request: number, subject, requester, total and a link to the request, plus your message and your name. Replies go to your own address; the sender stays the configured one. Sending runs in the background; a notice tells you once the mail server has the mail, or why not. If the mail server accepts only some recipients, the notice says so.
+SentryAssets writes subject and text from the request: number, subject, requester, total and a link to the request, plus your message and your name. The sender stays the configured one. If your account has a confirmed e-mail address, replies go to it; otherwise to the sender address of the mail server, and the dialog points this out. Local accounts get their address from the administration under **Settings › Users**; when you sign in through the identity provider, it comes from there. Sending runs in the background; a notice tells you once the mail server has the mail, or why not. If the mail server accepts only some recipients, the notice says so.
 
 The limits: at most 5 recipients per sending, 20 sendings per person and hour and 200 per organisation and day; addresses with `%` or `!` before the `@` are refused. The PDF is checked like an uploaded document, kept encrypted until it went out and deleted afterwards. The audit log names the number of recipients and their domains, never an address or the message.
 
