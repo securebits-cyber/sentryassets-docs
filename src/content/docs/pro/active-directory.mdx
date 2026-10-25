@@ -1,8 +1,8 @@
 ---
-title: Personen aus dem Active Directory
+title: Benutzer aus dem Active Directory
 description: Mit Pro liest SentryAssets die Mitglieder gewählter AD-Gruppen über die vorhandene AD-Verbindung, gleicht sie mit den Verantwortlichen ab und erkennt Ein- und Austritte.
 sidebar:
-  label: Personen aus dem AD
+  label: Benutzer aus dem AD
   order: 5
 ---
 
@@ -12,6 +12,8 @@ import { Badge, Steps, Aside } from '@astrojs/starlight/components';
 
 Die Community-Edition gleicht die Computer des Active Directory mit dem Inventar ab. Pro liest zusätzlich die **Personen** gewählter Gruppen, ordnet sie den Verantwortlichen zu und meldet, wer neu ist und wer geht.
 
+Sie finden beides unter **Discovery › Verzeichnisdienst**: den Reiter **Computer** in jeder Edition, dazu ab Pro **Benutzer**, **Austritt fällig**, **Neu eingetreten**, **Geräte** und für die Administration **Einstellungen**. Ohne Pro zeigen diese Reiter, was sie bringen.
+
 Gelesen wird über die Verbindung, die Sie unter **Einstellungen › Verzeichnisdienste** eingerichtet und getestet haben, mit demselben Dienstkonto und nur lesend. Ein zweites Dienstkonto ist nicht nötig. SentryAssets ändert und sperrt im AD nichts.
 
 ## Einrichten
@@ -19,7 +21,7 @@ Gelesen wird über die Verbindung, die Sie unter **Einstellungen › Verzeichnis
 <Steps>
 
 1. Die [Verbindung zum Active Directory](/guides/active-directory/) einrichten, testen und aktivieren, falls noch nicht geschehen. Wichtig: Unter den Basis-DNs der Verbindung müssen auch die OUs der Benutzer stehen.
-2. **Discovery › Personen aus dem AD › Einstellungen** öffnen und die Gruppen als Distinguished Name eintragen, eine je Zeile, etwa `CN=Mitarbeitende,OU=Gruppen,DC=firma,DC=de`. Mitglieder verschachtelter Gruppen zählen mit; höchstens 20 Gruppen.
+2. **Discovery › Verzeichnisdienst › Einstellungen** öffnen und die Gruppen als Distinguished Name eintragen, eine je Zeile, etwa `CN=Mitarbeitende,OU=Gruppen,DC=firma,DC=de`. Mitglieder verschachtelter Gruppen zählen mit; höchstens 20 Gruppen.
 3. Bei Bedarf **Regeln für die Abteilung** anlegen (siehe unten) und den Abstand des Abgleichs wählen.
 4. **Speichern und abgleichen.** Der erste Abgleich läuft sofort.
 

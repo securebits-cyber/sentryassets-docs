@@ -1,8 +1,8 @@
 ---
-title: People from Active Directory
+title: Users from Active Directory
 description: With Pro, SentryAssets reads the members of chosen AD groups over the existing AD connection, matches them with the responsible persons and spots joiners and leavers.
 sidebar:
-  label: People from AD
+  label: Users from AD
   order: 5
 ---
 
@@ -12,6 +12,8 @@ import { Badge, Steps, Aside } from '@astrojs/starlight/components';
 
 The Community edition matches the computers of Active Directory with the inventory. Pro also reads the **people** of chosen groups, links them to responsible persons and tells you who is new and who is leaving.
 
+Both are under **Discovery › Directory service**: the tab **Computers** in every edition, and from Pro **Users**, **Leaving**, **New joiners**, **Devices** and, for the administration, **Settings**. Without Pro these tabs explain what they bring.
+
 Reading uses the connection you set up and tested under **Settings › Directory services**, with the same service account and read-only. No second service account is needed. SentryAssets changes and disables nothing in AD.
 
 ## Setting up
@@ -19,7 +21,7 @@ Reading uses the connection you set up and tested under **Settings › Directory
 <Steps>
 
 1. Set up, test and activate the [connection to Active Directory](/en/guides/active-directory/) if you have not yet. Important: the connection's base DNs must include the users' OUs too.
-2. Open **Discovery › People from AD › Settings** and enter the groups as distinguished names, one per line, such as `CN=Staff,OU=Groups,DC=company,DC=com`. Members of nested groups count too; at most 20 groups.
+2. Open **Discovery › Directory service › Settings** and enter the groups as distinguished names, one per line, such as `CN=Staff,OU=Groups,DC=company,DC=com`. Members of nested groups count too; at most 20 groups.
 3. Add **rules for the department** if needed (see below) and choose the reconciliation interval.
 4. **Save and reconcile.** The first reconciliation runs at once.
 

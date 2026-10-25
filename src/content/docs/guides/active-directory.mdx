@@ -59,8 +59,8 @@ Der Server muss den Domänencontroller erreichen dürfen: Sein Netz steht in `SA
    - **Dienstkonto:** als UPN (`svc-sentryassets@firma.local`), `FIRMA\svc-sentryassets` oder DN, dazu das **Passwort**. Es wird verschlüsselt gespeichert und nie wieder angezeigt.
    - **Eigene CA (PEM):** der Inhalt der exportierten `.cer`-Datei.
 2. **Entwurf speichern** und **Verbindung testen.** Der Test nennt den Grund, falls etwas fehlt, etwa einen Namen, der nicht zum Zertifikat passt.
-3. **Aktivieren.** Der erste Abgleich der Computer läuft; die Ergebnisse stehen unter **Discovery › Active Directory**.
-4. <Badge text="Pro" variant="note" /> Für Personen unter **Discovery › Personen aus dem AD › Einstellungen** die Gruppen eintragen und **Speichern und abgleichen**, siehe [Personen aus dem Active Directory](/pro/active-directory/).
+3. **Aktivieren.** Der erste Abgleich der Computer läuft; die Ergebnisse stehen unter **Discovery › Verzeichnisdienst › Computer**.
+4. <Badge text="Pro" variant="note" /> Für Personen unter **Discovery › Verzeichnisdienst › Einstellungen** die Gruppen eintragen und **Speichern und abgleichen**, siehe [Benutzer aus dem Active Directory](/pro/active-directory/).
 
 </Steps>
 
@@ -69,7 +69,7 @@ Der Server muss den Domänencontroller erreichen dürfen: Sein Netz steht in `SA
 <Badge text="Pro" variant="note" /> Ab Pro binden Sie bis zu 20 Domänen oder Forests an, etwa nach einem Zukauf. Jede bekommt unter **Einstellungen › Verzeichnisdienste** über **Weitere Domäne anbinden** eine eigene Verbindung mit eigenem Dienstkonto, eigener CA und eigenen OUs; Vorbereitung und Test wie oben, je Domänencontroller.
 
 - **Ein Abgleich für alle:** Jede aktive Verbindung wird in ihrem Abstand gelesen, auf Knopfdruck alle. Scheitert eine, behalten ihre Computer ihren Stand; die anderen werden trotzdem gespeichert.
-- **Herkunft:** Unter **Discovery › Active Directory** steht bei jedem Computer, aus welcher Verbindung er kommt.
+- **Herkunft:** Unter **Discovery › Verzeichnisdienst › Computer** steht bei jedem Computer, aus welcher Verbindung er kommt.
 - **Konflikte löst die Reihenfolge:** Wird ein Computer über zwei Verbindungen gefunden, gehört er zur oberen. Passen Computer zweier Domänen zu demselben Asset, bekommt es der Computer der oberen Verbindung; der andere wird zum Konflikt. Zuordnungen von Hand gehen immer vor. Die Reihenfolge ändern Sie mit den Pfeilen.
 - **Entfernen** einer Verbindung löscht ihre Konfiguration; ihre Computer gelten beim nächsten Abgleich als entfernt, Assets bleiben unverändert.
 - **Ohne Lizenz für Pro** liest der Abgleich nur die erste Verbindung; die übrigen bleiben gespeichert.
