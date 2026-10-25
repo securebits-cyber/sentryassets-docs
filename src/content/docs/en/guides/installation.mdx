@@ -86,7 +86,7 @@ docker compose ps                    # every service "healthy", migrate ended wi
 ```
 
 - `pki init` prints the **fingerprint of the root CA**; every agent installation needs it. The encrypted file `root-ca.p12` is only needed to renew the CAs: write it straight to an offline medium (`/media/offline` above, such as a USB stick; adjust it) and delete it from the volume. Keep the passphrase apart from it.
-- `admin create-admin` creates the first administrator, with the address for test mails and notifications (`--email`, also later in the setup assistant or under **Settings › Users**): it asks for the password (at least 12 characters) and shows an `otpauth://` address for the authenticator app. Then sign in at `https://<SA_UI_HOST>`; the setup assistant leads through location and the first agent. More people get a local account under **Settings › Users**: the administrator creates it and passes on a one-time setup link, with which the person sets their own password and TOTP.
+- `admin create-admin` creates the first administrator, with the address for test mails and notifications (`--email`, also later in the setup assistant or under **Settings › Users**): it asks for the password (at least 12 characters) and shows an `otpauth://` address for the authenticator app. Then sign in at `https://<SA_UI_HOST>`; the setup assistant leads through location and sign-in and shows the ways into the inventory. More people get a local account under **Settings › Users**: the administrator creates it and passes on a one-time setup link, with which the person sets their own password and TOTP.
 - `./secrets/master_key` encrypts stored secrets (TOTP, issuing CA), every document and the backups. Without it they are lost: keep it apart from the backups, for example printed in a safe or in a password manager.
 - With Podman instead of Docker: `sudo apt-get install -y podman podman-compose`, `sudo sysctl -w net.ipv4.ip_unprivileged_port_start=80` (permanently in `/etc/sysctl.d/`) and `podman compose` instead of `docker compose`.
 - If port 443 is not an option for the agents, `docker-compose.agent-port.yml` gives them a port of their own (8443).
@@ -94,7 +94,7 @@ docker compose ps                    # every service "healthy", migrate ended wi
 ## Check the result
 
 - `docker compose ps` shows every service as `healthy`; `migrate` has exited with code 0.
-- `https://<SA_UI_HOST>` shows the sign-in. Sign in with the administrator account; the [setup wizard](/en/guides/einrichtung/) leads through location and the first agent. Other people get a [local account](/en/guides/einrichtung/#local-accounts); OIDC is optional.
+- `https://<SA_UI_HOST>` shows the sign-in. Sign in with the administrator account; the [setup wizard](/en/guides/einrichtung/) leads through location and sign-in and shows the ways into the inventory. Other people get a [local account](/en/guides/einrichtung/#local-accounts); OIDC is optional.
 
 <Aside type="danger" title="Keep the master key safe">
 `./secrets/master_key` encrypts stored secrets (TOTP, issuing CA), every document and the backups. Without it they are lost. Keep it apart from the backups, for example printed in a safe or in a password manager.
