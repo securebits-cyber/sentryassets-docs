@@ -10,7 +10,7 @@ This page describes the community edition. Features from Pro on are under [Pro a
 
 ## Overview and tasks
 
-The **Overview** is the start page: the next sensible step, progress in the IT-Grundschutz, key figures compared with the previous week, the sources of discovery and the **Tasks**. Tasks arise from deadlines and rules, such as licences and contracts running out, support ending, backup proofs missing, requirements due or consumables below their minimum. The command palette (`Ctrl + K`) finds assets, pages and actions; a scanned asset label or EAN appears there as the first match and opens the asset or the item with Enter.
+The **Overview** is the start page: the next sensible step, progress in the IT-Grundschutz, key figures compared with the previous week, the sources of discovery and the **Tasks**. Tasks arise from deadlines and rules, such as licences and contracts running out, support ending, backup proofs missing, medical device checks due, requirements due or consumables below their minimum. The command palette (`Ctrl + K`) finds assets, pages and actions; a scanned asset label or EAN appears there as the first match and opens the asset or the item with Enter.
 
 ## Inventory
 
@@ -29,6 +29,7 @@ The **Overview** is the start page: the next sensible step, progress in the IT-G
 - **Stocktaking** per location with everything below it: target frozen at the start, recording by search, label or inventory number, results found, missing, found elsewhere, not in target and unknown; unchangeable once closed, **Take over location** for assets found elsewhere, a protocol to print or save as a PDF. From Pro, a scan field records each scan at once. See [Stocktaking](/en/guides/inventur/).
 - **Disposal with proof of erasure** after BSI CON.6: reason, data media with method (NIST SP 800-88, secure erase, cryptographic, destruction with a DIN 66399 security level, disposer), performed and checked by, proof as a document, whereabouts; unchangeable once closed, a proof can be handed in later but no longer deleted; a protocol with signature fields. See [Disposal](/en/guides/aussonderung/).
 - **Lifecycle rules:** warranty ending, a device older than its replacement age, not seen for long; as tasks and filters, without a rule changing an asset by itself.
+- **Checks of medical devices:** when the safety check (STK) or metrological check (MTK) of a device in operation has passed, the task **Check overdue** appears (red), because without the check the device may no longer be used. When a check falls today or within the next 30 days, **Check due** appears; a device counts once, overdue first. Both are filters of the asset list, part of an e-mail subscription category and of what needs care in the inventory report. They read the date fields "Sicherheitstechnische Kontrolle fällig" and "Messtechnische Kontrolle fällig" of the medical technology category and of any own category with date fields under the keys `stk_due` and `mtk_due`; devices out of operation do not count.
 
 ## Automatic discovery
 
@@ -67,7 +68,7 @@ Grundschutz++ and Edition 2023 with a guided process, the Grundschutz check and 
 
 ## Reports
 
-- **Inventory:** assets by lifecycle, category and location, what needs care (no owner, orphaned, support ending, shadow IT) and agent coverage; every figure leads to the filtered asset list.
+- **Inventory:** assets by lifecycle, category and location, what needs care (no owner, orphaned, support ending, medical device checks overdue or due once there are any, shadow IT) and agent coverage; every figure leads to the filtered asset list.
 - **Costs:** monthly and yearly costs of licences and contracts per currency, area and item, and by cost center with the year's procurement, as CSV and for printing.
 
 ## Notifications
