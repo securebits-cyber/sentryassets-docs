@@ -110,9 +110,13 @@ Die Compose-Datei baut die Erweiterungen für Pro und Enterprise sowie die Add-o
 git pull
 ../../scripts/generate-secrets.sh   # ergänzt neue Geheimnisse und baut die Zugriffsregeln von Valkey neu, der Rest bleibt
 docker compose build                # neue Version bauen; „up -d“ allein behält die alten Images
+docker compose up -d postgres       # mit neuen Geheimnissen neu starten
+docker compose exec postgres sh /docker-entrypoint-initdb.d/10-sentryassets-roles.sh
 docker compose run --rm migrate
 docker compose up -d
 ```
+
+Die Zeile vor `migrate` legt Datenbankrollen an, die eine neuere Version mitbringt; vorhandene Rollen und ihre Passwörter bleiben unverändert.
 
 Vorher eine Sicherung anlegen (**Einstellungen › Sicherung** oder `docker compose run --rm backup create`). Hinweise zu einzelnen Versionen stehen im Änderungsprotokoll (`CHANGELOG.md`). Für Updates ohne Ausfall siehe [Hochverfügbarkeit](/pro/hochverfuegbarkeit/).
 

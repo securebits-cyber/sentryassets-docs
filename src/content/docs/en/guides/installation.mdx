@@ -110,9 +110,13 @@ The Compose file builds the extensions for Pro and Enterprise and the ISMS, data
 git pull
 ../../scripts/generate-secrets.sh   # adds new secrets and rebuilds the Valkey access rules, keeps the rest
 docker compose build                # the new version; "up -d" alone keeps the old images
+docker compose up -d postgres       # restart with new secrets
+docker compose exec postgres sh /docker-entrypoint-initdb.d/10-sentryassets-roles.sh
 docker compose run --rm migrate
 docker compose up -d
 ```
+
+The last line before `migrate` creates database roles that a newer version brings and leaves existing ones and their passwords alone.
 
 Make a backup first (**Settings › Backup** or `docker compose run --rm backup create`). Notes on single versions are in the changelog (`CHANGELOG.md`). For updates without downtime see [High availability](/en/pro/hochverfuegbarkeit/).
 
