@@ -77,7 +77,8 @@ Notifications, directory service, AI assistant and connectors reach only network
 |---|---|
 | "Address not allowed" | The target's name resolves to an address that is not allowed, often a private address or one of an overlay network. Allow it as described under [Network allowances](/en/reference/konfiguration/#network-allowances), in the existing line of `.env`, then `docker compose up -d`. |
 | Allowance set but without effect | The variable appears twice in `.env`, and the later (often empty) one counts. Check with `grep -n ALLOWED_NETWORKS .env`; keep one line per variable. |
-| Gotify: "refused by the target" | Gotify refuses the token (answer 401). It needs the token of an **application** (in Gotify under "Apps", starting with "A"); a token under "Clients" can only read. Enter the token again under **Edit target**. |
+| Gotify: "token refused (401/403)" | Gotify refuses the token. It needs the token of an **application** (in Gotify under "Apps", starting with "A"); a token under "Clients" can only read. Enter the token again under **Edit target**. |
+| "path not found at the target (404)" | The address reaches the server, but the path does not exist there. For a webhook check the path after the host; for Gotify check that the address points to Gotify itself, without a path such as `/message`. |
 
 ## System health
 

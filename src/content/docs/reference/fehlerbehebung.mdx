@@ -77,7 +77,8 @@ Benachrichtigungen, Verzeichnisdienst, KI-Assistent und Konnektoren erreichen nu
 |---|---|
 | „Adresse nicht erlaubt“ | Der Name des Ziels löst auf eine Adresse auf, die nicht freigegeben ist, oft eine private Adresse oder die eines Overlay-Netzes. Freigabe wie unter [Netzfreigaben](/reference/konfiguration/#netzfreigaben) beschrieben, in der vorhandenen Zeile der `.env`, dann `docker compose up -d`. |
 | Freigabe gesetzt, wirkt aber nicht | Die Variable steht zweimal in der `.env`, die spätere (oft leere) gilt. Prüfen mit `grep -n ALLOWED_NETWORKS .env`; nur eine Zeile je Variable behalten. |
-| Gotify: „vom Ziel abgelehnt“ | Gotify lehnt den Token ab (Antwort 401). Nötig ist das Token einer **Anwendung** (in Gotify unter „Apps“, beginnt mit „A“); ein Token unter „Clients“ kann nur lesen. Token unter **Ziel bearbeiten** neu eintragen. |
+| Gotify: „Token abgelehnt (401/403)“ | Gotify lehnt den Token ab. Nötig ist das Token einer **Anwendung** (in Gotify unter „Apps“, beginnt mit „A“); ein Token unter „Clients“ kann nur lesen. Token unter **Ziel bearbeiten** neu eintragen. |
+| „Pfad beim Ziel nicht gefunden (404)“ | Die Adresse erreicht den Server, aber den Pfad gibt es dort nicht. Prüfen Sie beim Webhook den Pfad hinter dem Host und bei Gotify, dass die Adresse auf Gotify selbst zeigt, ohne Pfad wie `/message`. |
 
 ## Systemzustand
 
