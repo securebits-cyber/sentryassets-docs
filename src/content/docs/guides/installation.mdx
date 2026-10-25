@@ -80,13 +80,13 @@ docker compose run --rm cli pki init --organization "Musterfirma GmbH" \
   --agent-host agents.example.com --output-dir /pki   # fragt eine Passphrase für den Root-Schlüssel
 (umask 077; docker compose run --rm -T --entrypoint cat cli /pki/root-ca.p12 > /media/offline/root-ca.p12)
 docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
-docker compose run --rm cli admin create-admin --username admin
+docker compose run --rm cli admin create-admin --username admin --email it@example.com
 docker compose up -d
 docker compose ps                    # alle Dienste „healthy“, migrate mit 0 beendet
 ```
 
 - `pki init` gibt den **Fingerprint der Root-CA** aus; er gehört in jede Agent-Installation. Die verschlüsselte Datei `root-ca.p12` wird nur zum Erneuern der CAs gebraucht: direkt auf einen Offline-Datenträger schreiben (oben `/media/offline`, etwa ein USB-Stick; anpassen) und im Volume löschen. Die Passphrase gehört getrennt davon aufbewahrt.
-- `admin create-admin` legt den ersten Administrator an: Es fragt das Passwort ab (mindestens 12 Zeichen) und zeigt eine `otpauth://`-Adresse für die Authenticator-App. Danach unter `https://<SA_UI_HOST>` anmelden; der Einrichtungsassistent führt durch Standort und den ersten Agent. Weitere Personen erhalten unter **Einstellungen › Benutzer** ein lokales Konto: Die Administration legt es an und gibt einen einmaligen Einrichtungslink weiter, mit dem die Person Passwort und TOTP selbst festlegt.
+- `admin create-admin` legt den ersten Administrator an, mit der Adresse für Testmails und Benachrichtigungen (`--email`, auch später im Einrichtungsassistenten oder unter **Einstellungen › Benutzer**): Es fragt das Passwort ab (mindestens 12 Zeichen) und zeigt eine `otpauth://`-Adresse für die Authenticator-App. Danach unter `https://<SA_UI_HOST>` anmelden; der Einrichtungsassistent führt durch Standort und den ersten Agent. Weitere Personen erhalten unter **Einstellungen › Benutzer** ein lokales Konto: Die Administration legt es an und gibt einen einmaligen Einrichtungslink weiter, mit dem die Person Passwort und TOTP selbst festlegt.
 - `./secrets/master_key` verschlüsselt gespeicherte Geheimnisse (TOTP, Issuing-CA), alle Dokumente und die Sicherungen. Ohne ihn sind diese verloren: getrennt von den Sicherungen aufbewahren, etwa ausgedruckt im Tresor oder in einem Passwortmanager.
 - Mit Podman statt Docker: `sudo apt-get install -y podman podman-compose`, `sudo sysctl -w net.ipv4.ip_unprivileged_port_start=80` (dauerhaft in `/etc/sysctl.d/`) und `podman compose` statt `docker compose`.
 - Kommt Port 443 für die Agents nicht in Frage, bekommen sie mit `docker-compose.agent-port.yml` einen eigenen Port (8443).

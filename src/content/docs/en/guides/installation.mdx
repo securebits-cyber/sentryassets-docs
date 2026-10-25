@@ -80,13 +80,13 @@ docker compose run --rm cli pki init --organization "Example Ltd" \
   --agent-host agents.example.com --output-dir /pki   # asks for a passphrase for the root key
 (umask 077; docker compose run --rm -T --entrypoint cat cli /pki/root-ca.p12 > /media/offline/root-ca.p12)
 docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
-docker compose run --rm cli admin create-admin --username admin
+docker compose run --rm cli admin create-admin --username admin --email it@example.com
 docker compose up -d
 docker compose ps                    # every service "healthy", migrate ended with 0
 ```
 
 - `pki init` prints the **fingerprint of the root CA**; every agent installation needs it. The encrypted file `root-ca.p12` is only needed to renew the CAs: write it straight to an offline medium (`/media/offline` above, such as a USB stick; adjust it) and delete it from the volume. Keep the passphrase apart from it.
-- `admin create-admin` creates the first administrator: it asks for the password (at least 12 characters) and shows an `otpauth://` address for the authenticator app. Then sign in at `https://<SA_UI_HOST>`; the setup assistant leads through location and the first agent. More people get a local account under **Settings › Users**: the administrator creates it and passes on a one-time setup link, with which the person sets their own password and TOTP.
+- `admin create-admin` creates the first administrator, with the address for test mails and notifications (`--email`, also later in the setup assistant or under **Settings › Users**): it asks for the password (at least 12 characters) and shows an `otpauth://` address for the authenticator app. Then sign in at `https://<SA_UI_HOST>`; the setup assistant leads through location and the first agent. More people get a local account under **Settings › Users**: the administrator creates it and passes on a one-time setup link, with which the person sets their own password and TOTP.
 - `./secrets/master_key` encrypts stored secrets (TOTP, issuing CA), every document and the backups. Without it they are lost: keep it apart from the backups, for example printed in a safe or in a password manager.
 - With Podman instead of Docker: `sudo apt-get install -y podman podman-compose`, `sudo sysctl -w net.ipv4.ip_unprivileged_port_start=80` (permanently in `/etc/sysctl.d/`) and `podman compose` instead of `docker compose`.
 - If port 443 is not an option for the agents, `docker-compose.agent-port.yml` gives them a port of their own (8443).
