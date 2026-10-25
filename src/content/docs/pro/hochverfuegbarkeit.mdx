@@ -44,10 +44,15 @@ Eine Instanz, die Verbindungen annimmt, aber hängt, erkennt Caddy nicht. Docker
 
 ```bash
 git pull
+../../scripts/generate-secrets.sh
 docker compose -f docker-compose.yml -f docker-compose.ha.yml build
+docker compose -f docker-compose.yml -f docker-compose.ha.yml up -d postgres
+docker compose -f docker-compose.yml -f docker-compose.ha.yml exec postgres sh /docker-entrypoint-initdb.d/10-sentryassets-roles.sh
 docker compose -f docker-compose.yml -f docker-compose.ha.yml run --rm migrate
 docker compose -f docker-compose.yml -f docker-compose.ha.yml up -d api gateway worker caddy
 ```
+
+Wie bei einer einzelnen Instanz ergänzt `generate-secrets.sh` neue Geheimnisse, und das Rollenskript legt Datenbankrollen an, die eine neuere Version mitbringt; vorhandene bleiben unverändert.
 
 Kurz können Anfragen scheitern, bis die neuen Instanzen bereit sind; die Aktion lässt sich dann wiederholen. Eine Version, deren Schema alte und neue Instanzen nicht kurz nebeneinander erlaubt, nennt das in ihren Hinweisen.
 
