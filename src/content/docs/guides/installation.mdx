@@ -77,7 +77,7 @@ docker compose build                 # Images lokal bauen, einige Minuten
 docker compose run --rm migrate      # Datenbankschema anlegen
 docker compose run --rm cli setup --organization "Musterfirma GmbH"
 docker compose run --rm cli pki init --organization "Musterfirma GmbH" \
-  --agent-host agents.example.com --output-dir /pki   # fragt eine Passphrase für den Root-Schlüssel
+  --agent-host agents.example.com --output-dir /pki   # Sie wählen eine neue Passphrase für den Root-Schlüssel (mind. 16 Zeichen)
 (umask 077; docker compose run --rm -T --entrypoint cat cli /pki/root-ca.p12 > /media/offline/root-ca.p12)
 docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
 docker compose run --rm cli admin create-admin --username admin --email it@example.com

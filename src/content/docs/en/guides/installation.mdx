@@ -77,7 +77,7 @@ docker compose build                 # build the images locally, a few minutes
 docker compose run --rm migrate      # create the database schema
 docker compose run --rm cli setup --organization "Example Ltd"
 docker compose run --rm cli pki init --organization "Example Ltd" \
-  --agent-host agents.example.com --output-dir /pki   # asks for a passphrase for the root key
+  --agent-host agents.example.com --output-dir /pki   # you choose a new passphrase for the root key (16+ characters)
 (umask 077; docker compose run --rm -T --entrypoint cat cli /pki/root-ca.p12 > /media/offline/root-ca.p12)
 docker compose run --rm --entrypoint rm cli /pki/root-ca.p12
 docker compose run --rm cli admin create-admin --username admin --email it@example.com
