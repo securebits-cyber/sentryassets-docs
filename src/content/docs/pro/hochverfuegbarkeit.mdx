@@ -23,7 +23,7 @@ Einige Einstellungen merkt sich jede Instanz kurz selbst: die Anmeldeart bis zu 
 
 ## Lizenz
 
-Mehrere **aktive** Instanzen gehören zu Pro und Enterprise. Ohne eine solche Lizenz arbeitet je Dienst eine Instanz; weitere warten, ohne Verbindungen anzunehmen oder Aufträge zu holen, und übernehmen, wenn die aktive ausfällt. Die aktive Instanz hält dafür einen Lease von 20 Sekunden in der Datenbank und verlängert ihn alle 5 Sekunden; beim geordneten Stopp gibt sie ihn sofort zurück, nach einem Absturz endet er von selbst. Der **Systemzustand** zeigt, was gilt. Endet die Lizenz, arbeitet binnen Sekunden wieder nur eine Instanz je Dienst.
+Mehrere **aktive** Instanzen gehören zu Pro und Enterprise. Ohne eine solche Lizenz arbeitet je Dienst eine Instanz; weitere warten, ohne Verbindungen anzunehmen oder Aufträge zu holen, und übernehmen, wenn die aktive ausfällt. Die aktive Instanz hält dafür einen Lease von 20 Sekunden in der Datenbank und verlängert ihn alle 5 Sekunden; beim geordneten Stopp gibt sie ihn sofort zurück, nach einem Absturz endet er von selbst. Der **Systemzustand** zeigt, was gilt. Endet die Lizenz, arbeitet binnen Sekunden wieder nur eine Instanz je Dienst. Eine wartende Instanz beantwortet ihren Healthcheck nicht und steht in `docker compose ps` deshalb als `unhealthy`; ohne Lizenz ist das erwartet, ihr Log sagt „another … instance is active; this one waits“. Neu starten müssen Sie sie nicht.
 
 ## Auf einem Host
 
