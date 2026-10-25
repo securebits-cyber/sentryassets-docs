@@ -29,7 +29,7 @@ The report is **not sent**; it is saved as a JSON file you pass on yourself. Ses
 | `migrate` ends with an error | The database cannot be reached or a secret is missing. `../../scripts/generate-secrets.sh` creates missing secrets, then `docker compose up -d postgres` and `docker compose run --rm migrate`. |
 | Sign-in fails with error 500 after an interrupted start | Containers with missing network aliases. `docker compose up -d --force-recreate` creates them again. |
 | Start refused because of an unencrypted connection | PostgreSQL or Valkey are on another host without TLS. See [High availability](/en/pro/hochverfuegbarkeit/). |
-| Ports 80 or 443 are not available | Rootless Docker or Podman may not open low ports, see [Installation](/en/guides/installation/#requirements). |
+| Ports 80 or 443 are not available | Rootless Docker or Podman may not open low ports, see [Installation](/en/guides/installation/#2-install-docker-rootless). |
 | No certificate is issued | For ACME, ports 80 and 443 must be reachable from the internet and the DNS names must point to the server. In an internal network set `SA_UI_TLS=internal`. |
 
 ## Sign-in
