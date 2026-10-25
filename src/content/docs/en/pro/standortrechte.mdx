@@ -17,6 +17,7 @@ The administration binds people to one or more locations. A bound person then ad
 - **Writing** only at the bound locations and everything below them.
 - **Reading** stays as the role allows, across the whole tenant.
 - A bound person changes nothing that applies to the whole organisation: categories, fields, numbering, lifecycle rules, consumable items, the GLPI import.
+- On an asset at another location the interface shows no buttons to change, delete, hand out or dispose of it, but the note "Can be changed only at your locations." A new asset needs one of the person's own locations; without a location, SentryAssets refuses to create it with a note on the missing permission.
 - The binding applies from the next request on, never to the administration.
 - It also keeps applying after the licence has ended; only changing bindings needs the licence.
 
