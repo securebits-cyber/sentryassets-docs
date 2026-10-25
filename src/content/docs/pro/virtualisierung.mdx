@@ -20,6 +20,17 @@ SentryAssets liest Hosts und virtuelle Maschinen im Hintergrund in einem Abstand
 | **VMware vCenter** ab 7.0 Update 2 | Port 443, Benutzer mit der Rolle „Nur lesen“; einzelne ESXi-Hosts ohne vCenter haben die nötige API nicht |
 | **Hyper-V** | über den Agent auf dem Host: einmal die Verbindung „Hyper-V über den Agent“ anlegen; der Agent liest die Gäste über WMI, nur lesend, mit Bordmitteln von Windows |
 
+## Agent auf jedem Host
+
+Installieren Sie zusätzlich zur Verbindung auf **jedem Host** einen Agent, bei Proxmox VE also auf jedem Knoten des Clusters. Die Verbindung liefert die VMs und ihre Zuordnung zum Host; vom Host selbst kennt die API nur Name, Version, CPUs, Arbeitsspeicher und Zustand. Erst der Agent bringt:
+
+- Hersteller, Modell und **Seriennummer** der Hardware; Proxmox VE und vCenter nennen keine Seriennummer, ein Host lässt sich ohne Agent nur über den Namen zuordnen,
+- Netzwerkschnittstellen, Datenträger und installierte Software,
+- den **Zustand** mit Auslastung und Laufzeit; fällt ein Host aus, zeigt SentryAssets „Keine Meldung“,
+- den Sicherheitszustand (Verschlüsselung, Firewall, Updates, Secure Boot).
+
+Am einfachsten wählen Sie am Asset des Hosts **Agent für dieses Asset installieren**; der Agent pflegt dann genau dieses Asset. Bei Hyper-V ist der Agent auf dem Host ohnehin Voraussetzung. Auf einzelnen ESXi-Hosts läuft kein Agent; dort bleibt es bei den Angaben aus dem vCenter.
+
 ## Proxmox VE anbinden
 
 1. Legen Sie in Proxmox VE unter „Rechenzentrum › Berechtigungen“ einen Benutzer an, etwa `sentryassets@pve`, und geben Sie ihm auf `/` die Rolle `PVEAuditor`. Er liest nur.
