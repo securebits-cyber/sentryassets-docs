@@ -10,7 +10,7 @@ Diese Seite beschreibt die Community-Edition. Funktionen ab Pro stehen unter [Pr
 
 ## Übersicht und Aufgaben
 
-Die **Übersicht** ist die Startseite: der nächste sinnvolle Schritt, der Fortschritt im IT-Grundschutz, Kennzahlen im Vergleich zur Vorwoche, die Quellen der Erfassung und die **Aufgaben**. Aufgaben entstehen aus Fristen und Regeln, etwa auslaufende Lizenzen und Verträge, endender Support, fehlende Sicherungsnachweise, fällige Prüfungen der Medizintechnik, fällige Anforderungen oder Material unter Mindestbestand. Die Befehlspalette (`Strg + K`) findet Assets, Seiten und Aktionen; ein gescanntes Asset-Etikett oder eine gescannte EAN steht dort als erster Treffer und öffnet mit Enter das Asset oder den Artikel.
+Die **Übersicht** ist die Startseite: der nächste sinnvolle Schritt, der Fortschritt im IT-Grundschutz, Kennzahlen im Vergleich zur Vorwoche, die Quellen der Erfassung und die **Aufgaben**. Aufgaben entstehen aus Fristen und Regeln, etwa auslaufende Lizenzen und Verträge, endender Support, fehlende Sicherungsnachweise, fällige Prüfungen der Medizintechnik, fällige Anforderungen oder Material unter Mindestbestand; mit den Add-ons auch Meldefristen von Datenpannen und Sicherheitsvorfällen, Betroffenenanfragen, die Registrierung nach NIS2 und fällige Wiedervorlagen. Die Befehlspalette (`Strg + K`) findet Assets, Seiten und Aktionen; ein gescanntes Asset-Etikett oder eine gescannte EAN steht dort als erster Treffer und öffnet mit Enter das Asset oder den Artikel.
 
 ## Inventar
 
@@ -85,10 +85,12 @@ Add-ons werden eigens lizenziert und erscheinen als eigene Gruppe in der Navigat
 - **Datenschutz-Add-on** (zu jeder Edition): führt Schritt für Schritt durch die Pflichten der DSGVO, vom Verzeichnis von Verarbeitungstätigkeiten bis zum Tätigkeitsbericht, siehe [Datenschutz-Add-on](/pro/datenschutz-add-on/).
 - **NIS2-Add-on** (zu jeder Edition): führt durch die Pflichten nach NIS2 und dem BSIG, von der Betroffenheitsprüfung über Registrierung, Maßnahmen und Meldungen bis zum Nachweis, siehe [NIS2-Add-on](/pro/nis2/).
 
+Fristen und Wiedervorlagen der Add-ons erscheinen unter **Aufgaben**, in der Glocke und auf Wunsch per E-Mail, nur für Personen, die im Add-on ändern dürfen.
+
 ## Betrieb
 
 - **Anmeldung:** lokale Konten mit Passwort und Pflicht-TOTP, angelegt von der Administration mit Einrichtungslink; optional OIDC mit jedem Identity Provider; sechs feste [Rollen](/reference/rollen/); siehe [Einrichtung](/guides/einrichtung/#anmeldung-lokale-konten-und-oidc).
 - **Systemzustand:** Datenbank, Valkey, Job-Worker und Virenscanner, Warteschlange, Fristen der Agent-PKI, Speicher der Dokumente und letzte Prüfung der Audit-Kette.
 - **Audit-Log** mit Hash-Kette, Filtern, Namen der Personen und Export als JSON Lines, siehe [Sicherheit](/reference/sicherheit/#audit-log).
 - **Sicherung und Umzug** (Community): im Dashboard unter **Einstellungen › Sicherung** jetzt sichern, täglich nach Zeitplan sichern und die neuesten behalten, prüfen, herunterladen und wiederherstellen, mit Wartungsmodus, Sicherheitskopie und automatischem Rückfall; Warnung in der Glocke bei fehlender Sicherung und bei jedem Herunterladen; alles auch per Befehl. Siehe [Sicherung und Umzug](/guides/sicherung/).
-- **Oberfläche** auf Deutsch und Englisch, hell und dunkel.
+- **Oberfläche** auf Deutsch und Englisch, hell und dunkel; **Wiki / Doku** in der Seitenleiste öffnet die Anleitung zum aktuellen Bereich, bei englischer Oberfläche auf Englisch.
