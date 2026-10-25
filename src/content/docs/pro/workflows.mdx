@@ -35,3 +35,9 @@ flowchart LR
 - Jedes Ticket wird geprüft, als würde es von Hand erstellt.
 - Eine Auswertung erstellt höchstens 50 Tickets; Abweichungen über eine Grenze hinaus werden als übersprungen gezählt.
 - Ein fehlschlagender Workflow hält die Auswertung nie an.
+
+## Einschalten und Ergebnis
+
+- Einschalten lässt sich ein Workflow nur mit einer Verbindung, die auf der Seite **Tickets** eingeschaltet und getestet ist. Ein eingeschalteter Workflow lässt sich nicht auf eine Verbindung umstellen, die nicht bereit ist.
+- Wird die Verbindung später ausgeschaltet, zeigt die Karte des Workflows „Verbindung nicht bereit“ mit einem Hinweis; bis die Verbindung wieder bereit ist, entstehen keine Tickets.
+- Ein Lauf, der kein Ticket angelegt hat, steht als „Kein Ticket angelegt“ in der Liste, einer mit weniger Tickets als Assets als „Teilweise ausgeführt“, jeweils mit den Gründen darunter.
