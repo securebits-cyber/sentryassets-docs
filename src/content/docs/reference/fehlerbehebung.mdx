@@ -73,6 +73,12 @@ Der Bericht wird **nicht gesendet**, sondern als JSON-Datei gespeichert, die Sie
 
 Benachrichtigungen, Verzeichnisdienst, KI-Assistent und Konnektoren erreichen nur Netze, die Sie freigeben. Ein Ziel im eigenen Netz braucht die passende Variable, etwa `SA_NOTIFICATION_ALLOWED_NETWORKS=public,192.168.10.5/32` ([Konfiguration](/reference/konfiguration/#netzfreigaben)). Ziele brauchen TLS 1.3 und ein gültiges Zertifikat; für eine eigene CA hinterlegen Sie deren Zertifikat in der jeweiligen Verbindung.
 
+| Problem | Ursache und Lösung |
+|---|---|
+| „Adresse nicht erlaubt“ | Der Name des Ziels löst auf eine Adresse auf, die nicht freigegeben ist, oft eine private Adresse oder die eines Overlay-Netzes. Freigabe wie unter [Netzfreigaben](/reference/konfiguration/#netzfreigaben) beschrieben, in der vorhandenen Zeile der `.env`, dann `docker compose up -d`. |
+| Freigabe gesetzt, wirkt aber nicht | Die Variable steht zweimal in der `.env`, die spätere (oft leere) gilt. Prüfen mit `grep -n ALLOWED_NETWORKS .env`; nur eine Zeile je Variable behalten. |
+| Gotify: „vom Ziel abgelehnt“ | Gotify lehnt den Token ab (Antwort 401). Nötig ist das Token einer **Anwendung** (in Gotify unter „Apps“, beginnt mit „A“); ein Token unter „Clients“ kann nur lesen. Token unter **Ziel bearbeiten** neu eintragen. |
+
 ## Systemzustand
 
 Die Seite **Systemzustand** zeigt, ob Datenbank, Valkey, Job-Worker und Virenscanner antworten. Wartet ein Auftrag lange über seine Zeit hinaus, läuft der Worker vermutlich nicht: `docker compose logs worker`.

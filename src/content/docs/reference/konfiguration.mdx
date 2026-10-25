@@ -56,6 +56,18 @@ Verbindungen, die SentryAssets nach außen aufbaut, gehen nur in Netze, die Sie 
 
 Private Netze sind `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `100.64.0.0/10` und `fc00::/7`. Ein Ziel im eigenen Netz geben Sie möglichst als einzelne Adresse frei, etwa `public,192.168.10.5/32`.
 
+**So setzen Sie eine Freigabe:** Die Variablen stehen schon leer in der `.env` (aus `.env.example`). Tragen Sie den Wert in **dieser** Zeile ein, statt eine zweite anzuhängen: Steht eine Variable zweimal in der `.env`, gilt die letzte, und eine leere Zeile hebt die Freigabe wieder auf. Danach übernimmt `docker compose up -d` den Wert; die Dienste starten neu.
+
+```bash
+sed -i 's|^SA_NOTIFICATION_ALLOWED_NETWORKS=.*|SA_NOTIFICATION_ALLOWED_NETWORKS=public,192.168.10.5/32|' .env
+grep -n '^SA_NOTIFICATION_ALLOWED_NETWORKS=' .env     # genau eine Zeile
+docker compose up -d
+```
+
+**Name, der auf eine private Adresse zeigt:** Geprüft wird die Adresse, auf die ein Name auflöst, nicht der Name. Zeigt etwa `push.example.com` auf `172.20.3.162`, lehnt SentryAssets das Ziel mit „Adresse nicht erlaubt“ ab, bis diese Adresse freigegeben ist.
+
+**Overlay-Netze und VPN** (NetBird, WireGuard, Tailscale, IPsec): Liegt ein Ziel nur im Overlay, muss der SentryAssets-Server selbst Mitglied des Overlays sein und die Adresse des Ziels erreichen; prüfen Sie das auf dem Server, etwa mit `curl https://<Ziel>`. Geben Sie dann die Overlay-Adresse des Ziels frei, etwa `public,100.80.12.7/32`. Die Container erreichen das Overlay über das Netz des Hosts; eine weitere Einstellung ist nicht nötig.
+
 Immer gesperrt, auch innerhalb erlaubter Netze: die Netze der eigenen Container (`172.30.248.0/21`), Loopback, Link-local, Metadaten-Adressen von Cloud-Anbietern und reservierte Bereiche. Kollidiert `172.30.248.0/21` mit einem lokalen Netz, ändern Sie den Bereich in der Compose-Datei an allen Stellen gemeinsam.
 
 ### Mehrere Instanzen und externe Dienste

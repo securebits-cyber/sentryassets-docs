@@ -56,6 +56,18 @@ Connections SentryAssets opens to the outside go only into networks you allow. L
 
 Private networks are `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`, `100.64.0.0/10` and `fc00::/7`. Allow a target in your own network as a single address where possible, such as `public,192.168.10.5/32`.
 
+**Setting an allowance:** the variables are already in `.env`, empty (from `.env.example`). Put the value into **that** line instead of adding a second one: if a variable appears twice in `.env`, the last one counts, and an empty line takes the allowance away again. Afterwards `docker compose up -d` applies the value; the services restart.
+
+```bash
+sed -i 's|^SA_NOTIFICATION_ALLOWED_NETWORKS=.*|SA_NOTIFICATION_ALLOWED_NETWORKS=public,192.168.10.5/32|' .env
+grep -n '^SA_NOTIFICATION_ALLOWED_NETWORKS=' .env     # exactly one line
+docker compose up -d
+```
+
+**A name pointing to a private address:** what is checked is the address a name resolves to, not the name. If `push.example.com` points to `172.20.3.162`, SentryAssets refuses the target with "address not allowed" until that address is allowed.
+
+**Overlay networks and VPN** (NetBird, WireGuard, Tailscale, IPsec): if a target is only in the overlay, the SentryAssets server itself must be a member of the overlay and reach the target's address; check that on the server, for example with `curl https://<target>`. Then allow the target's overlay address, such as `public,100.80.12.7/32`. The containers reach the overlay through the host's network; nothing else needs setting.
+
 Always closed, even inside allowed networks: the networks of the own containers (`172.30.248.0/21`), loopback, link-local, cloud metadata addresses and reserved ranges. If `172.30.248.0/21` collides with a local network, change the range everywhere in the Compose file together.
 
 ### Several instances and external services

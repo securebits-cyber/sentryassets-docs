@@ -73,6 +73,12 @@ The report is **not sent**; it is saved as a JSON file you pass on yourself. Ses
 
 Notifications, directory service, AI assistant and connectors reach only networks you allow. A target in your own network needs the matching variable, such as `SA_NOTIFICATION_ALLOWED_NETWORKS=public,192.168.10.5/32` ([Configuration](/en/reference/konfiguration/#network-allowances)). Targets need TLS 1.3 and a valid certificate; for an own CA, add its certificate to the connection.
 
+| Problem | Cause and solution |
+|---|---|
+| "Address not allowed" | The target's name resolves to an address that is not allowed, often a private address or one of an overlay network. Allow it as described under [Network allowances](/en/reference/konfiguration/#network-allowances), in the existing line of `.env`, then `docker compose up -d`. |
+| Allowance set but without effect | The variable appears twice in `.env`, and the later (often empty) one counts. Check with `grep -n ALLOWED_NETWORKS .env`; keep one line per variable. |
+| Gotify: "refused by the target" | Gotify refuses the token (answer 401). It needs the token of an **application** (in Gotify under "Apps", starting with "A"); a token under "Clients" can only read. Enter the token again under **Edit target**. |
+
 ## System health
 
 The page **System health** shows whether database, Valkey, job worker and virus scanner answer. If a job waits long past its time, the worker is probably not running: `docker compose logs worker`.
