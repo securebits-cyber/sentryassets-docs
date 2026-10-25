@@ -47,7 +47,7 @@ git pull
 ../../scripts/generate-secrets.sh
 docker compose -f docker-compose.yml -f docker-compose.ha.yml build
 docker compose -f docker-compose.yml -f docker-compose.ha.yml up -d postgres
-docker compose -f docker-compose.yml -f docker-compose.ha.yml exec postgres sh /docker-entrypoint-initdb.d/10-sentryassets-roles.sh
+docker compose -f docker-compose.yml -f docker-compose.ha.yml exec -T postgres sh -s < ../postgres/10-sentryassets-roles.sh
 docker compose -f docker-compose.yml -f docker-compose.ha.yml run --rm migrate
 docker compose -f docker-compose.yml -f docker-compose.ha.yml up -d api gateway worker caddy
 ```
