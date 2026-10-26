@@ -61,13 +61,29 @@ docker compose run --rm -T backup create --stdout > sentryassets.sabak   # strai
 The backup is encrypted with `./secrets/master_key`. Keep the key apart from the backups. No backup contains the key of the root CA (`root-ca.p12`); it stays offline.
 </Aside>
 
+## The master key
+
+The master key is a file on the server: `deploy/compose/secrets/master_key` (from within `deploy/compose`, `./secrets/master_key`). It is created at installation when `scripts/generate-secrets.sh` runs and holds 32 random bytes in Base64. You do not download it anywhere; to move, you copy this file along.
+
+Right after installing, keep a copy apart from the backups, such as in a password manager or on a medium in a safe. If the server is lost and the copy is missing, nobody can read a backup.
+
+```bash
+cat deploy/compose/secrets/master_key   # show the content to store it safely
+```
+
 ## Moving to another server
 
 <Steps>
 
 1. Prepare the installation on the new server as described under [Installation](/en/guides/installation/), up to and including `generate-secrets.sh` and `docker compose build`.
 
-2. Take `./secrets/master_key` from the old server. The other secrets may be new.
+2. Copy `./secrets/master_key` from the old server to the same place on the new one, overwriting the file `generate-secrets.sh` created there. The other secrets may be new. For example, from the old server:
+
+   ```bash
+   scp deploy/compose/secrets/master_key new-server:sentryassets/deploy/compose/secrets/master_key
+   ```
+
+   Adjust path and user to your installation. The `secrets` directory stays accessible only to the user who runs SentryAssets (`chmod 700`).
 
 3. Start **only** the database and restore the backup:
 
