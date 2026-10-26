@@ -1,12 +1,12 @@
 ---
 title: Rollen und Rechte
-description: Die sechs festen Rollen von SentryAssets und was jede darf, von der Administration bis zum reinen Lesen.
+description: Die sechs Rollen von SentryAssets und was jede standardmäßig darf, von der Administration bis zum reinen Lesen; mit Pro anpassbar.
 sidebar:
   label: Rollen und Rechte
   order: 3
 ---
 
-SentryAssets kennt sechs feste Rollen. Bei lokalen Konten legt die Administration die Rolle unter **Einstellungen › Benutzer** fest ([Lokale Konten](/guides/einrichtung/#lokale-konten)); bei OIDC-Konten kommt sie bei jeder Anmeldung aus den Gruppen des Identity Providers ([Anmeldung mit OIDC](/guides/einrichtung/#anmeldung-mit-oidc-optional)). Unter **Einstellungen › Rollen und Rechte** sehen Administration, Informationssicherheit, Datenschutz und Prüfung dieselbe Tabelle, gegen die jede Anfrage geprüft wird.
+SentryAssets kennt sechs feste Rollen mit Standardrechten; mit [Pro](/pro/rollen-anpassen/) passt die Administration sie an und legt eigene Rollen an. Bei lokalen Konten legt die Administration die Rolle unter **Einstellungen › Benutzer** fest ([Lokale Konten](/guides/einrichtung/#lokale-konten)); bei OIDC-Konten kommt sie bei jeder Anmeldung aus den Gruppen des Identity Providers ([Anmeldung mit OIDC](/guides/einrichtung/#anmeldung-mit-oidc-optional)). Unter **Einstellungen › Rollen und Rechte** sehen Administration, Informationssicherheit, Datenschutz und Prüfung dieselbe Tabelle, gegen die jede Anfrage geprüft wird, mit allen Anpassungen der Organisation.
 
 | Rolle | Kennung | Gedacht für |
 |---|---|---|
@@ -17,9 +17,11 @@ SentryAssets kennt sechs feste Rollen. Bei lokalen Konten legt die Administratio
 | Prüfung (nur lesend) | `auditor` | interne oder externe Prüfung: alles lesen einschließlich Audit-Log, nichts ändern |
 | Lesend | `viewer` | Auskunft: Inventar und Verwaltung lesen |
 
-Passt bei der Anmeldung mehr als eine Gruppe, gilt die erste in dieser Reihenfolge: Administrator, Informationssicherheit, Bearbeitung, Datenschutz, Prüfung, Lesend. Ohne passende Gruppe wird die Anmeldung abgelehnt.
+Passt bei der Anmeldung mehr als eine Gruppe, gilt die erste in dieser Reihenfolge: Administrator, Informationssicherheit, Bearbeitung, Datenschutz, Prüfung, Lesend; eine eigene Rolle zählt mit ihrer Basisrolle, nach der festen Rolle derselben Basis. Ohne passende Gruppe wird die Anmeldung abgelehnt.
 
 ## Rechte im Einzelnen
+
+Die Tabelle zeigt die Standardrechte. Was Ihre Organisation angepasst hat, steht unter **Einstellungen › Rollen und Rechte**.
 
 | Bereich | Administrator | Informationssicherheit | Bearbeitung | Datenschutz | Prüfung | Lesend |
 |---|---|---|---|---|---|---|
@@ -61,6 +63,6 @@ Nachweise oberhalb der eigenen Stufe werden im Grundschutz-Check nur gezählt, n
 
 Mit [Pro](/pro/standortrechte/) lassen sich Personen auf das Schreiben an bestimmten Standorten beschränken. Lesen bleibt, wie die Rolle es erlaubt.
 
-## Eigene Rollen
+## Anpassen und eigene Rollen
 
-Eigene Rollen gibt es nicht. Die festen Rollen halten die Rechte überschaubar und prüfbar.
+Mit [Pro](/pro/rollen-anpassen/) gibt oder nimmt die Administration einzelnen Rollen Rechte, ändert die Grenze der Vertraulichkeit und legt bis zu 20 eigene Rollen auf Basis einer festen Rolle an. Rechte über Benutzer, Anmeldung, Rollen, Lizenz und Sicherung bleiben immer allein bei der Administration. Endet die Lizenz, gelten die Anpassungen weiter; nur das Ändern ist gesperrt.

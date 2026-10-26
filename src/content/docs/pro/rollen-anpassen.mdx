@@ -1,0 +1,67 @@
+---
+title: Rollen und Rechte anpassen
+description: Mit Pro geben oder nehmen Sie den festen Rollen einzelne Rechte und legen eigene Rollen auf Basis einer festen Rolle an.
+sidebar:
+  label: Rollen anpassen
+  order: 21
+---
+
+import { Badge, Aside, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
+
+Die sechs [Rollen](/reference/rollen/) bringen Standardrechte mit. Mit Pro passt die Administration sie für ihre Organisation an: einer festen Rolle ein Recht geben oder nehmen, die Grenze der Vertraulichkeit von Dokumenten ändern oder eine **eigene Rolle** anlegen, etwa „Einkauf“, die lesen und Beschaffungsanträge stellen darf.
+
+## Wo
+
+Unter **Einstellungen › Rollen und Rechte**. Die Tabelle zeigt in jeder Spalte eine Rolle, eigene Rollen rechts mit ihrer Basis („auf Basis von Lesend“). Was vom Standard abweicht, ist markiert: die Rolle mit „angepasst“, das Recht mit einem Punkt („hinzugefügt“ oder „entzogen, abweichend vom Standard“). Die Spalte „Recht“ bleibt beim seitlichen Scrollen stehen.
+
+Ändern darf nur die Administration, mit Pro und nach einer frischen Bestätigung der Anmeldung (Einmalcode oder erneute Anmeldung beim Identity Provider, gültig 5 Minuten). Informationssicherheit, Prüfung und Datenschutz sehen die Tabelle nur lesend.
+
+## Eine feste Rolle anpassen
+
+- **Haken setzen oder entfernen:** wirkt sofort, mit **Rückgängig** in der Meldung.
+- **Dokumente sichtbar bis:** in der Zeile der Grenzen je Rolle wählen.
+- **Standard wiederherstellen** im Kopf der Spalte nimmt alle Abweichungen dieser Rolle zurück.
+
+Gespeichert wird nur die Abweichung vom Standard. Bringt ein Update einer Rolle ein neues Recht, bekommt sie es auch mit Anpassung.
+
+## Eigene Rollen
+
+<Steps>
+
+1. **Rolle anlegen**, Name (bis 60 Zeichen, eindeutig) und **Basisrolle** wählen: Informationssicherheit, Bearbeitung, Datenschutz, Prüfung oder Lesend. Die neue Rolle darf zunächst genau, was die Basis darf.
+2. In ihrer Spalte die Haken setzen, die sie mehr oder weniger haben soll.
+3. Zuweisen: lokale Konten unter **Einstellungen › Benutzer**, Gruppen des Identity Providers unter **Einstellungen › Anmeldung** in der Zuordnung von Gruppen zu Rollen.
+
+</Steps>
+
+- Höchstens 20 eigene Rollen. Der Name darf nicht der einer festen Rolle sein. Die Basis lässt sich später nicht ändern; legen Sie dafür eine neue Rolle an.
+- **Umbenennen** im Kopf der Spalte, mit **Rückgängig**.
+- **Löschen** nur, wenn kein Konto die Rolle hat und keine Gruppe auf sie verweist; sonst nennt die Meldung den Grund.
+- Passen bei der Anmeldung mehrere Gruppen, gewinnt die Basisrolle mit dem höchsten Vorrang, bei gleicher Basis die feste Rolle vor eigenen Rollen.
+- Eine Zuordnung in der Server-Konfiguration (`SA_OIDC_ROLE_MAPPING`) nennt nur feste Rollen.
+
+## Was die Administration behält
+
+Gesperrte Haken tragen ein Schloss und den Grund:
+
+| Schutz | Rechte | Bedeutung |
+|---|---|---|
+| Nur die Administration | Benutzer und Anmeldung verwalten, Rollen und Rechte anpassen, Organisation und Einrichtung (mit Lizenz), Sicherung, Systemzustand, Standortrechte vergeben, SCIM verwalten | weder der Administration zu entziehen noch einer anderen Rolle zu geben |
+| Nur die Inhaber | Stellungnahmen und vertrauliche Akte der Datenschutzbeauftragten im Audit-Log ([Datenschutz-Add-on](/pro/datenschutz-add-on/)) | bleiben bei der Rolle Datenschutz; die Administration kann sie sich nicht geben |
+| Bleibt der Administration | Rollen und Rechte ansehen | anderen Rollen vergebbar |
+| Behält jede Rolle | Anmelden und eigene Sitzung, Organisation ansehen | ohne sie ließe sich die Oberfläche nicht nutzen |
+
+Die Administration ist keine Basis für eigene Rollen. Andere Rechte, die standardmäßig nur die Administration hat, etwa Agents verwalten, können Sie ihr nehmen oder einer anderen Rolle geben.
+
+## Wann es wirkt
+
+- **Ab der nächsten Anfrage** jeder Person mit dieser Rolle, auch in laufenden Sitzungen; die Oberfläche zeigt danach nur noch, was die Person darf.
+- Verliert eine Rolle ein Recht, verwirft SentryAssets wartende [E-Mail-Benachrichtigungen](/guides/benachrichtigungen/) ihrer Personen, die unter den alten Rechten vorbereitet waren.
+- [SCIM](/pro/scim/) senkt weiter nur: Es vergleicht die Rechte, wie sie jetzt sind. Hat eine Rolle durch eine Anpassung mehr Rechte als die bisherige, ist der Wechsel kein Senken; die Sitzungen der Person enden, die nächste Anmeldung wendet die Gruppen an.
+- Jede Änderung steht im Audit-Log (`role.adjusted`, `role.restored`, `role.created`, `role.updated`, `role.deleted`) mit der Abweichung vorher und nachher.
+
+<Aside>
+Endet die Lizenz, gelten Anpassungen und eigene Rollen **unverändert weiter**, und eigene Rollen bleiben zuweisbar. Gesperrt ist nur das Ändern. So bekommt niemand Rechte zurück, die ihm genommen wurden.
+</Aside>

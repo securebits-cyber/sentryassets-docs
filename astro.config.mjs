@@ -114,6 +114,7 @@ export default defineConfig({
 							{ icon: 'i-ph:receipt-duotone', slug: 'pro/lizenzmanagement' },
 							{ icon: 'i-ph:broadcast-duotone', slug: 'pro/siem' },
 							{ icon: 'i-ph:map-pin-duotone', slug: 'pro/standortrechte' },
+							{ icon: 'i-ph:user-gear-duotone', slug: 'pro/rollen-anpassen' },
 							{ icon: 'i-ph:user-list-duotone', slug: 'pro/scim' },
 							{ icon: 'i-ph:list-checks-duotone', slug: 'pro/pruefregeln' },
 							{ icon: 'i-ph:ticket-duotone', slug: 'pro/tickets' },

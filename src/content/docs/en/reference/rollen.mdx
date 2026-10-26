@@ -1,12 +1,12 @@
 ---
 title: Roles and permissions
-description: The six fixed roles of SentryAssets and what each may do, from administration to read-only.
+description: The six roles of SentryAssets and what each may do by default, from administration to read-only; adjustable with Pro.
 sidebar:
   label: Roles and permissions
   order: 3
 ---
 
-SentryAssets has six fixed roles. For local accounts the administration sets the role under **Settings › Users** ([Local accounts](/en/guides/einrichtung/#local-accounts)); for OIDC accounts it comes from the identity provider's groups at every sign-in ([Sign-in with OIDC](/en/guides/einrichtung/#sign-in-with-oidc-optional)). Under **Settings › Roles and permissions**, administration, information security, data protection and auditors see the same table every request is checked against.
+SentryAssets has six fixed roles with default permissions; with [Pro](/en/pro/rollen-anpassen/) the administration adapts them and creates custom roles. For local accounts the administration sets the role under **Settings › Users** ([Local accounts](/en/guides/einrichtung/#local-accounts)); for OIDC accounts it comes from the identity provider's groups at every sign-in ([Sign-in with OIDC](/en/guides/einrichtung/#sign-in-with-oidc-optional)). Under **Settings › Roles and permissions**, administration, information security, data protection and auditors see the same table every request is checked against, with every adjustment of the organisation.
 
 | Role | Key | Meant for |
 |---|---|---|
@@ -17,9 +17,11 @@ SentryAssets has six fixed roles. For local accounts the administration sets the
 | Auditor (read only) | `auditor` | internal or external audit: read everything including the audit log, change nothing |
 | Read only | `viewer` | information: read inventory and records |
 
-If more than one group matches at sign-in, the first in this order applies: administrator, information security, editor, data protection, auditor, read only. Without a matching group the sign-in is refused.
+If more than one group matches at sign-in, the first in this order applies: administrator, information security, editor, data protection, auditor, read only; a custom role counts with its base role, after the fixed role of the same base. Without a matching group the sign-in is refused.
 
 ## Permissions in detail
+
+The table shows the default permissions. What your organisation adjusted is under **Settings › Roles and permissions**.
 
 | Area | Administrator | Information security | Editor | Data protection | Auditor | Read only |
 |---|---|---|---|---|---|---|
@@ -61,6 +63,6 @@ Evidence above one's own level is only counted in the Grundschutz check, not sho
 
 With [Pro](/en/pro/standortrechte/) people can be limited to writing at certain locations. Reading stays as the role allows.
 
-## Own roles
+## Adjusting and custom roles
 
-There are no own roles. The fixed roles keep the rights clear and auditable.
+With [Pro](/en/pro/rollen-anpassen/) the administration gives or takes permissions of single roles, changes the limit of confidentiality and creates up to 20 custom roles based on a fixed role. Permissions over users, sign-in, roles, licence and backups always stay with the administration alone. When the licence ends, the adjustments keep applying; only changing them is locked.

@@ -49,7 +49,7 @@ A setup link is valid for 72 hours. Once it has expired, the user list shows "Li
 </Aside>
 
 - **Password rules:** at least 12 characters, without the username and without "sentryassets". A long sentence is easier to remember than a short, complicated password.
-- **Change the role:** for local accounts, pick the role right in the user list; it applies at once, also in running sessions.
+- **Change the role:** for local accounts, pick the role right in the user list; it applies at once, also in running sessions. With Pro, [custom roles](/en/pro/rollen-anpassen/) are offered there too.
 - **Lost password or authenticator:** **Reset access** invalidates password and one-time codes, ends all sessions of the account and creates a new setup link.
 - **Change your own password:** everyone changes their password and authenticator in their **profile**.
 - **Failed attempts:** after five failed sign-ins, the account is locked for a growing time.
@@ -98,6 +98,7 @@ With OIDC, SentryAssets signs people in through your identity provider (OpenID C
 
 - **No matching group:** the sign-in is refused.
 - **Several groups:** the first role in the order administrator, information security, editor, data protection, auditor, read only applies (see [Roles and permissions](/en/reference/rollen/)).
+- **Custom roles:** with Pro, groups can also be mapped to [custom roles](/en/pro/rollen-anpassen/); the choice offers them after the fixed roles.
 - **Role:** for OIDC accounts, change the role through the groups at the identity provider, not in SentryAssets.
 - **Permissions revoked:** at every session renewal SentryAssets checks that the account is still active. Revoked groups take effect at the next sign-in at the latest. With [SCIM](/en/pro/scim/) a block applies at once.
 - **E-mail address:** SentryAssets takes the `email` claim only if the provider reports the address as confirmed. If it does not send `email_verified`, as Microsoft Entra ID depending on its setup, and your IT maintains the addresses there, switch on **Addresses of this provider count as confirmed** in the draft (`SA_OIDC_TRUST_EMAIL` in the server configuration). Without a confirmed address the account receives no [notifications by e-mail](/en/guides/benachrichtigungen/#which-address-applies).

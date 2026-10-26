@@ -1,0 +1,67 @@
+---
+title: Changing roles and permissions
+description: With Pro you give or take single permissions of the fixed roles and create custom roles based on a fixed role.
+sidebar:
+  label: Changing roles
+  order: 21
+---
+
+import { Badge, Aside, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition.
+
+The six [roles](/en/reference/rollen/) come with default permissions. With Pro the administration adapts them for its organisation: give a fixed role a permission or take one, change the limit of document confidentiality, or create a **custom role** such as "Purchasing", which may read and file procurement requests.
+
+## Where
+
+Under **Settings › Roles and permissions**. Each column of the table is a role, custom roles on the right with their base ("based on Read only"). What differs from the default is marked: the role with "adjusted", the permission with a dot ("added" or "taken, differs from the default"). The "Permission" column stays in view while scrolling sideways.
+
+Only the administration may change them, with Pro and after a fresh confirmation of the sign-in (one-time code or signing in again at the identity provider, valid for 5 minutes). Information security, auditors and data protection see the table read-only.
+
+## Adjusting a fixed role
+
+- **Set or clear a tick:** applies at once, with **Undo** in the message.
+- **Documents visible up to:** choose per role in the row of limits.
+- **Restore default** in the column head takes back every difference of that role.
+
+Only the difference from the default is stored. When an update gives a role a new permission, the role gets it even when adjusted.
+
+## Custom roles
+
+<Steps>
+
+1. **Create role**, choose a name (up to 60 characters, unique) and a **base role**: information security, editor, data protection, auditor or read only. The new role at first may exactly what its base may.
+2. Set the ticks in its column that it should have more or less.
+3. Assign it: local accounts under **Settings › Users**, groups of the identity provider under **Settings › Sign-in** in the mapping of groups to roles.
+
+</Steps>
+
+- At most 20 custom roles. The name may not be that of a fixed role. The base cannot be changed later; create a new role instead.
+- **Rename** in the column head, with **Undo**.
+- **Delete** works only while no account holds the role and no group refers to it; otherwise the message names the reason.
+- When several groups match at sign-in, the base role with the highest precedence wins; with the same base, the fixed role comes before custom roles.
+- A mapping in the server configuration (`SA_OIDC_ROLE_MAPPING`) names fixed roles only.
+
+## What the administration keeps
+
+Locked ticks carry a lock and the reason:
+
+| Protection | Permissions | Meaning |
+|---|---|---|
+| Administration only | manage users and sign-in, change roles and permissions, organisation and setup (with the licence), backups, system health, granting location rights, managing SCIM | neither taken from the administration nor given to another role |
+| Holders only | opinions and the confidential file of the data protection officer in the audit log ([data protection add-on](/en/pro/datenschutz-add-on/)) | stay with the data protection role; the administration cannot give them to itself |
+| Stays with the administration | view roles and permissions | may be given to other roles |
+| Every role keeps it | sign in and own session, view organisation | without them the interface could not be used |
+
+The administration is no base for custom roles. Other permissions only the administration holds by default, such as managing agents, may be taken from it or given to another role.
+
+## When it applies
+
+- **From the next request** of every person with that role, also in running sessions; the interface then shows only what the person may do.
+- When a role loses a permission, SentryAssets drops waiting [e-mail notifications](/en/guides/benachrichtigungen/) of its people that were prepared under the former rights.
+- [SCIM](/en/pro/scim/) still only lowers: it compares the permissions as they are now. If an adjustment gives a role more permissions than the former one, the change is no lowering; the person's sessions end and the next sign-in applies the groups.
+- Every change is in the audit log (`role.adjusted`, `role.restored`, `role.created`, `role.updated`, `role.deleted`) with the difference before and after.
+
+<Aside>
+When the licence ends, adjustments and custom roles **keep applying unchanged**, and custom roles can still be assigned. Only changing them is locked, so nobody gets back permissions that were taken away.
+</Aside>
