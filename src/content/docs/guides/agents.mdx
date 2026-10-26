@@ -41,6 +41,8 @@ Dateiinhalte, Browserverläufe, Tastatur- oder Bildschirmdaten, Verbindungen und
    - **Standort der neuen Assets (optional)**;
    - **Neue Agents erst nach Freigabe zulassen**, wenn jedes Gerät einzeln bestätigt werden soll.
 
+   Ein Token für **mehrere Geräte ohne Freigabe** entsteht nur kurz nach einer Bestätigung Ihrer Anmeldung (Einmalcode oder erneute Anmeldung beim Identity Provider, gültig 5 Minuten); der Dialog bietet sie beim Erzeugen an. Ein Token für ein Gerät oder mit Freigabe braucht keine.
+
 3. **Token erzeugen.** Das Token wird **nur einmal angezeigt**; der Server speichert nur seinen Hash. Kopieren Sie es jetzt.
 
 4. Wählen Sie die Plattform und kopieren Sie den fertigen Installationsbefehl. Er lädt den Agent von Ihrem Server, prüft die SHA-256-Prüfsumme und bricht bei Abweichung vor der Installation ab.
@@ -71,7 +73,7 @@ Jede Installation mit einem Rollout-Token ist eine eigene Registrierung; die alt
 
 Steht das Gerät schon im Inventar, etwa von Hand angelegt oder als virtuelle Maschine aus dem Hypervisor, soll der Agent kein zweites Asset anlegen.
 
-- **Vor der Installation:** Öffnen Sie das Asset, Reiter **Zustand**, und wählen Sie **Agent für dieses Asset installieren**. Das Rollout-Token gilt dann für genau eine Installation, und der Agent meldet sich als dieses Asset.
+- **Vor der Installation:** Öffnen Sie das Asset, Reiter **Zustand**, und wählen Sie **Agent für dieses Asset installieren**. Das Rollout-Token gilt dann für genau eine Installation, und der Agent meldet sich als dieses Asset. Weil seine Meldungen ein vorhandenes Asset ändern, verlangt das Erzeugen eine frische Bestätigung der Anmeldung; nach der Anmeldung beim Identity Provider kehren Sie zum Asset zurück.
 - **Nachträglich zusammenführen:** Hat ein Agent doch ein eigenes Asset angelegt, zeigt dessen Reiter **Zustand** die Frage **Steht dieses Gerät schon im Inventar?** mit möglichen Treffern (gleicher Name, Hostname, gleiche Seriennummer oder MAC-Adresse). **Agent übertragen** verbindet den Agent mit dem bestehenden Asset. Name, Kategorie und Standort des Ziels bleiben, Hostname, Hersteller, Modell, Seriennummer und MAC-Adressen pflegt künftig der Agent. Das bisherige Asset können Sie dabei gleich löschen.
 
 Die Treffer sind nur Vorschläge; übertragen wird erst, wenn eine Person es bestätigt.

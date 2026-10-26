@@ -41,6 +41,8 @@ The agent never collects file contents, browser histories, keyboard or screen da
    - **Location of the new assets (optional)**;
    - **Admit new agents only after approval**, if each device is to be confirmed.
 
+   A token for **several devices without approval** is created only shortly after confirming your sign-in (one-time code or signing in again at the identity provider, valid for 5 minutes); the dialog offers it when you create the token. A token for one device or with approval needs none.
+
 3. **Create token.** The token is **shown once**; the server keeps only its hash. Copy it now.
 
 4. Choose the platform and copy the ready-made installation command. It downloads the agent from your server, checks the SHA-256 checksum and stops before installing if it differs.
@@ -65,7 +67,7 @@ For Ansible, scripts and similar tools, put the token beforehand into the file n
 
 If the device is in the inventory already, created by hand or as a virtual machine from the hypervisor, the agent should not create a second asset.
 
-- **Before installing:** open the asset, tab **Condition**, and choose **Install an agent for this asset**. The rollout token then serves exactly one installation, and the agent reports as this asset.
+- **Before installing:** open the asset, tab **Condition**, and choose **Install an agent for this asset**. The rollout token then serves exactly one installation, and the agent reports as this asset. Because its reports change an existing asset, creating it needs a fresh confirmation of the sign-in; after signing in at the identity provider you return to the asset.
 - **Merging afterwards:** if an agent created an asset of its own after all, its tab **Condition** asks **Is this device in the inventory already?** with possible matches (same name, host name, serial number or MAC address). **Move agent** connects the agent to the existing asset. Name, category and location of the target stay; host name, manufacturer, model, serial number and MAC addresses are kept up to date by the agent from then on. You can delete the previous asset in the same step.
 
 The matches are suggestions only; nothing moves until a person confirms it.
