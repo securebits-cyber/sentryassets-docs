@@ -1,0 +1,85 @@
+---
+title: Medical technology add-on
+description: The medical technology add-on keeps medical devices as the German operator regulation (MPBetreibV) asks, with inventory list, device book, safety and metrological checks, briefings, defects with reports to the BfArM, and recalls. Only together with Pro or Enterprise.
+sidebar:
+  label: Medical technology add-on
+  order: 18
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Medical technology add-on" variant="note" /> <Badge text="from Pro" variant="tip" /> The add-on is licensed on its own and adds to Pro or Enterprise only.
+
+The medical technology add-on is for operators of medical devices: medical practices, care facilities, ambulance services, laboratories and therapy centres. It covers the duties of the German **Medizinprodukte-Betreiberverordnung (MPBetreibV)**, in the version of 14 February 2025, last amended on 31 October 2025. Guiding idea: the inventory is the inventory list. Your devices stay assets in the inventory, with location, inventory number, labels, suppliers, cost centre, handover and disposal; the add-on adds what the regulation asks for beyond that.
+
+With the add-on, the navigation shows a section of its own, **Medical technology**, between **IT estate** and **Compliance**, divided into **Devices**, **Check and brief**, **Defects and reports** and **Organisation**. The category "Medizintechnik" then no longer appears in the tree under **Assets**; you still find the devices under **All assets** and in the category filter.
+
+<Aside type="caution" title="Support, no legal advice">
+The add-on structures and records. Whether an incident must be reported and which check intervals apply to a device, you decide based on the regulation and the manufacturers' instructions. The version and source of the regulation are shown on the start page of the area.
+</Aside>
+
+## Licence
+
+The add-on needs **two** unlocks: Pro (or Enterprise) **and** the medical technology add-on. Without either, the section shows a single entry with a lock and an explanation page. There is no free part. The [trial](/en/guides/lizenz/) includes the add-on.
+
+When the licence runs out, all entries stay stored and unchanged, and the medical devices stay visible and editable as assets. An asset in the inventory list cannot be deleted, because the device book must be kept after the device is taken out of service; you can still dispose of it.
+
+## Overview
+
+The start page shows the figures **Devices**, **Not ready**, **Defects** (this year), **Costs** (checks and repairs this year) and the **safety checks**, **metrological checks** and **maintenance** planned this month. Below are the **upcoming appointments** with "n days overdue" and the **device defects**, with the shortcuts **Report defect** and **Inventory list**.
+
+## Devices
+
+| Area | Content |
+|---|---|
+| **All devices** | List with inventory and serial number, annex 1 or 2, next check, lateness and readiness for use; filters for device set, annex, state and search. **Take over from the inventory** offers every asset of the category "Medizintechnik" not yet in the list and takes over risk class, UDI-DI, year of acquisition and the dates of the safety and metrological checks as deadlines. Assets of other categories are registered on the asset's page with **Register as medical device** |
+| **Device** | Profile from the inventory and the details under the MPBetreibV: kind, annex 1 (functional test, briefing, safety checks), annex 2 (metrological checks), active non-implantable device, software of class IIb, III, C or D (§ 17), risk class, UDI-DI, year of acquisition, responsible party under § 14, put into service, taken out of service, device set, "briefing needed again since" and the **persons in charge** (§ 11). Tabs **Checks**, **Briefings** and **Defects**, and the **device book** |
+| **Device sets** | Devices used together, such as an emergency bag. Briefings and briefing groups can name a set as a whole |
+| **Inventory list** | Under § 14 all active non-implantable devices not taken out of service, for the whole organisation or one site: name, kind, type, serial number or lot code, year of acquisition, responsible party, identification number, location and assignment. To print (also as PDF) and **As CSV for Excel** |
+
+## Check and brief
+
+| Area | Content |
+|---|---|
+| **Appointments** | All deadlines of the devices, overdue first; choose the period (overdue, 30 days, 90 days, all) and the kind |
+| **Checks** (on the device) | One deadline per kind: **safety check** (§ 12, at least every 24 months), **metrological check** (§ 15, under annex 2), **IT security** (§ 17, at least every 24 months) and **maintenance** (§ 7), with interval, next due date, agreed appointment and service company. A recorded check with date, examiner or firm, result, findings, marking, cost and protocol sets the next due date at the end of the month; you enter a shorter one if needed. Checks stay in the device book and can be neither deleted nor changed; record corrections as a new check |
+| **Briefings** | Briefing of the **users** (§ 4) or **functional test and briefing of the persons in charge** (§ 11) with date (also afterwards), instructor, occasion, devices or sets, attendees and proof. Briefings stay in the device book; the name of a person deleted later stays |
+| **Missing briefings** | Persons of briefing groups without a valid briefing on a required device, and persons in charge of an annex 1 device without the manufacturer's briefing. Once "briefing needed again since" is set, for example after a software update, older briefings no longer count |
+| **Briefing groups** | Who must be briefed on which devices or sets, such as the nurses of a ward |
+
+## Defects and reports
+
+| Area | Content |
+|---|---|
+| **Defects** | Malfunctions, operating errors and damage with state, author, **device ready / not ready** and **BfArM report** (to be decided, required, not required); filters for period, state, report, keyword and "My reports only". An open defect marked "not ready" keeps the device from use until it is resolved. A defect holds the **repair order** to a service company with order number and cost, consequences, the date the manufacturer was informed, and the resolution. Defects stay in the device book |
+| **Report defect** | Also for the team at the device (a role with the right "Report defects of medical devices", by default also viewers): device, subject, kind, description and whether the device can still be used. Each person can report 10 defects a minute and 100 a day |
+| **Recalls** | Field safety notices and corrective actions of manufacturers with reference, receipt, due date and document; for each device concerned, the date the action was done |
+
+<Aside type="note" title="Report to the BfArM">
+Operators and users report suspected serious incidents to the competent federal authority without delay, usually the BfArM (§ 3 MPAMIV). Whether such an incident occurred is your decision; the software suggests nothing automatically and reports nothing itself. Once a report is required and not yet recorded, it appears in the bell as an urgent task at once. Enter the date and reference after reporting.
+</Aside>
+
+## Organisation
+
+| Area | Content |
+|---|---|
+| **Officers** | Per health care facility (location) or for the whole organisation: regular employees, officer and deputy, date of appointment, function e-mail address, how the officer is made known, and the appointment. With more than 20 employees, § 6 requires an officer for medical device safety; if missing, the page and the bell show it |
+| **Costs** | Costs of checks and repairs per device and year, with the total |
+
+## Device book
+
+A device's **device book** (§ 13) is built from its entries: name and identification, persons in charge, functional test and briefings with those briefed, deadlines and checks, malfunctions and operating errors with consequences and reports, and the manufacturers' actions. You open it on the device's page and print it or save it as PDF. Once the device is taken out of service, it states until when it must be kept.
+
+## Tasks and e-mail
+
+For roles that manage medical technology, the bell and the e-mail category **Deadlines, defects and reports of medical technology** show: pending BfArM reports, devices not ready for use, checks overdue and due within 30 days, open recalls (urgent once past their due date), missing briefings and missing officers.
+
+## Roles and permissions
+
+| Permission | By default | Purpose |
+|---|---|---|
+| Read medical technology | Administration, editor, information security, data protection, auditor, viewer | see everything |
+| Report defects of medical devices | Administration, editor, viewer | report defects |
+| Manage medical technology | Administration, editor | everything else |
+
+Whoever keeps the medical devices works with the **editor** role or a [custom role](/en/pro/rollen-anpassen/) holding only "Manage medical technology" and read access to the inventory. A device whose asset a person cannot see, for instance because of [rights per location](/en/pro/standortrechte/), stays hidden in the add-on too.

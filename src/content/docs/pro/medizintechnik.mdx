@@ -1,0 +1,85 @@
+---
+title: Medizintechnik-Add-on
+description: Das Medizintechnik-Add-on führt Medizinprodukte nach der Medizinprodukte-Betreiberverordnung, mit Bestandsverzeichnis, Medizinproduktebuch, STK und MTK, Einweisungen, Mängeln mit BfArM-Meldung und Rückrufen. Nur zusammen mit Pro oder Enterprise.
+sidebar:
+  label: Medizintechnik-Add-on
+  order: 18
+---
+
+import { Badge, Aside } from '@astrojs/starlight/components';
+
+<Badge text="Medizintechnik-Add-on" variant="note" /> <Badge text="ab Pro" variant="tip" /> Das Add-on wird eigens lizenziert und ergänzt nur Pro oder Enterprise.
+
+Das Medizintechnik-Add-on ist für Betreiber von Medizinprodukten: Arztpraxen, MVZ, Pflegeeinrichtungen, Rettungsdienste, Labore und Therapiezentren. Es bildet die Pflichten der **Medizinprodukte-Betreiberverordnung (MPBetreibV)** ab, in der Fassung vom 14.02.2025, zuletzt geändert am 31.10.2025. Leitsatz: Das Inventar ist das Bestandsverzeichnis. Ihre Geräte bleiben Assets im Inventar, mit Standort, Inventarnummer, Etiketten, Lieferanten, Kostenstelle, Ausgabe und Aussonderung; das Add-on ergänzt, was die Verordnung zusätzlich verlangt.
+
+Mit dem Add-on erscheint in der Navigation ein eigener Abschnitt **Medizintechnik** zwischen **IT-Bestand** und **Compliance**, gegliedert in **Geräte**, **Prüfen und einweisen**, **Mängel und Meldungen** und **Organisation**. Die Kategorie „Medizintechnik“ steht dann nicht mehr im Baum unter **Assets**; die Geräte finden Sie weiter unter **Alle Assets** und im Filter der Kategorien.
+
+<Aside type="caution" title="Unterstützung, keine Rechtsberatung">
+Das Add-on strukturiert und dokumentiert. Ob ein Vorkommnis gemeldet werden muss und welche Prüffristen für ein Gerät gelten, entscheiden Sie anhand der Verordnung und der Angaben der Hersteller. Fassung und Quelle der Verordnung stehen auf der Startseite des Bereichs.
+</Aside>
+
+## Lizenz
+
+Das Add-on braucht **zwei** Freischaltungen: Pro (oder Enterprise) **und** das Add-on Medizintechnik. Fehlt eines davon, zeigt der Abschnitt nur einen Eintrag mit Schloss und eine Erklärseite. Einen freien Teil gibt es nicht. Der [Testzeitraum](/guides/lizenz/) schließt das Add-on ein.
+
+Läuft die Lizenz ab, bleiben alle Einträge gespeichert und unverändert, und die Medizingeräte bleiben als Assets sichtbar und bearbeitbar. Ein Asset, das im Bestandsverzeichnis steht, lässt sich nicht löschen, weil das Medizinproduktebuch nach der Außerbetriebnahme aufbewahrt werden muss; aussondern können Sie es weiterhin.
+
+## Übersicht
+
+Die Startseite zeigt die Kennzahlen **Geräte**, **Nicht einsatzklar**, **Mängel** (im Jahr), **Kosten** (Prüfungen und Reparaturen im Jahr) sowie **STK**, **MTK** und **Wartung**, die in diesem Monat geplant sind. Darunter stehen die **anstehenden Termine** mit „n Tage überfällig“ und die **Gerätemängel**, dazu der Schnellzugriff **Mangel melden** und **Bestandsverzeichnis**.
+
+## Geräte
+
+| Bereich | Inhalt |
+|---|---|
+| **Alle Geräte** | Liste mit Inventar- und Seriennummer, Anlage 1 oder 2, nächster Prüfung, Überfälligkeit und Einsatzbereitschaft; Filter nach Gerätesets, Anlage, Stand und Suche. **Aus dem Inventar übernehmen** bietet alle Assets der Kategorie „Medizintechnik“ an, die noch nicht im Verzeichnis stehen, und übernimmt Risikoklasse, UDI-DI, Anschaffungsjahr und die Daten von STK und MTK als Fristen. Einzelne Assets anderer Kategorien nehmen Sie auf der Seite des Assets mit **Als Medizinprodukt aufnehmen** auf |
+| **Gerät** | Steckbrief aus dem Inventar und die Angaben nach MPBetreibV: Art, Anlage 1 (Funktionsprüfung, Einweisung, STK), Anlage 2 (MTK), aktives nichtimplantierbares Produkt, Software der Klassen IIb, III, C oder D (§ 17), Risikoklasse, UDI-DI, Anschaffungsjahr, Verantwortlicher nach § 14, Inbetriebnahme, Außerbetriebnahme, Geräteset, „Einweisung erneut nötig seit“ und die **beauftragten Personen** (§ 11). Reiter **Prüfungen**, **Einweisungen** und **Mängel**, dazu das **Medizinproduktebuch** |
+| **Gerätesets** | Geräte, die zusammen benutzt werden, etwa ein Notfallrucksack. Einweisungen und Einweisungsgruppen nennen ein Set als Ganzes |
+| **Bestandsverzeichnis** | nach § 14 alle aktiven nichtimplantierbaren Produkte ohne Außerbetriebnahme, für die ganze Organisation oder eine Betriebsstätte: Bezeichnung, Art, Typ, Seriennummer oder Loscode, Anschaffungsjahr, Verantwortlicher, betriebliche Identifikationsnummer, Standort und Zuordnung. Zum Drucken (auch als PDF) und **Als CSV für Excel** |
+
+## Prüfen und einweisen
+
+| Bereich | Inhalt |
+|---|---|
+| **Termine** | alle Fristen der Geräte, überfällige zuerst; Zeitraum (überfällig, 30 Tage, 90 Tage, alle) und Art wählbar |
+| **Prüfungen** (am Gerät) | je Art eine Frist: **STK** (§ 12, höchstens alle 24 Monate), **MTK** (§ 15, nach Anlage 2), **IT-Sicherheit** (§ 17, höchstens alle 24 Monate) und **Wartung** (§ 7), mit Intervall, nächster Fälligkeit, vereinbartem Termin und Servicefirma. Eine erfasste Prüfung mit Datum, prüfender Person oder Firma, Ergebnis, Mängeln, Kennzeichnung, Kosten und Prüfprotokoll setzt die nächste Fälligkeit „mit Ablauf des Monats“; eine kürzere Frist geben Sie an. Prüfungen bleiben im Medizinproduktebuch und lassen sich nicht löschen oder ändern; Korrekturen erfassen Sie als neue Prüfung |
+| **Einweisungen** | Einweisung der **Benutzer** (§ 4) oder **Funktionsprüfung und Einweisung der beauftragten Personen** (§ 11) mit Datum (auch nachgetragen), einweisender Person, Anlass, Geräten oder Sets, Teilnehmenden und Nachweis. Einweisungen bleiben im Medizinproduktebuch; der Name einer später gelöschten Person bleibt erhalten |
+| **Fehlende Einweisungen** | Personen aus Einweisungsgruppen ohne gültige Einweisung in ein gefordertes Gerät, und beauftragte Personen eines Geräts der Anlage 1 ohne Einweisung durch den Hersteller. Ist „Einweisung erneut nötig seit“ gesetzt, etwa nach einer Softwareaktualisierung, zählen ältere Einweisungen nicht |
+| **Einweisungsgruppen** | wer in welche Geräte oder Sets eingewiesen sein muss, etwa die Pflege einer Station |
+
+## Mängel und Meldungen
+
+| Bereich | Inhalt |
+|---|---|
+| **Mängel** | Funktionsstörungen, Bedienungsfehler und Schäden mit Stand, Verfasser, **Gerät einsatzklar / nicht einsatzklar** und **BfArM-Meldung** (zu klären, erforderlich, nicht erforderlich); Filter nach Zeitraum, Stand, Meldung, Stichwort und „Nur meine Meldungen“. Ein offener Mangel mit „nicht einsatzklar“ macht das Gerät nicht einsatzklar, bis er behoben ist. Zum Mangel gehören der **Reparaturauftrag** an eine Servicefirma mit Auftragsnummer und Kosten, Folgen, Hersteller informiert am und die Lösung. Mängel bleiben im Medizinproduktebuch |
+| **Mangel melden** | auch für das Team am Gerät (Rolle mit dem Recht „Mängel an Medizinprodukten melden“, standardmäßig auch Betrachter): Gerät, Betreff, Art, Beschreibung und ob das Gerät weiter benutzt werden kann. Je Person sind 10 Meldungen in der Minute und 100 am Tag möglich |
+| **Rückrufe** | Kundeninformationen und Sicherheitskorrekturmaßnahmen der Hersteller mit Referenz, Eingang, Frist und Dokument; je betroffenem Gerät das Datum der Erledigung |
+
+<Aside type="note" title="Meldung an das BfArM">
+Mutmaßliche schwerwiegende Vorkommnisse melden Betreiber und Anwender unverzüglich der zuständigen Bundesoberbehörde, in der Regel dem BfArM (§ 3 MPAMIV). Ob ein solches Vorkommnis vorliegt, entscheiden Sie; die Software schlägt nichts automatisch vor und meldet nichts selbst. Ist eine Meldung erforderlich und noch nicht eingetragen, steht sie sofort als dringende Aufgabe in der Glocke. Tragen Sie nach der Meldung Datum und Kennung ein.
+</Aside>
+
+## Organisation
+
+| Bereich | Inhalt |
+|---|---|
+| **Beauftragte** | je Gesundheitseinrichtung (Standort) oder für die ganze Organisation: regelmäßig Beschäftigte, beauftragte Person und Vertretung, Datum der Bestimmung, Funktions-E-Mail-Adresse, Art der Bekanntmachung und Bestellung. Ab mehr als 20 Beschäftigten verlangt § 6 eine Beauftragte oder einen Beauftragten für Medizinproduktesicherheit; fehlt sie oder er, zeigt das die Seite und die Glocke |
+| **Kosten** | je Gerät und Jahr die Kosten der Prüfungen und Reparaturen, mit Summe |
+
+## Medizinproduktebuch
+
+Das **Medizinproduktebuch** (§ 13) eines Geräts entsteht aus seinen Einträgen: Bezeichnung und Identifikation, beauftragte Personen, Funktionsprüfung und Einweisungen mit den Eingewiesenen, Fristen und Prüfungen, Funktionsstörungen und Bedienungsfehler mit Folgen und Meldungen sowie die Maßnahmen der Hersteller. Sie öffnen es auf der Seite des Geräts und drucken es oder speichern es als PDF. Nach der Außerbetriebnahme nennt es, bis wann es aufzubewahren ist.
+
+## Aufgaben und E-Mail
+
+Für Rollen, die die Medizintechnik verwalten, erscheinen in der Glocke und in der E-Mail-Kategorie **Fristen, Mängel und Meldungen der Medizintechnik**: ausstehende BfArM-Meldungen, nicht einsatzklare Geräte, überfällige und in 30 Tagen fällige Prüfungen, offene Rückrufe (nach Ablauf der Frist dringend), fehlende Einweisungen und fehlende Beauftragte.
+
+## Rollen und Rechte
+
+| Recht | Standardmäßig | Wofür |
+|---|---|---|
+| Medizintechnik lesen | Administration, Bearbeitung, Informationssicherheit, Datenschutz, Prüfung, Betrachter | alles ansehen |
+| Mängel an Medizinprodukten melden | Administration, Bearbeitung, Betrachter | Mängel melden |
+| Medizintechnik verwalten | Administration, Bearbeitung | alles Übrige |
+
+Wer die Medizintechnik führt, arbeitet mit der Rolle **Bearbeitung** oder mit einer [eigenen Rolle](/pro/rollen-anpassen/), die nur das Recht „Medizintechnik verwalten“ und Lesen im Inventar hat. Ein Gerät, dessen Asset eine Person nicht sieht, etwa wegen [Rechten je Standort](/pro/standortrechte/), sieht sie auch im Add-on nicht.

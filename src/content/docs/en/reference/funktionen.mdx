@@ -10,12 +10,12 @@ This page describes the community edition. Features from Pro on are under [Pro a
 
 ## Overview and tasks
 
-The **Overview** is the start page: the next sensible step, progress in the IT-Grundschutz, key figures compared with the previous week, the sources of discovery and the **Tasks**. Tasks arise from deadlines and rules, such as licences and contracts running out, support ending, backup proofs missing, medical device checks due, requirements due or consumables below their minimum; with the add-ons also the report deadlines of breaches and security incidents, data subject requests, the registration under NIS2 and follow-ups due. The command palette (`Ctrl + K`) finds assets, pages and actions; a scanned asset label or EAN appears there as the first match and opens the asset or the item with Enter.
+The **Overview** is the start page: the next sensible step, progress in the IT-Grundschutz, key figures compared with the previous week, the sources of discovery and the **Tasks**. Tasks arise from deadlines and rules, such as licences and contracts running out, support ending, backup proofs missing, requirements due or consumables below their minimum; with the add-ons also the report deadlines of breaches and security incidents, data subject requests, the registration under NIS2, checks and defects of medical technology and follow-ups due. The command palette (`Ctrl + K`) finds assets, pages and actions; a scanned asset label or EAN appears there as the first match and opens the asset or the item with Enter.
 
 ## Inventory
 
 - **Assets** with category, location, owners, lifecycle (planned, active, in maintenance, retired, disposed), protection requirement per security goal and relations to other assets.
-- **Categories** as a tree with fields of their own per category, such as IMEI for mobile devices or, for **medical technology**, the risk class under the MDR, the due safety and metrological checks (German MPBetreibV) and the UDI-DI; fields holding personal values are marked and visible only to roles allowed to see them. The navigation lists the categories with their counts.
+- **Categories** as a tree with fields of their own per category, such as IMEI for mobile devices or, for **medical technology**, the risk class under the MDR and the UDI-DI; fields holding personal values are marked and visible only to roles allowed to see them. The navigation lists the categories with their counts.
 - **Locations** as a tree from site through building and floor down to the room, with a responsible person, a contact on site, access protection, hazards after the BSI's elementary threats and the internet connection. Connections between locations (WAN, VPN, own line, radio link) are seen from both ends. A location's protection requirement follows the maximum principle from its assets.
 - **Inventory numbers** with numbering schemes per category, optionally required; batch creation of identical assets.
 - **Print labels** with QR code, inventory number and name: on A4 sheets (3 × 8 labels of 70 × 37 mm), on tape (12, 18 or 24 mm) for label printers, or for the **DYMO LabelWriter** on labels 99012 (89 × 36 mm), 11354 (57 × 32 mm) and 11352 (54 × 25 mm). DYMO labels also carry the inventory number as a barcode (Code 128) for handheld scanners that read one-dimensional codes only; if a number is too long for the label, the QR code remains on its own. Printing goes through the browser's print dialog: the LabelWriter as printer, the label as paper, no margins and 100 %.
@@ -29,7 +29,7 @@ The **Overview** is the start page: the next sensible step, progress in the IT-G
 - **Stocktaking** per location with everything below it: target frozen at the start, recording by search, label or inventory number, results found, missing, found elsewhere, not in target and unknown; unchangeable once closed, **Take over location** for assets found elsewhere, a protocol to print or save as a PDF. From Pro, a scan field records each scan at once. See [Stocktaking](/en/guides/inventur/).
 - **Disposal with proof of erasure** after BSI CON.6: reason, data media with method (NIST SP 800-88, secure erase, cryptographic, destruction with a DIN 66399 security level, disposer), performed and checked by, proof as a document, whereabouts; unchangeable once closed, a proof can be handed in later but then no longer deleted, renamed or replaced by a new version; a protocol with signature fields. See [Disposal](/en/guides/aussonderung/).
 - **Lifecycle rules:** warranty ending, a device older than its replacement age, not seen for long; as tasks and filters, without a rule changing an asset by itself.
-- **Checks of medical devices:** when the safety check (STK) or metrological check (MTK) of a device in operation has passed, the task **Check overdue** appears (red), because without the check the device may no longer be used. When a check falls today or within the next 30 days, **Check due** appears; a device counts once, overdue first. Both are filters of the asset list, part of an e-mail subscription category and of what needs care in the inventory report. They read the date fields "Sicherheitstechnische Kontrolle fällig" and "Messtechnische Kontrolle fällig" of the medical technology category and of any own category with date fields under the keys `stk_due` and `mtk_due`; devices out of operation do not count.
+- **Medical technology:** deadlines and records of the safety and metrological checks with tasks are kept by the [medical technology add-on](/en/pro/medizintechnik/) (from Pro). Installations already using the fields "Sicherheitstechnische Kontrolle fällig" and "Messtechnische Kontrolle fällig" keep fields and values; the add-on takes them over as deadlines.
 
 ## Automatic discovery
 
@@ -68,7 +68,7 @@ Grundschutz++ and Edition 2023 with a guided process, the Grundschutz check and 
 
 ## Reports
 
-- **Inventory:** assets by lifecycle, category and location, what needs care (no owner, orphaned, support ending, medical device checks overdue or due once there are any, shadow IT) and agent coverage; every figure leads to the filtered asset list.
+- **Inventory:** assets by lifecycle, category and location, what needs care (no owner, orphaned, support ending, shadow IT) and agent coverage; every figure leads to the filtered asset list.
 - **Costs:** monthly and yearly costs of licences and contracts per currency, area and item, and by cost center with the year's procurement, as CSV and for printing.
 
 ## Notifications
@@ -84,6 +84,7 @@ Add-ons are licensed separately and appear as their own group in the navigation.
 - **ISMS add-on** (with Pro or Enterprise): guides you through an information security management system according to BSI standards 200-1 to 200-3, see [ISMS add-on](/en/pro/isms/).
 - **Data protection add-on** (with any edition): guides you step by step through the duties of the GDPR, from the record of processing activities to the activity report, see [Data protection add-on](/en/pro/datenschutz-add-on/).
 - **NIS2 add-on** (with any edition): guides you through the duties under NIS2 and the BSIG, from checking whether you are covered through registration, measures and reports to the evidence, see [NIS2 add-on](/en/pro/nis2/).
+- **Medical technology add-on** (only with Pro or Enterprise): medical devices under the German MPBetreibV with inventory list, device book, safety, metrological and IT security checks and maintenance, briefings with briefing groups, defects with reports to the BfArM, recalls and officers for medical device safety, see [Medical technology add-on](/en/pro/medizintechnik/).
 
 Deadlines and follow-ups of the add-ons appear under **Tasks**, in the bell and, on request, by e-mail, only for people who may make changes in the add-on.
 
