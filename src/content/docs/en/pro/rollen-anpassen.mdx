@@ -55,6 +55,19 @@ Locked ticks carry a lock and the reason:
 
 The administration is no base for custom roles. Other permissions only the administration holds by default, such as managing agents, may be taken from it or given to another role.
 
+## Far-reaching permissions
+
+Some permissions reach past the organisation's data: they set up credentials for other systems, send data out, let devices or foreign systems in, or reveal the trail of everyone's actions. Their row carries the mark **Far-reaching**. When you give such a permission to a role that lacks it by default, the page asks first and says what the role can do with it. Taking it away, and giving back a default permission that was taken, need no confirmation.
+
+| Area | Far-reaching permissions |
+|---|---|
+| Credentials for other systems | mail server, directory service (Active Directory), groups from AD, Entra ID and Intune, hypervisors, ticket systems, Open Icecat, mailbox of the data protection add-on (change data protection) |
+| Data sent out | notifications (webhook, Gotify), SIEM export, setting up the AI assistant, setting up and using the data assistant |
+| Access for devices and foreign systems | manage agents (rollout tokens, collectors), status tokens, hosts for revocation lists |
+| Trail and secrets | read and export the audit log, reveal licence keys |
+
+In the audit log, `role.adjusted` or `role.updated` additionally names such permissions under `far_reaching` when the change gives them anew and beyond the default.
+
 ## When it applies
 
 - **From the next request** of every person with that role, also in running sessions; the interface then shows only what the person may do.

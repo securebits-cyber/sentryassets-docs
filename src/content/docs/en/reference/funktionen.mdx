@@ -47,7 +47,7 @@ A traffic light per asset (healthy, warning, critical, unknown) with its reasons
 
 **Security state of devices:** once a day the agent reports for each protective function whether it is on, off, partly on or unknown: disk encryption, antivirus (with the age of its signatures), firewall, automatic updates (with the day of the last updates), Secure Boot and screen lock. It reads states only, never keys, rules, findings or names of updates; what cannot be determined reliably with built-in means stays "unknown". The state shows in the **Health** tab and serves the implementation help in IT-Grundschutz as a suggestion. On macOS it follows with the macOS agent.
 
-**Status tokens** (under **Settings**) let a monitoring report states only (`POST /api/v1/status-reports`), without reading or changing anything; they are shown once, kept as a hash, expire and can be revoked. See [API](/en/reference/api/).
+**Status tokens** (under **Settings**) let a monitoring report states only (`POST /api/v1/status-reports`), without reading or changing anything; they are created only after a fresh confirmation of the sign-in, shown once, kept as a hash, expire and can be revoked. See [API](/en/reference/api/).
 
 ## IT-Grundschutz
 

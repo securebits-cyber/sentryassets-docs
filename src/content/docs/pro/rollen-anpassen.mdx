@@ -55,6 +55,19 @@ Gesperrte Haken tragen ein Schloss und den Grund:
 
 Die Administration ist keine Basis für eigene Rollen. Andere Rechte, die standardmäßig nur die Administration hat, etwa Agents verwalten, können Sie ihr nehmen oder einer anderen Rolle geben.
 
+## Weitreichende Rechte
+
+Manche Rechte wirken über die Daten der Organisation hinaus: Sie richten Zugangsdaten zu anderen Systemen ein, schicken Daten nach außen, lassen Geräte oder Fremdsysteme herein oder legen die Spur aller Handlungen offen. Ihre Zeile trägt die Marke **Weitreichend**. Geben Sie ein solches Recht einer Rolle, die es von Haus aus nicht hat, fragt die Seite vorher und sagt, was die Rolle damit kann. Entziehen und das Zurückgeben eines zuvor entzogenen Standardrechts gehen ohne Nachfrage.
+
+| Bereich | Weitreichende Rechte |
+|---|---|
+| Zugangsdaten zu anderen Systemen | Mailserver, Verzeichnisdienst (Active Directory), Gruppen aus dem AD, Entra ID und Intune, Hypervisoren, Ticketsysteme, Open Icecat, Postfach des Datenschutz-Add-ons (Datenschutz ändern) |
+| Daten nach außen | Benachrichtigungen (Webhook, Gotify), SIEM-Export, KI-Assistent einrichten, Daten-Assistent einrichten und nutzen |
+| Zugang für Geräte und Fremdsysteme | Agents verwalten (Rollout-Tokens, Collectors), Status-Tokens, Hosts für Sperrlisten |
+| Spur und Geheimnisse | Audit-Log lesen und exportieren, Lizenzschlüssel anzeigen |
+
+Im Audit-Log nennt der Eintrag `role.adjusted` bzw. `role.updated` solche Rechte zusätzlich unter `far_reaching`, wenn die Änderung sie neu und über den Standard hinaus vergibt.
+
 ## Wann es wirkt
 
 - **Ab der nächsten Anfrage** jeder Person mit dieser Rolle, auch in laufenden Sitzungen; die Oberfläche zeigt danach nur noch, was die Person darf.

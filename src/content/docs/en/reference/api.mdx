@@ -27,7 +27,7 @@ There is no general API key to read or change the inventory. A stolen key can th
 
 A monitoring such as Checkmk, Zabbix or Uptime Kuma reports the state of an asset. SentryAssets shows it in the asset's traffic light, next to what the agent reports.
 
-1. Create a token under **Settings › Status tokens** (valid for up to 365 days). It starts with `sa_sts_` and is shown once.
+1. Create a token under **Settings › Status tokens** (valid for up to 365 days). It starts with `sa_sts_` and is shown once. Creating needs a fresh confirmation of the sign-in (valid for 5 minutes); you can revoke at any time.
 2. An asset's ID (`asset_id`) is in its address in the web UI.
 3. Report the state:
 

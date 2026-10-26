@@ -32,6 +32,10 @@ With SCIM 2.0 your identity provider, such as Entra ID, Okta, Keycloak or Authen
 
 Provisioned users match accounts by the OIDC claim `sub`, for Entra ID by `oid`. The page shows who is provisioned and who has signed in already.
 
+<Aside type="caution" title="Fresh confirmation">
+Creating and revoking tokens and changing the matching claim work only shortly after confirming the sign-in: a one-time code for local accounts, signing in again at the identity provider for OIDC, valid for 5 minutes. If it is older, the page shows the confirmation at the top and locks the buttons until then. A token ends access and lowers roles; an unattended session should neither create one nor switch it off.
+</Aside>
+
 <Aside>
 The mapping of groups to roles stays the one of the [sign-in](/en/guides/einrichtung/#sign-in-with-oidc-optional).
 </Aside>

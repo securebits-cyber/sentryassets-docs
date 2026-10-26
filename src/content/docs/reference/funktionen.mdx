@@ -47,7 +47,7 @@ Eine Ampel je Asset (gesund, Warnung, kritisch, unbekannt) mit ihren Gründen, a
 
 **Sicherheitszustand der Geräte:** Der Agent meldet täglich je Schutzfunktion, ob sie an, aus, teilweise aktiv oder unbekannt ist: Datenträgerverschlüsselung, Virenschutz (mit dem Alter der Signaturen), Firewall, automatische Updates (mit dem Tag der letzten Updates), Secure Boot und Bildschirmsperre. Er liest nur Zustände, nie Schlüssel, Regeln, Funde oder Namen von Updates; was sich mit Bordmitteln nicht sicher feststellen lässt, bleibt „unbekannt“. Der Zustand steht in der Registerkarte **Zustand** und dient der Umsetzungshilfe im IT-Grundschutz als Vorschlag. Unter macOS folgt er mit dem Agent für macOS.
 
-**Status-Tokens** (unter **Einstellungen**) erlauben einem Monitoring, nur Zustände zu melden (`POST /api/v1/status-reports`), ohne Lesen und ohne Ändern; sie werden einmal angezeigt, nur als Hash gespeichert, laufen ab und sind widerrufbar. Siehe [API](/reference/api/).
+**Status-Tokens** (unter **Einstellungen**) erlauben einem Monitoring, nur Zustände zu melden (`POST /api/v1/status-reports`), ohne Lesen und ohne Ändern; sie entstehen nur nach frischer Bestätigung der Anmeldung, werden einmal angezeigt, nur als Hash gespeichert, laufen ab und sind widerrufbar. Siehe [API](/reference/api/).
 
 ## IT-Grundschutz
 
