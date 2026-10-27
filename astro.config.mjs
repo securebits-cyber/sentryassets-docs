@@ -65,6 +65,7 @@ export default defineConfig({
 							{ icon: 'i-ph:recycle-duotone', slug: 'guides/aussonderung' },
 							{ icon: 'i-ph:coins-duotone', slug: 'guides/kostenstellen' },
 							{ icon: 'i-ph:envelope-simple-duotone', slug: 'guides/benachrichtigungen' },
+							{ icon: 'i-ph:graph-duotone', slug: 'guides/netzwerk-dokumentation' },
 							{ icon: 'i-ph:hard-drives-duotone', slug: 'guides/racks' },
 							{ icon: 'i-ph:shield-check-duotone', slug: 'guides/grundschutz' },
 							{ icon: 'i-ph:archive-duotone', slug: 'guides/sicherung' },

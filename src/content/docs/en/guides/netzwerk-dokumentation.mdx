@@ -1,0 +1,72 @@
+---
+title: Network documentation
+description: Document network plans, WLAN, VPN and emergency procedures as pages in a tree, from templates with required sections, so every documentation has the same structure and serves as evidence.
+sidebar:
+  label: Network documentation
+  order: 13
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Under **Network › Documentation** you describe your network on pages that belong to no single device: network plan, segments and zones, firewall rule set, WLAN, VPN and remote access, internet connections, naming and addressing convention, DNS and DHCP, and the emergency runbook for a network outage. The pages form a tree, such as “Site Vilshofen › WLAN”.
+
+Each page is a [documentation](/en/guides/dokumentation/) in Markdown: with diagrams (Mermaid), versions, confidentiality, encryption and a record of every read in the audit log. Pages therefore also appear in the list of documents.
+
+The network documentation is part of the Community edition. The **Network** group also holds the [racks](/en/guides/racks/) and the dependencies (from Pro).
+
+## Prerequisites
+
+- Reading needs the right to read documents. Pages whose confidentiality is above your level stay hidden; their subpages then appear one level up.
+- Creating, editing, moving, marking as reviewed and deleting pages needs the right to write documents and **no location binding**: **Administrator**, **Information security** or **Editing** (see [Roles and rights](/en/reference/rollen/)). This holds through **Documents** as well.
+- Own templates are created by **Administrator** and **Information security** (right “Manage own templates of the network documentation”).
+
+## Create a page from a template
+
+<Steps>
+
+1. Open **Network › Documentation** and choose **Create page**.
+
+2. Enter the **Title** and choose a **Template**, such as **Network plan**. Below you see the template's required sections. If needed, choose a **Parent page**, the **Confidentiality** and how often the page is to be reviewed (**Review every … months**, default 12).
+
+3. SentryAssets creates the page with all headings of the template. Below each heading the **guidance** stands as a quote, with the requirement the section helps to meet.
+
+4. Choose **Edit** and write your text below each heading, with tables and diagrams as you like. Saving creates a new version.
+
+</Steps>
+
+Pages without a template start with their title only.
+
+## Required sections and completeness
+
+The card **State of the page** shows which required sections are still empty (“Still empty: …”), or **All required sections are filled in**. In the tree, each page shows **n required sections empty** or **Complete**.
+
+A required section counts as filled when below its heading (`## Heading`), up to the next heading of the same level, at least one line is neither blank nor a quote. The template's guidance is quoted and therefore does not count. A diagram or a code block counts as content. Case does not matter; if you rename a required heading, the section is missing.
+
+The check runs with every new version.
+
+<Aside>
+The included templates name modules of the IT-Grundschutz-Kompendium (edition 2023), such as NET.1.1, NET.2.1, NET.3.2, NET.3.3, APP.3.6 and DER.4, and Art. 21 (2) of the NIS2 directive. A filled section supports the evidence; it does not replace checking the requirement itself.
+</Aside>
+
+## Templates
+
+Under **Network › Documentation › Templates** you see the nine included templates in German and English: network plan, network segmentation and zones, firewall rule set, WLAN, VPN and remote access, internet connections, naming and addressing convention, DNS and DHCP, and emergency runbook: network down. Clicking a name shows the sections with guidance and requirement.
+
+Create own templates with **Create template**, or with **Copy as own template** from an included one. A template has a **Name**, a **Language**, a **Description** and up to 30 **Sections**, each with **Heading**, **Guidance**, **Supports requirement** and the mark **Required section**. Change the order with the arrows.
+
+- When you change an own template, its pages are checked against it with their next version.
+- When you delete an own template, its pages keep their content; their required sections are no longer checked.
+
+## Review, move, delete
+
+- **Mark as reviewed** records that the page is still right and sets the next review. Once it is past, page and tree show **Review due**.
+- **Move** puts the page below another page or at the top level, at the start or at the end. Pages nest at most six levels deep, and no page goes below one of its own subpages.
+- **Create subpage** creates a page directly below the open one.
+- **Delete** removes the page with all its versions and cannot be undone. A page with subpages cannot be deleted, not through **Documents** either; delete or move its subpages first. If a retention period runs for the document, it stays until then.
+
+## Limits
+
+- At most 2,000 pages per organisation and six levels.
+- A version is at most 1 MiB (as any documentation).
+- At most 200 own templates with up to 30 sections each.
+- Do not enter passwords, keys or community strings on pages. The encrypted credentials of each function are there for that.

@@ -1,0 +1,72 @@
+---
+title: Netzwerk-Dokumentation
+description: Netzpläne, WLAN, VPN und Notfallabläufe als Seiten in einem Baum dokumentieren, aus Vorlagen mit Pflichtabschnitten, damit jede Dokumentation gleich aufgebaut ist und als Nachweis taugt.
+sidebar:
+  label: Netzwerk-Dokumentation
+  order: 13
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Unter **Netzwerk › Dokumentation** beschreiben Sie Ihr Netz auf Seiten, die zu keinem einzelnen Gerät gehören: Netzplan, Segmente und Zonen, Firewall-Regelwerk, WLAN, VPN und Fernzugang, Internetanschlüsse, Namens- und Adresskonvention, DNS und DHCP sowie das Notfall-Runbook für einen Netzausfall. Die Seiten stehen in einem Baum, etwa „Standort Vilshofen › WLAN“.
+
+Jede Seite ist eine [Dokumentation](/guides/dokumentation/) in Markdown: mit Diagrammen (Mermaid), Versionen, Vertraulichkeit, Verschlüsselung und Protokoll jedes Abrufs im Audit-Log. Seiten erscheinen deshalb auch in der Liste der Dokumente.
+
+Die Netzwerk-Dokumentation gehört zur Community-Edition. In der Gruppe **Netzwerk** finden Sie außerdem die [Racks](/guides/racks/) und die Abhängigkeiten (ab Pro).
+
+## Voraussetzungen
+
+- Lesen genügt das Recht, Dokumente zu lesen. Seiten, deren Vertraulichkeit über Ihrer Stufe liegt, sehen Sie nicht; ihre Unterseiten erscheinen dann eine Ebene höher.
+- Seiten anlegen, bearbeiten, verschieben, als geprüft markieren und löschen darf, wer Dokumente schreiben darf und **an keinen Standort gebunden** ist: **Administrator**, **Informationssicherheit** oder **Bearbeitung** (siehe [Rollen und Rechte](/reference/rollen/)). Das gilt auch auf dem Weg über **Dokumente**.
+- Eigene Vorlagen legen **Administrator** und **Informationssicherheit** an (Recht „Eigene Vorlagen der Netzwerk-Dokumentation verwalten“).
+
+## Seite aus einer Vorlage anlegen
+
+<Steps>
+
+1. Öffnen Sie **Netzwerk › Dokumentation** und wählen Sie **Seite anlegen**.
+
+2. Tragen Sie den **Titel** ein und wählen Sie eine **Vorlage**, etwa **Netzplan**. Darunter sehen Sie die Pflichtabschnitte der Vorlage. Wählen Sie bei Bedarf eine **Übergeordnete Seite**, die **Vertraulichkeit** und wie oft die Seite geprüft werden soll (**Prüfen alle … Monate**, Standard 12).
+
+3. SentryAssets legt die Seite mit allen Überschriften der Vorlage an. Unter jeder Überschrift steht die **Anleitung** als Zitat, mit der Anforderung, die der Abschnitt belegen hilft.
+
+4. Wählen Sie **Bearbeiten** und schreiben Sie unter jede Überschrift Ihren Text, gern mit Tabellen und Diagrammen. Speichern legt eine neue Version an.
+
+</Steps>
+
+Seiten ohne Vorlage beginnen nur mit ihrem Titel.
+
+## Pflichtabschnitte und Vollständigkeit
+
+Die Karte **Stand der Seite** zeigt, welche Pflichtabschnitte noch leer sind („Noch leer: …“), oder **Alle Pflichtabschnitte sind ausgefüllt**. Im Baum steht dazu je Seite **n Pflichtabschnitte leer** oder **Vollständig**.
+
+Ein Pflichtabschnitt gilt als ausgefüllt, wenn unter seiner Überschrift (`## Überschrift`) bis zur nächsten gleich hohen Überschrift mindestens eine Zeile steht, die weder leer noch ein Zitat ist. Die Anleitungen der Vorlage sind Zitate und zählen deshalb nicht. Auch ein Diagramm oder ein Codeblock zählt als Inhalt. Groß- und Kleinschreibung der Überschrift spielen keine Rolle; benennen Sie eine Pflichtüberschrift um, fehlt der Abschnitt.
+
+Geprüft wird mit jeder neuen Version.
+
+<Aside>
+Die mitgelieferten Vorlagen nennen Bausteine des IT-Grundschutz-Kompendiums (Edition 2023), etwa NET.1.1, NET.2.1, NET.3.2, NET.3.3, APP.3.6 und DER.4, sowie Art. 21 Abs. 2 der NIS2-Richtlinie. Ein ausgefüllter Abschnitt unterstützt den Nachweis; die Prüfung der Anforderung selbst ersetzt er nicht.
+</Aside>
+
+## Vorlagen
+
+Unter **Netzwerk › Dokumentation › Vorlagen** sehen Sie die neun mitgelieferten Vorlagen auf Deutsch und Englisch: Netzplan, Netzsegmentierung und Zonen, Firewall-Regelwerk, WLAN, VPN und Fernzugang, Internetanschlüsse, Namens- und Adresskonvention, DNS und DHCP sowie Notfall-Runbook: Netz ausgefallen. Ein Klick auf den Namen zeigt die Abschnitte mit Anleitung und Anforderung.
+
+Eigene Vorlagen legen Sie mit **Vorlage anlegen** an oder mit **Als eigene Vorlage kopieren** aus einer mitgelieferten. Eine Vorlage hat einen **Namen**, eine **Sprache**, eine **Beschreibung** und bis zu 30 **Abschnitte**, je mit **Überschrift**, **Anleitung**, **Belegt Anforderung** und dem Merkmal **Pflichtabschnitt**. Die Reihenfolge ändern Sie mit den Pfeilen.
+
+- Ändern Sie eine eigene Vorlage, werden die Seiten daraus mit ihrer nächsten Version gegen den neuen Stand geprüft.
+- Löschen Sie eine eigene Vorlage, behalten die Seiten ihren Inhalt; ihre Pflichtabschnitte werden danach nicht mehr geprüft.
+
+## Prüfen, verschieben, löschen
+
+- **Als geprüft markieren** hält fest, dass die Seite noch stimmt, und setzt die nächste Prüfung. Ist sie überschritten, zeigen Seite und Baum **Prüfung fällig**.
+- **Verschieben** setzt die Seite unter eine andere Seite oder auf die oberste Ebene, an den Anfang oder ans Ende. Seiten lassen sich höchstens sechs Ebenen tief schachteln, und keine Seite unter eine ihrer eigenen Unterseiten.
+- **Unterseite anlegen** legt eine Seite direkt unter der geöffneten an.
+- **Löschen** entfernt die Seite mit allen Versionen und lässt sich nicht rückgängig machen. Eine Seite mit Unterseiten lässt sich nicht löschen, auch nicht über **Dokumente**; löschen oder verschieben Sie zuerst die Unterseiten. Läuft für das Dokument eine Aufbewahrungsfrist, bleibt es bis dahin.
+
+## Grenzen
+
+- Höchstens 2 000 Seiten je Organisation und sechs Ebenen.
+- Eine Version ist höchstens 1 MiB groß (wie jede Dokumentation).
+- Höchstens 200 eigene Vorlagen mit je bis zu 30 Abschnitten.
+- Tragen Sie keine Passwörter, Schlüssel oder Community-Strings in Seiten ein. Dafür sind die verschlüsselten Zugangsdaten der jeweiligen Funktion da.
