@@ -1,0 +1,78 @@
+---
+title: Networks, topology and cabling
+description: Maintain IP networks, VLANs, zones and the communication matrix, see the occupancy of a network, the topology from cables, LLDP and links by hand, and every cable of the racks.
+sidebar:
+  label: Networks and topology
+  order: 13
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Beside the [network documentation](/en/guides/netzwerk-dokumentation/) and the [racks](/en/guides/racks/), the **Network** group holds:
+
+- **Overview:** figures on pages, networks, VLANs, zones, racks and cables.
+- **Topology:** the devices and their connections as a map.
+- **Networks and VLANs:** IP networks, VLANs, zones, the communication matrix and links to the outside.
+- **Cabling:** every cable of the racks with both ends.
+
+All of it is part of the Community edition. The **dependencies** in the same group are a feature from Pro.
+
+## Rights
+
+- Every role may read; networks, VLANs and zones hold no personal data.
+- **Administrator**, **Information security** and **Editing** may change them when bound to no location (see [Roles and rights](/en/reference/rollen/)).
+- The **occupancy** of a network and the **LLDP neighbours** in the topology are shown only to roles that may read the discovery's findings.
+
+## Networks, VLANs and zones
+
+<Steps>
+
+1. Open **Network › Networks and VLANs**, view **Zones**, and create your zones, such as clients, servers, DMZ, management and guests, each with its **protection needs**.
+
+2. In the view **VLANs**, create VLANs with **number** (1 to 4094), **name**, **zone** and **location**. A number exists once per location.
+
+3. In the view **Networks**, create the IP networks: **address range (CIDR)** such as `192.168.10.0/24` or `2001:db8:10::/64`, **name**, **VLAN**, **zone**, **location**, **gateway** and **DHCP from** and **DHCP to**. Gateway and DHCP range must lie in the network.
+
+</Steps>
+
+A network counts as **public** when it is reachable on the internet and overlaps no range IANA sets aside; a wide range such as `10.0.0.0/7` is therefore not public. The [NIS2 registration](/en/pro/nis2/) takes the public networks over at the press of a button.
+
+A zone with VLANs, networks or allowed connections cannot be deleted, nor a VLAN with networks. When a location is deleted, its VLANs and networks stay without a location; the audit log says so.
+
+## Occupancy of a network
+
+Clicking the range opens the network. The card **Occupancy** shows:
+
+- how many addresses are in use and the share, with a warning from 90 %,
+- the next free addresses outside the DHCP range, without the gateway,
+- the addresses in use with device, MAC address and source: **Agent** (the device's agent reports it) or **Network scan** (a collector found it).
+
+The occupancy is computed when the network is opened, from what agents report and collectors find, and is not stored. For IPv6 networks SentryAssets shows the addresses seen only.
+
+## Communication matrix
+
+In the view **Communication matrix** you record which zone may talk to which, over which **services** (such as HTTPS, SSH, DNS) and for which **reason**. This is the target: it supports the segmentation under NET.1.1 and NIS2 and is the basis for reviewing the firewall rules. SentryAssets does not configure a firewall.
+
+## Topology
+
+**Network › Topology** draws the devices and their connections as a map:
+
+- **cables** between two devices in the racks (solid),
+- **LLDP neighbours** the switches report over SNMP (dotted),
+- **links by hand** from the network plan, such as the internet connection at the firewall (dashed).
+
+The ends outside the network stand at the top, below them each device a row under its nearest neighbour. Clicking a device opens the asset. With **Location** you show only the devices of a location and their direct neighbours. Below the map all connections stand as a list.
+
+**Copy as Mermaid diagram** puts the map as text on the clipboard; on a page of the network documentation, **Diagram from topology** inserts it straight into the editor.
+
+<Aside>
+The map does not yet follow cables through a patch panel: cables between two devices count. Connections to devices you may not see stay out.
+</Aside>
+
+## Cabling
+
+**Network › Cabling** lists every cable of the racks with ID, type, colour and length and both ends: rack, location, device or patch panel and port. The search finds cable, rack, device and port, such as `Gi1/0/24`. A cable with one end only shows as **open**.
+
+## References from the documentation
+
+On a page of the network documentation, **Reference** also inserts networks, VLANs and zones. They always show the current name, and a network's page names the pages that mention it.

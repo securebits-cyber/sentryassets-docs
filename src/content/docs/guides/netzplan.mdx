@@ -1,0 +1,78 @@
+---
+title: Netze, Topologie und Verkabelung
+description: IP-Netze, VLANs, Zonen und die Kommunikationsmatrix pflegen, die Belegung eines Netzes sehen, die Topologie aus Kabeln, LLDP und Verbindungen von Hand und alle Kabel der Racks.
+sidebar:
+  label: Netze und Topologie
+  order: 13
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+In der Gruppe **Netzwerk** finden Sie neben der [Netzwerk-Dokumentation](/guides/netzwerk-dokumentation/) und den [Racks](/guides/racks/):
+
+- **Übersicht:** Kennzahlen zu Seiten, Netzen, VLANs, Zonen, Racks und Kabeln.
+- **Topologie:** die Geräte und ihre Verbindungen als Karte.
+- **Netze und VLANs:** IP-Netze, VLANs, Zonen, die Kommunikationsmatrix und Verbindungen nach außen.
+- **Verkabelung:** alle Kabel der Racks mit beiden Enden.
+
+Alles gehört zur Community-Edition. Die **Abhängigkeiten** in derselben Gruppe sind eine Funktion ab Pro.
+
+## Rechte
+
+- Lesen dürfen alle Rollen; Netze, VLANs und Zonen enthalten keine personenbezogenen Daten.
+- Ändern dürfen **Administrator**, **Informationssicherheit** und **Bearbeitung**, wenn sie an keinen Standort gebunden sind (siehe [Rollen und Rechte](/reference/rollen/)).
+- Die **Belegung** eines Netzes und die **LLDP-Nachbarn** in der Topologie sehen nur Rollen, die die Funde der Discovery lesen dürfen.
+
+## Netze, VLANs und Zonen
+
+<Steps>
+
+1. Öffnen Sie **Netzwerk › Netze und VLANs**, Ansicht **Zonen**, und legen Sie Ihre Zonen an, etwa Clients, Server, DMZ, Verwaltung und Gäste, je mit **Schutzbedarf**.
+
+2. In der Ansicht **VLANs** legen Sie VLANs mit **Nummer** (1 bis 4094), **Name**, **Zone** und **Standort** an. Eine Nummer gibt es je Standort einmal.
+
+3. In der Ansicht **Netze** legen Sie die IP-Netze an: **Adressbereich (CIDR)** wie `192.168.10.0/24` oder `2001:db8:10::/64`, **Name**, **VLAN**, **Zone**, **Standort**, **Gateway** und **DHCP von** und **DHCP bis**. Gateway und DHCP-Bereich müssen im Netz liegen.
+
+</Steps>
+
+Ein Netz gilt als **öffentlich**, wenn es im Internet erreichbar ist und keinen von IANA vorbehaltenen Bereich überschneidet; ein weites Sammelnetz wie `10.0.0.0/7` ist daher nicht öffentlich. Die öffentlichen Netze übernimmt die [NIS2-Registrierung](/pro/nis2/) auf Knopfdruck.
+
+Eine Zone mit VLANs, Netzen oder erlaubten Verbindungen lässt sich nicht löschen, ein VLAN mit Netzen ebenfalls nicht. Wird ein Standort gelöscht, bleiben VLANs und Netze ohne Standort stehen; das steht im Audit-Log.
+
+## Belegung eines Netzes
+
+Ein Klick auf den Bereich öffnet das Netz. Die Karte **Belegung** zeigt:
+
+- wie viele Adressen belegt sind und den Anteil, ab 90 % mit Warnung,
+- die nächsten freien Adressen außerhalb des DHCP-Bereichs, ohne das Gateway,
+- die belegten Adressen mit Gerät, MAC-Adresse und Quelle: **Agent** (die Adresse meldet der Agent des Geräts) oder **Netzwerkscan** (ein Collector hat sie gefunden).
+
+Die Belegung wird beim Öffnen aus den Meldungen der Agents und den Funden der Collectors berechnet und nicht gespeichert. Für IPv6-Netze zeigt SentryAssets nur die gesehenen Adressen.
+
+## Kommunikationsmatrix
+
+In der Ansicht **Kommunikationsmatrix** halten Sie fest, welche Zone mit welcher sprechen darf, über welche **Dienste** (etwa HTTPS, SSH, DNS) und mit welcher **Begründung**. Das ist das Soll: Es belegt die Segmentierung nach NET.1.1 und NIS2 und ist die Grundlage, um die Regeln der Firewall zu prüfen. Eine Firewall konfiguriert SentryAssets nicht.
+
+## Topologie
+
+**Netzwerk › Topologie** zeichnet die Geräte und ihre Verbindungen als Karte:
+
+- **Kabel** zwischen zwei Geräten in den Racks (durchgezogen),
+- **LLDP-Nachbarn**, die die Switches über SNMP melden (gepunktet),
+- **Verbindungen von Hand** aus dem Netzplan, etwa der Internetanschluss an der Firewall (gestrichelt).
+
+Oben stehen die Gegenstellen außerhalb des Netzes, darunter jedes Gerät eine Zeile unter seinem nächsten Nachbarn. Ein Klick auf ein Gerät öffnet das Asset. Mit **Standort** zeigen Sie nur die Geräte eines Standorts und ihre direkten Nachbarn. Unter der Karte stehen alle Verbindungen als Liste.
+
+**Als Mermaid-Diagramm kopieren** legt die Karte als Text in die Zwischenablage; in einer Seite der Netzwerk-Dokumentation fügt **Diagramm aus Topologie** sie direkt in den Editor ein.
+
+<Aside>
+Kabel durch ein Patchfeld hindurch verfolgt die Karte noch nicht: Es zählen Kabel zwischen zwei Geräten. Verbindungen zu Geräten, die Sie nicht sehen dürfen, bleiben aus.
+</Aside>
+
+## Verkabelung
+
+**Netzwerk › Verkabelung** listet jedes Kabel der Racks mit Kennung, Typ, Farbe und Länge und beiden Enden: Rack, Standort, Gerät oder Patchfeld und Port. Die Suche findet Kabel, Rack, Gerät und Port, etwa `Gi1/0/24`. Ein Kabel mit nur einem Ende steht als **offen** da.
+
+## Verweise aus der Dokumentation
+
+In einer Seite der Netzwerk-Dokumentation fügt **Verweis** auch Netze, VLANs und Zonen ein. Sie zeigen immer den aktuellen Namen, und die Seite eines Netzes nennt die Seiten, die es erwähnen.
