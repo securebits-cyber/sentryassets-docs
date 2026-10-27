@@ -1,0 +1,89 @@
+---
+title: Active Directory without a VPN (directory agent)
+description: "When SentryAssets runs at a hosting provider and the domain controller is in the company network: the directory agent reads AD on site and reports outbound only, without a VPN and without the service account's password on the server."
+sidebar:
+  label: Directory agent (no VPN)
+---
+
+import { Steps, Aside, Badge } from '@astrojs/starlight/components';
+
+If SentryAssets runs at a hosting provider, the server cannot reach your domain controller in the company network. Instead of a site-to-site VPN, install the **directory agent** on a Windows server in the company network. It reads Active Directory over LDAPS and sends the results over an outbound-only, mutually authenticated connection (mTLS, TLS 1.3) to SentryAssets, like the agent and the collector.
+
+<Badge text="Community" variant="success" /> for the computers, <Badge text="Pro" variant="note" /> for [people from AD](/en/pro/active-directory/).
+
+## How it differs from the direct route
+
+| | Directly from the server | Over a directory agent |
+|---|---|---|
+| Network path | server → domain controller (TCP 636), in your network or over a VPN | directory agent → SentryAssets (HTTPS, outbound only) |
+| Domain controllers, service account, password, CA | in the interface, password encrypted on the server | only on the directory agent's computer, never on the server |
+| What is read | fixed attributes | the same fixed attributes, compiled into the program |
+| What the server decides | everything | only OUs, groups (Pro) and the interval |
+
+Even a compromised server at the hosting provider therefore knows neither the service account's password nor can it ask for other attributes such as LAPS passwords or BitLocker recovery keys: the directory agent has no way to read them.
+
+## Where it runs
+
+A **member server** that is always on, such as a file server, is recommended. A domain controller belongs to the highest protection level, and IT-Grundschutz asks to run only the services needed there. The directory agent still runs on a domain controller; SentryAssets then points this out.
+
+The computer needs:
+
+- Windows Server 2016 or later (or Linux with systemd), without additional software.
+- Outbound HTTPS to your SentryAssets (agent address, port 443 or 8443).
+- TCP 636 (or 3269) to the domain controllers. Only private addresses are contacted.
+
+## Setting it up
+
+<Steps>
+
+1. **Prepare the service account and CA** as for the direct route, see [Connecting Active Directory](/en/guides/active-directory/). Save the CA certificate as a file on the directory agent's computer, for example `C:\SentryAssets\ad-ca.cer`.
+
+2. Open **Settings › Directory services**, choose the route **Over a directory agent (no VPN)** in the draft and create a rollout token under **Set up a directory agent**. This asks you to confirm your sign-in again. The token is shown once.
+
+3. **Install:** run the command shown in an **administrator PowerShell** on the computer. It downloads the program from your SentryAssets, checks its SHA-256 sum, creates `C:\ProgramData\SentryAssets\Directory` for SYSTEM and Administrators only and enrolls the device. Paste the token at the prompt; the input stays hidden.
+
+4. **Set up access to AD**, in the same PowerShell:
+
+   ```powershell
+   & "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" set `
+     --bind-name svc-sentryassets@company.local `
+     --controller dc01.company.local --controller dc02.company.local `
+     --ca-file C:\SentryAssets\ad-ca.cer
+   ```
+
+   The program asks for the password without showing it; it never appears on the command line. Up to four domain controllers are possible, in failover order. Everything is stored only in `C:\ProgramData\SentryAssets\Directory`, the password additionally bound to the computer with DPAPI.
+
+5. **Test on site** (optional):
+
+   ```powershell
+   & "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" test --base-dn "OU=Clients,DC=company,DC=local"
+   ```
+
+6. **Start the service:** `Start-Service SentryAssetsDirectory`. The directory agent then appears under **Discovery › Agents** with the label **Directory agent**. Depending on the token, approve it there.
+
+7. **Back in Settings › Directory services:** choose the directory agent, enter the **OUs (base DNs)**, **save the draft** and **test the connection**. The directory agent runs the test at its next contact, usually within five minutes; the result appears by itself. Then **activate**.
+
+</Steps>
+
+<Aside type="tip" title="Linux">
+On Linux the page shows a command that creates a system user `sentryassets-directory` of its own and sets up the hardened systemd service `sentryassets-directory`. Run `set` with `sudo -u sentryassets-directory /opt/sentryassets-directory/bin/sentryassets-directory set …`.
+</Aside>
+
+## In operation
+
+- The directory agent reads at the interval set, at most once an hour; **Synchronise now** asks for a run. SentryAssets takes a run over only once it has arrived completely; an interrupted or failed run changes nothing.
+- **Changing the password:** run `sentryassets-directory set` again on the computer. The interface has no field for it; the next test shows the new state.
+- **Changing the route:** if you switch an existing connection from "direct" to "over a directory agent", SentryAssets deletes the password stored on the server when you activate it. Computers keep their links.
+- **Updates:** On Windows the directory agent updates itself, only with versions the vendor signed, staggered within 24 hours. To update at once: `& "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" update; Restart-Service SentryAssetsDirectory`. On Linux it runs without write access to its program; update it there with the installation command.
+- One directory agent serves exactly one connection. For several domains (Pro) set up one per domain.
+- **Removing it:** block it under **Discovery › Agents** first, then run `Stop-Service SentryAssetsDirectory; sc.exe delete SentryAssetsDirectory` on the computer and delete `C:\Program Files\SentryAssets\Directory` and `C:\ProgramData\SentryAssets\Directory`.
+
+## Common errors
+
+| Message | Cause and fix |
+|---|---|
+| The directory agent has not reported | The service is not running, not approved yet, or has no outbound connection. Check `Get-Service SentryAssetsDirectory` and make the agent address reachable. |
+| The service does not start | `set` has not been run yet; without access to AD the service does not start on purpose. |
+| Address not allowed | The domain controller's name resolves to a public address. The directory agent contacts private addresses only. |
+| Certificate invalid | The domain controller's name is not in its certificate, or `--ca-file` names the wrong CA. |
+| Sign-in refused | Wrong bind name or password; set them again with `set`. After a refusal the directory agent tries no further domain controllers, so the account is not locked out. |

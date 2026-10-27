@@ -14,7 +14,7 @@ SentryAssets liest das Active Directory nur, per LDAPS mit einem gewöhnlichen D
 - Einen Domänencontroller mit **LDAPS** auf Port 636 (oder den globalen Katalog auf 3269).
 - Ein **Dienstkonto** ohne besondere Rechte.
 - Das Zertifikat der **CA**, die das LDAPS-Zertifikat des Domänencontrollers ausgestellt hat, etwa Ihrer AD CS.
-- Einen Netzweg vom SentryAssets-Server zum Domänencontroller.
+- Einen Netzweg vom SentryAssets-Server zum Domänencontroller. Läuft SentryAssets bei einem Hoster, geht es ohne VPN über einen [Verzeichnis-Agent](/guides/verzeichnis-agent/) im Firmennetz.
 
 ## Auf dem Domänencontroller vorbereiten
 

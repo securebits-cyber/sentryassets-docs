@@ -1,0 +1,89 @@
+---
+title: Active Directory ohne VPN (Verzeichnis-Agent)
+description: "Wenn SentryAssets bei einem Hoster läuft und der Domänencontroller im Firmennetz steht: Der Verzeichnis-Agent liest das AD vor Ort und meldet nur ausgehend, ohne VPN und ohne das Passwort des Dienstkontos auf dem Server."
+sidebar:
+  label: Verzeichnis-Agent (ohne VPN)
+---
+
+import { Steps, Aside, Badge } from '@astrojs/starlight/components';
+
+Läuft SentryAssets bei einem Hoster, erreicht der Server Ihren Domänencontroller im Firmennetz nicht. Statt eines Site-to-Site-VPN installieren Sie den **Verzeichnis-Agent** auf einem Windows-Server im Firmennetz. Er liest das Active Directory per LDAPS und schickt die Ergebnisse über eine nur ausgehende, gegenseitig authentifizierte Verbindung (mTLS, TLS 1.3) an SentryAssets, wie Agent und Collector.
+
+<Badge text="Community" variant="success" /> für den Abgleich der Computer, <Badge text="Pro" variant="note" /> für die [Personen aus dem AD](/pro/active-directory/).
+
+## Was anders ist als beim direkten Weg
+
+| | Direkt vom Server | Über einen Verzeichnis-Agent |
+|---|---|---|
+| Netzweg | Server → Domänencontroller (TCP 636), im eigenen Netz oder per VPN | Verzeichnis-Agent → SentryAssets (HTTPS, nur ausgehend) |
+| Domänencontroller, Dienstkonto, Passwort, CA | in der Oberfläche, Passwort verschlüsselt auf dem Server | nur auf dem Rechner des Verzeichnis-Agents, nie auf dem Server |
+| Was gelesen wird | feste Attribute | dieselben festen Attribute, fest im Programm |
+| Was der Server festlegt | alles | nur OUs, Gruppen (Pro) und Abstand der Läufe |
+
+Auch ein übernommener Server beim Hoster kennt damit weder das Passwort des Dienstkontos noch kann er andere Attribute anfordern, etwa LAPS-Passwörter oder BitLocker-Wiederherstellungsschlüssel: Der Verzeichnis-Agent kennt keinen Weg, sie zu lesen.
+
+## Wo er läuft
+
+Empfohlen ist ein **Mitgliedsserver**, der dauernd läuft, etwa ein Dateiserver. Ein Domänencontroller gehört zur höchsten Schutzstufe, und der IT-Grundschutz verlangt sinngemäß, dort nur nötige Dienste zu betreiben. Auf einem Domänencontroller läuft der Verzeichnis-Agent trotzdem; SentryAssets weist dann darauf hin.
+
+Der Rechner braucht:
+
+- Windows Server 2016 oder neuer (oder Linux mit systemd), ohne zusätzliche Software.
+- Ausgehend HTTPS zu Ihrem SentryAssets (Agent-Adresse, Port 443 oder 8443).
+- TCP 636 (oder 3269) zu den Domänencontrollern. Nur private Adressen werden angesprochen.
+
+## Einrichten
+
+<Steps>
+
+1. **Dienstkonto und CA vorbereiten** wie beim direkten Weg, siehe [Active Directory anbinden](/guides/active-directory/#auf-dem-domänencontroller-vorbereiten). Das CA-Zertifikat speichern Sie als Datei auf dem Rechner des Verzeichnis-Agents, etwa `C:\SentryAssets\ad-ca.cer`.
+
+2. **Einstellungen › Verzeichnisdienste** öffnen, im Entwurf den Weg **Über Verzeichnis-Agent (ohne VPN)** wählen und unter **Verzeichnis-Agent einrichten** ein Rollout-Token erzeugen. Dafür bestätigen Sie Ihre Anmeldung erneut. Das Token wird nur einmal angezeigt.
+
+3. **Installieren:** den angezeigten Befehl in einer **PowerShell als Administrator** auf dem Rechner ausführen. Er lädt das Programm von Ihrem SentryAssets, prüft die SHA-256-Summe, legt den Ordner `C:\ProgramData\SentryAssets\Directory` nur für SYSTEM und Administratoren an und registriert das Gerät. Das Token fügen Sie bei der Abfrage ein; die Eingabe bleibt unsichtbar.
+
+4. **Zugang zum AD einrichten**, in derselben PowerShell:
+
+   ```powershell
+   & "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" set `
+     --bind-name svc-sentryassets@firma.local `
+     --controller dc01.firma.local --controller dc02.firma.local `
+     --ca-file C:\SentryAssets\ad-ca.cer
+   ```
+
+   Das Passwort fragt das Programm ohne Anzeige ab; es steht nie in der Befehlszeile. Bis zu vier Domänencontroller sind möglich, in der Reihenfolge des Ausfalls. Gespeichert wird alles nur in `C:\ProgramData\SentryAssets\Directory`, das Passwort zusätzlich mit DPAPI an den Rechner gebunden.
+
+5. **Vor Ort testen** (optional):
+
+   ```powershell
+   & "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" test --base-dn "OU=Clients,DC=firma,DC=local"
+   ```
+
+6. **Dienst starten:** `Start-Service SentryAssetsDirectory`. Danach erscheint der Verzeichnis-Agent unter **Discovery › Agents** mit dem Kennzeichen **Verzeichnis-Agent**. Je nach Token geben Sie ihn dort frei.
+
+7. **Zurück in Einstellungen › Verzeichnisdienste:** den Verzeichnis-Agent wählen, die **OUs (Basis-DNs)** eintragen, **Entwurf speichern** und **Verbindung testen**. Den Test führt der Verzeichnis-Agent bei seinem nächsten Kontakt aus, meist innerhalb von fünf Minuten; das Ergebnis erscheint von selbst. Danach **Aktivieren**.
+
+</Steps>
+
+<Aside type="tip" title="Linux">
+Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sentryassets-directory` anlegt und den gehärteten systemd-Dienst `sentryassets-directory` einrichtet. `set` führen Sie dann mit `sudo -u sentryassets-directory /opt/sentryassets-directory/bin/sentryassets-directory set …` aus.
+</Aside>
+
+## Im Betrieb
+
+- Der Verzeichnis-Agent liest im eingestellten Abstand, höchstens einmal je Stunde; **Jetzt abgleichen** fordert einen Lauf an. SentryAssets übernimmt einen Lauf erst, wenn er vollständig angekommen ist; ein abgebrochener oder gescheiterter Lauf ändert nichts.
+- **Passwort ändern:** auf dem Rechner `sentryassets-directory set` erneut ausführen. In der Oberfläche gibt es dafür kein Feld; den neuen Stand sehen Sie am nächsten Test.
+- **Wechsel des Wegs:** Wechseln Sie eine bestehende Verbindung von „direkt“ auf „über Verzeichnis-Agent“, löscht SentryAssets beim Aktivieren das auf dem Server gespeicherte Passwort. Die Computer behalten ihre Zuordnungen.
+- **Updates:** Unter Windows aktualisiert sich der Verzeichnis-Agent selbst, nur mit Versionen, die der Hersteller signiert hat, gestaffelt innerhalb von 24 Stunden. Sofort geht es mit `& "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" update; Restart-Service SentryAssetsDirectory`. Unter Linux läuft er ohne Schreibrecht auf sein Programm; dort aktualisieren Sie ihn mit dem Installationsbefehl.
+- Ein Verzeichnis-Agent dient genau einer Verbindung. Für mehrere Domänen (Pro) richten Sie je Domäne einen ein.
+- **Entfernen:** zuerst unter **Discovery › Agents** sperren, dann auf dem Rechner `Stop-Service SentryAssetsDirectory; sc.exe delete SentryAssetsDirectory` und die Ordner `C:\Program Files\SentryAssets\Directory` und `C:\ProgramData\SentryAssets\Directory` löschen.
+
+## Häufige Fehler
+
+| Meldung | Ursache und Lösung |
+|---|---|
+| Verzeichnis-Agent hat sich nicht gemeldet | Dienst läuft nicht, noch nicht freigegeben oder keine ausgehende Verbindung. `Get-Service SentryAssetsDirectory` prüfen und die Agent-Adresse erreichbar machen. |
+| Dienst startet nicht | `set` wurde noch nicht ausgeführt; ohne Zugang zum AD startet der Dienst bewusst nicht. |
+| Adresse nicht erlaubt | Der Name des Domänencontrollers löst auf eine öffentliche Adresse auf. Der Verzeichnis-Agent spricht nur private Adressen an. |
+| Zertifikat ungültig | Name des Domänencontrollers nicht im Zertifikat oder falsche CA in `--ca-file`. |
+| Anmeldung abgelehnt | Bind-Name oder Passwort falsch; mit `set` neu setzen. Nach einer Ablehnung versucht der Verzeichnis-Agent keine weiteren Domänencontroller, damit das Konto nicht gesperrt wird. |

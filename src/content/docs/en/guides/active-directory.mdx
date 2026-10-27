@@ -14,7 +14,7 @@ SentryAssets only reads Active Directory, over LDAPS with an ordinary domain acc
 - A domain controller with **LDAPS** on port 636 (or the global catalog on 3269).
 - A **service account** without special rights.
 - The certificate of the **CA** that issued the domain controller's LDAPS certificate, such as your AD CS.
-- A network path from the SentryAssets server to the domain controller.
+- A network path from the SentryAssets server to the domain controller. If SentryAssets runs at a hosting provider, a [directory agent](/en/guides/verzeichnis-agent/) in the company network does without a VPN.
 
 ## Preparing the domain controller
 
