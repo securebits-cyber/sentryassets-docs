@@ -70,7 +70,7 @@ flowchart LR
 **Load a Markdown file** takes an existing `.md` file into the editor. It is checked for size, encoding and open code blocks first.
 
 <Aside type="note" title="No HTML">
-HTML is not allowed in a documentation, so that the file runs no script in other Markdown viewers either. Angle brackets before letters, such as in configuration examples like `VirtualHost`, belong in a code block that starts with three backticks at the start of the line and ends with exactly the same three backticks; the server does not take them in an inline code span or an indented block. Links lead to `https:`, `http:`, `mailto:` and paths only; images from the web are not loaded.
+HTML is not allowed in a documentation, so that the file runs no script in other Markdown viewers either. Write angle brackets before letters, such as in placeholders like `<site>-<no>`, as `&lt;` (that is `&lt;site>-&lt;no>`); the view shows `<` again. The editor names the lines concerned and converts them with **Convert automatically**, with “Undo” in the notice afterwards. Configuration examples such as `VirtualHost` are better put in a code block that starts with three backticks at the start of the line and ends with exactly the same three backticks; the server does not take them in an inline code span or an indented block. Links lead to `https:`, `http:`, `mailto:` and paths only; images from the web are not loaded.
 </Aside>
 
 ## Versions
