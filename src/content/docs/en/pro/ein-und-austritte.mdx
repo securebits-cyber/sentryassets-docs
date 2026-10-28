@@ -6,7 +6,7 @@ sidebar:
   order: 19
 ---
 
-import { Badge, Steps } from '@astrojs/starlight/components';
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 <Badge text="Pro" variant="note" /> This feature applies from the Pro edition.
 
@@ -112,6 +112,30 @@ Right after a take-back you can reverse it with **Undo** in the notice, for 15 m
 ### Account in Entra ID
 
 If a tested [Entra ID connection](/en/pro/entra/) is set up and you may read personal details from Entra ID, the leaving case shows the card **Account in Entra ID**: whether the account linked to the person is still enabled as of the last reconciliation, and how many Intune devices still name them as primary user. SentryAssets only reads Entra ID; it disables or changes nothing there. Disable the account in Entra ID yourself. The note does not hold up completing and reflects the last reconciliation.
+
+## Beginning by themselves
+
+Under **Employees › Joiners and leavers**, tab **Automation**, leaving and joining cases begin by themselves as soon as [Active Directory](/en/pro/active-directory/) or [Entra ID](/en/pro/entra/) show them. SentryAssets checks every 15 minutes.
+
+<Steps>
+
+1. Choose the **sources**: Active Directory, Entra ID or both. The people must already be read there.
+2. **Begin leaving cases automatically** for people whose account was disabled or left the groups and who are linked to a responsible person. The last working day is the day of the disabling; it goes into the directory as the last working day where your rights allow it.
+3. **Begin joining cases automatically** for people whose account was created within the last 30 days. The first working day is the day it was created. New people without a responsible person are created only if **Create new people as responsible persons on the way** is chosen.
+4. Choose a **template** per kind or keep the default template, and **Save**.
+
+</Steps>
+
+<Aside title="In your name, with your rights">
+The automation begins cases in the name of the person who saved last, and only with that person's rights of today. The audit log names this person and notes “automatic from Active Directory” or “from Entra ID”. If the account can no longer sign in or lacks a right, the automation pauses and says so in the bell; it continues only once someone saves the settings again.
+</Aside>
+
+- **Never twice:** if a case of this kind is running, no second one begins. If you cancel a case that began by itself, it does not begin again by itself for the same day, even if you changed its date before.
+- **Safeguard:** each run begins 20 cases at most. If more than 20 leavers were due at once, or more than three and at the same time more than a tenth of the people, nothing begins and the automation pauses with the note “unusually many leavers”. Check groups and base DNs then.
+- **Nothing in AD or Entra ID:** SentryAssets still never creates, changes or disables accounts there.
+- Roles that may begin joining and leaving and read personal data, without a location binding, and that may read the chosen source, may change the automation.
+
+Cases that begin this way carry the note **automatic from AD** or **automatic from Entra ID** in the list.
 
 ## Completing
 

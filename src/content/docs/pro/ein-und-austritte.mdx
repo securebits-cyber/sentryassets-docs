@@ -6,7 +6,7 @@ sidebar:
   order: 19
 ---
 
-import { Badge, Steps } from '@astrojs/starlight/components';
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 <Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
 
@@ -112,6 +112,30 @@ Direkt nach einer Rücknahme können Sie sie im Hinweis mit **Rückgängig** zur
 ### Konto in Entra ID
 
 Ist eine getestete [Verbindung zu Entra ID](/pro/entra/) eingerichtet und dürfen Sie personenbezogene Angaben aus Entra ID lesen, zeigt der Austritt die Karte **Konto in Entra ID**: ob das Konto, mit dem die Person verknüpft ist, laut letztem Abgleich noch aktiv ist, und wie viele Geräte in Intune sie noch als Hauptbenutzer nennen. SentryAssets liest Entra ID nur; es sperrt und ändert dort nichts. Sperren Sie das Konto in Entra ID selbst. Der Hinweis hält den Abschluss nicht auf und hat den Stand des letzten Abgleichs.
+
+## Automatisch beginnen
+
+Unter **Mitarbeitende › Ein- und Austritte**, Reiter **Automatik**, beginnen Austritte und Eintritte von selbst, sobald [Active Directory](/pro/active-directory/) oder [Entra ID](/pro/entra/) sie zeigen. SentryAssets prüft das alle 15 Minuten.
+
+<Steps>
+
+1. **Quellen** wählen: Active Directory, Entra ID oder beide. Die Personen müssen dort schon gelesen werden.
+2. **Austritte automatisch beginnen** für Personen, deren Konto deaktiviert oder aus den Gruppen ist und die einem Verantwortlichen zugeordnet sind. Letzter Arbeitstag ist der Tag der Deaktivierung; er wird als letzter Arbeitstag ins Verzeichnis übernommen, wo Ihre Rechte das erlauben.
+3. **Eintritte automatisch beginnen** für Personen, deren Konto in den letzten 30 Tagen angelegt wurde. Erster Arbeitstag ist der Tag der Anlage. Neue Personen ohne Verantwortlichen legt die Automatik nur an, wenn **Neue Personen dabei als Verantwortliche anlegen** gewählt ist.
+4. Je Art eine **Vorlage** wählen oder die Standardvorlage lassen und **Speichern**.
+
+</Steps>
+
+<Aside title="In Ihrem Namen, mit Ihren Rechten">
+Die Automatik beginnt Vorgänge im Namen der Person, die zuletzt gespeichert hat, und nur mit deren Rechten von heute. Das Audit-Log nennt diese Person und vermerkt „automatisch aus Active Directory“ bzw. „aus Entra ID“. Kann sich das Konto nicht mehr anmelden oder fehlt ihm ein Recht, hält die Automatik an und meldet das in der Glocke; sie läuft erst weiter, wenn jemand die Einstellungen erneut speichert.
+</Aside>
+
+- **Nie doppelt:** Läuft schon ein Vorgang dieser Art, beginnt kein zweiter. Brechen Sie einen automatisch begonnenen Vorgang ab, beginnt er für denselben Tag nicht wieder von selbst, auch wenn Sie dessen Datum vorher geändert haben.
+- **Schutz vor Fehlern:** Je Lauf beginnen höchstens 20 Vorgänge. Wären mehr als 20 Austritte auf einmal fällig, oder mehr als drei und zugleich mehr als ein Zehntel der Personen, beginnt nichts, und die Automatik hält mit dem Hinweis „ungewöhnlich viele Austritte“ an. Prüfen Sie dann Gruppen und Basis-DNs.
+- **Nichts in AD oder Entra ID:** Konten legt SentryAssets dort weiterhin nicht an, ändert und sperrt sie nicht.
+- Ändern dürfen die Automatik Rollen, die Ein- und Austritte beginnen und Personendaten lesen dürfen, ohne Bindung an Standorte, und die die gewählte Quelle lesen dürfen.
+
+Vorgänge, die so beginnen, tragen in der Liste den Hinweis **automatisch aus AD** bzw. **automatisch aus Entra ID**.
 
 ## Abschließen
 
