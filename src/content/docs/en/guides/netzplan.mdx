@@ -39,6 +39,12 @@ A network counts as **public** when it is reachable on the internet and overlaps
 
 A zone with VLANs, networks or allowed connections cannot be deleted, nor a VLAN with networks. When a location is deleted, its VLANs and networks stay without a location; the audit log says so.
 
+### VLANs on the switches
+
+When the [collector](/en/guides/collector/#snmpv3-and-lldp) reads switches over SNMPv3, the view **VLANs** shows the card **VLANs on the switches** below the list: each VLAN number the switches report, with the name they give it, the switches, the number of ports untagged and tagged and the VLAN of the network plan with the same number. If it is missing there, **Take over** opens the form with number and name filled in; you add zone and location yourself. Nothing is taken over by itself.
+
+Only roles that may read the collectors' findings see the card.
+
 ## Occupancy of a network
 
 Clicking the range opens the network. The card **Occupancy** shows:

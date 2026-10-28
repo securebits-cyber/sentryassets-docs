@@ -39,6 +39,12 @@ Ein Netz gilt als **öffentlich**, wenn es im Internet erreichbar ist und keinen
 
 Eine Zone mit VLANs, Netzen oder erlaubten Verbindungen lässt sich nicht löschen, ein VLAN mit Netzen ebenfalls nicht. Wird ein Standort gelöscht, bleiben VLANs und Netze ohne Standort stehen; das steht im Audit-Log.
 
+### VLANs auf den Switches
+
+Liest der [Collector](/guides/collector/#snmpv3-und-lldp) Switches per SNMPv3, zeigt die Ansicht **VLANs** unter der Liste die Karte **VLANs auf den Switches**: jede VLAN-Nummer, die die Switches melden, mit dem Namen, den sie ihr geben, den Switches, der Zahl der Ports untagged und tagged und dem VLAN im Netzplan mit derselben Nummer. Fehlt es dort, öffnet **Übernehmen** das Formular mit Nummer und Name vorbelegt; Zone und Standort ergänzen Sie selbst. Von selbst wird nichts übernommen.
+
+Die Karte sehen nur Rollen, die die Funde der Collectors lesen dürfen.
+
 ## Belegung eines Netzes
 
 Ein Klick auf den Bereich öffnet das Netz. Die Karte **Belegung** zeigt:
