@@ -62,7 +62,7 @@ Für Switches, Router und Drucker liest der Collector auf Wunsch per SNMPv3 Syst
 - ein Zugang lässt sich auf einzelne Netze des Collectors beschränken; ein Gerät, das schon geantwortet hat, wird nur mit seinem Zugang gefragt;
 - nur Geräte, die derselbe Scan fand, und mit einem festen Budget an Anfragen je Gerät.
 
-Die VLANs stehen am Gerät unter **Discovery › Netzwerk** und am Port im Rack. Sie kommen aus der Q-BRIDGE-MIB, die die meisten verwalteten Switches beantworten; ein Gerät ohne sie zeigt keine VLANs. Hat ein Switch mehr, als eine Abfrage liest, steht dort „nicht alle gelesen“: Was angezeigt wird, stimmt, es fehlt nur ein Teil.
+Die VLANs stehen am Gerät unter **Discovery › Netzwerk** und am Port im Rack. Sie kommen aus der Q-BRIDGE-MIB, die die meisten verwalteten Switches beantworten, und bei Cisco-Switches ohne sie aus Ciscos eigenen Tabellen (Access-VLAN, natives VLAN und erlaubte VLANs am Trunk). Ein Gerät ohne beides zeigt keine VLANs. Hat ein Switch mehr, als eine Abfrage liest, steht dort „nicht alle gelesen“: Was angezeigt wird, stimmt, es fehlt nur ein Teil.
 
 Die Schnittstellen eines Switches übernehmen Sie unter **Racks** auf einen Klick als Ports; LLDP-Nachbarn erscheinen dort als Vorschläge für Kabel. Verkabelt wird nie von selbst; mehr dazu unter [Racks und Ports](/guides/racks/#ports-und-kabel).
 
