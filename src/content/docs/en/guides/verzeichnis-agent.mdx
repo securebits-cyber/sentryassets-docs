@@ -71,7 +71,7 @@ On Linux the page shows a command that creates a system user `sentryassets-direc
 
 ## In operation
 
-- The directory agent reads at the interval set, at most once an hour; **Synchronise now** asks for a run. SentryAssets takes a run over only once it has arrived completely; an interrupted or failed run changes nothing.
+- The directory agent reads at the interval set, at most once an hour. **Synchronise now** asks for a run, which it starts 15 minutes after its last start at the earliest; so it reads at most four times an hour. When the next run comes at the earliest is shown under **Settings › Directory services** as **Next run**. SentryAssets takes a run over only once it has arrived completely; an interrupted or failed run changes nothing.
 - **Changing the password:** run `sentryassets-directory set` again on the computer. The interface has no field for it; the next test shows the new state.
 - **Changing the route:** if you switch an existing connection from "direct" to "over a directory agent", SentryAssets deletes the password stored on the server when you activate it. Computers keep their links.
 - **Updates:** On Windows the directory agent updates itself, only with versions the vendor signed, staggered within 24 hours. To update at once: `& "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" update; Restart-Service SentryAssetsDirectory`. On Linux it runs without write access to its program and does not update itself; use the command **Update later (Linux)** from the setup there. It checks the SHA-256 sum, replaces the program and restarts the service, without enrolling again.
