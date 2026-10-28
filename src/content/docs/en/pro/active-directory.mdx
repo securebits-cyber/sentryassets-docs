@@ -21,7 +21,7 @@ Reading uses the connection you set up and tested under **Settings › Directory
 <Steps>
 
 1. Set up, test and activate the [connection to Active Directory](/en/guides/active-directory/) if you have not yet. Important: the connection's base DNs must include the users' OUs too.
-2. Open **Discovery › Directory service › Settings** and enter the groups as distinguished names, one per line, such as `CN=Staff,OU=Groups,DC=company,DC=com`. Members of nested groups count too; at most 20 groups.
+2. Open **Discovery › Directory service › Settings** and enter the groups as distinguished names, one per line, such as `CN=Staff,OU=Groups,DC=company,DC=com`. The full name with its `DC=` parts is needed, because they decide which connection reads the group; `CN=Staff` alone is not saved. The group's `distinguishedName` attribute shows it, or `Get-ADGroup Staff` in PowerShell. Members of nested groups count too; at most 20 groups.
 3. Add **rules for the department** if needed (see below) and choose the reconciliation interval.
 4. **Save and reconcile.** The first reconciliation runs at once.
 

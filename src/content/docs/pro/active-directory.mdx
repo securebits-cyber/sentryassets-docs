@@ -21,7 +21,7 @@ Gelesen wird über die Verbindung, die Sie unter **Einstellungen › Verzeichnis
 <Steps>
 
 1. Die [Verbindung zum Active Directory](/guides/active-directory/) einrichten, testen und aktivieren, falls noch nicht geschehen. Wichtig: Unter den Basis-DNs der Verbindung müssen auch die OUs der Benutzer stehen.
-2. **Discovery › Verzeichnisdienst › Einstellungen** öffnen und die Gruppen als Distinguished Name eintragen, eine je Zeile, etwa `CN=Mitarbeitende,OU=Gruppen,DC=firma,DC=de`. Mitglieder verschachtelter Gruppen zählen mit; höchstens 20 Gruppen.
+2. **Discovery › Verzeichnisdienst › Einstellungen** öffnen und die Gruppen als Distinguished Name eintragen, eine je Zeile, etwa `CN=Mitarbeitende,OU=Gruppen,DC=firma,DC=de`. Nötig ist der vollständige Name mit den `DC=`-Teilen, denn sie bestimmen, über welche Verbindung die Gruppe gelesen wird; `CN=Mitarbeitende` allein wird nicht gespeichert. Den Namen zeigt das Attribut `distinguishedName` der Gruppe, oder in PowerShell `Get-ADGroup Mitarbeitende`. Mitglieder verschachtelter Gruppen zählen mit; höchstens 20 Gruppen.
 3. Bei Bedarf **Regeln für die Abteilung** anlegen (siehe unten) und den Abstand des Abgleichs wählen.
 4. **Speichern und abgleichen.** Der erste Abgleich läuft sofort.
 
