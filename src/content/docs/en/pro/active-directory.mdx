@@ -16,16 +16,34 @@ Both are under **Discovery › Directory service**: the tab **Computers** in eve
 
 Reading uses the connection you set up and tested under **Settings › Directory services**, with the same service account and read-only. No second service account is needed. SentryAssets changes and disables nothing in AD.
 
-## Setting up
+## Setting up: from the service account to the asset
+
+It takes six steps until a person from AD can be chosen as owner in an asset. The page **Discovery › Directory service** shows the same steps above the tabs **Users** and **Settings**, with where each step stands and the next one marked, until the first person is linked.
 
 <Steps>
 
-1. Set up, test and activate the [connection to Active Directory](/en/guides/active-directory/) if you have not yet. Important: the connection's base DNs must include the users' OUs too.
-2. Open **Discovery › Directory service › Settings** and enter the groups as distinguished names, one per line, such as `CN=Staff,OU=Groups,DC=company,DC=com`. The full name with its `DC=` parts is needed, because they decide which connection reads the group; `CN=Staff` alone is not saved. The group's `distinguishedName` attribute shows it, or `Get-ADGroup Staff` in PowerShell. Members of nested groups count too; at most 20 groups.
-3. Add **rules for the department** if needed (see below) and choose the reconciliation interval.
-4. **Save and reconcile.** The first reconciliation runs at once.
+1. **Service account in AD.** An ordinary user account, member of **Domain Users** only, without administrator rights. It reads computers, users and group memberships; if you have restricted read rights, it needs **Read** on computer and user objects there and on the members of the chosen groups. See [Connecting Active Directory](/en/guides/active-directory/#preparing-the-domain-controller).
+2. **Set up, test and activate the connection** under **Settings › Directory services**, directly over LDAPS or through a [directory agent](/en/guides/verzeichnis-agent/). Important: the connection's base DNs must include the users' OUs too.
+3. **Choose groups.** Open **Discovery › Directory service › Settings** and enter the groups as distinguished names, one per line, such as `CN=Staff,OU=Groups,DC=company,DC=com`. The full name with its `DC=` parts is needed, because they decide which connection reads the group; `CN=Staff` alone is not saved. The group's `distinguishedName` attribute shows it, or `(Get-ADGroup Staff).DistinguishedName` in PowerShell. An OU is not a group. Members of nested groups count too; at most 20 groups. Add **rules for the department** if needed (see below) and choose the interval, then **Save and reconcile**.
+4. **Wait for the first run.** Over a direct connection it runs at once. Through a directory agent, the agent reads the groups with its next run, at the earliest 15 minutes after the last; **Settings › Directory services** shows it under **Next run**. The reconciliation then takes the people over, at the latest about 25 minutes later. **Settings** then shows how many people were read, or why the run failed.
+5. **Create as responsible persons.** The tab **Users** lists under **New** the people without a responsible person yet. Select them and **Create as responsible persons**, or link them to an existing one. **Ignore** people who should never be taken over.
+6. **Assign in the asset.** Now the people can be chosen under **Owner** in every asset and are listed under **Master data › Responsible persons**. If **Managed by** of a computer in AD names the person, the tab **Devices** proposes the assignment (see below).
 
 </Steps>
+
+<Aside title="Why can't I choose the AD users in an asset?">
+Nothing reaches the inventory by itself: in an asset you choose from the responsible persons, and people from AD become responsible persons only with step 5. That way test, service or old accounts do not land in the inventory unasked.
+</Aside>
+
+### What holds it up
+
+| You see | Cause and remedy |
+|---|---|
+| “One of the groups is in a domain without an active connection.” | The DN has no or other `DC=` parts than the connection. Enter the full DN. |
+| “There is no active connection to Active Directory.” | Step 2: test and activate the connection. |
+| “At least one group has no members.” | Wrong DN, group renamed, or the service account may not read its members. |
+| List **New** empty, run without errors | The people are not under the connection's base DNs, or all are linked already (list **Linked**). |
+| “No reconciliation has run yet.” through a directory agent | The next run is still to come; see **Settings › Directory services**. |
 
 Only fixed details are read: name, logon name, `userPrincipalName`, email, department, job title, office, company, OU, whether the account is disabled, and when it was created. At most 20,000 people per reconciliation.
 

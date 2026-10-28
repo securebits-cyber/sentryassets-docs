@@ -16,16 +16,34 @@ Sie finden beides unter **Discovery › Verzeichnisdienst**: den Reiter **Comput
 
 Gelesen wird über die Verbindung, die Sie unter **Einstellungen › Verzeichnisdienste** eingerichtet und getestet haben, mit demselben Dienstkonto und nur lesend. Ein zweites Dienstkonto ist nicht nötig. SentryAssets ändert und sperrt im AD nichts.
 
-## Einrichten
+## Einrichten: vom Dienstkonto bis zum Asset
+
+Bis eine Person aus dem AD in einem Asset als Verantwortliche wählbar ist, sind es sechs Schritte. Dieselben Schritte zeigt die Seite **Discovery › Verzeichnisdienst** über den Reitern **Benutzer** und **Einstellungen**, mit dem Stand jedes Schritts und dem nächsten markiert, bis die erste Person zugeordnet ist.
 
 <Steps>
 
-1. Die [Verbindung zum Active Directory](/guides/active-directory/) einrichten, testen und aktivieren, falls noch nicht geschehen. Wichtig: Unter den Basis-DNs der Verbindung müssen auch die OUs der Benutzer stehen.
-2. **Discovery › Verzeichnisdienst › Einstellungen** öffnen und die Gruppen als Distinguished Name eintragen, eine je Zeile, etwa `CN=Mitarbeitende,OU=Gruppen,DC=firma,DC=de`. Nötig ist der vollständige Name mit den `DC=`-Teilen, denn sie bestimmen, über welche Verbindung die Gruppe gelesen wird; `CN=Mitarbeitende` allein wird nicht gespeichert. Den Namen zeigt das Attribut `distinguishedName` der Gruppe, oder in PowerShell `Get-ADGroup Mitarbeitende`. Mitglieder verschachtelter Gruppen zählen mit; höchstens 20 Gruppen.
-3. Bei Bedarf **Regeln für die Abteilung** anlegen (siehe unten) und den Abstand des Abgleichs wählen.
-4. **Speichern und abgleichen.** Der erste Abgleich läuft sofort.
+1. **Dienstkonto im AD.** Ein gewöhnliches Benutzerkonto, nur Mitglied von **Domänen-Benutzer**, ohne Administratorrechte. Es liest Computer, Benutzer und Gruppenmitgliedschaften; haben Sie Leserechte eingeschränkt, braucht es dort **Lesen** auf Computer- und Benutzerobjekte und auf die Mitglieder der gewählten Gruppen. Siehe [Active Directory anbinden](/guides/active-directory/#auf-dem-domänencontroller-vorbereiten).
+2. **Verbindung einrichten, testen und aktivieren** unter **Einstellungen › Verzeichnisdienste**, direkt per LDAPS oder über einen [Verzeichnis-Agent](/guides/verzeichnis-agent/). Wichtig: Unter den Basis-DNs der Verbindung müssen auch die OUs der Benutzer stehen.
+3. **Gruppen wählen.** **Discovery › Verzeichnisdienst › Einstellungen** öffnen und die Gruppen als Distinguished Name eintragen, eine je Zeile, etwa `CN=Mitarbeitende,OU=Gruppen,DC=firma,DC=de`. Nötig ist der vollständige Name mit den `DC=`-Teilen, denn sie bestimmen, über welche Verbindung die Gruppe gelesen wird; `CN=Mitarbeitende` allein wird nicht gespeichert. Den Namen zeigt das Attribut `distinguishedName` der Gruppe, oder in PowerShell `(Get-ADGroup Mitarbeitende).DistinguishedName`. Eine OU ist keine Gruppe. Mitglieder verschachtelter Gruppen zählen mit; höchstens 20 Gruppen. Bei Bedarf **Regeln für die Abteilung** anlegen (siehe unten) und den Abstand wählen, dann **Speichern und abgleichen**.
+4. **Ersten Abgleich abwarten.** Bei einer direkten Verbindung läuft er sofort. Über einen Verzeichnis-Agent liest dieser die Gruppen mit seinem nächsten Lauf, frühestens 15 Minuten nach dem letzten; wann er kommt, steht unter **Einstellungen › Verzeichnisdienste** bei **Nächster Lauf**. Danach übernimmt der Abgleich die Personen, spätestens etwa 25 Minuten später. Unter **Einstellungen** steht dann, wie viele Personen gelesen wurden, oder warum der Abgleich gescheitert ist.
+5. **Als Verantwortliche anlegen.** Im Reiter **Benutzer** stehen in der Liste **Neu** die Personen, zu denen es noch keinen Verantwortlichen gibt. Markieren und **Als Verantwortliche anlegen**, oder einem vorhandenen Verantwortlichen zuordnen. Personen, die nie übernommen werden sollen, **ignorieren**.
+6. **Im Asset zuordnen.** Jetzt stehen die Personen in jedem Asset unter **Verantwortlich** zur Auswahl und unter **Stammdaten › Verantwortliche**. Nennt im AD **Verwaltet von** eines Computers die Person, schlägt der Reiter **Geräte** die Zuordnung vor (siehe unten).
 
 </Steps>
+
+<Aside title="Warum stehen die AD-Benutzer nicht im Asset zur Auswahl?">
+Nichts gelangt von selbst ins Inventar: Im Asset wählen Sie aus den Verantwortlichen, und zu Verantwortlichen werden Personen aus dem AD erst mit Schritt 5. So landen Test-, Dienst- oder Altkonten nicht ungefragt im Inventar.
+</Aside>
+
+### Woran es hängt
+
+| Sie sehen | Ursache und Abhilfe |
+|---|---|
+| „Eine der Gruppen liegt in einer Domäne, für die es keine aktive Verbindung gibt.“ | Der DN hat keine oder andere `DC=`-Teile als die Verbindung. Den vollständigen DN eintragen. |
+| „Es gibt keine aktive Verbindung zum Active Directory.“ | Schritt 2: Verbindung testen und aktivieren. |
+| „Mindestens eine Gruppe hat keine Mitglieder.“ | DN falsch, Gruppe umbenannt, oder das Dienstkonto darf ihre Mitglieder nicht lesen. |
+| Liste **Neu** leer, Abgleich ohne Fehler | Die Personen liegen nicht unter den Basis-DNs der Verbindung, oder alle sind schon zugeordnet (Liste **Zugeordnet**). |
+| „Noch kein Abgleich gelaufen.“ über einen Verzeichnis-Agent | Der nächste Lauf steht noch aus; Zeitpunkt unter **Einstellungen › Verzeichnisdienste**. |
 
 Gelesen werden nur feste Angaben: Name, Anmeldename, `userPrincipalName`, E-Mail, Abteilung, Funktion, Büro, Firma, OU, ob das Konto deaktiviert ist, und wann es angelegt wurde. Höchstens 20 000 Personen je Abgleich.
 
