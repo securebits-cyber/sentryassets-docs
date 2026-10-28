@@ -55,12 +55,14 @@ Nur die Funde eines Collectors zeigt der Link **n Funde ansehen** in seiner Kart
 
 ## SNMPv3 und LLDP
 
-Für Switches, Router und Drucker liest der Collector auf Wunsch per SNMPv3 System, Gehäuse (Hersteller, Modell, Seriennummer, Firmware), die MAC-Adressen und Namen der Schnittstellen und die LLDP-Nachbarn.
+Für Switches, Router und Drucker liest der Collector auf Wunsch per SNMPv3 System, Gehäuse (Hersteller, Modell, Seriennummer, Firmware), die MAC-Adressen und Namen der Schnittstellen, die LLDP-Nachbarn und je physischem Port die VLANs: das untagged VLAN und die tagged VLANs, mit den Namen, die der Switch ihnen gibt.
 
 - bis zu 4 SNMPv3-Zugänge je Collector, nur **authPriv mit SHA-2 und AES**, Passphrasen mit mindestens 20 Zeichen (auf Wunsch erzeugt);
 - verschlüsselt gespeichert und so versiegelt, dass nur der zugehörige Collector sie erhält; er hält sie nur im Arbeitsspeicher;
 - ein Zugang lässt sich auf einzelne Netze des Collectors beschränken; ein Gerät, das schon geantwortet hat, wird nur mit seinem Zugang gefragt;
 - nur Geräte, die derselbe Scan fand, und mit einem festen Budget an Anfragen je Gerät.
+
+Die VLANs stehen am Gerät unter **Discovery › Netzwerk** und am Port im Rack. Sie kommen aus der Q-BRIDGE-MIB, die die meisten verwalteten Switches beantworten; ein Gerät ohne sie zeigt keine VLANs. Hat ein Switch mehr, als eine Abfrage liest, steht dort „nicht alle gelesen“: Was angezeigt wird, stimmt, es fehlt nur ein Teil.
 
 Die Schnittstellen eines Switches übernehmen Sie unter **Racks** auf einen Klick als Ports; LLDP-Nachbarn erscheinen dort als Vorschläge für Kabel. Verkabelt wird nie von selbst; mehr dazu unter [Racks und Ports](/guides/racks/#ports-und-kabel).
 
