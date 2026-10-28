@@ -10,7 +10,7 @@ import { Aside, Steps } from '@astrojs/starlight/components';
 
 The bell in the header shows open tasks: expiring warranties, licences and certificates, notice periods, consumables below their minimum and more. Anyone who does not look into SentryAssets every day can receive the same tasks by e-mail, at once or as a daily summary. Mails go out through your organisation's mail server.
 
-E-mail notifications are part of the Community edition. Notifications by webhook or Gotify for services are set up separately under **Settings › Notifications**, see [Features](/en/reference/funktionen/#notifications).
+E-mail notifications are part of the Community edition. Events of the installation to a fixed mailbox, by webhook or Gotify are set up separately under **Settings › Notifications**, see [Features](/en/reference/funktionen/#notifications).
 
 ## Prerequisites
 
@@ -37,7 +37,7 @@ E-mail notifications are part of the Community edition. Notifications by webhook
 
 6. Under **Daily summary at**, choose the time and the **Time zone**. The defaults are 07:00, Berlin.
 
-7. Under **Domains for sending documents**, enter the domains [procurement requests by e-mail](/en/guides/beschaffung/#sending-by-e-mail) may go to, one per line, such as `company.com`. Subdomains are not included. Left empty, nothing goes to typed-in addresses; notifications go to the accounts regardless. To let requests go to any address, such as suppliers, switch on **Allow recipients in every domain**; the other limits (5 recipients per sending, 20 sendings per person and hour, audit entry) stay.
+7. Under **Domains for sending documents**, enter the domains [procurement requests by e-mail](/en/guides/beschaffung/#sending-by-e-mail) may go to, one per line, such as `company.com`. Subdomains are not included. The same domains apply to [events to a mailbox](#events-of-the-installation-to-a-mailbox). Left empty, nothing goes to typed-in addresses; personal notifications go to the accounts regardless. To let requests go to any address, such as suppliers, switch on **Allow recipients in every domain**; the other limits (5 recipients per sending, 20 sendings per person and hour, audit entry) stay.
 
 8. Tick **Sending switched on** and choose **Save**.
 
@@ -108,6 +108,24 @@ The profile only shows categories whose area your role may read; the categories 
 
 - **At once:** every 5 minutes SentryAssets compares the tasks with the previous round. If a task of an at-once category is new or has grown, a mail goes out with these tasks and their current count. The first round after subscribing only records what is open already: subscribing is no news in itself.
 - **Daily:** once a day after the time set, all open tasks of the daily categories, at most 100 per mail, the rest as a count with a link. Without open tasks no mail is sent.
+
+## Events of the installation to a mailbox
+
+Besides personal subscriptions there are events that concern running the installation: a new or blocked agent, a sign-in with a local account, a failed directory sync, a broken audit chain. They go to fixed addresses, such as the IT mailbox, without anyone needing an account.
+
+<Steps>
+
+1. Allow the domain of the mailbox under **Settings › E-mail** (step 7 above).
+
+2. Open **Settings › Notifications**, choose **Add target** and as **Kind** **E-mail**.
+
+3. Enter up to five **Recipients**, one address per line, choose the **Events** and **Save**.
+
+4. Check with **Test message** that the mail arrives.
+
+</Steps>
+
+The mail names only the kind and time of the events, the organisation and a link into the audit log; persons, devices and addresses are only there. Events of one minute come in one mail. Before each sending SentryAssets checks the recipients again: remove a domain and its addresses get nothing more, and the target shows “Address not allowed”. The audit log names the domains and the number of recipients, never the addresses.
 
 ## Who receives what
 

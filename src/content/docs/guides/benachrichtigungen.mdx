@@ -10,7 +10,7 @@ import { Aside, Steps } from '@astrojs/starlight/components';
 
 Die Glocke in der Kopfzeile zeigt offene Aufgaben: auslaufende Garantien, Lizenzen und Zertifikate, Kündigungsfristen, Verbrauchsmaterial unter Mindestbestand und anderes. Wer nicht täglich in SentryAssets schaut, bekommt dieselben Aufgaben auf Wunsch per E-Mail, sofort oder als tägliche Zusammenfassung. Gesendet wird über den Mailserver Ihrer Organisation.
 
-E-Mail-Benachrichtigungen gehören zur Community-Edition. Benachrichtigungen per Webhook oder Gotify für Dienste richten Sie getrennt davon unter **Einstellungen › Benachrichtigungen** ein, siehe [Funktionen](/reference/funktionen/#benachrichtigungen).
+E-Mail-Benachrichtigungen gehören zur Community-Edition. Ereignisse der Installation an ein festes Postfach, per Webhook oder Gotify richten Sie getrennt davon unter **Einstellungen › Benachrichtigungen** ein, siehe [Funktionen](/reference/funktionen/#benachrichtigungen).
 
 ## Voraussetzungen
 
@@ -37,7 +37,7 @@ E-Mail-Benachrichtigungen gehören zur Community-Edition. Benachrichtigungen per
 
 6. Wählen Sie unter **Tägliche Zusammenfassung um** die Uhrzeit und die **Zeitzone**. Voreingestellt sind 07:00 Uhr, Berlin.
 
-7. Tragen Sie unter **Domänen für den Versand von Dokumenten** die Domänen ein, an die [Beschaffungsanträge per E-Mail](/guides/beschaffung/#per-e-mail-senden) gehen dürfen, eine je Zeile, etwa `firma.de`. Unterdomänen sind nicht eingeschlossen. Leer bleibt der Versand an eingegebene Adressen aus; Benachrichtigungen gehen davon unabhängig an die Konten. Sollen Anträge an jede Adresse gehen dürfen, etwa an Lieferanten, schalten Sie **Empfänger in allen Domänen erlauben** ein; die übrigen Grenzen (5 Empfänger je Versand, 20 Versände je Person und Stunde, Audit-Eintrag) bleiben.
+7. Tragen Sie unter **Domänen für den Versand von Dokumenten** die Domänen ein, an die [Beschaffungsanträge per E-Mail](/guides/beschaffung/#per-e-mail-senden) gehen dürfen, eine je Zeile, etwa `firma.de`. Unterdomänen sind nicht eingeschlossen. Dieselben Domänen gelten für [Ereignisse an ein Postfach](#ereignisse-der-installation-an-ein-postfach). Leer bleibt der Versand an eingegebene Adressen aus; die persönlichen Benachrichtigungen gehen davon unabhängig an die Konten. Sollen Anträge an jede Adresse gehen dürfen, etwa an Lieferanten, schalten Sie **Empfänger in allen Domänen erlauben** ein; die übrigen Grenzen (5 Empfänger je Versand, 20 Versände je Person und Stunde, Audit-Eintrag) bleiben.
 
 8. Setzen Sie **Versand eingeschaltet** und wählen Sie **Speichern**.
 
@@ -108,6 +108,24 @@ Das Profil zeigt nur die Kategorien, deren Bereich Ihre Rolle lesen darf; die Ka
 
 - **Sofort:** Alle 5 Minuten vergleicht SentryAssets die Aufgaben mit der vorigen Runde. Ist eine Aufgabe einer Sofort-Kategorie neu oder größer geworden, geht eine Mail mit diesen Aufgaben und ihrer aktuellen Anzahl. Die erste Runde nach dem Abonnieren hält nur fest, was schon offen ist: Ein Abonnement selbst ist keine Neuigkeit.
 - **Täglich:** einmal am Tag nach der eingestellten Uhrzeit alle offenen Aufgaben der Tageskategorien, höchstens 100 je Mail, der Rest als Anzahl mit Link. Ohne offene Aufgaben kommt keine Mail.
+
+## Ereignisse der Installation an ein Postfach
+
+Neben den persönlichen Abos gibt es Ereignisse, die die Betreuung der Installation betreffen: ein neuer oder gesperrter Agent, eine Anmeldung mit lokalem Konto, ein fehlgeschlagener Verzeichnisabgleich, eine unterbrochene Audit-Kette. Sie gehen an feste Adressen, etwa das Postfach der IT, ohne dass jemand ein Konto braucht.
+
+<Steps>
+
+1. Geben Sie unter **Einstellungen › E-Mail** die Domäne des Postfachs frei (Schritt 7 oben).
+
+2. Öffnen Sie **Einstellungen › Benachrichtigungen**, wählen Sie **Ziel hinzufügen** und als **Art** **E-Mail**.
+
+3. Tragen Sie bis zu fünf **Empfänger** ein, eine Adresse je Zeile, wählen Sie die **Ereignisse** und **Speichern**.
+
+4. Prüfen Sie mit **Testnachricht**, ob die Mail ankommt.
+
+</Steps>
+
+Die Mail nennt nur Art und Zeitpunkt der Ereignisse, den Namen der Organisation und einen Link ins Audit-Log; Personen, Geräte und Adressen stehen nur dort. Ereignisse einer Minute kommen in einer Mail. Vor jedem Versand prüft SentryAssets die Empfänger erneut: Entfernen Sie eine Domäne, bekommt deren Adresse nichts mehr, und am Ziel steht „Adresse nicht erlaubt“. Das Audit-Log nennt die Domänen und die Zahl der Empfänger, nie die Adressen.
 
 ## Wer was bekommt
 
