@@ -76,7 +76,31 @@ Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sent
 - **Wechsel des Wegs:** Wechseln Sie eine bestehende Verbindung von „direkt“ auf „über Verzeichnis-Agent“, löscht SentryAssets beim Aktivieren das auf dem Server gespeicherte Passwort. Die Computer behalten ihre Zuordnungen.
 - **Updates:** Unter Windows aktualisiert sich der Verzeichnis-Agent selbst, nur mit Versionen, die der Hersteller signiert hat, gestaffelt innerhalb von 24 Stunden. Sofort geht es mit `& "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" update; Restart-Service SentryAssetsDirectory`. Unter Linux läuft er ohne Schreibrecht auf sein Programm und aktualisiert sich nicht selbst; dort nehmen Sie den Befehl **Später aktualisieren (Linux)** aus der Einrichtung. Er prüft die SHA-256-Summe, ersetzt das Programm und startet den Dienst neu, ohne neue Registrierung.
 - Ein Verzeichnis-Agent dient genau einer Verbindung. Für mehrere Domänen (Pro) richten Sie je Domäne einen ein.
-- **Entfernen:** zuerst unter **Discovery › Agents** sperren, dann auf dem Rechner `Stop-Service SentryAssetsDirectory; sc.exe delete SentryAssetsDirectory` und die Ordner `C:\Program Files\SentryAssets\Directory` und `C:\ProgramData\SentryAssets\Directory` löschen.
+- **Entfernen:** siehe [Deinstallieren](#deinstallieren).
+
+## Deinstallieren
+
+<Steps>
+
+1. **Sperren:** Unter **Discovery › Agents** den Verzeichnis-Agent sperren. Sein Zertifikat wird damit ungültig, er liest und meldet nichts mehr, auch wenn er noch läuft. Eine Verbindung, die über ihn liest, stellen Sie vorher unter **Einstellungen › Verzeichnisdienste** auf einen anderen Verzeichnis-Agent um oder deaktivieren sie.
+
+2. **Vom Rechner entfernen:** Unter **Discovery › Agents** in der Karte **Agent deinstallieren** die Auswahl **Verzeichnis-Agent (Windows)** oder **Verzeichnis-Agent (Linux)** wählen und den Befehl kopieren. Unter Windows in einer PowerShell als Administrator:
+
+   ```powershell
+   Stop-Service SentryAssetsDirectory -ErrorAction SilentlyContinue; sc.exe delete SentryAssetsDirectory; Remove-Item -Recurse -Force (Join-Path $env:ProgramFiles 'SentryAssets\Directory'), (Join-Path $env:ProgramData 'SentryAssets\Directory') -ErrorAction SilentlyContinue
+   ```
+
+   Unter Linux im Terminal:
+
+   ```bash
+   sudo systemctl disable --now sentryassets-directory && sudo rm -f /etc/systemd/system/sentryassets-directory.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-directory /var/lib/sentryassets-directory && sudo userdel sentryassets-directory
+   ```
+
+   Der Befehl stoppt den Dienst und löscht Programm, Zertifikat, Schlüssel und das dort gespeicherte Passwort des Dienstkontos.
+
+3. **Im AD aufräumen** (optional): Das Dienstkonto deaktivieren oder löschen, wenn es sonst niemand braucht.
+
+</Steps>
 
 ## Häufige Fehler
 
