@@ -44,7 +44,19 @@ Einbauten lassen sich ziehen oder mit den Pfeiltasten um eine Einheit verschiebe
 
 </Steps>
 
-Verbundene Ports erscheinen in der Farbe ihres Kabels. Unter **Vorschläge aus LLDP** stehen Kabel, die die Switches selbst melden; jeden Vorschlag nehmen Sie mit **Übernehmen** an oder mit **Verwerfen** zurück; verworfene Vorschläge kommen nicht wieder. Verkabelt wird nie von selbst.
+Verbundene Ports erscheinen in der Farbe ihres Kabels.
+
+### Patchpanels: Vorderseite, Rückseite und Verlauf
+
+Ein Port eines Patchpanels hat zwei Seiten: vorne steckt das Patchkabel, hinten die feste Verlegung. Wählen Sie den Port, sehen Sie beide Abschnitte, **Vorderseite** und **Rückseite**, je mit eigenem **Verbinden mit …**. Vorne und hinten desselben Ports sind durchverbunden, wie im Patchpanel selbst.
+
+- **Zum nächsten Patchpanel:** Führt die Verlegung zu einem Patchpanel in einem anderen Schrank, verbinden Sie die Rückseite mit dessen Port und wählen unter **Seite am Patchpanel** die **Rückseite**.
+- **Zur Datendose:** Endet sie an einer Dose oder einem Ort ohne eigenen Port, tragen Sie im Formular des Ports **Ziel hinten** ein, etwa „Dose 2.14“, und speichern. Ziel und Kabel hinten schließen sich aus.
+- **Verlauf:** Unter jedem Port steht der ganze Weg seines Kabels, etwa Switch Gi1/0/12, Patchpanel PP-A Port 12, Patchpanel PP-B Port 12, „Dose 2.14“. Der Verlauf endet an einem Gerät, an einem Ziel, offen, wenn kein weiteres Kabel dokumentiert ist, oder nach 16 Stationen; führt er im Kreis, sagt er es.
+
+Eine Rückseite haben nur Patchpanels; Geräte und sonstige Einbauten haben nur Ports vorne.
+
+Unter **Vorschläge aus LLDP** stehen Kabel, die die Switches selbst melden; jeden Vorschlag nehmen Sie mit **Übernehmen** an oder mit **Verwerfen** zurück; verworfene Vorschläge kommen nicht wieder. Verkabelt wird nie von selbst.
 
 ## Portliste drucken
 

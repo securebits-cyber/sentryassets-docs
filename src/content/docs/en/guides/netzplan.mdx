@@ -57,7 +57,7 @@ In the view **Communication matrix** you record which zone may talk to which, ov
 
 **Network › Topology** draws the devices and their connections as a map:
 
-- **cables** between two devices in the racks (solid),
+- **cables** between two devices in the racks (solid), also across patch panels; the connection then names the patch panels it passes,
 - **LLDP neighbours** the switches report over SNMP (dotted),
 - **links by hand** from the network plan, such as the internet connection at the firewall (dashed).
 
@@ -66,12 +66,12 @@ The ends outside the network stand at the top, below them each device a row unde
 **Copy as Mermaid diagram** puts the map as text on the clipboard; on a page of the network documentation, **Diagram from topology** inserts it straight into the editor.
 
 <Aside>
-The map does not yet follow cables through a patch panel: cables between two devices count. Connections to devices you may not see stay out.
+A way across patch panels counts when it reaches a device at both ends; how it runs shows the [path at the port](/en/guides/racks/#patch-panels-front-rear-and-path). Connections to devices you may not see stay out.
 </Aside>
 
 ## Cabling
 
-**Network › Cabling** lists every cable of the racks with ID, type, colour and length and both ends: rack, location, device or patch panel and port. The search finds cable, rack, device and port, such as `Gi1/0/24`. A cable with one end only shows as **open**.
+**Network › Cabling** lists every cable of the racks with ID, type, colour and length and both ends: rack, location, device or patch panel and port, for a patch panel with its face. The search finds cable, rack, device and port, such as `Gi1/0/24`. A cable with one end only shows as **open**.
 
 ## References from the documentation
 

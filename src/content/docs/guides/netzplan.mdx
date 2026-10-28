@@ -57,7 +57,7 @@ In der Ansicht **Kommunikationsmatrix** halten Sie fest, welche Zone mit welcher
 
 **Netzwerk › Topologie** zeichnet die Geräte und ihre Verbindungen als Karte:
 
-- **Kabel** zwischen zwei Geräten in den Racks (durchgezogen),
+- **Kabel** zwischen zwei Geräten in den Racks (durchgezogen), auch über Patchpanels hinweg; dann nennt die Verbindung die Patchpanels, durch die sie führt,
 - **LLDP-Nachbarn**, die die Switches über SNMP melden (gepunktet),
 - **Verbindungen von Hand** aus dem Netzplan, etwa der Internetanschluss an der Firewall (gestrichelt).
 
@@ -66,12 +66,12 @@ Oben stehen die Gegenstellen außerhalb des Netzes, darunter jedes Gerät eine Z
 **Als Mermaid-Diagramm kopieren** legt die Karte als Text in die Zwischenablage; in einer Seite der Netzwerk-Dokumentation fügt **Diagramm aus Topologie** sie direkt in den Editor ein.
 
 <Aside>
-Kabel durch ein Patchfeld hindurch verfolgt die Karte noch nicht: Es zählen Kabel zwischen zwei Geräten. Verbindungen zu Geräten, die Sie nicht sehen dürfen, bleiben aus.
+Ein Weg über Patchpanels zählt, wenn er an beiden Enden ein Gerät erreicht; wie er verläuft, zeigt der [Verlauf am Port](/guides/racks/#patchpanels-vorderseite-rückseite-und-verlauf). Verbindungen zu Geräten, die Sie nicht sehen dürfen, bleiben aus.
 </Aside>
 
 ## Verkabelung
 
-**Netzwerk › Verkabelung** listet jedes Kabel der Racks mit Kennung, Typ, Farbe und Länge und beiden Enden: Rack, Standort, Gerät oder Patchfeld und Port. Die Suche findet Kabel, Rack, Gerät und Port, etwa `Gi1/0/24`. Ein Kabel mit nur einem Ende steht als **offen** da.
+**Netzwerk › Verkabelung** listet jedes Kabel der Racks mit Kennung, Typ, Farbe und Länge und beiden Enden: Rack, Standort, Gerät oder Patchpanel und Port, bei einem Patchpanel mit der Seite. Die Suche findet Kabel, Rack, Gerät und Port, etwa `Gi1/0/24`. Ein Kabel mit nur einem Ende steht als **offen** da.
 
 ## Verweise aus der Dokumentation
 
