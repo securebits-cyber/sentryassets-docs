@@ -1,0 +1,238 @@
+---
+title: Operations at a glance
+description: Check the health of the installation, filter, export and verify the audit log, create status tokens for a monitoring and set the lifecycle rules.
+head:
+  - tag: title
+    content: System health, audit log, status tokens | SentryAssets Docs
+sidebar:
+  label: Operations
+  order: 50
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+This guide brings together four pages that help you keep an eye on SentryAssets while it runs. **System health** shows whether the installation is healthy. The **audit log** records who changed what and proves that nobody altered entries afterwards. **Status tokens** let an existing monitoring report the state of assets, and **lifecycle rules** set when warranty, age or a long silence make an asset a task.
+
+All four pages are part of the Community edition.
+
+## Prerequisites
+
+| Page | Where | Who opens it |
+|---|---|---|
+| System health | **Settings › System health** in the sidebar | **Administrator** only |
+| Audit log | **Settings › Audit log** | **Administrator**, **Information security**, **Data protection**, **Auditor** |
+| Status tokens | **Settings › Status tokens** | **Administrator** |
+| Lifecycle rules | **Settings › Lifecycle rules** | **Administrator**, **Information security** |
+
+Details are under [Rights](#rights). With [custom roles](/en/pro/rollen-anpassen/) (from Pro), the audit log, status tokens and lifecycle rules can be given to other roles as well; system health stays with the administration.
+
+## System health
+
+**System health** shows on one page whether the parts of the installation answer, whether jobs are piling up, when certificates expire and when the last backup ran. Open it after an update, after a disruption or simply now and then. **Check again** queries the state at once; the footer names the version of SentryAssets and the time of the check.
+
+Each line carries a badge: **OK**, **Quiet**, **Check**, **Unreachable**, **Off**, **Expired**, **Broken** or **Failed**.
+
+### What the page shows
+
+| Card | Content |
+|---|---|
+| **Services** | **Database** with version and size, **Valkey (sessions)**, **Worker (jobs)** with the queue, **Malware scanner** and **Instances** |
+| **Certificates of the agents** | **Root CA**, **Issuing CA** and **Agent endpoint certificate** with the date they are valid until |
+| **Storage** | Number of **Documents** and the space used by all versions |
+| **Audit log** | **Last check** of the hash chain and the link **Go to activity** |
+| **Backup** | **Last backup** with time and size, the link **Start, schedule and restore backups** and the command for a backup on the server |
+
+### What to do about a warning
+
+- **Database** or **Valkey (sessions)** is **Unreachable:** check on the server with `docker compose ps` whether the containers are running, and look at their log. Without an answer from the database, the queue, certificates, storage and audit log cannot be checked.
+- **Worker (jobs)** shows **Check:** a job has been waiting for more than 10 minutes. Usually the worker is not running; check the `worker` container, for instance with `docker compose logs worker`. The line also names jobs that failed in the last 24 hours.
+- **Malware scanner** shows **Off:** uploaded files are not checked for malware. How to switch it on is described under [Virus scanner](/en/reference/konfiguration/#virus-scanner).
+- **Issuing CA** or **Agent endpoint certificate** shows **Check** (valid for less than 60 days) or **Expired:** once a certificate expires, agents stop reporting. Renew both as described under [Renewing the agent PKI](/en/guides/sicherung/#renewing-the-agent-pki). How agents renew their own certificate is under [Certificates and renewal](/en/guides/agents/#certificates-and-renewal).
+- **Root CA** shows **Check:** it lasts ten years from setup; the page warns a year ahead. It cannot be renewed with `pki rotate`.
+- **Audit log** shows **Broken:** the hash chain is no longer intact from the entry named, see [Checking the hash chain](#checking-the-hash-chain).
+- **Backup** shows **Check** or **Failed:** there is no backup yet, the last is more than two days old, or a later one failed. Back up as described under [Backup and migration](/en/guides/sicherung/). Keep the master key (`secrets/master_key`) apart from the backups.
+
+## Audit log
+
+The **audit log** records every action that changes something: what happened, who caused it, when and from which address. Each entry contains the hash of its predecessor, so a later change shows up when the chain is checked. Entries can be neither changed nor deleted in the application.
+
+### What is recorded
+
+- **Time**, **Action** (such as “Asset: changed”), **Actor** (**Person**, **Agent** or **System**) and **Object**.
+- Under **Show**, the recorded **Changes**, the **Actor ID**, the **Object ID**, the **Source IP** and the **Correlation ID**.
+- Values of personal fields and free text are recorded as “changed” only, never with their content. Secrets such as passwords or tokens are never recorded.
+
+### Finding entries
+
+<Steps>
+
+1. Open **Settings › Audit log**. The newest entries come first.
+
+2. Filter by **Area** (such as assets, users, sign-ins or status tokens), by **Actor** or by a period with **From** and **To**.
+
+3. Choose **Show** on an entry to see its details.
+
+4. **Load older entries** takes you further back.
+
+</Steps>
+
+If a query takes too long, narrow down the period or the area.
+
+### Exporting
+
+**Export** downloads the entries as a JSON Lines file, the oldest first and with the hashes of the chain. The filters you chose apply to the export too. With the file, the chain can be recomputed outside SentryAssets.
+
+- One file holds at most 20,000 entries or 16 MiB. If there are more, the file has “teil” in its name, and **Export the next part** downloads the next part.
+- Each person can start at most three exports a minute. Every export is itself recorded in the audit log.
+
+### Checking the hash chain
+
+<Steps>
+
+1. On the **Hash chain** card, choose **Check chain**.
+
+2. The server recomputes all entries; meanwhile the card reads “Check running …”.
+
+3. The result stays visible: “Chain intact · … entries checked” or “Chain broken from entry …”.
+
+</Steps>
+
+A check from the last 15 minutes still stands; a new one is possible after that. The job worker runs the check; [system health](#system-health) shows the last one. On the server, check the chain with the command under [Checking the audit chain](/en/guides/sicherung/#checking-the-audit-chain).
+
+If the check reports “Chain broken”, an entry from that point on was changed or removed outside the application. Treat this as a security incident: secure the current state, check who had access to the database and compare with an earlier export. Whoever fully controls the database could recompute the chain; each successful check therefore also records the number and hash of the last entry in the log of the worker.
+
+### SIEM export
+
+From Pro, the audit log is forwarded continuously to up to three SIEM targets, see [SIEM export](/en/pro/siem/).
+
+## Status tokens
+
+With a **status token**, a monitoring you already run (such as Zabbix, Checkmk, PRTG or Uptime Kuma) reports the state of assets to SentryAssets: OK, warning, critical or unknown. The state shows on the asset's **State** card with the traffic light and in the list **Assets needing attention**. This pays off above all for devices without an agent, such as switches, printers, UPS, firewalls or appliances. Devices with an agent need no token.
+
+### What a status token may do
+
+A status token may only report states of assets, that is, call `POST /api/v1/status-reports`. It can neither read nor change anything, nor use any other part of the API. So a stolen token can never do more than this one thing. More on machine access is under [API](/en/reference/api/).
+
+### Creating a status token
+
+<Steps>
+
+1. Open **Settings › Status tokens**.
+
+2. Confirm your sign-in at the top under **Confirm sign-in**: with the **One-time code from your authenticator app** or with **Sign in again at the identity provider**. Without a fresh confirmation no token can be created.
+
+3. Choose **Create status token**.
+
+4. Enter the **Name of the source**, such as “Central monitoring”. It is shown as the source of a reported state.
+
+5. Under **Valid for**, choose 30, 90, 180 or 365 days.
+
+6. Choose **Create status token**. The token appears under **Token shown once**.
+
+7. Copy the token into your monitoring now and choose **Done**. It is shown only this once; only a hash is kept.
+
+</Steps>
+
+Create one token per monitoring. The list shows each token's status **Active**, **Expired** or **Revoked**, its expiry date and when it was last used.
+
+### Reporting a state
+
+The monitoring reports the state per asset with the **Asset ID**, which is on the asset's detail page. An example with placeholders:
+
+```bash
+curl -X POST https://assets.example.test/api/v1/status-reports \
+  -H "Authorization: Bearer <status-token>" -H "Content-Type: application/json" \
+  -d '{"asset_id": "<asset-id>", "state": "critical", "message": "Fan failed"}'
+```
+
+| Field | Values |
+|---|---|
+| `asset_id` | Asset ID (UUID) |
+| `state` | `ok`, `warning`, `critical` or `unknown` |
+| `message` | optional, up to 300 printable characters |
+
+The server answers a successful report with `204` and no content.
+
+### Revoking
+
+Choose **Revoke** on the token and confirm. The token can then no longer report states, and its earlier reports no longer count. This cannot be undone. You can revoke at any time, also without a fresh confirmation of the sign-in.
+
+### Limits
+
+- A token lasts one year at most. After that, create a new one and store it in the monitoring.
+- Each organisation can have at most 50 active tokens. Revoked and expired ones stay in the list for the record.
+- A report is at most 4 KiB; each token can send up to 1,200 reports a minute.
+- Reports without a successor stop counting after 24 hours. A monitoring that falls silent then says nothing more about the asset.
+- Creating and revoking are recorded in the audit log, single reports are not.
+
+## Lifecycle rules
+
+Under **Settings › Lifecycle rules** you set when an asset needs attention. Each rule creates a task in the **Overview** and a filter in the asset list. No rule changes the status of an asset; you decide that.
+
+### The rules
+
+| Rule | What it finds | Setting | Default | Allowed |
+|---|---|---|---|---|
+| **Warranty ends** | Assets in operation whose “warranty until” falls within this period or has passed | **Lead time in days** | 60 | 7 to 365 |
+| **Not seen for long: check status** | Assets in operation no source has reported for this long | **Without report for days** | 90 | 31 to 730 |
+| **Plan replacement** | Assets in operation bought this long ago | **Age in years** | 5 | 1 to 15 |
+
+“In operation” here means any lifecycle except **Retired** and **Disposed**.
+
+### Setting the rules
+
+<Steps>
+
+1. Open **Settings › Lifecycle rules**.
+
+2. Switch **Rule on** on or off for each rule.
+
+3. For a rule that is on, enter a whole number within the allowed range.
+
+4. Choose **Save rules**. **Undo** in the notice restores the previous values.
+
+</Steps>
+
+### Effect on tasks
+
+The rules apply to the whole organisation. The **Overview** then shows tasks such as “The warranty of … assets ends”, “… assets have not reported for long” or “… assets are due for replacement”. A click on **View** or **Check status** shows the assets concerned in the asset list.
+
+- Warranty and purchase date count only in categories that have the fields for warranty end and purchase date.
+- **Not seen for long** counts only assets that have reported at least once, for instance through an agent or a monitoring. After 30 days they count as **Orphaned** already; this rule also asks whether they are out of operation. If so, change the asset's status.
+- Fields with personal data count only for roles allowed to see them.
+- A rule that is switched off creates no task.
+- Every change to the rules is recorded in the audit log.
+
+## Rights
+
+| Role | System health | Audit log | Status tokens | Lifecycle rules |
+|---|---|---|---|---|
+| Administrator | view | view, export, check chain | create, revoke | set |
+| Information security | – | view, export, check chain | – | set |
+| Data protection, Auditor | – | view, export, check chain | – | – |
+| Editor, Read only | – | – | – | – |
+
+- **System health** is seen by the administration only; this permission cannot be given to any other role.
+- The audit log and status tokens are **far-reaching** permissions: the audit log reveals the trail of everyone's actions, and a status token lets a foreign system in for up to a year. With [custom roles](/en/pro/rollen-anpassen/#far-reaching-permissions), the page asks before you give them to another role.
+- The tasks from the lifecycle rules are seen by every role that may read the inventory, counted over the assets it may see.
+
+An overview of all roles is under [Roles](/en/reference/rollen/).
+
+## Check the result
+
+- **System health** shows **OK** or **Quiet** for services, certificates, audit log and backup.
+- The **audit log** shows “Chain intact” after **Check chain**.
+- A new status token is listed as **Active**; after the first report it shows “last used …”, and the asset shows the reported state.
+- After saving the lifecycle rules, the **Overview** shows the matching tasks.
+
+## Troubleshooting
+
+- **“For the administration only”** on system health: your role is not **Administrator**.
+- **“Please wait a minute before the next check.”** You have just had the chain checked several times.
+- **“The last check finished less than 15 minutes ago; a new one is possible after that.”** The last check still stands.
+- **“Too many exports in a short time. Please try again in a minute.”** or **“Another export is running.”** Wait a moment and export again.
+- **“The query took too long. …”** Narrow down the period or the area in the audit log.
+- **Create status token is greyed out:** confirm your sign-in at the top first. **“Your confirmation of the sign-in has expired. …”** means you need to confirm it again.
+- **The monitoring gets `401`:** the token is missing, copied wrongly, expired or revoked. Create a new one if needed.
+- **The monitoring gets `404`:** the asset ID belongs to no asset of this organisation, or the asset was deleted.
+- **“Please enter a whole number from … to ….”** The value of a lifecycle rule is outside the allowed range.

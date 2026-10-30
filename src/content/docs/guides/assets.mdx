@@ -1,0 +1,270 @@
+---
+title: Assets erfassen und importieren
+description: Assets in der Liste finden, einzeln oder mehrfach anlegen, bearbeiten, Etiketten drucken, als CSV exportieren, aus GLPI importieren und löschen.
+head:
+  - tag: title
+    content: Assets erfassen und importieren | SentryAssets Docs
+sidebar:
+  label: Assets
+  order: 50
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+Assets sind die Dinge, die Sie verwalten: Server, Notebooks, Switches, Drucker, Telefone, aber auch Software oder Datenbanken. Jedes Asset hat eine Kategorie, einen Lebenszyklus und auf Wunsch Standort, Verantwortlichen, Inventarnummer und Schutzbedarf. Viele Geräte erscheinen von selbst, sobald ein [Agent](/guides/agents/), der [Collector](/guides/collector/) oder der [Abgleich mit dem Active Directory](/guides/active-directory/) sie meldet; alles andere legen Sie hier von Hand an oder importieren es.
+
+Die Verwaltung der Assets gehört zur Community-Edition.
+
+## Voraussetzungen
+
+- **Ansehen:** jede Rolle.
+- **Anlegen, bearbeiten, löschen und importieren:** eine Rolle mit Schreibrecht im Inventar, also **Administrator**, **Informationssicherheit** oder **Bearbeitung** (siehe [Rechte](#rechte)).
+- Kategorien, Standorte und Verantwortliche stehen in den [Stammdaten](/guides/stammdaten/). Für den Anfang genügen die mitgelieferten Kategorien.
+
+## Die Asset-Liste
+
+Öffnen Sie **Assets › Alle Assets**. Unter **Assets** listet die Navigation zusätzlich jede Kategorie mit ihrer Anzahl; ein Klick zeigt nur diese Kategorie mit ihren Unterkategorien.
+
+Die Liste zeigt je Asset die Spalten **Asset** (Name, Kategorie und Inventarnummer), **Verantwortlich**, **Schutzbedarf**, **Zustand**, **Status** und **Zuletzt gesehen**. **Schutzbedarf** ist der höchste der drei Werte Vertraulichkeit, Integrität und Verfügbarkeit (Maximumprinzip nach BSI-Standard 200-2). **Status** zeigt den Lebenszyklus und, wo nötig, einen Hinweis wie **Ohne Verantwortlichen**.
+
+### Suchen und filtern
+
+- Das Suchfeld **Assets durchsuchen** findet **Name, Inventarnummer, Hostname, Seriennummer oder MAC-Adresse**.
+- Die Filter darunter grenzen ein nach **Kategorie**, **Geräteklasse**, **Standort** und **Kostenstelle**. Ein Standort gilt mit allem darunter, ein Gebäude also mit seinen Etagen und Räumen.
+- Die Umschalter über der Liste zeigen, was Aufmerksamkeit braucht, jeweils mit Anzahl:
+
+| Umschalter | Zeigt |
+|---|---|
+| **Alle** | alle Assets |
+| **Ohne Verantwortlichen** | Assets ohne Verantwortlichen |
+| **Schatten-IT** | Assets in der Kategorie **Nicht zugeordnet** ohne Agent und ohne Verantwortlichen, etwa Geräte aus einem Netzwerkscan. Nur für Rollen, die Agents sehen dürfen; die anderen sehen diese Assets unter **Ohne Verantwortlichen**. |
+| **Verwaist** | Assets, die sich seit mehr als 30 Tagen nicht gemeldet haben |
+
+Die drei Hinweise gelten nur für Assets in Betrieb; was **Außer Betrieb** oder **Entsorgt** ist, zeigt keinen.
+
+Aus Aufgaben der Übersicht kommen Sie mit einem fertigen Filter in die Liste, etwa „Assets in Betrieb, deren Support in den nächsten 60 Tagen endet oder schon geendet hat“. **Filter entfernen** hebt ihn auf. Wann Garantie, Alter und lange Stille zur Aufgabe werden, legen Sie unter **Einstellungen › Lifecycle-Regeln** fest.
+
+### Assets mit Handlungsbedarf
+
+Die Spalte **Zustand** zeigt die Ampel aus den Meldungen des Agents und eines vorhandenen Monitorings: **Gesund**, **Warnung**, **Kritisch** oder **Unbekannt**. Assets mit Warnung oder kritischem Zustand stehen gesammelt auf der Seite **Assets mit Handlungsbedarf**, die kritischen zuerst. Sie erreichen sie über die passenden Aufgaben in der Übersicht.
+
+## Asset anlegen
+
+<Steps>
+
+1. Wählen Sie in der Asset-Liste **Asset anlegen**.
+
+2. Wählen Sie die **Kategorie**. Sie bestimmt, welche technischen Angaben und welche eigenen Felder das Formular zeigt; Telefone haben zum Beispiel keinen Hostnamen, Software keine Seriennummer.
+
+3. Tragen Sie den **Name** ein (Pflichtfeld, höchstens 200 Zeichen).
+
+4. Lassen Sie die **Inventarnummer** leer, wenn die Kategorie einen Nummernkreis hat: Das Asset erhält beim Speichern die nächste Nummer. Ohne Nummernkreis tragen Sie bei Bedarf selbst eine ein (höchstens 50 Zeichen: Buchstaben, Ziffern und `. _ / -` oder Leerzeichen, am Anfang und Ende ein Buchstabe oder eine Ziffer).
+
+5. Wählen Sie den **Status**, also den Lebenszyklus: **Geplant**, **Aktiv**, **In Wartung**, **Außer Betrieb** oder **Entsorgt**. Vorgabe ist **Aktiv**.
+
+6. Wählen Sie bei Bedarf **Standort**, **Verantwortlich** und **Kostenstelle** (siehe [Kostenstellen](/guides/kostenstellen/)).
+
+7. Füllen Sie unter **Kategoriefelder** die eigenen Felder der Kategorie aus. Pflichtfelder sind mit „(Pflichtfeld)“ markiert.
+
+8. Ergänzen Sie unter **Technische Angaben** bei Bedarf **Hostname**, **MAC-Adresse**, **Seriennummer**, **Hersteller** und **Modell**. Die MAC-Adresse nimmt übliche Schreibweisen an und wandelt sie in `aa:bb:cc:dd:ee:ff` um. Beim **Hersteller** schlägt das Feld beim Tippen Hersteller aus den Lieferanten vor oder legt ihn dort an.
+
+9. Wählen Sie unter **Schutzbedarf** je **Vertraulichkeit**, **Integrität** und **Verfügbarkeit** **normal**, **hoch**, **sehr hoch** oder **nicht bewertet**.
+
+10. Wählen Sie unter **Lieferanten** bei Bedarf **Gekauft bei** und **Wartung durch**.
+
+11. Tragen Sie bei Bedarf **Notizen** ein, ohne Passwörter oder andere Geheimnisse, und wählen Sie **Asset anlegen**.
+
+</Steps>
+
+Danach öffnet sich das neue Asset. Ändern Sie später die Kategorie, entfernt das Speichern die Werte von Feldern, die die neue Kategorie nicht kennt; das Formular weist darauf hin.
+
+### Mehrere gleiche Assets auf einmal
+
+Für zehn gleiche Telefone oder einen Satz Monitore tragen Sie beim Anlegen unter **Anzahl** eine Zahl von 1 bis 100 ein. Die Schaltfläche heißt dann etwa **10 Assets anlegen**.
+
+- Jedes Asset erhält eine laufende Nummer am Namen, aus „Telefon“ werden „Telefon 01“ bis „Telefon 10“.
+- Jedes Asset erhält eine eigene Inventarnummer aus dem Nummernkreis der Kategorie; eine Nummer von Hand gibt es dabei nicht.
+- Hostname, MAC-Adresse und Seriennummer sind je Gerät verschieden. Ergänzen Sie sie nach dem Anlegen am einzelnen Asset.
+- Angelegt werden alle oder keines.
+
+## Das Asset im Detail
+
+Ein Klick auf ein Asset öffnet seine Seite. Oben stehen Lebenszyklus, ein Hinweis wie **Verwaist** und die Schaltflächen **Etikett drucken**, **Bearbeiten** und **Löschen**. Darunter liegen die Reiter:
+
+| Reiter | Inhalt |
+|---|---|
+| **Übersicht** | **Steckbrief** mit Geräteklasse, Typ, Inventarnummer, Standort, Verantwortlichem, Kostenstelle, System, **Zuletzt gesehen**, **Erfasst am** und **Erfasst durch** (Person, Agent oder System, bei Importen die Herkunft wie „GLPI · Netzwerkgeräte 42“); dazu **Schutzbedarf** mit **Gesamt (Maximum)**, **Technische Angaben**, **Kategoriefelder**, **Lieferanten**, **Zustand** und **Bild** |
+| **Zustand** | Was der Agent meldet: Prozessor, Arbeitsspeicher, Festplatten, Grafik und Netzwerk mit Durchsatz, dazu der **Sicherheitszustand** (Verschlüsselung, Virenschutz, Firewall, automatische Updates, Secure Boot, Bildschirmsperre). Nur für Rollen, die Agents sehen dürfen. |
+| **Software** | Installierte Software, wie der Agent sie meldet |
+| **Beziehungen** | Wovon das Asset abhängt, worauf es läuft und wozu es gehört |
+| **Dokumentation** | Anleitungen und Runbooks zum Asset, siehe [Dokumentation an Asset und Standort](/guides/dokumentation/) |
+| **Dokumente** | Verknüpfte Dokumente |
+| **Verträge** | Verknüpfte Verträge |
+| **Verlauf** | Wann das Asset angelegt und geändert wurde, von wem (Person, Agent oder System) und welche Felder sich änderten, bis zu 200 Einträge. Werte und Personen stehen im Audit-Log. |
+
+Personenbezogene Kategoriefelder sehen nur berechtigte Rollen; die anderen sehen den Hinweis „Personenbezogene Felder (…) sind nur für berechtigte Rollen sichtbar.“
+
+### Zustand und Agent
+
+Meldet kein Agent für das Asset, zeigt der Reiter **Zustand** „Kein Agent für dieses Asset“. Administratoren finden dort **Agent für dieses Asset installieren**: Der Agent meldet sich dann als dieses Asset, statt ein neues anzulegen (siehe [Agent für ein bestehendes Asset](/guides/agents/#agent-für-ein-bestehendes-asset)).
+
+Hat ein Agent ein neues Asset angelegt, obwohl das Gerät schon im Inventar steht, etwa als virtuelle Maschine aus dem Hypervisor, fragt die Karte **Steht dieses Gerät schon im Inventar?** nach. Sie schlägt Assets mit gleichem Namen, Hostnamen, gleicher Seriennummer oder MAC-Adresse vor. **Agent übertragen** lässt den Agent künftig als das gewählte Asset melden; Name, Kategorie und Standort dort bleiben. Mit **Dieses Asset danach löschen** verschwindet das doppelte Asset; das lässt sich nicht rückgängig machen.
+
+### Beziehungen
+
+Unter **Beziehungen** wählen Sie **Beziehung hinzufügen**, dann unter **Dieses Asset …** die Art: **hängt ab von**, **läuft auf**, **ist verbunden mit** oder **ist Teil von**. Suchen Sie das Ziel-Asset und legen Sie die Beziehung an. Am Ziel erscheint sie umgekehrt, etwa **wird benötigt von** oder **betreibt**. **Beziehung entfernen** löst sie wieder.
+
+### Bild
+
+Ein Foto hilft, das Gerät vor Ort wiederzuerkennen. Wählen Sie auf der Karte **Bild** die Schaltfläche **Bild hochladen**. Das Bild wird vor dem Hochladen verkleinert; Aufnahmeort und andere Metadaten werden entfernt. Erlaubt sind JPEG oder PNG bis 2 MB und höchstens 4096 Pixel je Seite. **Bild ersetzen** und **Bild entfernen** stehen daneben.
+
+## Asset bearbeiten
+
+<Steps>
+
+1. Öffnen Sie das Asset und wählen Sie **Bearbeiten**.
+
+2. Ändern Sie die Angaben im Dialog **Asset bearbeiten**.
+
+3. Wählen Sie **Speichern**.
+
+</Steps>
+
+Der Hinweis „Änderungen gespeichert“ bietet **Rückgängig** an. Verlangt die Kategorie eine Inventarnummer, lässt sie sich ändern, aber nicht leeren. Fehlt einem Asset die Nummer, obwohl seine Kategorie einen Nummernkreis hat, vergibt **Nummer vergeben** auf der Seite des Assets die nächste.
+
+## Mehrere Assets auf einmal ändern
+
+<Steps>
+
+1. Markieren Sie in der Asset-Liste die Assets über das Kästchen vor jeder Zeile, oder alle Assets der Seite über das Kästchen im Kopf. Eine Seite zeigt 50 Assets.
+
+2. Unten erscheint die Leiste **Massenbearbeitung** mit der Zahl der ausgewählten Assets.
+
+3. Wählen Sie eine Aktion:
+   - **Verantwortlichen setzen**, auch **Kein Verantwortlicher**,
+   - **Standort setzen**, auch **Kein Standort**,
+   - **Schutzbedarf setzen**: Im Dialog wählen Sie je Schutzziel einen Wert, **Nicht bewertet** oder **Unverändert**, und bestätigen mit **Übernehmen**,
+   - **Etiketten drucken** (siehe unten).
+
+4. **Abbrechen** hebt die Auswahl auf.
+
+</Steps>
+
+Verantwortlicher und Standort gelten sofort. Der Hinweis „… Assets geändert“ bietet **Rückgängig** an; das setzt nur die geänderten Felder auf den vorigen Stand zurück. Die Auswahl und die Massenbearbeitung sehen nur Rollen mit Schreibrecht.
+
+## Inventarnummern und Etiketten
+
+Inventarnummern vergibt SentryAssets aus dem **Nummernkreis** einer Kategorie, etwa `NB-2026-00042`. Einen Nummernkreis richten Sie unter **Stammdaten › Kategorien** ein, siehe [Inventarnummern](/guides/stammdaten/#inventarnummern). Die Adresse `/assets/nr/<Inventarnummer>` öffnet das Asset mit dieser Nummer direkt.
+
+### Etiketten drucken
+
+<Steps>
+
+1. Wählen Sie auf der Seite eines Assets **Etikett drucken**, oder markieren Sie in der Liste bis zu 100 Assets und wählen Sie **Etiketten drucken**.
+
+2. Wählen Sie unter **Format**:
+   - **A4-Bögen, 70 × 37 mm** (3 × 8 Etiketten je Bogen),
+   - **Band 24 mm**, **Band 18 mm** oder **Band 12 mm, ohne QR-Code** für Beschriftungsgeräte,
+   - **DYMO LabelWriter, Etikett 99012 (89 × 36 mm)**, **Etikett 11354 (57 × 32 mm)** oder **Etikett 11352 (54 × 25 mm)**.
+
+3. Folgen Sie dem Hinweis unter dem Format, etwa Papier, Ränder „Keine“ und 100 %, und wählen Sie **Drucken**.
+
+</Steps>
+
+Jedes Etikett trägt Name, Inventarnummer und einen QR-Code, der zum Asset in SentryAssets führt. DYMO-Etiketten tragen zusätzlich die Inventarnummer als Strichcode; ist sie dafür zu lang, bleibt der QR-Code. Der Browser merkt sich das zuletzt gewählte Format. Gescannt wird unter **Assets › Scannen**; passende Geräte beschreibt [Handscanner](/guides/scanner/).
+
+## Als CSV exportieren
+
+Wählen Sie in der Asset-Liste **CSV exportieren**. Die Datei enthält alle Assets, die zu Suche und Filtern passen, nicht nur die aktuelle Seite. Sind Assets markiert, heißt die Schaltfläche **Auswahl exportieren (…)** und exportiert nur diese.
+
+- Die Spalten: Name, Inventarnummer, Kategorie, Geräteklasse, Standort, Verantwortlich, Lebenszyklus, Status, Schutzbedarf mit den drei Schutzzielen, Hostname, MAC-Adresse, Seriennummer, Hersteller, Modell, Hersteller aus den Stammdaten, Gekauft bei, Wartung durch, Kostenstelle sowie Zeitpunkte von zuletzt gesehen, Anlage und Änderung in UTC; danach die Kategoriefelder.
+- Notizen und personenbezogene Kategoriefelder sind nie dabei, auch nicht für Rollen, die sie sehen dürfen: Die Datei verlässt die Anwendung.
+- Die Datei ist UTF-8 mit Semikolon, wie Excel sie öffnet. Zellen, die eine Tabellenkalkulation als Formel ausführen würde, beginnen mit einem Apostroph.
+- Höchstens 10 000 Assets je Export. Jeder Export steht im Audit-Log.
+
+## Aus GLPI importieren
+
+Wechseln Sie von GLPI zu SentryAssets, übernehmen Sie die Geräte über die CSV-Exporte von GLPI. Eine andere CSV-Vorlage für Assets gibt es nicht.
+
+<Steps>
+
+1. Exportieren Sie in GLPI eine Liste, etwa „Netzwerkgeräte“, über „Export › CSV“. Blenden Sie dort die Spalten ein, die Sie übernehmen möchten; die Spalte „Name“ ist Pflicht.
+
+2. Wählen Sie in der Asset-Liste **Aus GLPI importieren**.
+
+3. Wählen Sie unter **Liste in GLPI** die Art der Liste: **Netzwerkgeräte**, **Computer**, **Monitore**, **Drucker**, **Telefone**, **Peripherie** oder **Sonstige**.
+
+4. Wählen Sie unter **CSV-Export** die Datei. SentryAssets prüft sie und zeigt, wie viele Zeilen neu, schon vorhanden oder fehlerhaft sind.
+
+5. Ordnen Sie unter **Typ → Kategorie** jedem Typ aus GLPI eine Kategorie zu.
+
+6. Prüfen Sie unter **Status → Lebenszyklus** die Vorschläge.
+
+7. Wählen Sie unter **Standort** je Standort aus GLPI einen vorhandenen, **Neu anlegen (… Ebenen)** oder **Kein Standort**.
+
+8. Prüfen Sie die Zeilen und den **Hinweis** zu fehlerhaften. Wählen Sie dann **… Assets anlegen**.
+
+</Steps>
+
+Übernommen werden Name, Typ, Standort, Hersteller, Modell, Seriennummer, Inventarnummer, MAC-Adresse, Kommentar und, wo die Kategorie das Feld hat, die Firmware. Was SentryAssets nicht übernimmt, nennt der Dialog unter „Nicht übernommen“. Angelegt wird ganz oder gar nicht.
+
+Vorhandene Assets bleiben unverändert. Ein schon importiertes Gerät erkennt SentryAssets an seiner GLPI-ID, sonst an Inventar- oder Seriennummer; es gilt als **Vorhanden** und wird übersprungen. Die Herkunft steht danach im Steckbrief unter **Herkunft**.
+
+## Asset löschen
+
+<Steps>
+
+1. Öffnen Sie das Asset und wählen Sie **Löschen**.
+
+2. Bestätigen Sie im Dialog **Asset löschen?** mit **Löschen**.
+
+</Steps>
+
+Das Asset wird endgültig gelöscht, einschließlich seiner Beziehungen und seines Bilds. Im Audit-Log bleibt der letzte Stand erhalten. Das Löschen lässt sich nicht rückgängig machen.
+
+Wird ein Gerät nur nicht mehr genutzt, löschen Sie es besser nicht: Setzen Sie den Lebenszyklus auf **Außer Betrieb** oder sondern Sie es mit Löschnachweis aus, siehe [Aussonderung](/guides/aussonderung/). So bleibt nachvollziehbar, wohin es ging.
+
+SentryAssets lehnt das Löschen ab, solange noch etwas das Asset braucht:
+
+| Meldung | Was Sie tun |
+|---|---|
+| „Das Asset ist an eine Person ausgegeben. Nehmen Sie es zuerst zurück; dann geht nicht verloren, wer es hatte.“ | Nehmen Sie das Asset unter **Mitarbeitende › Asset-Ausgaben** zurück ([Asset-Ausgaben](/guides/ausgaben/#gerät-zurücknehmen)). |
+| „Für das Asset läuft eine Aussonderung. Schließen Sie sie ab oder brechen Sie sie ab, bevor Sie es löschen.“ | Schließen Sie die [Aussonderung](/guides/aussonderung/) ab oder brechen Sie sie ab. |
+| „Das Asset ist ein Medizinprodukt. Sein Medizinproduktebuch muss erhalten bleiben; sondern Sie es stattdessen aus.“ | Mit dem [Medizintechnik-Add-on](/pro/medizintechnik/) bleibt ein Medizinprodukt erhalten; sondern Sie es aus. |
+
+## Rechte
+
+| Rolle | Assets |
+|---|---|
+| Administrator, Informationssicherheit, Bearbeitung | ansehen, anlegen, bearbeiten, mehrere ändern, importieren, exportieren, Etiketten drucken, löschen |
+| Datenschutz, Prüfung, Lesend | ansehen, exportieren, Etiketten drucken |
+
+- **Reiter Zustand und Filter Schatten-IT:** nur für Rollen, die Agents sehen dürfen: **Administrator**, **Informationssicherheit**, **Datenschutz** und **Prüfung**.
+- **Personenbezogene Kategoriefelder**, etwa eine IMEI: sehen nur **Administrator**, **Informationssicherheit**, **Bearbeitung** und **Datenschutz**.
+- <Badge text="Pro" variant="note" /> Mit [Standortrechten](/pro/standortrechte/) ändern und legen Personen Assets nur an ihren Standorten an; an anderen zeigt das Asset „Nur an Ihren Standorten änderbar.“
+- **Audit-Log:** Anlegen, Ändern und Löschen sowie jeder Export mit Filter und Zahl der Zeilen.
+
+## Grenzen
+
+- Name höchstens 200 Zeichen, Inventarnummer höchstens 50, Hostname höchstens 253, Seriennummer, Hersteller und Modell je höchstens 100, Notizen höchstens 10 000 Zeichen.
+- Mehrfachanlage: 1 bis 100 Assets auf einmal. Massenbearbeitung und Etiketten: höchstens 100 Assets.
+- CSV-Export: höchstens 10 000 Assets.
+- GLPI-Import: Datei bis 700 kB, höchstens 1 000 Zeilen und 100 Spalten, höchstens 200 verschiedene Typen, Status oder Standorte; je Import höchstens 500 neue Standorte, insgesamt höchstens 2 000.
+- Bild: JPEG oder PNG bis 2 MB, höchstens 4096 Pixel je Seite; ein Bild je Asset.
+
+## Ergebnis prüfen
+
+- Das Asset steht unter **Assets › Alle Assets** und in der Navigation bei seiner Kategorie.
+- Der Steckbrief zeigt Inventarnummer, Standort und Verantwortlichen.
+- Nach einem Import zeigt der Steckbrief unter **Herkunft** etwa „GLPI · Netzwerkgeräte 42“.
+
+## Fehlerbehebung
+
+- **„Dafür fehlt Ihnen die Berechtigung. Assets ändern und anlegen Sie nur an Ihren Standorten …“** Wählen Sie einen Standort, an dem Sie schreiben dürfen, oder wenden Sie sich an die Administration.
+- **„Die Kategorie verlangt eine Inventarnummer. Sie lässt sich ändern, aber nicht leeren.“** Tragen Sie eine Nummer ein oder lassen Sie die bisherige stehen.
+- **„Zu viele Assets für einen Export. Bitte grenzen Sie Suche oder Filter ein.“** Exportieren Sie in Teilen, etwa je Kategorie oder Standort.
+- **„Die Datei hat keine Spalte „Name“.“** Blenden Sie die Spalte in der Liste von GLPI ein und exportieren Sie erneut.
+- **„Die Datei ist weder UTF-8 noch Windows-1252.“** Exportieren Sie die Liste erneut aus GLPI und laden Sie diese Datei hoch.
+- **„die Kategorie verlangt Felder, die der Import nicht füllt; wählen Sie eine andere“** Ordnen Sie den Typ einer Kategorie ohne Pflichtfelder zu und ergänzen Sie die Felder später.
+- **„„Nicht zugeordnet“ ist für Funde der Discovery“** Wählen Sie für den Typ eine andere Kategorie.
+- **„Ein Asset aus der Datei wurde inzwischen angelegt. Es wurde nichts übernommen; prüfen Sie erneut.“** Laden Sie die Datei erneut; das neue Asset gilt dann als vorhanden.

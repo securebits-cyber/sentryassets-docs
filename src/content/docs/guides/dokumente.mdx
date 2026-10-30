@@ -1,0 +1,206 @@
+---
+title: Dokumente
+description: Verträge, Belege, Handbücher und Nachweise verschlüsselt ablegen, mit Assets verknüpfen, versionieren, Fristen setzen und als Nachweis nutzen.
+head:
+  - tag: title
+    content: Dokumentenablage mit Versionen | SentryAssets Docs
+sidebar:
+  label: Dokumente
+  order: 50
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Unter **Inventar › Dokumente** liegen alle Dateien Ihrer Organisation an einem Ort: Verträge, Kaufbelege, Handbücher, Zertifikate und Nachweise. Jedes Dokument hat eine Art, eine Vertraulichkeit, auf Wunsch eine Gültigkeit und eine Aufbewahrungsfrist, und jede neue Datei wird eine neue Version. Sie verknüpfen Dokumente mit Assets, Standorten, Lieferanten, Lizenzen und Verträgen und nutzen sie als Nachweis, etwa im Grundschutz-Check.
+
+Die Dokumentenablage gehört zur Community-Edition.
+
+<Aside type="note" title="Dokumente oder Dokumentation?">
+Diese Seite beschreibt hochgeladene Dateien. Anleitungen, Runbooks und Notfallpläne, die Sie direkt in SentryAssets in Markdown schreiben, stehen im Reiter **Dokumentation** am Asset oder Standort; siehe [Dokumentation an Asset und Standort](/guides/dokumentation/).
+</Aside>
+
+## Voraussetzungen
+
+- Zum Hochladen und Ändern: **Administrator**, **Informationssicherheit** oder **Bearbeitung**. Alle anderen Rollen lesen nur (siehe [Rechte](#rechte)).
+- Der Betreiber hat die Dokumentenablage eingerichtet. Fehlt sie, zeigt die Seite „Die Dokumentablage ist auf diesem Server nicht eingerichtet. Metadaten lassen sich anlegen, Dateien nicht.“
+- Empfohlen: ein [Virenscanner](/reference/konfiguration/#virenscanner).
+
+## Dokument hochladen
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Dokumente** und wählen Sie **Dokument hochladen**.
+
+2. Geben Sie einen **Titel** ein.
+
+3. Wählen Sie die **Art**: **Vertrag**, **Kaufbeleg**, **Handbuch**, **Nachweis**, **Zertifikat** oder **Sonstiges**.
+
+4. Wählen Sie die **Vertraulichkeit**: **Öffentlich**, **Intern**, **Vertraulich** oder **Streng vertraulich**. Angeboten werden nur Stufen, die Sie selbst sehen dürfen.
+
+5. Tragen Sie bei Bedarf **Gültig bis**, **Aufbewahren bis** und eine Person unter **Verantwortlich** ein.
+
+6. Wählen Sie unter **Datei** die Datei. Erlaubt sind PDF, Bilder (PNG, JPEG), Office-Dokumente, Text oder CSV.
+
+7. Unter **Zuordnen (optional)** wählen Sie ein Asset, einen Standort, einen Lieferanten, eine Lizenz oder einen Vertrag, zu dem das Dokument gehört.
+
+8. Speichern Sie. Die Meldung „Dokument hochgeladen“ bestätigt es.
+
+</Steps>
+
+Die Datei ist optional; ein Dokument ohne Datei zeigt „Noch keine Datei“, und Sie laden sie später als Version nach.
+
+Schneller geht es vom Objekt aus: Assets, Standorte und Lieferanten haben einen Reiter **Dokumente**, Lizenzen und Verträge einen Reiter **Belege**. Was Sie dort hochladen, ist gleich mit diesem Objekt verknüpft.
+
+### Arten
+
+| Art | Wofür |
+|---|---|
+| **Vertrag** | Verträge, etwa Wartungs- oder Leasingverträge |
+| **Kaufbeleg** | Rechnungen und Lieferscheine |
+| **Handbuch** | Bedienungs- und Installationsanleitungen des Herstellers |
+| **Nachweis** | Belege für eine Umsetzung, etwa ein Beschluss oder ein Löschprotokoll |
+| **Zertifikat** | Zertifikate und Prüfbescheinigungen |
+| **Sonstiges** | alles andere |
+
+Daneben gibt es die Art **Dokumentation** für Markdown-Seiten aus dem Reiter **Dokumentation**. Beim Hochladen steht sie nicht zur Wahl, und ein Dokument wechselt weder in diese Art noch aus ihr heraus.
+
+### Nicht erlaubte Dateien
+
+SentryAssets prüft den Inhalt jeder Datei, nicht nur ihre Endung, und lehnt ab:
+
+- ausführbare Dateien,
+- HTML-, SVG- und XML-Dateien,
+- alte Office-Formate (`.doc`, `.xls`); speichern Sie sie als PDF oder im neuen Office-Format,
+- Dateien mit Makros oder eingebetteten Programmen,
+- leere Dateien.
+
+## Vertraulichkeit und Verschlüsselung
+
+Die Vertraulichkeit entscheidet, wer ein Dokument überhaupt sieht. Ein Dokument über der Stufe Ihrer Rolle erscheint nirgends: nicht in der Liste, nicht in der Suche, nicht als Datei.
+
+| Rolle | Sieht Dokumente bis |
+|---|---|
+| Administrator, Informationssicherheit, Datenschutz | **Streng vertraulich** |
+| Bearbeitung, Prüfung | **Vertraulich** |
+| Lesend | **Intern** |
+
+Neu angelegte Dokumente sind **Intern**. Niemand kann ein Dokument auf eine Stufe setzen, die er danach selbst nicht mehr sähe. Mehr dazu unter [Vertraulichkeit von Dokumenten](/reference/rollen/#vertraulichkeit-von-dokumenten).
+
+Jede Datei wird vor dem Speichern verschlüsselt, mit eigenem Schlüssel je Version, der wiederum mit dem Master-Schlüssel der Installation verschlüsselt ist. Auf der Platte liegt sie unter einem zufälligen Namen; der ursprüngliche Dateiname ist nur eine Angabe am Dokument. Ohne den Master-Schlüssel sind die Dokumente verloren; siehe [Der Master-Schlüssel](/guides/sicherung/#der-master-schlüssel).
+
+## Versionen
+
+<Steps>
+
+1. Öffnen Sie das Dokument aus der Liste.
+
+2. Wählen Sie **Neue Version hochladen** und wählen Sie die Datei.
+
+3. Die Meldung „Neue Version hochgeladen“ bestätigt es.
+
+</Steps>
+
+Die Tabelle **Versionen** zeigt je Version **Version**, **Datei** mit der Prüfsumme **SHA-256**, **Größe**, **Hochgeladen** und **Prüfung**. Die Liste der Dokumente zeigt die **Aktuelle Version**. Ältere Versionen bleiben erhalten und lassen sich weiter herunterladen.
+
+Titel, Art, Vertraulichkeit, Fristen und Verantwortliche ändern Sie mit **Bearbeiten**.
+
+## Gültig bis und Aufbewahren bis
+
+- **Gültig bis** ist das Ablaufdatum des Inhalts, etwa eines Zertifikats oder einer Prüfbescheinigung. Läuft es in den nächsten 30 Tagen ab oder ist es schon abgelaufen, erscheint die Aufgabe „… Nachweise laufen in 30 Tagen ab“ auf der [Übersicht](/guides/uebersicht/). Der Filter **Gültigkeit läuft ab** zeigt diese Dokumente.
+- **Aufbewahren bis** ist die gesetzliche oder vertragliche Aufbewahrungsfrist. Bis zu diesem Tag lässt sich das Dokument nicht löschen. Die Frist lässt sich verlängern; verkürzen oder entfernen können sie nur **Administrator** und **Informationssicherheit**, etwa nach einem Tippfehler.
+
+Der Filter **Aufbewahrung abgelaufen** zeigt Dokumente, deren Frist vorbei ist: „Diese Dokumente haben ihr Aufbewahrungsdatum überschritten und können gelöscht werden.“ Gelöscht wird nur von Hand.
+
+## Virenprüfung
+
+Ist ein Virenscanner eingerichtet, prüft SentryAssets jede Datei vor dem Speichern:
+
+- Findet der Scanner Schadcode, wird die Datei nicht gespeichert: „Der Virenscanner hat Schadcode gefunden. Die Datei wurde nicht gespeichert.“ Das Audit-Log hält den Fund fest.
+- Ist der Scanner gerade nicht erreichbar, wird der Upload abgelehnt statt ungeprüft gespeichert: „Der Virenscanner ist gerade nicht erreichbar. Bitte versuchen Sie es später erneut.“
+- Geprüfte Versionen zeigen unter **Prüfung** „Auf Schadcode geprüft“.
+
+<Aside type="caution" title="Ohne Virenscanner">
+Ist kein Scanner eingerichtet, zeigt die Seite: „Hochgeladene Dateien werden nicht auf Schadcode geprüft, weil kein Virenscanner eingerichtet ist.“ Die Versionen stehen dann als **Ungeprüft**. Richtet der Betreiber später einen Scanner ein, prüft SentryAssets die bisherigen Dateien nach. Befallene stehen dann als „Schadcode gefunden“ und „Gesperrt, nicht abrufbar“. Einrichtung: [Virenscanner](/reference/konfiguration/#virenscanner).
+</Aside>
+
+## Vorschau und Herunterladen
+
+In der Tabelle **Versionen** laden Sie jede Version mit **Herunterladen** herunter. Bilder (PNG, JPEG) öffnen Sie zusätzlich mit **Vorschau** direkt in der Seite; andere Dateitypen haben keine Vorschau. Eine Version mit Schadcode lässt sich weder ansehen noch herunterladen.
+
+Jedes Herunterladen und jede Vorschau steht im Audit-Log.
+
+## Verknüpfen und als Nachweis nutzen
+
+Die Karte **Verknüpft mit** zeigt, zu welchen Objekten ein Dokument gehört.
+
+<Steps>
+
+1. Wählen Sie auf der Seite des Dokuments **Zuordnen**.
+
+2. Wählen Sie unter **Objekt wählen** ein Asset, einen Standort, einen Lieferanten, eine Lizenz oder einen Vertrag.
+
+3. Bestätigen Sie. Die Meldung nennt das Objekt („Mit … verknüpft“).
+
+</Steps>
+
+Mit **Verknüpfung lösen** trennen Sie ein Dokument wieder von einem Objekt; das Dokument selbst bleibt.
+
+Die Karte **Dient als Nachweis für** zeigt, was das Dokument belegt, so weit Sie es sehen dürfen:
+
+- **Grundschutz++** und **Edition 2023**: eine Anforderung im Grundschutz-Check, an deren Stand Sie das Dokument gehängt haben (siehe [IT-Grundschutz](/guides/grundschutz/)),
+- **Beschaffung**: der unterschriebene Antrag (siehe [Beschaffung](/guides/beschaffung/)),
+- **Aussonderung**: der Löschnachweis (siehe [Aussonderung](/guides/aussonderung/)),
+- Verwendungen in Erweiterungen wie dem [ISMS-Add-on](/pro/isms/).
+
+## Löschen
+
+<Steps>
+
+1. Wählen Sie auf der Seite des Dokuments **Löschen**.
+
+2. Der Dialog „Dokument löschen?“ nennt, wofür das Dokument noch als Nachweis dient. Diese Verknüpfungen werden mit dem Löschen gelöst; das Audit-Log hält jede fest.
+
+3. Bestätigen Sie. Das Dokument wird mit allen Versionen endgültig gelöscht, die Dateien werden entfernt.
+
+</Steps>
+
+Nicht löschen lässt sich ein Dokument,
+
+- solange seine Aufbewahrungsfrist läuft: „Dieses Dokument ist bis … aufzubewahren und kann vorher nicht gelöscht werden.“,
+- das der Löschnachweis einer abgeschlossenen Aussonderung ist; Titel, Art und Datei bleiben dann auch unverändert,
+- das ein Nachweis ist, der erhalten bleiben muss, etwa ein freigegebener Beschluss oder eine erstattete Meldung, auch nicht nach Ablauf der Aufbewahrungsfrist.
+
+## Rechte
+
+| Rolle | Dokumente | Sieht bis |
+|---|---|---|
+| Administrator, Informationssicherheit | ansehen, hochladen, ändern, verknüpfen, löschen, Aufbewahrungsfrist verkürzen | Streng vertraulich |
+| Bearbeitung | ansehen, hochladen, ändern, verknüpfen, löschen | Vertraulich |
+| Datenschutz | ansehen, herunterladen | Streng vertraulich |
+| Prüfung | ansehen, herunterladen | Vertraulich |
+| Lesend | ansehen, herunterladen | Intern |
+
+- **Audit-Log:** Anlegen, Ändern, neue Versionen, Verknüpfungen, Löschen, jedes Herunterladen und jede Vorschau sowie Funde des Virenscanners.
+
+## Grenzen
+
+- Größte Datei: standardmäßig 25 MiB, vom Betreiber mit `SA_DOCUMENT_MAX_BYTES` bis 100 MiB einstellbar. Die Grenze nennt auch das Feld **Datei**.
+- Alle Versionen einer Organisation zusammen: standardmäßig 20 GiB (`SA_DOCUMENT_QUOTA_BYTES`), siehe [Konfiguration](/reference/konfiguration/).
+- Je Person höchstens 60 Uploads in der Stunde.
+- Titel höchstens 200 Zeichen, Dateinamen höchstens 255 Zeichen.
+- Ein Dokument wird beim Hochladen mit höchstens einem Objekt verknüpft; weitere Verknüpfungen fügen Sie auf seiner Seite hinzu.
+
+## Ergebnis prüfen
+
+- Das Dokument steht unter **Inventar › Dokumente** mit **Art**, **Vertraulichkeit**, **Aktuelle Version** und **Gültig bis**.
+- Die Version zeigt unter **Prüfung** „Auf Schadcode geprüft“, ohne Scanner „Ungeprüft“.
+- Das verknüpfte Objekt zeigt das Dokument in seinem Reiter **Dokumente** bzw. **Belege**.
+
+## Fehlerbehebung
+
+- **„Die Datei ist zu groß (höchstens …).“** Verkleinern Sie die Datei, etwa als PDF mit geringerer Auflösung, oder lassen Sie den Betreiber die Grenze erhöhen.
+- **„Dieser Dateityp ist nicht erlaubt.“** oder eine der Meldungen zu ausführbaren Dateien, HTML, alten Office-Formaten oder Makros: Speichern Sie die Datei als PDF.
+- **„Der Virenscanner ist gerade nicht erreichbar.“** Der Scanner ist eingetragen, läuft aber nicht; siehe [Fehlerbehebung](/reference/fehlerbehebung/).
+- **„Dieses Dokument gibt es nicht oder Sie haben keinen Zugriff.“** Das Dokument liegt über der Vertraulichkeitsstufe Ihrer Rolle oder wurde gelöscht.
+- **„Dieses Dokument wird an anderer Stelle noch gebraucht, etwa als Nachweis …“** Eine Erweiterung hält das Dokument als Nachweis fest. Lösen Sie es dort.
+- **Kein Feld „Datei“ beim Hochladen:** Die Dokumentenablage ist auf dem Server nicht eingerichtet.

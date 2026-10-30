@@ -1,0 +1,270 @@
+---
+title: Recording and importing assets
+description: Find assets in the list, create one or several at once, edit them, print labels, export them as CSV, import them from GLPI and delete them.
+head:
+  - tag: title
+    content: Recording and importing assets | SentryAssets Docs
+sidebar:
+  label: Assets
+  order: 50
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+Assets are the things you manage: servers, notebooks, switches, printers, phones, but also software or databases. Every asset has a category and a lifecycle and, if you like, a location, a responsible person, an inventory number and a protection requirement. Many devices appear on their own as soon as an [agent](/en/guides/agents/), the [collector](/en/guides/collector/) or the [Active Directory sync](/en/guides/active-directory/) reports them; everything else you create here by hand or import.
+
+Managing assets is part of the Community edition.
+
+## Prerequisites
+
+- **Viewing:** every role.
+- **Creating, editing, deleting and importing:** a role that may write the inventory, that is **Administrator**, **Information security** or **Editor** (see [Rights](#rights)).
+- Categories, locations and responsible persons are kept in the [master data](/en/guides/stammdaten/). To begin with, the categories that come with SentryAssets are enough.
+
+## The asset list
+
+Open **Assets › All assets**. Under **Assets**, the navigation also lists every category with its count; a click shows only that category with its subcategories.
+
+The list shows the columns **Asset** (name, category and inventory number), **Owner**, **Protection**, **Health**, **Status** and **Last seen** for each asset. **Protection** is the highest of the three values confidentiality, integrity and availability (maximum principle after BSI Standard 200-2). **Status** shows the lifecycle and, where needed, a note such as **Without owner**.
+
+### Searching and filtering
+
+- The **Search assets** field finds **Name, inventory number, host name, serial number or MAC address**.
+- The filters below narrow the list by **Category**, **Device class**, **Location** and **Cost center**. A location counts with everything below it, so a building with its floors and rooms.
+- The switches above the list show what needs attention, each with a count:
+
+| Switch | Shows |
+|---|---|
+| **All** | all assets |
+| **Without owner** | assets without a responsible person |
+| **Shadow IT** | assets in the category **Unassigned** without an agent and without a responsible person, such as devices from a network scan. Only for roles allowed to see agents; the others see these assets under **Without owner**. |
+| **Orphaned** | assets that have not reported for more than 30 days |
+
+These three notes apply only to assets in operation; nothing **Retired** or **Disposed** shows one.
+
+Tasks on the overview take you into the list with a ready filter, such as “Assets in operation whose support ends within 60 days or has ended”. **Remove filter** lifts it. When warranty, age and long silence become a task, you set under **Settings › Lifecycle rules**.
+
+### Assets needing attention
+
+The **Health** column shows the traffic light from the reports of the agent and of an existing monitoring: **Healthy**, **Warning**, **Critical** or **Unknown**. Assets with a warning or a critical state are gathered on the page **Assets needing attention**, the critical first. You reach it from the matching tasks on the overview.
+
+## Creating an asset
+
+<Steps>
+
+1. In the asset list, choose **Create asset**.
+
+2. Choose the **Category**. It decides which technical details and which fields of its own the form shows; phones, for instance, have no host name, software no serial number.
+
+3. Enter the **Name** (required, at most 200 characters).
+
+4. Leave the **Inventory number** empty if the category has a numbering: the asset gets the next number when saving. Without a numbering, enter one yourself if needed (at most 50 characters: letters, digits and `. _ / -` or spaces, starting and ending with a letter or digit).
+
+5. Choose the **Status**, that is the lifecycle: **Planned**, **Active**, **In maintenance**, **Retired** or **Disposed**. The default is **Active**.
+
+6. Choose **Location**, **Responsible** and **Cost center** as needed (see [Cost centers](/en/guides/kostenstellen/)).
+
+7. Under **Category fields**, fill in the category's own fields. Required fields are marked “(required)”.
+
+8. Under **Technical details**, add **Host name**, **MAC address**, **Serial number**, **Manufacturer** and **Model** as needed. The MAC address takes the common notations and turns them into `aa:bb:cc:dd:ee:ff`. While you type a **Manufacturer**, the field offers manufacturers from the suppliers or creates one there.
+
+9. Under **Protection requirement**, choose **normal**, **high**, **very high** or **not assessed** for each of **Confidentiality**, **Integrity** and **Availability**.
+
+10. Under **Suppliers**, choose **Bought from** and **Maintained by** as needed.
+
+11. Add **Notes** if you like, without passwords or other secrets, and choose **Create asset**.
+
+</Steps>
+
+The new asset then opens. If you change the category later, saving removes the values of fields the new category does not know; the form tells you so.
+
+### Several equal assets at once
+
+For ten equal phones or a set of monitors, enter a number from 1 to 100 under **Quantity** when creating. The button then reads, for example, **Create 10 assets**.
+
+- Each asset gets a running number in its name: “Phone” becomes “Phone 01” to “Phone 10”.
+- Each asset gets its own inventory number from the category's numbering; a number by hand is not possible here.
+- Host name, MAC address and serial number differ per device. Add them on each asset after creating.
+- Either all are created or none.
+
+## The asset in detail
+
+A click on an asset opens its page. At the top are the lifecycle, a note such as **Orphaned** and the buttons **Print label**, **Edit** and **Delete**. Below are the tabs:
+
+| Tab | Content |
+|---|---|
+| **Overview** | **Profile** with device class, type, inventory number, location, owner, cost center, system, **Last seen**, **Recorded on** and **Captured by** (person, agent or system, for imports the origin such as “GLPI · Network devices 42”); plus **Protection requirement** with **Overall (maximum)**, **Technical details**, **Category fields**, **Suppliers**, **State** and **Picture** |
+| **Health** | What the agent reports: processor, memory, disks, graphics and network with throughput, plus the **Security state** (disk encryption, antivirus, firewall, automatic updates, Secure Boot, screen lock). Only for roles allowed to see agents. |
+| **Software** | Installed software as the agent reports it |
+| **Relations** | What the asset depends on, runs on and belongs to |
+| **Documentation** | Instructions and runbooks for the asset, see [Documentation of assets and locations](/en/guides/dokumentation/) |
+| **Documents** | Linked documents |
+| **Contracts** | Linked contracts |
+| **History** | When the asset was created and changed, by whom (person, agent or system) and which fields changed, up to 200 entries. Values and persons are in the audit log. |
+
+Personal category fields are seen by authorised roles only; the others see the note “Personal fields (…) are visible to authorised roles only.”
+
+### Health and agent
+
+If no agent reports the asset, the **Health** tab reads “No agent for this asset”. Administrators find **Install an agent for this asset** there: the agent then reports as this asset instead of creating a new one (see [Agent for an existing asset](/en/guides/agents/#agent-for-an-existing-asset)).
+
+If an agent created a new asset although the device is already in the inventory, for instance as a virtual machine from the hypervisor, the card **Is this device in the inventory already?** asks. It suggests assets with the same name, host name, serial number or MAC address. **Move agent** lets the agent report as the chosen asset from then on; name, category and location there stay. With **Delete this asset afterwards**, the duplicate disappears; this cannot be undone.
+
+### Relations
+
+Under **Relations**, choose **Add relation**, then the kind under **This asset …**: **depends on**, **runs on**, **is connected to** or **is part of**. Search for the target asset and create the relation. At the target it appears the other way round, such as **is needed by** or **hosts**. **Remove relation** removes it again.
+
+### Picture
+
+A photo helps to recognise the device on site. On the **Picture** card, choose **Upload picture**. The picture is shrunk before the upload; where it was taken and other metadata are removed. JPEG or PNG up to 2 MB and at most 4096 pixels per side are allowed. **Replace picture** and **Remove picture** are next to it.
+
+## Editing an asset
+
+<Steps>
+
+1. Open the asset and choose **Edit**.
+
+2. Change the details in the **Edit asset** dialog.
+
+3. Choose **Save**.
+
+</Steps>
+
+The message “Changes saved” offers **Undo**. If the category requires an inventory number, it can be changed but not removed. If an asset has no number although its category has a numbering, **Assign number** on the asset's page assigns the next one.
+
+## Changing several assets at once
+
+<Steps>
+
+1. In the asset list, tick the assets with the box in front of each row, or all assets of the page with the box in the header. A page shows 50 assets.
+
+2. The **Bulk edit** bar appears at the bottom with the number of assets selected.
+
+3. Choose an action:
+   - **Set owner**, including **No owner**,
+   - **Set location**, including **No location**,
+   - **Set protection**: in the dialog, choose a value, **Not assessed** or **Unchanged** per security goal and confirm with **Apply**,
+   - **Print labels** (see below).
+
+4. **Cancel** clears the selection.
+
+</Steps>
+
+Owner and location apply at once. The message “… assets changed” offers **Undo**; it sets only the changed fields back to what they were. Only roles that may write see the selection and the bulk edit.
+
+## Inventory numbers and labels
+
+SentryAssets assigns inventory numbers from a category's **numbering**, such as `NB-2026-00042`. You set up a numbering under **Master data › Categories**, see [Inventory numbers](/en/guides/stammdaten/#inventory-numbers). The address `/assets/nr/<inventory number>` opens the asset with that number directly.
+
+### Printing labels
+
+<Steps>
+
+1. On an asset's page, choose **Print label**, or tick up to 100 assets in the list and choose **Print labels**.
+
+2. Under **Format**, choose:
+   - **A4 sheets, 70 × 37 mm** (3 × 8 labels per sheet),
+   - **Tape 24 mm**, **Tape 18 mm** or **Tape 12 mm, without QR code** for label makers,
+   - **DYMO LabelWriter, label 99012 (89 × 36 mm)**, **label 11354 (57 × 32 mm)** or **label 11352 (54 × 25 mm)**.
+
+3. Follow the note below the format, such as paper, no margins and 100 %, and choose **Print**.
+
+</Steps>
+
+Each label carries name, inventory number and a QR code that leads to the asset in SentryAssets. DYMO labels also carry the inventory number as a barcode; if it is too long for that, the QR code remains. The browser remembers the format chosen last. You scan under **Assets › Scan**; suitable devices are described under [Handheld scanners](/en/guides/scanner/).
+
+## Exporting as CSV
+
+In the asset list, choose **Export CSV**. The file holds every asset that matches the search and filters, not only the current page. With assets ticked, the button reads **Export selection (…)** and exports only those.
+
+- The columns: name, inventory number, category, device class, location, owner, lifecycle, state, protection requirement with the three security goals, host name, MAC address, serial number, manufacturer, model, manufacturer from the master data, bought from, maintained by, cost center and the times of last seen, creation and change in UTC; then the category fields.
+- Notes and personal category fields are never included, not even for roles allowed to see them: the file leaves the application.
+- The file is UTF-8 with semicolons, as Excel opens it. Cells a spreadsheet would run as a formula start with an apostrophe.
+- At most 10,000 assets per export. Every export is recorded in the audit log.
+
+## Importing from GLPI
+
+If you move from GLPI to SentryAssets, take the devices over with GLPI's CSV exports. There is no other CSV template for assets.
+
+<Steps>
+
+1. In GLPI, export a list such as “Network devices” via “Export › CSV”. Show the columns you want to take over there; the “Name” column is required.
+
+2. In the asset list, choose **Import from GLPI**.
+
+3. Under **List in GLPI**, choose the kind of list: **Network devices**, **Computers**, **Monitors**, **Printers**, **Phones**, **Devices** or **Other**.
+
+4. Under **CSV export**, choose the file. SentryAssets checks it and shows how many rows are new, already there or invalid.
+
+5. Under **Type → category**, map each GLPI type to a category.
+
+6. Under **Status → lifecycle**, check the proposals.
+
+7. Under **Location**, choose for each GLPI location an existing one, **Create (… levels)** or **No location**.
+
+8. Check the rows and the **Note** on invalid ones. Then choose **Create … assets**.
+
+</Steps>
+
+Name, type, location, manufacturer, model, serial number, inventory number, MAC address, comment and, where the category has the field, the firmware are taken over. What SentryAssets does not take over, the dialog names under “Not imported”. Either everything is created or nothing.
+
+Existing assets stay unchanged. SentryAssets recognises a device imported before by its GLPI ID, otherwise by inventory or serial number; it counts as **Existing** and is skipped. Afterwards the profile shows where it came from under **Origin**.
+
+## Deleting an asset
+
+<Steps>
+
+1. Open the asset and choose **Delete**.
+
+2. Confirm in the **Delete asset?** dialog with **Delete**.
+
+</Steps>
+
+The asset is deleted permanently, including its relations and its picture. The audit log keeps its last state. Deleting cannot be undone.
+
+If a device is just no longer used, better not delete it: set the lifecycle to **Retired** or dispose of it with proof of erasure, see [Disposal](/en/guides/aussonderung/). That way it stays traceable where it went.
+
+SentryAssets refuses to delete while something still needs the asset:
+
+| Message | What to do |
+|---|---|
+| “The asset is handed to a person. Take it back first, so who had it does not get lost.” | Take the asset back under **Employees › Asset handovers** ([Asset handovers](/en/guides/ausgaben/#taking-a-device-back)). |
+| “A disposal of the asset is in progress. Complete or cancel it before deleting the asset.” | Close or cancel the [disposal](/en/guides/aussonderung/). |
+| “The asset is a medical device. Its medical device book must be kept; dispose of it instead.” | With the [medical technology add-on](/en/pro/medizintechnik/), a medical device is kept; dispose of it. |
+
+## Rights
+
+| Role | Assets |
+|---|---|
+| Administrator, Information security, Editor | view, create, edit, change several, import, export, print labels, delete |
+| Data protection, Auditor, Read only | view, export, print labels |
+
+- **Health tab and Shadow IT filter:** only for roles allowed to see agents: **Administrator**, **Information security**, **Data protection** and **Auditor**.
+- **Personal category fields**, such as an IMEI: seen only by **Administrator**, **Information security**, **Editor** and **Data protection**.
+- <Badge text="Pro" variant="note" /> With [location rights](/en/pro/standortrechte/), people change and create assets only at their locations; elsewhere the asset reads “Can be changed only at your locations.”
+- **Audit log:** creating, changing and deleting, and every export with its filter and number of rows.
+
+## Limits
+
+- Name at most 200 characters, inventory number at most 50, host name at most 253, serial number, manufacturer and model at most 100 each, notes at most 10,000 characters.
+- Creating several: 1 to 100 assets at once. Bulk edit and labels: at most 100 assets.
+- CSV export: at most 10,000 assets.
+- GLPI import: file up to 700 kB, at most 1,000 rows and 100 columns, at most 200 different types, statuses or locations; at most 500 new locations per import and 2,000 in all.
+- Picture: JPEG or PNG up to 2 MB, at most 4096 pixels per side; one picture per asset.
+
+## Check the result
+
+- The asset is listed under **Assets › All assets** and in the navigation with its category.
+- The profile shows inventory number, location and owner.
+- After an import, the profile shows under **Origin** something like “GLPI · Network devices 42”.
+
+## Troubleshooting
+
+- **“You lack the permission for this. You change and create assets only at your locations …”** Choose a location where you may write, or contact the administration.
+- **“The category requires an inventory number. It can be changed but not removed.”** Enter a number or keep the current one.
+- **“Too many assets for one export. Please narrow the search or filter.”** Export in parts, for example per category or location.
+- **“The file has no "Name" column.”** Show the column in the GLPI list and export again.
+- **“The file is neither UTF-8 nor Windows-1252.”** Export the list from GLPI again and upload that file.
+- **“the category requires fields the import does not fill; choose another one”** Map the type to a category without required fields and add the fields later.
+- **“"Unassigned" is for discovery findings”** Choose another category for the type.
+- **“An asset of the file was created meanwhile. Nothing was imported; check again.”** Upload the file again; the new asset then counts as existing.

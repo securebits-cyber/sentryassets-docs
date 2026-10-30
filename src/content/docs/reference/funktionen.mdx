@@ -13,9 +13,13 @@ Diese Seite beschreibt die Community-Edition. Funktionen ab Pro stehen unter [Pr
 
 ## Übersicht und Aufgaben
 
+Anleitung: [Übersicht, Aufgaben und Berichte](/guides/uebersicht/).
+
 Die **Übersicht** ist die Startseite: der nächste sinnvolle Schritt, der Fortschritt im IT-Grundschutz, Kennzahlen im Vergleich zur Vorwoche, die Quellen der Erfassung und die **Aufgaben**. Aufgaben entstehen aus Fristen und Regeln, etwa auslaufende Lizenzen und Verträge, endender Support, fehlende Sicherungsnachweise, fällige Anforderungen oder Material unter Mindestbestand; mit den Add-ons auch Meldefristen von Datenpannen und Sicherheitsvorfällen, Betroffenenanfragen, die Registrierung nach NIS2, Prüfungen und Mängel der Medizintechnik und fällige Wiedervorlagen. Die Befehlspalette (`Strg + K`) findet Assets, Seiten und Aktionen; ein gescanntes Asset-Etikett oder eine gescannte EAN steht dort als erster Treffer und öffnet mit Enter das Asset oder den Artikel. Die Navigation gliedert sich in Bereiche (IT-Bestand, Netzwerk, Compliance, Auswertung und Verwaltung, dazu Bereiche der Add-ons): Der Bereich der aktuellen Seite steht offen, die übrigen klappen Sie mit ihrem Namen auf und zu, und der Browser merkt sich Ihre Wahl. Auf langen Seiten führt **Nach oben** unten rechts zurück zum Seitenanfang.
 
 ## Inventar
+
+Anleitungen: [Assets erfassen und importieren](/guides/assets/), [Stammdaten](/guides/stammdaten/), [Asset-Ausgaben und Sicherheitsschlüssel](/guides/ausgaben/).
 
 - **Assets** mit Kategorie, Standort, Verantwortlichen, Lebenszyklus (geplant, aktiv, in Wartung, außer Betrieb, entsorgt), Schutzbedarf je Schutzziel und Beziehungen zu anderen Assets.
 - **Kategorien** als Baum mit eigenen Feldern je Kategorie, etwa IMEI bei Mobilgeräten oder bei **Medizintechnik** die Risikoklasse nach MDR und die UDI-DI; Felder mit personenbezogenen Werten sind gekennzeichnet und nur für berechtigte Rollen sichtbar. Die Navigation listet die Kategorien mit ihrer Anzahl.
@@ -46,6 +50,8 @@ Der Abgleich mit dem **Active Directory** liest Computerobjekte per LDAPS (Port 
 
 ## Asset-Zustand
 
+Anleitung: [Asset-Zustand](/guides/uebersicht/) in der Übersicht, Meldungen eigener Skripte per [Status-Token](/guides/betrieb/).
+
 Eine Ampel je Asset (gesund, Warnung, kritisch, unbekannt) mit ihren Gründen, aus dem letzten Heartbeat des Agents mit festen Schwellen (Stille je Geräteklasse, Platte ab 90 %, Arbeitsspeicher ab 95 %) und aus Zuständen, die ein vorhandenes Monitoring meldet. Assets mit Handlungsbedarf stehen auf einer eigenen Seite und als Aufgaben in der Übersicht. Die Registerkarte **Zustand** im Asset zeigt CPU, Arbeitsspeicher, Platten, Netzwerkdurchsatz und Grafikkarte.
 
 **Sicherheitszustand der Geräte:** Der Agent meldet täglich je Schutzfunktion, ob sie an, aus, teilweise aktiv oder unbekannt ist: Datenträgerverschlüsselung, Virenschutz (mit dem Alter der Signaturen), Firewall, automatische Updates (mit dem Tag der letzten Updates), Secure Boot und Bildschirmsperre. Er liest nur Zustände, nie Schlüssel, Regeln, Funde oder Namen von Updates; was sich mit Bordmitteln nicht sicher feststellen lässt, bleibt „unbekannt“. Der Zustand steht in der Registerkarte **Zustand** und dient der Umsetzungshilfe im IT-Grundschutz als Vorschlag. Unter macOS folgt er mit dem Agent für macOS.
@@ -54,9 +60,13 @@ Eine Ampel je Asset (gesund, Warnung, kritisch, unbekannt) mit ihren Gründen, a
 
 ## IT-Grundschutz
 
+Anleitung: [IT-Grundschutz Schritt für Schritt](/guides/grundschutz/).
+
 Grundschutz++ und Edition 2023 mit geführtem Ablauf, Grundschutz-Check und Nachweisen, siehe [IT-Grundschutz](/guides/grundschutz/).
 
 ## Verwaltung
+
+Anleitungen: [Software, Lizenzen, Verträge und Zertifikate](/guides/lizenzen/), [Dokumente](/guides/dokumente/).
 
 - **Lizenzen:** Produkt, Hersteller, Lizenzmodell (je Gerät, je Benutzer, Volumen, gleichzeitige Nutzung, Abonnement, Standort), Plätze, Laufzeit und Kosten; Zuordnung zu Assets oder Personen, Überbelegung wird angezeigt; Lizenzschlüssel verschlüsselt und nur für Administration und Informationssicherheit sichtbar, jedes Mal mit Audit-Eintrag.
 - **Verträge:** Lieferant, Art, Laufzeit, Kündigungsfrist mit automatischer Verlängerung, Kosten mit Abrechnungsintervall; Erinnerungen vor Fristende; abgedeckte Assets, Lizenzen und Standorte.
@@ -72,6 +82,8 @@ Grundschutz++ und Edition 2023 mit geführtem Ablauf, Grundschutz-Check und Nach
 - **Dokumente** mit Versionen, Verschlüsselung je Datei, Vertraulichkeitsstufen, Aufbewahrungsfristen, optionaler Virenprüfung und Zuordnung zu Assets, Standorten, Lieferanten, Lizenzen und Verträgen.
 
 ## Berichte
+
+Anleitung: [Berichte](/guides/uebersicht/).
 
 - **Inventar:** Assets nach Lebenszyklus, Kategorie und Standort, Pflegebedarf (ohne Verantwortliche, verwaist, Support endet, Schatten-IT) und Abdeckung durch Agents; jede Zahl führt in die gefilterte Asset-Liste.
 - **Kosten:** monatliche und jährliche Kosten aus Lizenzen und Verträgen je Währung, Bereich und Posten, dazu nach Kostenstelle mit den Beschaffungen des Jahres, als CSV und zum Drucken.
@@ -94,6 +106,8 @@ Add-ons werden eigens lizenziert und erscheinen als eigene Gruppe in der Navigat
 Fristen und Wiedervorlagen der Add-ons erscheinen unter **Aufgaben**, in der Glocke und auf Wunsch per E-Mail, nur für Personen, die im Add-on ändern dürfen.
 
 ## Betrieb
+
+Anleitung: [Systemzustand, Audit-Log, Status-Tokens und Lifecycle-Regeln](/guides/betrieb/).
 
 - **Anmeldung:** lokale Konten mit Passwort und Pflicht-TOTP, angelegt von der Administration mit Einrichtungslink; optional OIDC mit jedem Identity Provider; sechs [Rollen](/reference/rollen/), ab Pro [anpassbar und um eigene Rollen ergänzbar](/pro/rollen-anpassen/); siehe [Einrichtung](/guides/einrichtung/#anmeldung-lokale-konten-und-oidc).
 - **Systemzustand:** Datenbank, Valkey, Job-Worker und Virenscanner, Warteschlange, Fristen der Agent-PKI, Speicher der Dokumente und letzte Prüfung der Audit-Kette.

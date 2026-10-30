@@ -1,0 +1,288 @@
+---
+title: Stammdaten
+description: Kategorien mit eigenen Feldern und Nummernkreisen, den Standortbaum, Verantwortliche und Lieferanten mit Ansprechpartnern anlegen und pflegen.
+head:
+  - tag: title
+    content: Stammdaten pflegen | SentryAssets Docs
+sidebar:
+  label: Stammdaten
+  order: 50
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+Stammdaten sind das Gerüst, an dem Ihre [Assets](/guides/assets/) hängen: in welche **Kategorie** ein Gerät gehört und welche Felder es dort hat, an welchem **Standort** es steht, wer **verantwortlich** ist und von welchem **Lieferanten** es stammt. Pflegen Sie diese Angaben einmal sauber, sind Listen, Filter, Etiketten und Berichte später verlässlich.
+
+Sie finden die Stammdaten in der Navigation im Bereich **Einstellungen** unter **Stammdaten**. Links stehen die Bereiche in drei Gruppen: **Inventar** mit **Kategorien** und **Standorte**, **Personen und Partner** mit **Verantwortliche** und **Lieferanten**, **Finanzen** mit **Kostenstellen** (siehe [Kostenstellen](/guides/kostenstellen/)).
+
+Die Stammdaten gehören zur Community-Edition.
+
+## Voraussetzungen
+
+- **Ansehen:** jede Rolle.
+- **Kategorien, Felder und Nummernkreise ändern:** **Administrator** oder **Informationssicherheit**.
+- **Standorte, Verantwortliche und Lieferanten ändern:** **Administrator**, **Informationssicherheit** oder **Bearbeitung**.
+- Einzelheiten stehen unter [Rechte](#rechte).
+
+## Kategorien
+
+Unter **Stammdaten › Kategorien** stehen links der **Kategoriebaum**, rechts die gewählte Kategorie mit ihren **Feldern** und ihren **Inventarnummern**. SentryAssets bringt Standardkategorien mit, etwa **Computer** mit **Laptop** und **Server**, **Netzwerk** mit **Switch** und **Firewall** oder **Telefone**; Sie ergänzen sie nach Bedarf.
+
+Der Baum hat bis zu drei Ebenen, etwa „Computer › Laptop › Entwicklung“. Eine Unterkategorie erbt die Felder und den Nummernkreis ihrer übergeordneten Kategorie. Die Navigation listet unter **Assets** jede Kategorie mit ihrer Anzahl.
+
+### Kategorie anlegen
+
+<Steps>
+
+1. Wählen Sie **Kategorie anlegen**, oder wählen Sie eine Kategorie und dann **Unterkategorie anlegen**.
+
+2. Tragen Sie den **Name** ein, etwa „Entwicklung“ (höchstens 100 Zeichen).
+
+3. Tragen Sie den **Schlüssel** ein: Kleinbuchstaben, Ziffern, Bindestrich, höchstens 50 Zeichen, etwa `entwicklung`. Er lässt sich später nicht ändern.
+
+4. Wählen Sie unter **Übergeordnete Kategorie** die Kategorie darüber oder **Keine (oberste Ebene)**.
+
+5. Wählen Sie die **Geräteklasse**: **Server**, **Virtuelle Maschinen**, **Clients**, **Netzwerk**, **Drucker und Peripherie**, **Mobilgeräte** oder **IoT / OT**. Bei einer Unterkategorie übernimmt **Von der übergeordneten Kategorie übernehmen** die Klasse darüber; **Keine (kein Gerät)** passt für Software oder Datenbanken.
+
+6. Wählen Sie **Kategorie anlegen**.
+
+</Steps>
+
+Die Geräteklasse bestimmt, welche technischen Angaben das Asset-Formular zeigt: Mobilgeräte haben keinen Hostnamen, Kategorien ohne Geräteklasse nur den Hersteller. Die Asset-Liste filtert nach ihr.
+
+Die Kategorie **Nicht zugeordnet** ist besonders: Dort kommen neue Geräte von Agents und aus Netzwerkscans an, bis Sie sie einer passenden Kategorie zuordnen. Sie lässt sich nicht löschen und verlangt keine Inventarnummer.
+
+### Empfohlene Felder
+
+Für die Standardkategorien gibt es empfohlene Felder, etwa Kaufdatum, Garantie, Firmware-Version oder Lizenzart. **Empfohlene Felder ergänzen** über dem Baum legt die fehlenden an; vorhandene Felder bleiben unverändert.
+
+### Eigene Felder
+
+Jede Kategorie kann eigene Felder haben, etwa die IMEI bei Mobilgeräten oder das Ende der Garantie bei Laptops. Sie erscheinen im Asset-Formular und im Steckbrief unter **Kategoriefelder**.
+
+<Steps>
+
+1. Wählen Sie die Kategorie und dann **Feld hinzufügen**.
+
+2. Tragen Sie die **Bezeichnung** ein, wie sie im Formular stehen soll (höchstens 100 Zeichen).
+
+3. Tragen Sie den **Schlüssel** ein: Kleinbuchstaben, Ziffern und Unterstrich, beginnend mit einem Buchstaben, höchstens 50 Zeichen, etwa `imei`. Er lässt sich später nicht ändern.
+
+4. Wählen Sie den **Feldtyp** (siehe Tabelle). Auch er lässt sich später nicht ändern.
+
+5. Legen Sie je nach Typ die Grenzen fest.
+
+6. Markieren Sie bei Bedarf **Pflichtfeld** und **Personenbezogen**.
+
+7. Wählen Sie **Speichern**.
+
+</Steps>
+
+| Feldtyp | Grenzen |
+|---|---|
+| **Text** | **Höchstlänge (Zeichen)** von 1 bis 1 000 |
+| **Zahl** | **Minimum** und **Maximum** |
+| **Datum** | – |
+| **Auswahl** | **Auswahloptionen**, eine Option je Zeile, höchstens 50, je höchstens 100 Zeichen |
+| **Ja/Nein** | – |
+
+Ein Feld der übergeordneten Kategorie steht in der Unterkategorie mit „geerbt von …“; ändern und löschen lässt es sich nur dort, wo es angelegt ist. **Feld bearbeiten** ändert Bezeichnung, Grenzen, **Pflichtfeld** und **Personenbezogen**. **Feld löschen** entfernt das Feld und seine gespeicherten Werte bei allen Assets der Kategorie und ihrer Unterkategorien.
+
+Für PINs, Passwörter, Seeds oder Recovery-Codes gibt es keine Felder: Solche Geheimnisse werden nie gespeichert.
+
+### Personenbezogene Felder
+
+Markieren Sie ein Feld als **Personenbezogen**, wenn sein Wert eine Person erkennbar macht, etwa IMEI oder Rufnummer eines Diensttelefons. Ein solches Feld trägt in der Liste der Felder das Zeichen **personenbezogen**. Seine Werte
+
+- sehen nur **Administrator**, **Informationssicherheit**, **Bearbeitung** und **Datenschutz**; die anderen Rollen sehen am Asset nur den Hinweis, dass es solche Felder gibt, und
+- stehen nie im CSV-Export der Asset-Liste.
+
+### Kategorie löschen
+
+Wählen Sie **Kategorie löschen** und bestätigen Sie. Das geht nur, wenn der Kategorie keine Assets und keine Unterkategorien zugeordnet sind; hängen Sie diese vorher um. Mit der Kategorie werden ihre Felddefinitionen gelöscht.
+
+### Inventarnummern
+
+Die Karte **Inventarnummern** einer Kategorie richtet ihren **Nummernkreis** ein. Er gilt auch für Unterkategorien ohne eigenen.
+
+<Steps>
+
+1. Wählen Sie die Kategorie und auf der Karte **Inventarnummern** die Schaltfläche **Nummernkreis einrichten**.
+
+2. Tragen Sie das **Präfix** ein, höchstens 30 Zeichen. `{jahr}` steht für das laufende Jahr, etwa `NB-{jahr}-`.
+
+3. Wählen Sie die **Stellen** (1 bis 10) und die **Nächste Nummer (Zähler)**.
+
+4. Prüfen Sie die Vorschau „Nächstes Asset erhält:“, etwa `NB-2026-00001`.
+
+5. Markieren Sie bei Bedarf **Pflicht für alle Assets der Kategorie** und speichern Sie.
+
+</Steps>
+
+Neue Assets erhalten die nächste Nummer, wenn Sie das Feld **Inventarnummer** leer lassen. Mit **Pflicht** hat jedes Asset der Kategorie eine Nummer: Beim Speichern erhalten vorhandene Assets ohne Nummer die nächsten Nummern, und die Nummer lässt sich ändern, aber nicht mehr leeren. Die Karte zeigt unter **Ohne Nummer**, wie viele Assets noch keine haben.
+
+**Entfernen** löst den Nummernkreis. Hat eine übergeordnete Kategorie einen Pflicht-Nummernkreis, erhalten Assets ohne Nummer danach Nummern daraus; das lässt sich nicht rückgängig machen, deshalb fragt SentryAssets vorher nach.
+
+## Standorte
+
+Unter **Stammdaten › Standorte** pflegen Sie den **Standortbaum**: wo Ihre Geräte stehen, von der Niederlassung bis zum Serverraum. Standorte nutzen die Asset-Liste als Filter, die [Inventur](/guides/inventur/), Racks, Verbrauchsmaterial und die Agents.
+
+Jeder Eintrag hat eine **Art**:
+
+| Art | Beispiel |
+|---|---|
+| **Standort** | Zentrale, Niederlassung Köln |
+| **Gebäude** | Haus A |
+| **Etage** | 2. OG |
+| **Raum** | Serverraum 2.14 |
+
+Die Reihenfolge ist Standort, Gebäude, Etage, Raum: Ein Gebäude liegt nie unter einem Raum. Gleiche Ebenen sind erlaubt, etwa ein Raum in einem Raum oder ein Gebäudeteil in einem Gebäude. Ein **Standort** hat zusätzlich einen **Standorttyp**: **Hauptstandort**, **Niederlassung**, **Rechenzentrum**, **Homeoffice** oder **Cloud-Region**.
+
+### Standort anlegen
+
+<Steps>
+
+1. Wählen Sie **Standort anlegen**, oder wählen Sie einen Standort und dann **Darunter anlegen**.
+
+2. Tragen Sie den **Name** ein, höchstens 200 Zeichen. Auf derselben Ebene ist jeder Name nur einmal möglich.
+
+3. Wählen Sie unter **Liegt in** den Eintrag darüber oder **Keinem (oberste Ebene)**.
+
+4. Wählen Sie die **Art** und bei einem Standort den **Standorttyp**.
+
+5. Tragen Sie bei Bedarf **Beschreibung** und **Adresse** (**Straße**, **Hausnummer**, **PLZ**, **Ort**, **Land**) ein und wählen Sie **Standort anlegen**.
+
+</Steps>
+
+### Was ein Standort zeigt
+
+Wählen Sie einen Standort im Baum. Die Reiter:
+
+- **Übersicht:** Zahl der **Assets** und **Racks** hier und darunter, die **Unterstandorte**, der **Steckbrief** und der **Schutzbedarf**. Der Schutzbedarf folgt dem Maximumprinzip des BSI-Standards 200-2: Ein Standort hat je Schutzziel den höchsten Schutzbedarf der Assets darin.
+- **Stammdaten:** die Angaben von oben, dazu
+  - **Verantwortung:** **Verantwortlich**, etwa die Leitung der Niederlassung, und **Ansprechpartner vor Ort**, etwa die Haustechnik, beide aus den Verantwortlichen,
+  - **Zutritt:** **Zutrittsschutz** von **Frei zugänglich** bis **Sicherheitsbereich mit protokolliertem Zutritt** und eine **Notiz zum Zutritt**, ohne Codes oder Passwörter,
+  - nur bei Standort und Gebäude: **Gefährdungen am Standort** nach den elementaren Gefährdungen des BSI, etwa **Hochwasser** (G 0.3, G 0.5) oder **Verkehrswege in der Nähe** (G 0.6), und die **Internetanbindung** mit **Art der Leitung**, Bandbreite und **Zweite Leitung vorhanden**.
+  
+  Wählen Sie **Speichern**; der Hinweis bietet **Rückgängig** an.
+- **Dokumentation**, **Dokumente** und **Verträge** zum Standort.
+- **Verbindungen:** wie Standorte untereinander verbunden sind. **Verbindung anlegen**, den anderen Standort wählen und die **Art**: **WAN (Anbieter)**, **VPN über das Internet**, **Eigene Leitung** oder **Richtfunk**, dazu bei Bedarf Bandbreite, Bezeichnung und Notiz. Die Verbindung erscheint bei beiden Standorten.
+- **Assets:** die Assets hier und darunter, mit einem Link in die gefilterte Asset-Liste.
+
+### Standort löschen
+
+Wählen Sie **Standort löschen** und bestätigen Sie. Personen, Agents und Rollout-Tokens mit diesem Standort verlieren ihn. Assets, Unterstandorte, Racks und Bestände an Verbrauchsmaterial müssen vorher an einen anderen Standort; sonst lehnt SentryAssets das Löschen mit einem passenden Hinweis ab. Ein Standort mit offener Inventur lässt sich nicht löschen.
+
+## Verantwortliche
+
+Unter **Stammdaten › Verantwortliche** stehen die Personen und Teams, die für Assets verantwortlich sind. Sie wählen sie am Asset unter **Verantwortlich**, an Standorten, bei Aussonderungen und bei Asset-Ausgaben.
+
+<Steps>
+
+1. Wählen Sie **Verantwortlichen anlegen**.
+
+2. Tragen Sie den **Name** ein, bei Bedarf **Funktion / Tätigkeit** (etwa IT-Leitung oder Hausmeister), **E-Mail** und **Abteilung**.
+
+3. Wählen Sie bei Bedarf den **Standort**, an dem die Person arbeitet.
+
+4. Tragen Sie bei Bedarf das **Austrittsdatum (optional)** ein, den letzten Arbeitstag. 14 Tage vorher erinnert SentryAssets daran, ausgegebene Assets zurückzunehmen.
+
+5. Speichern Sie.
+
+</Steps>
+
+Ein Klick auf eine Person öffnet ihre Seite mit **Ausgegeben** (welche Assets sie derzeit hat) und **Verantwortlich für** (für welche Assets sie eingetragen ist). Name, Funktion, E-Mail und Abteilung sind personenbezogen; das Audit-Log hält Änderungen daran nur als „geändert“ fest.
+
+Löschen Sie eine Person, sind ihre Assets danach nicht zugewiesen. Hat sie noch ausgegebene Assets oder wird sie an anderer Stelle gebraucht, etwa für eine Benennung, lehnt SentryAssets das Löschen ab; nehmen Sie die Assets zuerst zurück.
+
+<Badge text="Pro" variant="note" /> Ab Pro gleicht SentryAssets die Verantwortlichen mit den [Benutzern aus dem Active Directory](/pro/active-directory/) ab und führt durch [Ein- und Austritte](/pro/ein-und-austritte/).
+
+## Lieferanten
+
+Unter **Stammdaten › Lieferanten** stehen Hersteller, Händler und Dienstleister. Am Asset verknüpfen Sie sie als **Hersteller**, **Gekauft bei** und **Wartung durch**.
+
+### Lieferanten anlegen
+
+<Steps>
+
+1. Wählen Sie **Lieferanten anlegen**.
+
+2. Tragen Sie den **Name** ein und wählen Sie unter **Art** mindestens eine: **Hersteller**, **Händler** oder **Dienstleister**. Ein Lieferant kann mehrere Arten haben, etwa Händler und Dienstleister.
+
+3. Ergänzen Sie bei Bedarf Adresse, **Kundennummer**, **Website**, **Support-Seite**, **Support-E-Mail**, **Support-Telefon** und **Notiz**. Adressen im Netz nur mit `https://`; in die Notiz gehören keine Passwörter oder Zugangsdaten.
+
+4. Speichern Sie.
+
+</Steps>
+
+Schneller geht es aus dem Asset-Formular: Die Auswahl eines Lieferanten bietet etwa **Neuen Händler anlegen …** an. Dort genügen Name und Art; den Rest ergänzen Sie später.
+
+Die Liste sucht über **Lieferanten suchen** und filtert nach Art sowie nach **Aktiv** oder **Archiviert**. Die Seite eines Lieferanten hat die Reiter **Übersicht**, **Ansprechpartner**, **Assets** (mit **Verknüpft als**), **Dokumente** und **Verträge**.
+
+### Lieferanten importieren
+
+<Steps>
+
+1. Wählen Sie **Importieren** und bei Bedarf **Vorlage herunterladen**.
+
+2. Füllen Sie eine Zeile je Lieferant. Pflicht sind **Name** und **Art** (Hersteller, Händler oder Dienstleister, mehrere durch Komma getrennt).
+
+3. Laden Sie die Datei unter **CSV-Datei** hoch. Die Vorschau zeigt, wie viele Zeilen neu, schon vorhanden oder fehlerhaft sind.
+
+4. Wählen Sie **… Lieferanten anlegen**.
+
+</Steps>
+
+Vorhandene Lieferanten werden nicht verändert. Die Datei hat höchstens 500 Zeilen und 1 MB, als UTF-8 oder Windows-1252.
+
+### Ansprechpartner
+
+Im Reiter **Ansprechpartner** wählen Sie **Ansprechpartner anlegen** und tragen **Name**, **Funktion**, **Dienstliche E-Mail** und **Dienstliches Telefon** ein. Unter **Rollen** wählen Sie **Vertrieb**, **Support**, **Notfallkontakt** oder **Datenschutz**. Erfassen Sie nur dienstliche Kontaktdaten. Eine Person kann bei mehreren Lieferanten stehen; sie zeigt dann „Auch bei: …“.
+
+Ansprechpartner sind personenbezogen:
+
+- **Auskunft exportieren** lädt herunter, was zu dem Ansprechpartner gespeichert ist, etwa für eine Auskunft nach Art. 15 DSGVO. Der Export steht im Audit-Log.
+- Gehört ein Ansprechpartner zu keinem aktiven Lieferanten mehr, schlägt die Liste ihn unter **Zur Löschung vorgeschlagen** vor.
+- Das Audit-Log hält fest, welche Felder geändert wurden, aber nicht die Werte.
+
+### Archivieren statt löschen
+
+Arbeiten Sie mit einem Lieferanten nicht mehr, wählen Sie **Archivieren**. Er bleibt mit seinen Verknüpfungen erhalten, wird aber für neue nicht mehr angeboten. **Wiederherstellen** nimmt das zurück. **Löschen** geht nur, solange der Lieferant mit keinem Asset und keinem Ansprechpartner verknüpft ist.
+
+## Rechte
+
+| Rolle | Kategorien, Felder, Nummernkreise | Standorte | Verantwortliche | Lieferanten | Ansprechpartner |
+|---|---|---|---|---|---|
+| Administrator, Informationssicherheit | ansehen, ändern | ansehen, ändern | ansehen, ändern | ansehen, ändern | ansehen, ändern |
+| Bearbeitung | ansehen | ansehen, ändern | ansehen, ändern | ansehen, ändern | ansehen, ändern |
+| Datenschutz | ansehen | ansehen | ansehen | ansehen | ansehen |
+| Prüfung, Lesend | ansehen | ansehen | ansehen | ansehen | – |
+
+- **Personenbezogene Kategoriefelder** sehen nur Administrator, Informationssicherheit, Bearbeitung und Datenschutz.
+- <Badge text="Pro" variant="note" /> Mit [Standortrechten](/pro/standortrechte/) ändern Personen nur an ihren Standorten. Verantwortliche löschen kann dann nur, wer an keinen Standort gebunden ist.
+- Welche Rolle was darf, steht unter [Rollen](/reference/rollen/); ab Pro lassen sich Rollen anpassen.
+
+## Grenzen
+
+- Kategorien: höchstens drei Ebenen und 500 Kategorien je Organisation, je Kategorie höchstens 50 Felder.
+- Nummernkreise: Präfix höchstens 30 Zeichen, 1 bis 10 Stellen; ein Speichern nummeriert höchstens 1 000 Assets auf einmal.
+- Standorte: höchstens 2 000 je Organisation; Name höchstens 200 Zeichen, Beschreibung höchstens 2 000, Notiz zum Zutritt höchstens 500; Bandbreite 1 bis 100 000 Mbit/s; höchstens 500 Verbindungen.
+- Lieferanten: Import höchstens 500 Zeilen und 1 MB je Datei.
+
+## Ergebnis prüfen
+
+- Die neue Kategorie steht im Kategoriebaum und in der Navigation unter **Assets**; im Asset-Formular erscheinen ihre Felder unter **Kategoriefelder**.
+- Die Vorschau des Nummernkreises zeigt die Nummer, die das nächste Asset erhält.
+- Der Standort steht im Standortbaum mit seiner Art und lässt sich in der Asset-Liste als Filter wählen.
+- Verantwortliche und Lieferanten erscheinen im Asset-Formular zur Auswahl.
+
+## Fehlerbehebung
+
+- **„Die Kategorie ist noch in Gebrauch: Hängen Sie zuerst ihre Assets und Unterkategorien um. …“** Ordnen Sie die Assets einer anderen Kategorie zu und verschieben oder löschen Sie die Unterkategorien.
+- **„„Nicht zugeordnet“ kann keine Nummer verlangen: Dort kommen neue Geräte von Agents an.“** Richten Sie den Pflicht-Nummernkreis in einer anderen Kategorie ein.
+- **„Mehr als 1 000 Assets haben noch keine Nummer. …“** Richten Sie den Pflicht-Nummernkreis zuerst in Unterkategorien mit weniger Assets ein.
+- **„Diesen Namen gibt es auf dieser Ebene schon.“** Wählen Sie für den Standort einen anderen Namen oder eine andere Ebene.
+- **„Ein Standort liegt nie unter einer tieferen Ebene: …“** Wählen Sie eine passende **Art** oder einen anderen Eintrag unter **Liegt in**.
+- **„Dem Standort sind noch Assets zugeordnet. Hängen Sie diese zuerst um.“** Setzen Sie in der Asset-Liste über **Standort setzen** einen anderen Standort.
+- **„… ist noch mit Assets oder Ansprechpartnern verknüpft. Archivieren Sie den Lieferanten stattdessen.“** Wählen Sie **Archivieren**.
+- **„Die Kopfzeile enthält eine unbekannte Spalte. Verwenden Sie die Vorlage.“** Laden Sie mit **Vorlage herunterladen** die Vorlage und übernehmen Sie deren Kopfzeile.

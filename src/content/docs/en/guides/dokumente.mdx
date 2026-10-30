@@ -1,0 +1,206 @@
+---
+title: Documents
+description: Store contracts, receipts, manuals and evidence encrypted, link them with assets, keep versions, set dates and use them as evidence.
+head:
+  - tag: title
+    content: Document store with versions | SentryAssets Docs
+sidebar:
+  label: Documents
+  order: 50
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+**Inventory › Documents** keeps all of your organisation's files in one place: contracts, receipts, manuals, certificates and evidence. Each document has a kind, a confidentiality level, optionally a validity and a retention date, and every new file becomes a new version. You link documents with assets, locations, suppliers, licences and contracts and use them as evidence, for instance in the Grundschutz check.
+
+The document store is part of the Community edition.
+
+<Aside type="note" title="Documents or documentation?">
+This page describes uploaded files. Guides, runbooks and emergency plans that you write in Markdown right in SentryAssets live in the **Documentation** tab of an asset or location; see [Documentation on assets and locations](/en/guides/dokumentation/).
+</Aside>
+
+## Prerequisites
+
+- To upload and change: **Administrator**, **Information security** or **Editor**. All other roles only read (see [Rights](#rights)).
+- The operator has set up the document storage. Without it, the page reads “Document storage is not set up on this server. Metadata can be added, files cannot.”
+- Recommended: a [virus scanner](/en/reference/konfiguration/#virus-scanner).
+
+## Uploading a document
+
+<Steps>
+
+1. Open **Inventory › Documents** and choose **Upload document**.
+
+2. Enter a **Title**.
+
+3. Choose the **Kind**: **Contract**, **Receipt**, **Manual**, **Evidence**, **Certificate** or **Other**.
+
+4. Choose the **Confidentiality**: **Public**, **Internal**, **Confidential** or **Strictly confidential**. Only levels you may see yourself are offered.
+
+5. If needed, enter **Valid until**, **Retain until** and a person under **Responsible**.
+
+6. Under **File**, choose the file. Allowed are PDF, images (PNG, JPEG), office documents, text or CSV.
+
+7. Under **Link to (optional)**, choose an asset, location, supplier, licence or contract the document belongs to.
+
+8. Save. The message “Document uploaded” confirms it.
+
+</Steps>
+
+The file is optional; a document without one shows “No file yet”, and you add it later as a version.
+
+It is quicker from the object: assets, locations, suppliers, licences and contracts have a **Documents** tab. Whatever you upload there is linked with that object straight away.
+
+### Kinds
+
+| Kind | For |
+|---|---|
+| **Contract** | contracts, such as maintenance or leasing contracts |
+| **Receipt** | invoices and delivery notes |
+| **Manual** | the manufacturer's operating and installation guides |
+| **Evidence** | proof of an implementation, such as a decision or an erasure log |
+| **Certificate** | certificates and test certificates |
+| **Other** | everything else |
+
+There is also the kind **Documentation** for Markdown pages from the **Documentation** tab. It is not offered when uploading, and a document neither changes into this kind nor out of it.
+
+### Files that are not allowed
+
+SentryAssets checks the content of every file, not just its extension, and refuses:
+
+- executable files,
+- HTML, SVG and XML files,
+- old office formats (`.doc`, `.xls`); save them as PDF or in a current office format,
+- files with macros or embedded programs,
+- empty files.
+
+## Confidentiality and encryption
+
+The confidentiality decides who sees a document at all. A document above your role's level appears nowhere: not in the list, not in the search, not as a file.
+
+| Role | Sees documents up to |
+|---|---|
+| Administrator, Information security, Data protection | **Strictly confidential** |
+| Editor, Auditor | **Confidential** |
+| Read only | **Internal** |
+
+New documents are **Internal**. Nobody can set a document to a level they could not see afterwards. More under [Confidentiality of documents](/en/reference/rollen/#confidentiality-of-documents).
+
+Each file is encrypted before it is stored, with a key of its own per version, which in turn is encrypted with the installation's master key. On disk it lies under a random name; the original file name is only a detail of the document. Without the master key the documents are lost; see [The master key](/en/guides/sicherung/#the-master-key).
+
+## Versions
+
+<Steps>
+
+1. Open the document from the list.
+
+2. Choose **Upload new version** and choose the file.
+
+3. The message “New version uploaded” confirms it.
+
+</Steps>
+
+The **Versions** table shows for each version **Version**, **File** with its **SHA-256** checksum, **Size**, **Uploaded** and **Check**. The list of documents shows the **Current version**. Older versions are kept and can still be downloaded.
+
+You change title, kind, confidentiality, dates and the responsible person with **Edit**.
+
+## Valid until and Retain until
+
+- **Valid until** is the expiry date of the content, such as a certificate or a test certificate. If it falls within the next 30 days or has passed, the task “… proofs expire within 30 days” appears on the [overview](/en/guides/uebersicht/). The filter **Validity expiring** shows these documents.
+- **Retain until** is the legal or contractual retention period. Until that day the document cannot be deleted. The period can be extended; only **Administrator** and **Information security** can shorten or remove it, after a typo for instance.
+
+The filter **Retention expired** shows documents whose period is over: “These documents are past their retention date and can be deleted.” Deleting is done by hand only.
+
+## Malware scan
+
+If a virus scanner is set up, SentryAssets scans every file before storing it:
+
+- If the scanner finds malware, the file is not stored: “The scanner found malware. The file was not stored.” The audit log records the finding.
+- If the scanner cannot be reached right now, the upload is refused rather than stored unchecked: “The malware scanner is not reachable right now. Please try again later.”
+- Scanned versions show “Scanned for malware” under **Check**.
+
+<Aside type="caution" title="Without a virus scanner">
+If no scanner is set up, the page reads: “Uploaded files are not scanned for malware because no scanner is set up.” The versions are then **Not scanned**. If the operator sets up a scanner later, SentryAssets scans the earlier files. Infected ones then show “Malware found” and “Blocked, cannot be fetched”. Setup: [Virus scanner](/en/reference/konfiguration/#virus-scanner).
+</Aside>
+
+## Preview and download
+
+In the **Versions** table you download any version with **Download**. Images (PNG, JPEG) can also be opened right in the page with **Preview**; other file types have no preview. A version with malware can be neither viewed nor downloaded.
+
+Every download and every preview is recorded in the audit log.
+
+## Linking and using as evidence
+
+The **Linked with** card shows which objects a document belongs to.
+
+<Steps>
+
+1. On the document's page, choose **Link**.
+
+2. Under **Choose an object**, choose an asset, location, supplier, licence or contract.
+
+3. Confirm. The message names the object (“Linked with …”).
+
+</Steps>
+
+**Remove link** separates a document from an object again; the document itself stays.
+
+The **Serves as evidence for** card shows what the document backs, as far as you may see it:
+
+- **Grundschutz++** and **Edition 2023**: a requirement in the Grundschutz check whose state you attached the document to (see [IT-Grundschutz](/en/guides/grundschutz/)),
+- **Procurement**: the signed request (see [Procurement](/en/guides/beschaffung/)),
+- **Disposal**: the proof of erasure (see [Disposal](/en/guides/aussonderung/)),
+- uses in extensions such as the [ISMS add-on](/en/pro/isms/).
+
+## Deleting
+
+<Steps>
+
+1. On the document's page, choose **Delete**.
+
+2. The dialog “Delete document?” names what the document still serves as evidence for. Deleting removes these links; the audit log records each.
+
+3. Confirm. The document is deleted permanently with all versions, and the files are removed.
+
+</Steps>
+
+A document cannot be deleted
+
+- while its retention period runs: “This document must be kept until … and cannot be deleted before.”,
+- if it is the proof of erasure of a closed disposal; its title, kind and file then stay unchanged too,
+- if it is evidence that must be kept, such as an approved decision or a report made, not even after its retention period.
+
+## Rights
+
+| Role | Documents | Sees up to |
+|---|---|---|
+| Administrator, Information security | view, upload, change, link, delete, shorten the retention period | Strictly confidential |
+| Editor | view, upload, change, link, delete | Confidential |
+| Data protection | view, download | Strictly confidential |
+| Auditor | view, download | Confidential |
+| Read only | view, download | Internal |
+
+- **Audit log:** creating, changing, new versions, links, deleting, every download and preview, and findings of the virus scanner.
+
+## Limits
+
+- Largest file: 25 MiB by default, adjustable by the operator with `SA_DOCUMENT_MAX_BYTES` up to 100 MiB. The **File** field names the limit too.
+- All versions of an organisation together: 20 GiB by default (`SA_DOCUMENT_QUOTA_BYTES`), see [Configuration](/en/reference/konfiguration/).
+- At most 60 uploads per person and hour.
+- Titles at most 200 characters, file names at most 255.
+- When uploading, a document is linked with at most one object; you add further links on its page.
+
+## Check the result
+
+- The document is listed under **Inventory › Documents** with **Kind**, **Confidentiality**, **Current version** and **Valid until**.
+- The version shows “Scanned for malware” under **Check**, without a scanner “Not scanned”.
+- The linked object shows the document in its **Documents** tab.
+
+## Troubleshooting
+
+- **“The file is too large (at most …).”** Make the file smaller, as a PDF with a lower resolution for instance, or have the operator raise the limit.
+- **“This file type is not allowed.”** or one of the messages about executables, HTML, old office formats or macros: save the file as PDF.
+- **“The malware scanner is not reachable right now.”** The scanner is configured but not running; see [Troubleshooting](/en/reference/fehlerbehebung/).
+- **“This document does not exist or you have no access to it.”** The document is above your role's confidentiality level or was deleted.
+- **“This document is still needed elsewhere, as evidence for instance …”** An extension holds the document as evidence. Release it there.
+- **No “File” field when uploading:** the document storage is not set up on the server.

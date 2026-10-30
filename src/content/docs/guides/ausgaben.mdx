@@ -1,0 +1,284 @@
+---
+title: Asset-Ausgaben und Sicherheitsschlüssel
+description: Geräte an Personen ausgeben, das Protokoll unterschreiben lassen, Rücknahme und Verlust festhalten und YubiKeys, Nitrokeys und Smartcards verwalten.
+head:
+  - tag: title
+    content: Asset-Ausgaben und Sicherheitsschlüssel | SentryAssets Docs
+sidebar:
+  label: Ausgaben und Schlüssel
+  order: 50
+---
+
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
+
+Laptops, Telefone, Schlüssel und Sicherheitsschlüssel gehören der Organisation, sind aber bei einzelnen Personen. Unter **Mitarbeitende › Asset-Ausgaben** halten Sie fest, was an wen ausgegeben ist, seit wann und mit welchem unterschriebenen Protokoll. Verlässt jemand die Organisation, wissen Sie so, was zurückkommen muss.
+
+Für Sicherheitsschlüssel wie YubiKeys, Nitrokeys und Smartcards führt SentryAssets zusätzlich, was ein Schlüssel kann, bei welchen Diensten er registriert ist und was bei einem Verlust zu tun ist.
+
+Ausgaben und Sicherheitsschlüssel gehören zur Community-Edition. Was Pro ergänzt, steht unter [Was zu Pro gehört](#was-zu-pro-gehört).
+
+## Voraussetzungen
+
+- Eine Rolle mit Schreibrecht für Ausgaben: **Administrator**, **Informationssicherheit** oder **Bearbeitung**. **Datenschutz** und **Prüfung (nur lesend)** sehen Ausgaben nur, **Lesend** sieht sie nicht (siehe [Rechte](#rechte)).
+- Die Person steht unter **Stammdaten › Verantwortliche**. Tragen Sie dort das **Austrittsdatum (optional)** ein, damit SentryAssets 14 Tage vorher an die Rückgabe erinnert.
+- Das Asset ist im Inventar angelegt und weder ausgesondert noch entsorgt.
+- Für das unterschriebene Protokoll: die Möglichkeit, Dokumente unter **Dokumente** hochzuladen; für das Protokoll mit Briefkopf ein [Logo der Organisation](/guides/beschaffung/#logo-der-organisation-für-die-druckvorlage).
+
+## Gerät ausgeben
+
+<Steps>
+
+1. Öffnen Sie das Asset. Die Karte **Ausgabe** zeigt „Derzeit an niemanden ausgegeben.“
+
+2. Wählen Sie **Ausgeben**.
+
+3. Wählen Sie unter **Person** die Person aus den Verantwortlichen.
+
+4. Prüfen Sie **Ausgegeben am**. Voreingestellt ist heute; eine nachträglich erfasste Ausgabe behält so ihren echten Tag.
+
+5. Tragen Sie bei Bedarf eine **Notiz** ein, etwa mitgegebenes Zubehör. Passwörter oder PINs gehören nicht hierher.
+
+6. Bestätigen Sie mit **Ausgeben**.
+
+</Steps>
+
+Die Meldung bietet danach **Protokoll drucken** und **Später** an. Die Karte **Ausgabe** zeigt nun „Ausgegeben an … seit …“ mit einem Link auf das **Ausgabeprotokoll**.
+
+Ein Asset ist immer nur bei einer Person. Steht sein Lebenszyklus auf ausgesondert oder entsorgt, wird es nicht ausgegeben; die Karte nennt dann den Grund.
+
+## Ausgabeprotokoll drucken und unterschreiben
+
+Das Protokoll ist Ihr Nachweis, dass die Person das Gerät erhalten hat.
+
+<Steps>
+
+1. Wählen Sie in der Karte **Ausgabe** das **Ausgabeprotokoll** oder direkt nach der Ausgabe **Protokoll drucken**.
+
+2. Prüfen Sie die Angaben: **Gerät**, **Inventarnummer**, **Hersteller**, **Modell**, **Seriennummer**, dazu **Person**, **Abteilung** und **Funktion** nach dem Stand der Stammdaten.
+
+3. Wählen Sie **Drucken**. Im Druckdialog des Browsers speichern Sie das Protokoll auch als PDF.
+
+4. Lassen Sie beide Seiten unterschreiben: die **Unterschrift der empfangenden Person** und die **Unterschrift der ausgebenden Person**, mit **Ort, Datum**.
+
+5. Scannen Sie das unterschriebene Protokoll und laden Sie es unter **Dokumente** hoch.
+
+6. Wählen Sie in der Karte **Ausgabe** **Unterschriebenes Protokoll zuordnen**, suchen Sie das Dokument und wählen Sie **Zuordnen**.
+
+</Steps>
+
+Die Karte zeigt danach „Unterschrieben: …“ mit einem Link auf das Dokument. Das Protokoll enthält eine feste Erklärung: Die Person geht sorgsam mit dem Gerät um, nutzt es nur dienstlich, gibt es spätestens beim Austritt zurück und meldet Verlust oder Beschädigung sofort.
+
+## Gerät zurücknehmen
+
+<Steps>
+
+1. Öffnen Sie das Asset und wählen Sie in der Karte **Ausgabe** **Zurücknehmen**. Alternativ wählen Sie **Zurücknehmen** auf der Seite der Person.
+
+2. Wählen Sie den **Zustand**: **In Ordnung**, **Beschädigt** oder **Verloren**.
+
+3. Prüfen Sie **Zurück am**. Der Tag darf nicht vor der Ausgabe liegen.
+
+4. Tragen Sie bei Bedarf eine **Notiz** ein.
+
+5. Bestätigen Sie mit **Zurücknehmen**.
+
+</Steps>
+
+Die Meldung bietet wieder **Protokoll drucken** an, diesmal das **Rücknahmeprotokoll** mit der **Unterschrift der zurückgebenden Person** und der **Unterschrift der annehmenden Person**. Es hält fest, dass das Gerät im genannten Zustand zurückgegeben wurde und dienstliche Daten darauf nach den Vorgaben der Organisation gelöscht werden.
+
+Die Ausgabe steht danach unter **Frühere Ausgaben** auf der Karte, mit Zeitraum, Zustand und Link auf das Rücknahmeprotokoll.
+
+### Rücknahme rückgängig machen
+
+War die Rücknahme ein Versehen, wählen Sie **Rückgängig** in der Meldung. Das geht nur für Ihre eigene Rücknahme und nur 15 Minuten lang, solange das Asset nicht wieder ausgegeben, das Rücknahmeprotokoll nicht zugeordnet und die Person nicht gelöscht ist. Danach geben Sie das Asset bei Bedarf neu aus.
+
+### Verlust und Schaden
+
+- **Beschädigt** wird in der Liste und auf der Karte markiert. Für eine Reparatur oder Aussonderung gehen Sie danach wie gewohnt vor, etwa mit der [Aussonderung](/guides/aussonderung/).
+- **Verloren:** Sperren Sie Zugänge, die an dem Gerät hängen, und prüfen Sie, ob ein Sicherheitsvorfall vorliegt. Eine Rücknahme als „Verloren“ lässt sich nicht rückgängig machen.
+- Ist das Gerät ein Sicherheitsschlüssel, gilt er mit „Verloren“ als verloren, und SentryAssets legt die [Schritte nach dem Verlust](#verlust-eines-schlüssels) an.
+
+## Übersicht offener Ausgaben
+
+**Mitarbeitende › Asset-Ausgaben** listet die Ausgaben mit **Asset**, **Person**, **Ausgegeben am** und **Zurück am**. Ein Klick auf ein Datum öffnet das jeweilige Protokoll. Oben wählen Sie die Ansicht:
+
+| Ansicht | Zeigt |
+|---|---|
+| **Ausgegeben** | alles, was derzeit bei Personen ist |
+| **Austritt bald** | Ausgaben an Personen, die in den nächsten 14 Tagen austreten oder schon ausgetreten sind |
+| **Alle** | auch zurückgenommene Ausgaben |
+
+Ein Klick auf den Namen öffnet die Seite der Person. Sie zeigt unter **Ausgegeben**, was die Person derzeit hat, unter **Verantwortlich für** die Assets, für die sie eingetragen ist, und unter **Zurückgenommen** die früheren Ausgaben. Mit Austrittsdatum nennt die Seite, wie viele Assets vor dem Austritt noch zurückkommen müssen.
+
+Behalten noch Personen etwas, die bald austreten, erscheint unter **Aufgaben** „… Asset ist noch bei Personen, die bald austreten“. Diese Aufgabe sehen nur Rollen mit Recht auf personenbezogene Felder, weil sie verrät, wer geht. Per E-Mail bekommen Sie sie mit der Kategorie **Ausgaben und Sicherheitsschlüssel** (siehe [Benachrichtigungen](/guides/benachrichtigungen/#benachrichtigungen-abonnieren)).
+
+## Sicherheitsschlüssel
+
+Die Seite **Sicherheitsschlüssel** erreichen Sie über **Assets** und die Kategorie **Sicherheitsschlüssel** oder mit `Strg + K` und **Zu den Sicherheitsschlüsseln**. Sie zeigt je Schlüssel, **Bei** wem er ist (oder „auf Lager“), seinen **Zustand** und die **Firmware**.
+
+<Aside type="caution" title="Keine Geheimnisse">
+PINs, PUKs, Management-Keys, OTP-Seeds und Wiederherstellungscodes gehören nicht in SentryAssets; dafür gibt es bewusst keine Felder.
+</Aside>
+
+### Schlüssel anlegen
+
+<Steps>
+
+1. Öffnen Sie die Seite **Sicherheitsschlüssel** und wählen Sie **Schlüssel anlegen**.
+
+2. Füllen Sie das Formular wie bei jedem Asset aus, mindestens den Namen. Tragen Sie Hersteller und Modell genau ein, etwa „Yubico“ und „YubiKey 5C NFC“; danach richten sich die [Firmware-Hinweise](#firmware-hinweise).
+
+3. Speichern Sie. SentryAssets öffnet die Seite des neuen Schlüssels.
+
+4. Wählen Sie in der Karte **Sicherheitsschlüssel** **Angaben erfassen**.
+
+5. Wählen Sie die **Bauform**, etwa **USB-C und NFC** oder **Smartcard**, und die **Funktionen**: **FIDO2/WebAuthn**, **FIDO U2F**, **PIV (Smartcard)**, **OpenPGP**, **OTP**.
+
+6. Tragen Sie die **Firmware** ein, nur die Versionsnummer wie `5.4.3`.
+
+7. Setzen Sie **Ersatzschlüssel**, wenn es der zweite Schlüssel einer Person für den Fall eines Verlusts ist, und speichern Sie.
+
+</Steps>
+
+Diese Angaben gibt es nur für Assets der Kategorie „Sicherheitsschlüssel“ und ihrer Unterkategorien.
+
+### Schlüssel ausgeben
+
+Einen Schlüssel geben Sie wie jedes Gerät in der Karte **Ausgabe** aus, mit [Protokoll](#ausgabeprotokoll-drucken-und-unterschreiben). Ausgegeben wird nur ein Schlüssel im Zustand **In Gebrauch**.
+
+### Registrierungen festhalten
+
+Unter **Registriert bei** halten Sie fest, bei welchen Diensten der Schlüssel eingetragen ist. So wissen Sie bei einem Verlust, wo er entfernt werden muss.
+
+<Steps>
+
+1. Tragen Sie unter **Dienst** nur den Namen ein, etwa „VPN“ oder „Passwortmanager“, keine Kennungen, PINs oder Wiederherstellungscodes.
+
+2. Wählen Sie die **Art**: **Anmeldedienst**, **VPN**, **Passwortmanager**, **SSH**, **Code-Signatur**, **E-Mail** oder **Sonstiges**.
+
+3. Wählen Sie **Eintragen**.
+
+</Steps>
+
+Ist der Schlüssel bei einem Dienst nicht mehr registriert, wählen Sie **Entfernt**; der Eintrag bleibt mit „entfernt am …“ stehen. **Löschen** ist nur für versehentlich angelegte Einträge gedacht und entfernt sie ganz.
+
+### PIV-Zertifikate
+
+Unter **PIV-Zertifikate** ordnen Sie den Slots **9a Authentifizierung**, **9c Signatur**, **9d Verschlüsselung** und **9e Kartenauthentifizierung** je ein Zertifikat aus dem [Zertifikatsinventar](/guides/lizenzen/#zertifikate) zu: **Zertifikat zuordnen**, suchen, wählen. **Leeren** löst die Zuordnung. Der Slot zeigt, bis wann das Zertifikat gültig ist; an den Ablauf erinnert das Zertifikatsinventar.
+
+### Sperren, Verlust und Aussonderung
+
+| Zustand | Bedeutung |
+|---|---|
+| **In Gebrauch** | Der Schlüssel wird genutzt oder liegt einsatzbereit auf Lager. |
+| **Gesperrt** | Vorübergehend gesperrt, etwa während die Person abwesend ist oder ein Verdacht besteht. **Entsperren** setzt ihn zurück auf „In Gebrauch“. |
+| **Verloren** | Als verloren gemeldet; die Schritte nach dem Verlust sind angelegt. |
+| **Ausgesondert** | Zurückgesetzt oder vernichtet. |
+
+#### Verlust eines Schlüssels
+
+<Steps>
+
+1. Öffnen Sie den Schlüssel und wählen Sie **Verlust melden**.
+
+2. Bestätigen Sie mit **Verlust melden**. Ein ausgegebener Schlüssel wird dabei als „Verloren“ zurückgenommen.
+
+3. Arbeiten Sie die **Schritte nach dem Verlust** ab und haken Sie jeden ab: je Registrierung „Registrierung bei … entfernen“, dazu **Ersatzschlüssel ausgeben** und **Prüfen, ob ein Sicherheitsvorfall vorliegt**.
+
+</Steps>
+
+Solange Schritte offen sind, zeigt die Liste „… Schritte offen“, und unter **Aufgaben** steht „… verlorener Sicherheitsschlüssel hat offene Schritte“. Taucht der Schlüssel wieder auf, wählen Sie **Wiedergefunden**: Er ist wieder in Gebrauch, offene Schritte entfallen, erledigte bleiben als Nachweis.
+
+#### Schlüssel aussondern
+
+Ausgesondert wird nur ein Schlüssel, der in Gebrauch oder gesperrt ist und auf Lager liegt. Nehmen Sie einen ausgegebenen Schlüssel zuerst zurück; einen verlorenen melden Sie zuerst als **Wiedergefunden**.
+
+<Steps>
+
+1. Wählen Sie **Aussondern**.
+
+2. Wählen Sie unter **Art** **zurückgesetzt** oder **vernichtet**.
+
+3. Bestätigen Sie mit **Aussondern**.
+
+</Steps>
+
+Einen Nachweis, etwa ein Vernichtungsprotokoll, legen Sie unter **Dokumente** ab. Ein ausgesonderter Schlüssel lässt sich nicht mehr bearbeiten.
+
+### Firmware-Hinweise
+
+Viele Sicherheitsschlüssel lassen sich nicht aktualisieren. Ist für eine Firmware eine Schwachstelle bekannt, hilft nur der Austausch. Unter **Firmware-Hinweise** tragen Sie solche Meldungen der Hersteller ein; SentryAssets zeigt dann, welche Ihrer Schlüssel betroffen sind.
+
+<Steps>
+
+1. Wählen Sie auf der Seite **Sicherheitsschlüssel** **Hinweis anlegen**.
+
+2. Tragen Sie **Titel** und **Schwere** ein: **Kritisch**, **Hoch**, **Mittel** oder **Niedrig**.
+
+3. Tragen Sie den **Hersteller** so ein, wie er beim Asset steht, etwa „Yubico“.
+
+4. Tragen Sie bei Bedarf **Modell (optional)** ein, den Anfang des Modellnamens wie „YubiKey 5“; leer gilt der Hinweis für alle Modelle.
+
+5. Grenzen Sie mit **Firmware ab (optional)** und **Firmware bis (optional)** die betroffenen Versionen ein. Beide Grenzen zählen mit.
+
+6. Tragen Sie unter **Quelle (optional)** die Adresse der Meldung mit `https://` ein und wählen Sie **Hinweis anlegen**.
+
+</Steps>
+
+Die Meldung nennt, wie viele Schlüssel betroffen sind. Betroffene Schlüssel zeigen in der Liste „… Hinweis“ und auf ihrer Seite „Für diese Firmware ist eine Schwachstelle bekannt.“; die Ansicht **Betroffen** listet sie. Gezählt werden nur Schlüssel in Gebrauch oder gesperrt. Ein Schlüssel ohne Firmware oder mit einer Firmware ohne Zahl gilt als betroffen: lieber einmal zu viel hinsehen als einen schwachen Schlüssel übersehen.
+
+### Ersatzschlüssel je Person
+
+Wer nur einen Sicherheitsschlüssel hat, kommt bei einem Verlust nicht mehr an seine Konten. Unter **Ersatzschlüssel** legen Sie fest, wie viele **Schlüssel je Person** jede Person haben soll, 1 bis 5, voreingestellt 2. Gezählt werden die Schlüssel im Zustand **In Gebrauch**, die an die Person ausgegeben sind. Wer mindestens einen, aber weniger als vorgesehen hat, erscheint unter **Aufgaben** als „… Person fehlt ein Ersatzschlüssel“.
+
+### Ansichten der Liste
+
+**Alle**, **Ausgegeben**, **Auf Lager**, **Betroffen** (mit Firmware-Hinweis), **Verloren** und **Ausgesondert**.
+
+## Was zu Pro gehört
+
+<Badge text="Pro" variant="note" /> Diese Funktionen gelten ab der Edition Pro.
+
+- [Ein- und Austritte](/pro/ein-und-austritte/) führen durch Eintritt und Austritt mit Vorlagen nach BSI IT-Grundschutz und ISO/IEC 27001. Beim Austritt ermittelt der Vorgang von selbst, was die Person noch hat, und druckt ein Protokoll zur Unterschrift.
+- Unter [Meine Geräte](/pro/selbstbedienung/) sehen Mitarbeitende, was an sie ausgegeben ist, und melden Schäden und Bedarf selbst.
+
+## Rechte
+
+| Rolle | Ausgaben | Sicherheitsschlüssel |
+|---|---|---|
+| Administrator, Informationssicherheit | ansehen, ausgeben, zurücknehmen, Protokoll zuordnen | ansehen, Angaben erfassen, Registrierungen, Sperren, Verlust, Aussondern, Firmware-Hinweise und Ersatzschlüssel-Regel |
+| Bearbeitung | ansehen, ausgeben, zurücknehmen, Protokoll zuordnen | wie oben, ohne Firmware-Hinweise und Ersatzschlüssel-Regel |
+| Datenschutz, Prüfung (nur lesend) | ansehen, Protokolle drucken | ansehen |
+| Lesend | – | – |
+
+- Ausgeben und Zurücknehmen brauchen zusätzlich das Schreibrecht für das Asset und, mit [Rechten je Standort](/pro/standortrechte/) (ab Pro), an seinem Standort.
+- Wer welches Gerät hat, sind personenbezogene Daten. Darum sieht die Rolle **Lesend** weder Ausgaben noch Sicherheitsschlüssel.
+- Ausgaben stehen im Audit-Log; von einer Notiz nur, dass es eine gibt. Auch Sicherheitsschlüssel schreiben keinen Freitext ins Audit-Log.
+
+## Grenzen
+
+- Ein Asset ist höchstens bei einer Person; ein zweites Ausgeben scheitert, bis es zurückgenommen ist.
+- Daten vor dem 1. Januar 1990 und in der Zukunft werden abgelehnt.
+- Notizen haben höchstens 500 Zeichen.
+- Ein Asset oder eine Person mit offener Ausgabe lässt sich nicht löschen. Wird eine Person nach der Rücknahme gelöscht, bleibt die Ausgabe ohne Namen erhalten; die Liste zeigt „Gelöschte Person“.
+- Die Karte zeigt höchstens 50 frühere Ausgaben je Asset.
+- Je Schlüssel höchstens 5 Funktionen; Firmware höchstens 32 Zeichen; Dienstnamen höchstens 100 Zeichen.
+
+## Ergebnis prüfen
+
+- Das Asset steht unter **Mitarbeitende › Asset-Ausgaben** in der Ansicht **Ausgegeben** mit Person und Datum.
+- Die Karte **Ausgabe** zeigt „Unterschrieben: …“ mit dem zugeordneten Protokoll.
+- Auf der Seite der Person steht das Asset unter **Ausgegeben**.
+- Ein Sicherheitsschlüssel zeigt unter **Bei** die Person und unter **Registriert bei** seine Dienste.
+
+## Fehlerbehebung
+
+- **„Das Asset ist schon ausgegeben; nehmen Sie es zuerst zurück.“** Nehmen Sie das Asset zurück und geben Sie es dann an die neue Person aus.
+- **„Ausgesonderte Assets werden nicht ausgegeben.“** Das Asset ist ausgesondert oder entsorgt. Setzen Sie zuerst einen anderen Lebenszyklus, wenn es wieder genutzt wird.
+- **„Die Rücknahme liegt vor der Ausgabe.“** Prüfen Sie **Zurück am**.
+- **„Rückgängig geht nur kurz nach der eigenen Rücknahme. …“** Die 15 Minuten sind vorbei oder jemand anderes hat zurückgenommen. Geben Sie das Asset neu aus.
+- **„Eine Rücknahme als „Verloren“ lässt sich nicht rückgängig machen.“** Bei einem Sicherheitsschlüssel wählen Sie stattdessen **Wiedergefunden** und geben ihn neu aus.
+- **Eine Person lässt sich nicht löschen:** Ihr sind noch Assets ausgegeben. Nehmen Sie diese zuerst zurück.
+- **„Nur Assets der Kategorie „Sicherheitsschlüssel“ bekommen diese Angaben.“** Ändern Sie die Kategorie des Assets oder legen Sie den Schlüssel über **Schlüssel anlegen** an.
+- **„Bitte nur die Versionsnummer angeben, etwa 5.4.3.“** Tragen Sie die Firmware ohne Zusätze wie „Firmware“ ein.
+- **Aussondern fehlt:** Der Schlüssel ist ausgegeben oder verloren. Nehmen Sie ihn zurück oder melden Sie ihn als **Wiedergefunden**.

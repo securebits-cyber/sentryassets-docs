@@ -1,0 +1,248 @@
+---
+title: Software, Lizenzen, Verträge und Zertifikate
+description: Installierte Software einsehen, Lizenzen anlegen und zuweisen, Verträge mit Kündigungsfristen und Zertifikate mit Ablauf führen, mit Erinnerung.
+head:
+  - tag: title
+    content: Lizenzen, Verträge und Zertifikate | SentryAssets Docs
+sidebar:
+  label: Lizenzen und Verträge
+  order: 50
+---
+
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
+
+Software, Lizenzen, Verträge und Zertifikate haben eines gemeinsam: Sie laufen ab, und wer die Frist verpasst, zahlt nach, verlängert ungewollt oder hat einen Dienst, dem niemand mehr vertraut. SentryAssets führt alle vier im Menü **Inventar** unter **Software und Lizenzen** und erinnert unter **Aufgaben** und auf Wunsch per E-Mail an jede Frist.
+
+- **Software:** was die Agents auf den Geräten finden.
+- **Lizenzen:** was Sie gekauft haben, mit Plätzen und Laufzeit.
+- **Verträge:** Wartung, Support und Leasing mit Kündigungsfristen.
+- **Zertifikate:** Server, Dienste und die eigene PKI mit Ablauf und Sperrstatus.
+
+Alles auf dieser Seite gehört zur Community-Edition. Den Abgleich von Lizenzen mit der installierten Software und die Auswertung der Kosten bringt Pro, siehe [Was zu Pro gehört](#was-zu-pro-gehört).
+
+## Voraussetzungen
+
+- Zum Ansehen genügt jede Rolle; Zertifikate sieht die Rolle **Lesend** nicht. Zum Anlegen und Ändern brauchen Sie **Administrator**, **Informationssicherheit** oder **Bearbeitung** (siehe [Rechte](#rechte)).
+- Für die Software-Liste: [Agents](/guides/agents/) auf den Geräten.
+- Für den Hersteller einer Lizenz und den Lieferanten eines Vertrags: Einträge unter **Stammdaten › Lieferanten**.
+- Für Lizenzschlüssel: ein eingerichteter Hauptschlüssel der Installation.
+- Für Erinnerungen per E-Mail: ein eingerichteter Mailserver (siehe [Benachrichtigungen](/guides/benachrichtigungen/)).
+
+## Software
+
+**Inventar › Software** zeigt die installierte Software auf Geräten mit Agent. Der Agent meldet installierte Programme mit Version und Hersteller und überträgt die Liste nur, wenn sie sich geändert hat (siehe [Was der Agent erfasst](/guides/agents/#was-der-agent-erfasst)). Von Hand pflegen Sie hier nichts.
+
+Die Liste zeigt je Produkt **Name**, **Hersteller**, **Plattform**, die Zahl der **Versionen** und der **Geräte**. Sie suchen nach Software oder Hersteller und filtern nach **Plattform** (**Windows**, **Linux**, **macOS**), **Quelle** wie **Debian-Paket**, **RPM**, **Windows Installer** oder **winget**, nach **Hersteller** und **Geräteklasse**. Unter **Sortierung** wählen Sie **Name**, **Meiste Geräte** oder **Meiste Versionen**.
+
+Ein Klick auf ein Produkt zeigt seine **Versionen** und die **Installationen** mit Gerät, **Quelle** und **Installiert am**; angezeigt werden höchstens 1.000 Installationen. Installationen, die nur für einen Benutzer gelten, sind mit „nur für einen Benutzer“ markiert. Die Software eines einzelnen Geräts sehen Sie auf der Seite des Assets im Reiter **Software**.
+
+## Lizenzen
+
+### Lizenz anlegen
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Lizenzen** und wählen Sie **Lizenz anlegen**.
+
+2. Tragen Sie das **Produkt** ein und wählen Sie den **Hersteller** aus den Lieferanten mit der Art „Hersteller“.
+
+3. Wählen Sie das **Lizenzmodell** (siehe Tabelle unten).
+
+4. Tragen Sie die **Anzahl** der Plätze ein. Eine Standortlizenz hat keine Anzahl.
+
+5. Tragen Sie **Gültig ab** und **Gültig bis** ein. Lassen Sie **Gültig bis** bei unbefristeten Lizenzen leer.
+
+6. Tragen Sie bei Bedarf **Kosten**, **Währung** und **Turnus** ein. Der Turnus sagt, wie oft die Kosten anfallen; der [Kostenbericht](/guides/kostenstellen/#kostenbericht-nach-kostenstelle) rechnet damit.
+
+7. Ergänzen Sie bei Bedarf **Bestellnummer**, **Notiz** und **Lizenzschlüssel**.
+
+8. Speichern Sie.
+
+</Steps>
+
+| Lizenzmodell | Zuweisung |
+|---|---|
+| **Pro Gerät** | Jeder Platz gehört einem Asset. |
+| **Pro Benutzer** | Jeder Platz gehört einer verantwortlichen Person. |
+| **Volumenlizenz** | Viele Plätze aus einem Vertrag, oft mit einem gemeinsamen Schlüssel; Plätze für Assets oder Personen. |
+| **Gleichzeitige Nutzung** | Plätze für Assets oder Personen, gezählt wird die Höchstzahl. |
+| **Abonnement** | Plätze für Assets oder Personen für die Laufzeit des Abos. |
+| **Standortlizenz** | Gilt für alle; eine Anzahl gibt es nicht. |
+
+<Aside type="note" title="Lizenzschlüssel">
+Der Lizenzschlüssel wird verschlüsselt gespeichert und nur auf Anfrage angezeigt. Mit **Anzeigen** sehen ihn nur **Administrator** und **Informationssicherheit**; jede Anzeige steht im Audit-Log. Zum Ändern einer Lizenz lassen Sie das Feld leer, um den gespeicherten Schlüssel zu behalten. Ohne Hauptschlüssel der Installation lassen sich keine Lizenzschlüssel speichern.
+</Aside>
+
+### Lizenz zuweisen
+
+<Steps>
+
+1. Öffnen Sie die Lizenz. Unter **Zuweisungen** steht, wer einen Platz belegt.
+
+2. Wählen Sie **Zuweisen**.
+
+3. Wählen Sie unter **Art** **Asset** oder **Person**, je nachdem, was das Lizenzmodell erlaubt.
+
+4. Suchen Sie das Asset oder die Person, wählen Sie den Treffer und bei Bedarf eine **Notiz**.
+
+5. Bestätigen Sie mit **Zuweisen**.
+
+</Steps>
+
+Die Lizenz zeigt danach „… von … belegt, … frei“. Sind alle Plätze belegt, ist eine weitere Zuweisung trotzdem möglich; die Lizenz gilt dann als **Überlizenziert**. Eine Zuweisung lösen Sie in der Tabelle mit **Entfernen**.
+
+Die Lizenzliste filtert nach **Alle**, **Läuft ab** und **Überlizenziert**. Auf der Seite einer Lizenz finden Sie in den Reitern **Verträge** die verknüpften Verträge und unter **Belege** ihre Dokumente, etwa Rechnungen.
+
+## Verträge
+
+### Vertrag anlegen
+
+<Steps>
+
+1. Öffnen Sie **Inventar › Verträge** und wählen Sie **Vertrag anlegen**.
+
+2. Tragen Sie den **Titel** ein und wählen Sie die **Art**: **Kauf**, **Wartung**, **Support**, **Lizenz**, **Dienstleistung**, **Miete/Leasing** oder **Sonstiges**.
+
+3. Wählen Sie den **Lieferanten** und tragen Sie bei Bedarf die **Vertragsnummer** ein.
+
+4. Tragen Sie **Beginn** und **Ende der Laufzeit** ein. Lassen Sie das Ende leer, wenn der Vertrag unbefristet ist.
+
+5. Tragen Sie die **Kündigungsfrist** mit Zahl und **Einheit** ein (**Tage**, **Wochen** oder **Monate**). Sie gilt zum Ende der Laufzeit; lassen Sie sie leer, wenn keine vereinbart ist.
+
+6. Setzen Sie **Verlängert sich automatisch**, wenn der Vertrag ohne Kündigung weiterläuft, und tragen Sie **Verlängerung um Monate** ein. Dafür braucht der Vertrag ein Ende der Laufzeit.
+
+7. Tragen Sie bei Bedarf **Kosten**, **Währung**, **Turnus** und eine **Notiz** ein.
+
+8. Wählen Sie unter **Abgedeckt** die Assets, Lizenzen und Standorte, für die der Vertrag gilt. Weitere verknüpfen Sie später auf der Seite des Vertrags.
+
+9. Speichern Sie.
+
+</Steps>
+
+Die Seite des Vertrags zeigt **Laufzeit bis** und **Kündigung bis**, den letzten Tag, an dem die Kündigung zugehen muss, damit der Vertrag endet statt sich zu verlängern. SentryAssets berechnet beides jeden Tag neu aus den Angaben; ein verlängerter Vertrag rückt so von selbst in die nächste Laufzeit.
+
+- **Ohne automatische Verlängerung** endet der Vertrag am Laufzeitende; die Kündigungsfrist setzt dann keine Frist.
+- **Unbefristet:** Sie kündigen jederzeit; der Vertrag endet die Kündigungsfrist nach dem Tag der Kündigung.
+
+### Kündigung erfassen
+
+<Steps>
+
+1. Öffnen Sie den Vertrag und wählen Sie **Kündigung erfassen**.
+
+2. Tragen Sie unter **Gekündigt am** den Tag ein, an dem die Kündigung zugegangen ist.
+
+3. Wählen Sie **Kündigung speichern**.
+
+</Steps>
+
+Das Vertragsende ergibt sich aus Laufzeit und Kündigungsfrist; der Vertrag zeigt den Zustand **Gekündigt**. War die Kündigung ein Irrtum, wählen Sie **Kündigung zurücknehmen**.
+
+### Verknüpfen und Liste
+
+Unter **Abgedeckt** verknüpfen Sie mit **Verknüpfen** weitere Assets, Lizenzen oder Standorte und lösen sie mit **Lösen**. Auf der Seite eines Assets und einer Lizenz zeigt der Reiter **Verträge** die Verträge, die es abdecken. Unter **Belege** legen Sie Vertragsdokumente ab.
+
+Die Vertragsliste filtert nach **Alle**, **Kündigung fällig**, **Enden bald** und **Beendet**. Wird ein Vertrag gelöscht, bleiben seine Belege als Dokumente erhalten.
+
+## Zertifikate
+
+**Inventar › Zertifikate** führt die Zertifikate Ihrer Server und Dienste und die der eigenen CA. SentryAssets erinnert an jede Erneuerung, zeigt die Kette bis zur Root-CA, prüft Sperrlisten und markiert schwache Verfahren. Es stellt selbst keine Zertifikate aus und speichert keine privaten Schlüssel.
+
+### Zertifikate importieren
+
+<Steps>
+
+1. Wählen Sie **Zertifikate importieren**.
+
+2. Wählen Sie eine **Datei**: PEM (auch mehrere Zertifikate in einer Datei), DER oder PKCS#7 (`.p7b`).
+
+3. Wählen Sie im Dialog **Zertifikate importieren**. Das Ergebnis nennt, wie viele Zertifikate neu und wie viele schon bekannt sind.
+
+</Steps>
+
+Bekannte Zertifikate werden übersprungen; Aussteller und Kette ergänzt SentryAssets selbst. Ein Aussteller zählt nur, wenn seine Signatur passt.
+
+<Aside type="caution" title="Keine privaten Schlüssel">
+Private Schlüssel und PFX-Dateien nimmt SentryAssets nicht an. Exportieren Sie nur das Zertifikat, unter Windows etwa mit „Exportieren… ohne privaten Schlüssel“.
+</Aside>
+
+### Zertifikat pflegen
+
+Auf der Seite eines Zertifikats:
+
+- **Verwendet bei:** Ordnen Sie die Server, Dienste und Anwendungen zu, auf denen das Zertifikat liegt: Asset suchen, wählen, zuordnen. Höchstens 50 Assets je Zertifikat.
+- **Verantwortung:** Wählen Sie unter **Verantwortlich** die Person, die das Zertifikat erneuert, und halten Sie unter **Notizen** fest, wo es eingespielt wird oder wer es beantragt.
+- **Offline verwahrt:** Bei einer Root-CA markieren Sie, dass ihr Schlüssel auf einem Rechner ohne Netz oder einem Datenträger im Tresor liegt.
+- **Als PEM herunterladen** gibt das Zertifikat wieder aus; **Löschen** entfernt es aus dem Inventar, das Zertifikat selbst bleibt gültig.
+
+### Ablauf und Erneuerung
+
+Ein Zertifikat zeigt **Läuft in 60 Tagen ab**, **Läuft in 30 Tagen ab**, **Läuft in 14 Tagen ab** oder **Abgelaufen**. Für jede Stufe erscheint eine Aufgabe, für CA-Zertifikate schon 60 Tage vorher „… CA-Zertifikat läuft in 60 Tagen ab“.
+
+Haben Sie ein Zertifikat erneuert, importieren Sie das neue. Hat es denselben Inhaber, denselben Aussteller und ein späteres Ende, erkennt SentryAssets es als Erneuerung: Das alte zeigt **Erneuert** mit einem Link unter **Erneuert durch** und erinnert nicht mehr.
+
+### Sperrlisten und schwache Verfahren
+
+- SentryAssets holt Sperrlisten einmal täglich von den Adressen in den Zertifikaten. **Sperrlisten jetzt prüfen** stößt die Prüfung sofort an; das Ergebnis erscheint nach wenigen Minuten.
+- Server im eigenen Netz, etwa die Sperrliste einer Windows-CA, trägt die Rolle **Administrator** unter **Interne Sperrlisten-Server** ein: einen Hostnamen wie `pki.firma.local` oder ein privates Netz wie `10.0.10.0/24`, höchstens 50 Einträge. Öffentliche Server erreicht SentryAssets ohne Eintrag.
+- Eine Sperrliste, die in 48 Stunden abläuft, wird zur Aufgabe: Läuft sie ab, lehnen Clients alle Zertifikate dieser CA ab, etwa bei der Anmeldung mit Smartcard.
+- Ein gesperrtes Zertifikat, das noch gültig und nicht durch ein neues ersetzt ist, erscheint als Aufgabe „… gesperrtes Zertifikat ist noch im Einsatz“. Ersetzen Sie es und importieren Sie das neue.
+- **Schwaches Verfahren** markiert RSA oder DSA unter 2048 Bit, Kurven unter 256 Bit und Signaturen mit SHA-1 oder MD5.
+
+Die Liste zeigt die Ansichten **Aktuell**, **Läuft ab**, **Abgelaufen**, **Gesperrt**, **CAs**, **Schwach** und **Alle** und sucht nach Name, Aussteller, Seriennummer und DNS-Name. Zertifikate auf Sicherheitsschlüsseln ordnen Sie dort den [PIV-Slots](/guides/ausgaben/#piv-zertifikate) zu.
+
+## Fristen als Aufgaben und per E-Mail
+
+SentryAssets legt aus den Fristen von selbst Aufgaben an. Sie stehen unter **Aufgaben** und in der Glocke, jeweils mit Link auf die gefilterte Liste:
+
+| Bereich | Aufgabe |
+|---|---|
+| Lizenzen | Lizenz läuft in 60 Tagen ab oder ist abgelaufen; Lizenz ist überlizenziert |
+| Verträge | Kündigungsfrist endet in den nächsten 60 Tagen; Vertrag endet in 60 Tagen |
+| Zertifikate | Zertifikat läuft in 14, 30 oder 60 Tagen ab; CA-Zertifikat läuft in 60 Tagen ab; Sperrliste läuft in 48 Stunden ab; gesperrtes Zertifikat noch im Einsatz |
+
+Per E-Mail erhalten Sie dieselben Aufgaben, sofort oder als tägliche Zusammenfassung: Wählen Sie im **Profil** unter **E-Mail-Benachrichtigungen** die Kategorien **Lizenzen**, **Verträge** und **Zertifikate** (siehe [Benachrichtigungen abonnieren](/guides/benachrichtigungen/#benachrichtigungen-abonnieren)). Die Mail nennt nur Titel, Anzahl und Link, keine Namen.
+
+## Was zu Pro gehört
+
+<Badge text="Pro" variant="note" /> Diese Funktionen gelten ab der Edition Pro.
+
+Das [Lizenzmanagement](/pro/lizenzmanagement/) vergleicht Lizenzen mit der installierten Software (Soll-Ist-Abgleich), zeigt die Kosten aus Lizenzen und Verträgen im Verlauf, Budgets mit Prognose und führt Verlängerungen mit Entscheidung. Lizenzen, Verträge und Zertifikate selbst bleiben in der Community-Edition vollständig nutzbar.
+
+## Rechte
+
+| Rolle | Software | Lizenzen | Verträge | Zertifikate |
+|---|---|---|---|---|
+| Administrator | ansehen | ändern, Schlüssel anzeigen | ändern | ändern, interne Sperrlisten-Server |
+| Informationssicherheit | ansehen | ändern, Schlüssel anzeigen | ändern | ändern |
+| Bearbeitung | ansehen | ändern | ändern | ändern |
+| Datenschutz, Prüfung (nur lesend) | ansehen | ansehen | ansehen | ansehen |
+| Lesend | ansehen | ansehen | ansehen | – |
+
+„Ändern“ umfasst Anlegen, Bearbeiten, Zuweisen bzw. Verknüpfen und Löschen. Jede Änderung steht im Audit-Log, Notizen nur als Hinweis, dass sie geändert wurden.
+
+## Grenzen
+
+- Lizenzen: 1 bis 1.000.000 Plätze; Lizenzschlüssel höchstens 4.000 Zeichen; Notizen höchstens 2.000 Zeichen. Die Seite listet höchstens 500 Zuweisungen.
+- Verträge: Kündigungsfrist höchstens fünf Jahre; Verlängerung 1 bis 120 Monate; beim Anlegen höchstens 50 abgedeckte Objekte; die Seite listet höchstens 500 Verknüpfungen.
+- Zertifikate: Datei höchstens 1 MiB mit höchstens 200 Zertifikaten, je Zertifikat höchstens 16 KiB; höchstens 50.000 Zertifikate je Organisation.
+- Software: angezeigt werden höchstens 1.000 Installationen je Produkt.
+
+## Ergebnis prüfen
+
+- Die Lizenz zeigt „… von … belegt, … frei“ und unter **Zuweisungen** die Assets oder Personen.
+- Der Vertrag zeigt **Kündigung bis** mit dem richtigen Tag und unter **Abgedeckt** seine Objekte.
+- Das Zertifikat zeigt **Gültig bis**, die Kette bis zur Root-CA und unter **Verwendet bei** seine Assets.
+- Unter **Aufgaben** erscheinen die Fristen, sobald sie in den jeweiligen Zeitraum fallen.
+
+## Fehlerbehebung
+
+- **„Keine Software gefunden“:** Auf den Geräten läuft noch kein Agent, oder sein erstes Inventar steht aus.
+- **„Der Hersteller muss ein aktiver Lieferant mit der Art „Hersteller“ sein.“** Legen Sie den Hersteller unter **Stammdaten › Lieferanten** mit der Art „Hersteller“ an oder stellen Sie einen archivierten mit **Wiederherstellen** wieder her.
+- **„Ohne eingerichteten Hauptschlüssel lassen sich keine Lizenzschlüssel speichern.“** Speichern Sie die Lizenz ohne Schlüssel oder lassen Sie den Hauptschlüssel einrichten.
+- **„Das Lizenzmodell erlaubt diese Art der Zuweisung nicht.“** Eine Lizenz **Pro Gerät** gehört Assets, eine **Pro Benutzer** Personen.
+- **„Die bestehenden Zuweisungen passen nicht zum neuen Lizenzmodell.“** Entfernen Sie zuerst die Zuweisungen, die nicht passen.
+- **„Eine automatische Verlängerung braucht ein Ende der Laufzeit.“** Tragen Sie **Ende der Laufzeit** ein.
+- **„Zur Kündigungsfrist gehören Zahl und Einheit.“** Ergänzen Sie die **Einheit**.
+- **„Die Datei enthält einen privaten Schlüssel. …“** oder **„Das ist eine PFX- bzw. PKCS#12-Datei …“** Exportieren Sie das Zertifikat ohne Schlüssel als PEM, DER oder `.p7b`.
+- **Eine Sperrliste zeigt „Adresse nicht freigegeben“:** Der Server liegt im eigenen Netz. Tragen Sie ihn unter **Interne Sperrlisten-Server** ein.

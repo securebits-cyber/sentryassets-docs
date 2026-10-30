@@ -1,0 +1,284 @@
+---
+title: Asset handovers and security keys
+description: Hand devices to persons, have the protocol signed, record returns and losses, and manage YubiKeys, Nitrokeys and smartcards with their registrations.
+head:
+  - tag: title
+    content: Asset handovers and security keys | SentryAssets Docs
+sidebar:
+  label: Handovers and keys
+  order: 50
+---
+
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
+
+Laptops, phones, keys and security keys belong to the organisation but sit with individual persons. Under **Employees › Asset handovers** you record what is handed to whom, since when and with which signed protocol. When someone leaves, you then know what has to come back.
+
+For security keys such as YubiKeys, Nitrokeys and smartcards, SentryAssets also keeps what a key can do, which services it is registered with and what to do when it is lost.
+
+Handovers and security keys are part of the Community edition. What Pro adds is listed under [What belongs to Pro](#what-belongs-to-pro).
+
+## Prerequisites
+
+- A role that may write handovers: **Administrator**, **Information security** or **Editor**. **Data protection** and **Auditor (read only)** only view handovers; **Read only** does not see them (see [Rights](#rights)).
+- The person is listed under **Master data › Responsible persons**. Enter their **Last working day (optional)** there, so that SentryAssets reminds you 14 days before to take the assets back.
+- The asset is in the inventory and neither retired nor disposed of.
+- For the signed protocol: the possibility to upload documents under **Documents**; for a protocol with a letterhead, a [logo of the organisation](/en/guides/beschaffung/#logo-of-the-organisation-for-the-printed-form).
+
+## Handing over a device
+
+<Steps>
+
+1. Open the asset. The **Handover** card reads “Not handed to anyone at the moment.”
+
+2. Choose **Hand over**.
+
+3. Under **Person**, choose the person from the responsible persons.
+
+4. Check **Handed over on**. It defaults to today; a handover recorded afterwards thus keeps its real day.
+
+5. Add a **Note** if needed, such as accessories handed along. Passwords or PINs do not belong here.
+
+6. Confirm with **Hand over**.
+
+</Steps>
+
+The message then offers **Print protocol** and **Later**. The **Handover** card now shows “Handed to … since …” with a link to the **Handover protocol**.
+
+An asset is always with one person only. If its lifecycle is retired or disposed of, it is not handed over; the card then states why.
+
+## Printing and signing the handover protocol
+
+The protocol is your proof that the person received the device.
+
+<Steps>
+
+1. On the **Handover** card, choose the **Handover protocol**, or **Print protocol** right after handing over.
+
+2. Check the details: **Device**, **Inventory number**, **Manufacturer**, **Model**, **Serial number**, plus **Person**, **Department** and **Position** as the master data stand.
+
+3. Choose **Print**. In the browser's print dialog you can also save the protocol as a PDF.
+
+4. Have both sides sign: the **Signature of the person receiving it** and the **Signature of the person handing it over**, with **Place, date**.
+
+5. Scan the signed protocol and upload it under **Documents**.
+
+6. On the **Handover** card, choose **Link the signed protocol**, search for the document and choose **Link**.
+
+</Steps>
+
+The card then shows “Signed: …” with a link to the document. The protocol carries a fixed statement: the person handles the device with care, uses it for work only, returns it at the latest when they leave and reports loss or damage without delay.
+
+## Taking a device back
+
+<Steps>
+
+1. Open the asset and choose **Take back** on the **Handover** card. Alternatively, choose **Take back** on the person's page.
+
+2. Choose the **Condition**: **Fine**, **Damaged** or **Lost**.
+
+3. Check **Returned on**. The day may not lie before the handover.
+
+4. Add a **Note** if needed.
+
+5. Confirm with **Take back**.
+
+</Steps>
+
+The message again offers **Print protocol**, this time the **Return protocol** with the **Signature of the person returning it** and the **Signature of the person taking it back**. It records that the device was returned in the condition stated and that work data on it is erased as the organisation requires.
+
+The handover is then listed under **Earlier handovers** on the card, with its period, condition and a link to the return protocol.
+
+### Undoing a take-back
+
+If the take-back was a mistake, choose **Undo** in the message. This works only for your own take-back and only for 15 minutes, as long as the asset has not been handed out again, the return protocol is not linked and the person has not been deleted. After that, hand the asset out again if needed.
+
+### Loss and damage
+
+- **Damaged** is marked in the list and on the card. For a repair or disposal, carry on as usual, for instance with the [disposal](/en/guides/aussonderung/).
+- **Lost:** block the access tied to the device and check whether this is a security incident. A take-back as “lost” cannot be undone.
+- If the device is a security key, “Lost” marks it as lost, and SentryAssets lists the [steps after the loss](#losing-a-key).
+
+## Overview of open handovers
+
+**Employees › Asset handovers** lists the handovers with **Asset**, **Person**, **Handed over on** and **Returned on**. Choosing a date opens the respective protocol. At the top you choose the view:
+
+| View | Shows |
+|---|---|
+| **Handed over** | everything currently with persons |
+| **Leaving soon** | handovers to persons who leave within the next 14 days or have left already |
+| **All** | taken-back handovers too |
+
+Choosing a name opens the person's page. Under **Handed over** it shows what the person holds at the moment, under **Responsible for** the assets they are entered for, and under **Taken back** the earlier handovers. With a last working day, the page states how many assets still have to come back before they leave.
+
+If persons leaving soon still hold something, **Tasks** shows “… asset is still with persons leaving soon”. Only roles allowed to read personal fields see this task, because it reveals who leaves. You get it by e-mail with the category **Handovers and security keys** (see [Notifications](/en/guides/benachrichtigungen/#subscribing-to-notifications)).
+
+## Security keys
+
+You reach the **Security keys** page under **Assets** through the security keys category (in the standard catalogue named “Sicherheitsschlüssel”), or with `Ctrl + K` and **Go to security keys**. For every key it shows who it is **With** (or “in stock”), its **Condition** and its **Firmware**.
+
+<Aside type="caution" title="No secrets">
+PINs, PUKs, management keys, OTP seeds and recovery codes do not belong in SentryAssets; there are deliberately no fields for them.
+</Aside>
+
+### Adding a key
+
+<Steps>
+
+1. Open the **Security keys** page and choose **Add key**.
+
+2. Fill in the form as for any asset, at least the name. Enter manufacturer and model exactly, such as “Yubico” and “YubiKey 5C NFC”; the [firmware advisories](#firmware-advisories) go by them.
+
+3. Save. SentryAssets opens the new key's page.
+
+4. On the **Security key** card, choose **Record details**.
+
+5. Choose the **Form factor**, such as **USB-C and NFC** or **Smartcard**, and the **Functions**: **FIDO2/WebAuthn**, **FIDO U2F**, **PIV (smartcard)**, **OpenPGP**, **OTP**.
+
+6. Enter the **Firmware**, the version number only, such as `5.4.3`.
+
+7. Set **Spare key** if it is a person's second key for when the first one is lost, and save.
+
+</Steps>
+
+Only assets of the security keys category and its subcategories get these details.
+
+### Handing over a key
+
+You hand over a key like any device on the **Handover** card, with a [protocol](#printing-and-signing-the-handover-protocol). Only a key in the condition **In use** is handed over.
+
+### Recording registrations
+
+Under **Registered with** you record which services the key is registered with. When it is lost, you then know where it has to be removed.
+
+<Steps>
+
+1. Under **Service**, enter only the name, such as “VPN” or “Password manager”; no user names, PINs or recovery codes.
+
+2. Choose the **Kind**: **Sign-in service**, **VPN**, **Password manager**, **SSH**, **Code signing**, **E-mail** or **Other**.
+
+3. Choose **Add**.
+
+</Steps>
+
+Once the key is no longer registered with a service, choose **Removed**; the entry stays with “removed on …”. **Delete** is meant only for entries made by mistake and removes them completely.
+
+### PIV certificates
+
+Under **PIV certificates** you link one certificate from the [certificate inventory](/en/guides/lizenzen/#certificates) to each of the slots **9a Authentication**, **9c Signature**, **9d Encryption** and **9e Card authentication**: **Link certificate**, search, choose. **Empty** removes the link. The slot shows until when the certificate is valid; the certificate inventory reminds you of its expiry.
+
+### Blocking, loss and disposal
+
+| Condition | Meaning |
+|---|---|
+| **In use** | The key is used or lies ready in stock. |
+| **Blocked** | Blocked for a while, such as while its holder is away or under suspicion. **Unblock** sets it back to “In use”. |
+| **Lost** | Reported lost; the steps after the loss are listed. |
+| **Disposed of** | Reset or destroyed. |
+
+#### Losing a key
+
+<Steps>
+
+1. Open the key and choose **Report lost**.
+
+2. Confirm with **Report lost**. A key that is handed over is taken back as “Lost” at the same time.
+
+3. Work through the **Steps after the loss** and tick each one: “Remove the registration with …” for every registration, plus **Hand over a replacement key** and **Check whether this is a security incident**.
+
+</Steps>
+
+While steps are open, the list shows “… steps open” and **Tasks** shows “… lost security key has steps open”. If the key turns up again, choose **Found again**: it is in use again, open steps are dropped, those done stay as a record.
+
+#### Disposing of a key
+
+Only a key that is in use or blocked and lies in stock is disposed of. Take a key that is handed over back first; report a lost one as **Found again** first.
+
+<Steps>
+
+1. Choose **Dispose of**.
+
+2. Under **Kind**, choose **reset** or **destroyed**.
+
+3. Confirm with **Dispose of**.
+
+</Steps>
+
+Keep any proof, such as a destruction record, under **Documents**. A key once disposed of can no longer be edited.
+
+### Firmware advisories
+
+Many security keys cannot be updated. If a weakness is known for a firmware, only a replacement helps. Under **Firmware advisories** you enter such notices of the manufacturers; SentryAssets then shows which of your keys are affected.
+
+<Steps>
+
+1. On the **Security keys** page, choose **Add advisory**.
+
+2. Enter **Title** and **Severity**: **Critical**, **High**, **Medium** or **Low**.
+
+3. Enter the **Manufacturer** as entered for the asset, such as “Yubico”.
+
+4. If needed, enter **Model (optional)**, the start of the model name such as “YubiKey 5”; left empty, the advisory applies to every model.
+
+5. Narrow down the affected versions with **Firmware from (optional)** and **Firmware up to (optional)**. Both bounds are included.
+
+6. Under **Source (optional)**, enter the address of the notice with `https://` and choose **Add advisory**.
+
+</Steps>
+
+The message states how many keys are affected. Affected keys show “… advisory” in the list and “A weakness is known for this firmware.” on their page; the view **Affected** lists them. Only keys in use or blocked count. A key without firmware, or with a firmware without a number, counts as affected: better one look too many than a weak key overlooked.
+
+### Spare keys per person
+
+Someone with only one security key is locked out of their accounts when it is lost. Under **Spare keys** you set how many **Keys per person** everyone should have, 1 to 5, by default 2. Keys in the condition **In use** that are handed to the person count. Anyone who holds at least one but fewer than intended appears under **Tasks** as “… person lacks a spare key”.
+
+### Views of the list
+
+**All**, **Handed over**, **In stock**, **Affected** (with a firmware advisory), **Lost** and **Disposed of**.
+
+## What belongs to Pro
+
+<Badge text="Pro" variant="note" /> These functions apply from the Pro edition.
+
+- [Joiners and leavers](/en/pro/ein-und-austritte/) guide you through joining and leaving with templates after BSI IT-Grundschutz and ISO/IEC 27001. When someone leaves, the process finds out by itself what the person still holds and prints a protocol to sign.
+- Under [My devices](/en/pro/selbstbedienung/), employees see what is handed to them and report damage and needs themselves.
+
+## Rights
+
+| Role | Handovers | Security keys |
+|---|---|---|
+| Administrator, Information security | view, hand over, take back, link protocols | view, record details, registrations, block, loss, dispose of, firmware advisories and spare key rule |
+| Editor | view, hand over, take back, link protocols | as above, without firmware advisories and the spare key rule |
+| Data protection, Auditor (read only) | view, print protocols | view |
+| Read only | – | – |
+
+- Handing over and taking back also need write access to the asset and, with [rights per location](/en/pro/standortrechte/) (from Pro), at its location.
+- Who holds which device is personal data. That is why the role **Read only** sees neither handovers nor security keys.
+- Handovers are recorded in the audit log; of a note only that one exists. Security keys put no free text in the audit log either.
+
+## Limits
+
+- An asset is with one person at most; handing it over a second time fails until it is taken back.
+- Dates before 1 January 1990 and in the future are refused.
+- Notes hold at most 500 characters.
+- An asset or a person with an open handover cannot be deleted. If a person is deleted after the take-back, the handover stays without the name; the list shows “Deleted person”.
+- The card shows at most 50 earlier handovers per asset.
+- At most 5 functions per key; firmware at most 32 characters; service names at most 100 characters.
+
+## Check the result
+
+- The asset is listed under **Employees › Asset handovers** in the view **Handed over** with person and date.
+- The **Handover** card shows “Signed: …” with the linked protocol.
+- On the person's page, the asset is listed under **Handed over**.
+- A security key shows the person under **With** and its services under **Registered with**.
+
+## Troubleshooting
+
+- **“The asset is handed over already; take it back first.”** Take the asset back, then hand it to the new person.
+- **“Retired assets are not handed over.”** The asset is retired or disposed of. Set another lifecycle first if it is used again.
+- **“The return lies before the handover.”** Check **Returned on**.
+- **“Undo works only shortly after your own take-back. …”** The 15 minutes are over, or someone else took it back. Hand the asset out again.
+- **“A take-back as “lost” cannot be undone.”** For a security key, choose **Found again** instead and hand it out again.
+- **A person cannot be deleted:** assets are still handed to them. Take those back first.
+- **“Only assets of the category “Security keys” get these details.”** Change the asset's category, or add the key with **Add key**.
+- **“Please enter the version number only, such as 5.4.3.”** Enter the firmware without additions such as “Firmware”.
+- **Dispose of is missing:** the key is handed over or lost. Take it back or report it as **Found again**.

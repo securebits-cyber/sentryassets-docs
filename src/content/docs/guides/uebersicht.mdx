@@ -1,0 +1,191 @@
+---
+title: Übersicht, Aufgaben und Berichte
+description: Was die Startseite zeigt, wie Aufgaben und Glocke nach Dringlichkeit sortiert sind, was die Ampel des Asset-Zustands sagt und welche Berichte es gibt.
+head:
+  - tag: title
+    content: Übersicht, Aufgaben und Berichte | SentryAssets Docs
+sidebar:
+  label: Übersicht und Aufgaben
+  order: 50
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Die **Übersicht** ist die Startseite von SentryAssets. Sie sagt Ihnen, was als Nächstes zu tun ist, zeigt die wichtigsten Kennzahlen des Inventars und sammelt offene Punkte als **Aufgaben**. Die Ampel des Asset-Zustands zeigt, welche Geräte Aufmerksamkeit brauchen, und unter **Berichte** werten Sie Inventar und Kosten zum Drucken oder als CSV aus.
+
+Übersicht, Aufgaben, Asset-Zustand und Berichte gehören zur Community-Edition.
+
+## Voraussetzungen
+
+- Jede Rolle sieht die Übersicht, die Aufgaben und die Berichte.
+- Jeder Teil zeigt nur, was Ihre Rolle im jeweiligen Bereich lesen darf. Wer etwa keine Verträge sieht, bekommt keine Aufgaben zu Verträgen; ein Bereich ohne Recht bleibt leer.
+
+## Die Übersicht
+
+Öffnen Sie **Übersicht** ganz oben in der Navigation oder klicken Sie auf das Logo. Der Kopf grüßt Sie mit Namen und nennt darunter „Stand …“ mit dem Namen Ihrer Organisation und wann zuletzt abgeglichen wurde. Mit Schreibrecht steht oben rechts **Asset anlegen**.
+
+### Nächster bester Schritt
+
+Die erste Karte heißt **Nächster bester Schritt** und nennt genau eine Sache mit einer Schaltfläche, die direkt dorthin führt:
+
+1. Gibt es noch keine Standorte: **Standorte anlegen**.
+2. Gibt es noch keinen Agent: **Ersten Agent ausrollen**.
+3. Sonst die dringendste [Aufgabe](#aufgaben).
+4. Ohne offene Aufgabe der nächste Schritt im IT-Grundschutz, etwa **Grundschutz-Katalog importieren**, **Informationsverbund festlegen** oder „… Anforderungen noch nicht bewertet“, sofern Ihre Rolle ihn gehen darf.
+5. Ist nichts zu tun: **Alles erledigt**.
+
+Darunter zeigt die Leiste **IT-Grundschutz-Ablauf** die Schritte **Geltungsbereich**, **Strukturanalyse**, **Schutzbedarf**, **Modellierung**, **Grundschutz-Check** und **Risikoanalyse**, je mit einer kurzen Angabe wie „… % mit Verantwortlichem“ oder „… von … bewertet“. Der Schritt, zu dem der nächste beste Schritt gehört, ist hervorgehoben; Schritte, die es noch nicht gibt, stehen als „in Vorbereitung“. Mehr dazu unter [IT-Grundschutz](/guides/grundschutz/).
+
+### Kennzahlen
+
+| Kennzahl | Bedeutung | Klick führt zu |
+|---|---|---|
+| **Assets gesamt** | alle Assets, dazu die Zahl, die in den letzten 7 Tagen neu erfasst wurde | Asset-Liste |
+| **Agent-Abdeckung** | wie viele Server, VMs und Clients sich mit Agent melden | Agents |
+| **Ohne Verantwortlichen** | Assets ohne verantwortliche Person, verglichen mit dem Stand vor einer Woche | Asset-Liste, gefiltert |
+| **Verwaist (> 30 Tage)** | Assets, die seit über 30 Tagen keine Quelle mehr meldet | Asset-Liste, gefiltert |
+
+Den Vergleich zur Vorwoche gibt es erst, wenn SentryAssets sieben Tage Daten hat („Vergleich zur Vorwoche nach 7 Tagen“).
+
+### Weitere Karten
+
+- **Aufgaben-Inbox:** die ersten vier [Aufgaben](#aufgaben); **Alle …** öffnet die ganze Liste.
+- **Discovery-Quellen:** ob **Agents (Windows, Linux)** und **Netzscan und SNMPv3** eingerichtet sind und melden, mit dem Status **online**, **verzögert**, **inaktiv** oder **Fehler**. **Quellen verwalten** führt zu den Agents.
+- **Beschaffung:** offene Anträge und frische Entscheidungen, siehe [Karte „Beschaffung“ auf der Übersicht](/guides/beschaffung/#karte-beschaffung-auf-der-übersicht).
+- Sind Beispieldaten geladen, sagt ein Hinweis oben auf der Seite das (siehe [Einrichtung](/guides/einrichtung/)).
+
+## Aufgaben
+
+Aufgaben sind offene Punkte, die SentryAssets aus Ihren Daten ableitet. Sie legen sie nicht selbst an und haken sie nicht ab: Eine Aufgabe verschwindet von allein, sobald ihre Ursache behoben ist. Jede Aufgabe nennt die Zahl der betroffenen Einträge, einen kurzen Hinweis und eine Schaltfläche wie **Prüfen**, **Zuweisen** oder **Ansehen**, die zur passenden, gefilterten Liste führt.
+
+Sie finden Aufgaben an drei Stellen:
+
+- **Aufgaben** in der Navigation, mit der Zahl der offenen Aufgaben: die ganze Liste.
+- Die **Aufgaben-Inbox** auf der Übersicht: die ersten vier.
+- Die **Glocke** oben rechts: die ersten fünf. Ein Punkt an der Glocke zeigt, dass es offene Aufgaben gibt. **Alle Aufgaben** öffnet die ganze Liste, Escape schließt die Glocke.
+
+### Dringlichkeit
+
+Alle drei zeigen dieselbe Reihenfolge: die dringendsten zuerst. Darum sehen Sie in der Glocke und in der Inbox immer das Wichtigste, auch wenn dort nur wenige Aufgaben Platz haben. Die Farbe des Symbols zeigt die Stufe, von oben nach unten:
+
+| Stufe | Beispiele |
+|---|---|
+| Dringend | „… Assets ohne Verantwortlichen“, „… Assets verwaist“, „Bei … Verträgen endet bald die Kündigungsfrist“, „Bei … Anforderungen ist der Termin überschritten“, „Ein Monitoring meldet … Assets als kritisch“, „… Zertifikate laufen in 14 Tagen ab“ |
+| Warnung | „… Agents warten auf Freigabe“, „… Agents melden sich nicht“, „Bei … Assets ist eine Festplatte zu über 90 % belegt“, „… Lizenzen laufen in 60 Tagen ab“, „… Artikel sind unter dem Mindestbestand“, „… Beschaffungsanträge warten auf Freigabe“ |
+| Nächster Schritt | Schritte des IT-Grundschutzes wie „Grundschutz++: … Anforderungen noch bewerten“, „… Geräte als Schatten-IT erkannt“ |
+| Hinweis | „… Nachweise laufen in 30 Tagen ab“, „… Computer im Verzeichnis ohne Asset“, „… Assets sind reif für Ersatz“ |
+
+Innerhalb einer Stufe bleiben zusammengehörige Aufgaben beieinander.
+
+### Woher Aufgaben kommen
+
+| Bereich | Aufgaben zu |
+|---|---|
+| Inventar | fehlende Verantwortliche, verwaiste Assets, Schatten-IT, endender Support und endende Garantie, fehlender Backup-Nachweis, lange nicht gesehene Geräte, fälliger Ersatz |
+| Agents und Verzeichnis | Agents ohne Freigabe, ohne Meldung oder mit ablaufendem Zertifikat, Verzeichnisabgleich mit Fehlern, Konflikten oder Computern ohne Asset |
+| Asset-Zustand | kritische Meldungen eines Monitorings, volle Festplatten |
+| Verwaltung | Kündigungsfristen und Vertragsenden, Lizenzen, Zertifikate, Asset-Ausgaben an austretende Personen, Sicherheitsschlüssel, Verbrauchsmaterial, Beschaffungsanträge |
+| Dokumente | Nachweise, deren Gültigkeit abläuft (siehe [Dokumente](/guides/dokumente/#gültig-bis-und-aufbewahren-bis)) |
+| IT-Grundschutz | der nächste Schritt je Variante, fällige und überfällige Anforderungen |
+| Installation und Netzwerk | fehlende oder veraltete Sicherung, Seiten der Netzwerk-Dokumentation, die zu prüfen sind |
+
+Erweiterungen wie das [ISMS-Add-on](/pro/isms/) oder das [Datenschutz-Add-on](/pro/datenschutz-add-on/) bringen eigene Aufgaben mit, etwa Wiedervorlagen und Fristen.
+
+<Aside type="tip" title="Aufgaben per E-Mail">
+Aufgaben erscheinen nur in der Oberfläche. Möchten Sie zu Fristen und Ereignissen eine E-Mail bekommen, abonnieren Sie [Benachrichtigungen](/guides/benachrichtigungen/).
+</Aside>
+
+## Asset-Zustand
+
+Der Asset-Zustand zeigt mit einer Ampel, ob ein Gerät in Ordnung ist. Er beruht auf festen Schwellwerten und zwei Quellen: dem Heartbeat des [Agents](/guides/agents/) und Meldungen eines vorhandenen Monitorings über ein Status-Token.
+
+| Zustand | Bedeutung |
+|---|---|
+| **Gesund** | Der Agent meldet sich, die Werte liegen im Rahmen. |
+| **Warnung** | Etwas braucht bald Aufmerksamkeit. |
+| **Kritisch** | Etwas muss jetzt behoben werden. |
+| **Unbekannt** | Weder ein Agent noch ein Monitoring meldet dieses Asset. |
+
+Das schlechteste Signal entscheidet. Die Schwellwerte:
+
+| Signal | Warnung | Kritisch |
+|---|---|---|
+| Agent meldet sich nicht (Server und VMs) | über 1 Stunde | über 1 Tag |
+| Agent meldet sich nicht (andere Geräte) | über 3 Tage | – |
+| Festplatte belegt | ab 90 % | ab 95 % |
+| Arbeitsspeicher belegt | ab 95 % | – |
+| Monitoring | meldet Warnung | meldet kritisch |
+
+Meldet sich ein Agent nicht, zählen seine letzten Auslastungswerte nicht mehr. Eine Meldung aus einem Monitoring zählt 24 Stunden; ohne neue Meldung verfällt sie.
+
+### Wo Sie den Zustand sehen
+
+- **Asset-Liste:** neben dem Namen, sobald der Zustand nicht unbekannt ist.
+- **Asset-Detail:** die Karte **Zustand** mit den Gründen, etwa „Festplatte … zu … % belegt“ oder „Agent ohne Meldung seit …“.
+- **Assets mit Handlungsbedarf:** alle Assets mit Warnung oder kritischem Zustand, die kritischen zuerst. Sie öffnen die Liste über die Aufgaben „Ein Monitoring meldet … Assets als kritisch“ oder „Bei … Assets ist eine Festplatte zu über 90 % belegt“ und dort **Ansehen**. Ist alles in Ordnung, zeigt sie „Alles im grünen Bereich“.
+
+### Zustand aus einem Monitoring
+
+Für Geräte ohne Agent, etwa Switches, Drucker, USV oder Firewalls, meldet ein vorhandenes Monitoring wie Zabbix, Checkmk, PRTG oder Uptime Kuma den Zustand. Ein Administrator legt dazu unter **Einstellungen › Status-Tokens** ein Token an; die Karte **Zustand** am Asset zeigt Administratoren die **Asset-ID** und einen **Beispielaufruf**. Einzelheiten: [Status-Meldungen](/reference/api/#status-meldungen).
+
+## Berichte
+
+Unter **Auswertung › Berichte** stehen zwei Berichte.
+
+### Inventar
+
+**Inventar** zeigt, was das Inventar enthält, wo es steht und was Pflege braucht:
+
+- **Gesamt**, **In Betrieb oder Wartung** und **Außer Betrieb oder entsorgt**,
+- **Pflegebedarf**: Assets in Betrieb ohne Verantwortlichen, verwaiste, solche, deren Support in 60 Tagen endet oder beendet ist, und Schatten-IT. Ein Klick zeigt sie in der Asset-Liste,
+- die Agent-Abdeckung,
+- **Assets nach Kategorie** (mit Unterkategorien) und **Assets nach Standort** (mit allem darunter).
+
+**Drucken** öffnet den Druckdialog des Browsers; dort speichern Sie den Bericht auch als PDF.
+
+### Kosten
+
+**Kosten** rechnet die laufenden Kosten aus Lizenzen und Verträgen auf **Je Monat** und **Je Jahr** um:
+
+- **Kosten nach Bereichen**, **Kosten nach Kostenstelle** und **Kosten nach Posten**,
+- **Nicht eingerechnet**: Posten, bei denen der Turnus oder bei einmaligen Kosten das Datum fehlt. Ergänzen Sie die Angabe, dann zählen sie mit,
+- Gezählt wird, was heute läuft; einmalige Kosten im Jahr ihres Beginns.
+
+Die Kostenstellen erklärt [Kostenbericht nach Kostenstelle](/guides/kostenstellen/#kostenbericht-nach-kostenstelle).
+
+<Steps>
+
+1. Öffnen Sie **Auswertung › Berichte** und wählen Sie **Kosten**.
+
+2. Wählen Sie **CSV exportieren**. Die Datei wird heruntergeladen; die Meldung „Kostenbericht heruntergeladen“ bestätigt es.
+
+3. Oder wählen Sie **Drucken** und speichern Sie den Bericht im Druckdialog als PDF.
+
+</Steps>
+
+Jeder Export steht im Audit-Log. Je Person sind 5 Exporte in der Minute möglich, je Organisation 20.
+
+## Rechte
+
+| Bereich | Wer |
+|---|---|
+| Übersicht, Aufgaben, Berichte | jede Rolle, jeweils nur mit den Daten, die die Rolle im Bereich lesen darf |
+| Asset-Zustand | jede Rolle |
+| Status-Tokens anlegen und widerrufen | **Administrator** |
+
+Fehlt einer Rolle ein Bereich im Kostenbericht, sagt der Bericht es, etwa „Lizenzen sieht Ihre Rolle nicht.“
+
+## Ergebnis prüfen
+
+- Die Übersicht zeigt Kennzahlen und den nächsten besten Schritt.
+- Die Glocke trägt einen Punkt, solange Aufgaben offen sind; die dringendste steht oben.
+- Ist die Ursache behoben, verschwindet die Aufgabe, sobald die Übersicht neu geladen ist.
+
+## Fehlerbehebung
+
+- **Eine erwartete Aufgabe fehlt:** Ihre Rolle darf den Bereich nicht lesen, oder die Zahl ist null.
+- **„Vergleich zur Vorwoche nach 7 Tagen“:** SentryAssets hat noch keine sieben Tage Daten.
+- **Zustand „Unbekannt“:** Das Asset hat keinen aktiven Agent, und kein Monitoring hat in den letzten 24 Stunden gemeldet.
+- **„Es gibt mehr Hinweise, als hier Platz haben.“** Die Liste **Assets mit Handlungsbedarf** zeigt die dringendsten; die Zahlen der Übersicht sind Mindestwerte.
+- **„Gerade läuft ein anderer Export.“** oder **„Zu viele Exporte in kurzer Zeit.“** Versuchen Sie es nach einer Minute erneut.
+- **„Noch keine Kosten erfasst“:** Tragen Sie bei Lizenzen und Verträgen Betrag und Turnus ein.

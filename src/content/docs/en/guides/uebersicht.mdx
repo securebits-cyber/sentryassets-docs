@@ -1,0 +1,191 @@
+---
+title: Overview, tasks and reports
+description: What the start page shows, how tasks and the bell sort by urgency, what the asset state traffic light says and which reports there are.
+head:
+  - tag: title
+    content: Overview, tasks and reports | SentryAssets Docs
+sidebar:
+  label: Overview and tasks
+  order: 50
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The **Overview** is the start page of SentryAssets. It tells you what to do next, shows the key figures of the inventory and gathers open items as **Tasks**. The asset state traffic light shows which devices need attention, and under **Reports** you evaluate inventory and costs for printing or as CSV.
+
+Overview, tasks, asset state and reports are part of the Community edition.
+
+## Prerequisites
+
+- Every role sees the overview, the tasks and the reports.
+- Each part shows only what your role may read in that area. Someone who sees no contracts, for instance, gets no tasks about contracts; an area without the right stays empty.
+
+## The overview
+
+Open **Overview** at the top of the navigation or click the logo. The header greets you by name and below it reads “State of …” with your organisation's name and when it was last reconciled. With write access, **Create asset** sits at the top right.
+
+### Next best step
+
+The first card is called **Next best step** and names exactly one thing, with a button that leads straight there:
+
+1. If there are no locations yet: **Create locations**.
+2. If there is no agent yet: **Roll out the first agent**.
+3. Otherwise the most urgent [task](#tasks).
+4. Without an open task, the next step in IT-Grundschutz, such as **Import the Grundschutz catalog**, **Define the information domain** or “… requirements not assessed yet”, provided your role may take it.
+5. If there is nothing to do: **All done**.
+
+Below it, the bar **IT-Grundschutz procedure** shows the steps **Scope**, **Structure analysis**, **Protection needs**, **Modelling**, **Grundschutz check** and **Risk analysis**, each with a short detail such as “… % with owner” or “… of … assessed”. The step the next best step belongs to is highlighted; steps that do not exist yet read “in preparation”. More under [IT-Grundschutz](/en/guides/grundschutz/).
+
+### Key figures
+
+| Figure | Meaning | A click leads to |
+|---|---|---|
+| **Total assets** | all assets, with the number newly recorded in the last 7 days | asset list |
+| **Agent coverage** | how many servers, VMs and clients report with an agent | Agents |
+| **Without owner** | assets without a responsible person, compared with a week before | asset list, filtered |
+| **Orphaned (> 30 days)** | assets no source has reported for over 30 days | asset list, filtered |
+
+The comparison with last week only comes once SentryAssets has seven days of data (“Comparison with last week after 7 days”).
+
+### Further cards
+
+- **Task inbox:** the first four [tasks](#tasks); **All …** opens the whole list.
+- **Discovery sources:** whether **Agents (Windows, Linux)** and **Network scan and SNMPv3** are set up and reporting, with the status **online**, **delayed**, **inactive** or **error**. **Manage sources** leads to the agents.
+- **Procurement:** open requests and fresh decisions, see [The “Procurement” card on the overview](/en/guides/beschaffung/#the-procurement-card-on-the-overview).
+- If sample data are loaded, a notice at the top of the page says so (see [Setup](/en/guides/einrichtung/)).
+
+## Tasks
+
+Tasks are open items that SentryAssets derives from your data. You do not create them or tick them off: a task disappears by itself once its cause is fixed. Each task names the number of entries concerned, a short hint and a button such as **Check**, **Assign** or **View** that leads to the matching, filtered list.
+
+You find tasks in three places:
+
+- **Tasks** in the navigation, with the number of open tasks: the whole list.
+- The **Task inbox** on the overview: the first four.
+- The **bell** at the top right: the first five. A dot on the bell shows that there are open tasks. **All tasks** opens the whole list; Escape closes the bell.
+
+### Urgency
+
+All three show the same order: the most urgent first. So the bell and the inbox always show what matters most, even though only a few tasks fit there. The colour of the icon shows the level, from top to bottom:
+
+| Level | Examples |
+|---|---|
+| Urgent | “… assets without owner”, “… assets orphaned”, “Notice period ends soon for … contracts”, “… requirements are past their due date”, “A monitoring reports … assets as critical”, “… certificates expire within 14 days” |
+| Warning | “… agents await approval”, “… agents are not reporting”, “… assets have a disk more than 90 % full”, “… licences expire within 60 days”, “… consumables are below their minimum stock”, “… procurement requests await approval” |
+| Next step | IT-Grundschutz steps such as “Grundschutz++: … requirements still to assess”, “… devices detected as shadow IT” |
+| Hint | “… proofs expire within 30 days”, computers in the directory without an asset, assets due for replacement |
+
+Within a level, related tasks stay together.
+
+### Where tasks come from
+
+| Area | Tasks about |
+|---|---|
+| Inventory | missing owners, orphaned assets, shadow IT, ending support and warranty, missing backup proof, devices not seen for a long time, due replacement |
+| Agents and directory | agents awaiting approval, not reporting or with an expiring certificate, directory sync with errors, conflicts or computers without an asset |
+| Asset state | critical reports of a monitoring, full disks |
+| Administration | notice periods and contract ends, licences, certificates, asset handovers to people leaving, security keys, consumables, procurement requests |
+| Documents | proofs whose validity expires (see [Documents](/en/guides/dokumente/#valid-until-and-retain-until)) |
+| IT-Grundschutz | the next step per variant, requirements due and overdue |
+| Installation and network | missing or outdated backup, network documentation pages to review |
+
+Extensions such as the [ISMS add-on](/en/pro/isms/) or the [data protection add-on](/en/pro/datenschutz-add-on/) bring tasks of their own, such as follow-ups and deadlines.
+
+<Aside type="tip" title="Tasks by email">
+Tasks only appear in the interface. If you want an email about deadlines and events, subscribe to [notifications](/en/guides/benachrichtigungen/).
+</Aside>
+
+## Asset state
+
+The asset state shows with a traffic light whether a device is fine. It rests on fixed thresholds and two sources: the heartbeat of the [agent](/en/guides/agents/) and reports of an existing monitoring through a status token.
+
+| State | Meaning |
+|---|---|
+| **Healthy** | The agent reports, the values are within limits. |
+| **Warning** | Something needs attention soon. |
+| **Critical** | Something must be fixed now. |
+| **Unknown** | Neither an agent nor a monitoring reports this asset. |
+
+The worst signal decides. The thresholds:
+
+| Signal | Warning | Critical |
+|---|---|---|
+| Agent not reporting (servers and VMs) | over 1 hour | over 1 day |
+| Agent not reporting (other devices) | over 3 days | – |
+| Disk full | from 90 % | from 95 % |
+| Memory in use | from 95 % | – |
+| Monitoring | reports warning | reports critical |
+
+If an agent stops reporting, its last load figures no longer count. A report from a monitoring counts for 24 hours; without a new one it lapses.
+
+### Where you see the state
+
+- **Asset list:** next to the name, as soon as the state is not unknown.
+- **Asset detail:** the **State** card with the reasons, such as “Disk … … % full” or “Agent silent since …”.
+- **Assets needing attention:** all assets with a warning or a critical state, the critical first. You open the list from the tasks “A monitoring reports … assets as critical” or “… assets have a disk more than 90 % full” and **View** there. If everything is fine, it reads “All in the green”.
+
+### State from a monitoring
+
+For devices without an agent, such as switches, printers, UPS or firewalls, an existing monitoring such as Zabbix, Checkmk, PRTG or Uptime Kuma reports the state. An administrator creates a token for it under **Settings › Status tokens**; the **State** card on the asset shows administrators the **Asset ID** and an **Example call**. Details: [Status reports](/en/reference/api/#status-reports).
+
+## Reports
+
+The **Reports** area of the navigation holds the page **Reports** with two reports.
+
+### Inventory
+
+**Inventory** shows what the inventory holds, where it stands and what needs care:
+
+- **Total**, **In operation or maintenance** and **Retired or disposed**,
+- **Needs care**: assets in operation without owner, orphaned ones, those whose support ends within 60 days or has ended, and shadow IT. A click shows them in the asset list,
+- the agent coverage,
+- **Assets by category** (with subcategories) and **Assets by location** (with everything below).
+
+**Print** opens the browser's print dialog; there you also save the report as a PDF.
+
+### Costs
+
+**Costs** converts the running costs of licences and contracts to **Per month** and **Per year**:
+
+- **Costs by area**, **Costs by cost center** and **Costs by item**,
+- **Not included**: items that lack the interval or, for one-time costs, the date. Add it and they count,
+- What runs today is counted; one-time costs in the year they begin.
+
+Cost centers are explained in [Cost report by cost center](/en/guides/kostenstellen/#cost-report-by-cost-center).
+
+<Steps>
+
+1. Open **Reports** and choose **Costs**.
+
+2. Choose **Export CSV**. The file is downloaded; the message “Cost report downloaded” confirms it.
+
+3. Or choose **Print** and save the report as a PDF in the print dialog.
+
+</Steps>
+
+Every export is recorded in the audit log. Up to 5 exports per minute are possible per person, 20 per organisation.
+
+## Rights
+
+| Area | Who |
+|---|---|
+| Overview, tasks, reports | every role, each only with the data the role may read in that area |
+| Asset state | every role |
+| Creating and revoking status tokens | **Administrator** |
+
+If a role lacks an area of the cost report, the report says so, such as “Your role does not see licences.”
+
+## Check the result
+
+- The overview shows key figures and the next best step.
+- The bell carries a dot as long as tasks are open; the most urgent is at the top.
+- Once the cause is fixed, the task disappears as soon as the overview has reloaded.
+
+## Troubleshooting
+
+- **An expected task is missing:** your role may not read the area, or the number is zero.
+- **“Comparison with last week after 7 days”:** SentryAssets does not have seven days of data yet.
+- **State “Unknown”:** the asset has no active agent, and no monitoring has reported in the last 24 hours.
+- **“There are more hints than fit here.”** The list **Assets needing attention** shows the most urgent; the numbers of the overview are minimums.
+- **“Another export is running.”** or **“Too many exports in a short time.”** Try again after a minute.
+- **“No costs recorded yet”:** enter amount and interval on licences and contracts.

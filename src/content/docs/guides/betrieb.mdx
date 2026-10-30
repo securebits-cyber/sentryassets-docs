@@ -1,0 +1,238 @@
+---
+title: Betrieb im Blick
+description: Systemzustand prüfen, das Audit-Log filtern, exportieren und prüfen, Status-Tokens für ein Monitoring anlegen und Lifecycle-Regeln einstellen.
+head:
+  - tag: title
+    content: Systemzustand, Audit-Log, Status-Tokens | SentryAssets Docs
+sidebar:
+  label: Betrieb
+  order: 50
+---
+
+import { Steps } from '@astrojs/starlight/components';
+
+Diese Anleitung bündelt vier Seiten, mit denen Sie SentryAssets im laufenden Betrieb im Blick behalten. Der **Systemzustand** zeigt, ob die Installation gesund ist. Das **Audit-Log** hält fest, wer was geändert hat, und belegt, dass niemand Einträge nachträglich verändert hat. **Status-Tokens** lassen ein vorhandenes Monitoring Zustände von Assets melden, und **Lifecycle-Regeln** legen fest, wann Garantie, Alter oder lange Stille ein Asset zur Aufgabe machen.
+
+Alle vier Seiten gehören zur Community-Edition.
+
+## Voraussetzungen
+
+| Seite | Wo | Wer sie öffnet |
+|---|---|---|
+| Systemzustand | **Einstellungen › Systemzustand** in der Seitenleiste | nur **Administrator** |
+| Audit-Log | **Einstellungen › Audit-Log** | **Administrator**, **Informationssicherheit**, **Datenschutz**, **Prüfung** |
+| Status-Tokens | **Einstellungen › Status-Tokens** | **Administrator** |
+| Lifecycle-Regeln | **Einstellungen › Lifecycle-Regeln** | **Administrator**, **Informationssicherheit** |
+
+Einzelheiten stehen unter [Rechte](#rechte). Mit [anpassbaren Rollen](/pro/rollen-anpassen/) (ab Pro) lassen sich Audit-Log, Status-Tokens und Lifecycle-Regeln auch anderen Rollen geben; der Systemzustand bleibt der Administration vorbehalten.
+
+## Systemzustand
+
+Der **Systemzustand** zeigt auf einer Seite, ob die Bestandteile der Installation antworten, ob Aufträge liegen bleiben, wann Zertifikate ablaufen und wann zuletzt gesichert wurde. Öffnen Sie ihn nach einem Update, nach einer Störung oder einfach regelmäßig. **Neu prüfen** fragt den Zustand sofort neu ab; die Fußzeile nennt die Version von SentryAssets und den Zeitpunkt der Prüfung.
+
+Jede Zeile trägt eine Marke: **In Ordnung**, **Ruhig**, **Prüfen**, **Nicht erreichbar**, **Aus**, **Abgelaufen**, **Unterbrochen** oder **Fehlgeschlagen**.
+
+### Was die Seite zeigt
+
+| Karte | Inhalt |
+|---|---|
+| **Dienste** | **Datenbank** mit Version und Größe, **Valkey (Sitzungen)**, **Worker (Aufträge)** mit der Warteschlange, **Virenscanner** und **Instanzen** |
+| **Zertifikate der Agents** | **Root-CA**, **Issuing-CA** und **Zertifikat des Agent-Endpunkts** mit dem Datum, bis zu dem sie gelten |
+| **Speicher** | Zahl der **Dokumente** und der belegte Platz aller Fassungen |
+| **Audit-Log** | **Letzte Prüfung** der Hash-Kette und der Link **Zur Aktivität** |
+| **Sicherung** | **Letzte Sicherung** mit Zeitpunkt und Größe, der Link **Sicherungen auslösen, planen und wiederherstellen** und der Befehl für eine Sicherung auf dem Server |
+
+### Was bei einer Warnung zu tun ist
+
+- **Datenbank** oder **Valkey (Sitzungen)** sind **Nicht erreichbar:** Prüfen Sie auf dem Server mit `docker compose ps`, ob die Container laufen, und sehen Sie in ihr Log. Ohne Antwort der Datenbank lassen sich Warteschlange, Zertifikate, Speicher und Audit-Log nicht prüfen.
+- **Worker (Aufträge)** steht auf **Prüfen:** Ein Auftrag wartet seit mehr als 10 Minuten. Meist läuft der Worker nicht; prüfen Sie den Container `worker`, etwa mit `docker compose logs worker`. Fehlgeschlagene Aufträge der letzten 24 Stunden nennt die Zeile zusätzlich.
+- **Virenscanner** steht auf **Aus:** Hochgeladene Dateien werden nicht auf Schadsoftware geprüft. Wie Sie ihn einschalten, steht unter [Virenscanner](/reference/konfiguration/#virenscanner).
+- **Issuing-CA** oder **Zertifikat des Agent-Endpunkts** stehen auf **Prüfen** (weniger als 60 Tage gültig) oder **Abgelaufen:** Läuft ein Zertifikat ab, melden sich die Agents nicht mehr. Erneuern Sie beides wie unter [Agent-PKI erneuern](/guides/sicherung/#agent-pki-erneuern) beschrieben. Wie Agents ihr eigenes Zertifikat erneuern, steht unter [Zertifikate und Erneuerung](/guides/agents/#zertifikate-und-erneuerung).
+- **Root-CA** steht auf **Prüfen:** Sie gilt zehn Jahre ab der Einrichtung; die Seite warnt ein Jahr vorher. Mit `pki rotate` lässt sie sich nicht erneuern.
+- **Audit-Log** steht auf **Unterbrochen:** Die Hash-Kette ist ab dem genannten Eintrag nicht mehr intakt, siehe [Hash-Kette prüfen](#hash-kette-prüfen).
+- **Sicherung** steht auf **Prüfen** oder **Fehlgeschlagen:** Es gibt noch keine Sicherung, die letzte ist älter als zwei Tage, oder eine spätere ist gescheitert. Sichern Sie wie unter [Sicherung und Umzug](/guides/sicherung/) beschrieben. Bewahren Sie den Master-Schlüssel (`secrets/master_key`) getrennt von den Sicherungen auf.
+
+## Audit-Log
+
+Das **Audit-Log** hält jede schreibende Aktion fest: was geschehen ist, wer es ausgelöst hat, wann und von welcher Adresse. Jeder Eintrag enthält den Hash seines Vorgängers; so fällt eine nachträgliche Änderung bei der Prüfung auf. In der Anwendung lassen sich Einträge weder ändern noch löschen.
+
+### Was festgehalten wird
+
+- **Zeitpunkt**, **Aktion** (etwa „Asset: geändert“), **Auslöser** (**Person**, **Agent** oder **System**) und **Objekt**.
+- Unter **Anzeigen** die festgehaltenen **Änderungen**, die **Kennung des Auslösers**, die **Objekt-ID**, die **Quell-IP** und die **Korrelations-ID**.
+- Werte personenbezogener Felder und freie Texte stehen nur als „geändert“ darin, nie mit ihrem Inhalt. Geheimnisse wie Passwörter oder Tokens stehen nie darin.
+
+### Einträge finden
+
+<Steps>
+
+1. Öffnen Sie **Einstellungen › Audit-Log**. Die neuesten Einträge stehen oben.
+
+2. Filtern Sie nach **Bereich** (etwa Assets, Benutzer, Anmeldungen oder Status-Tokens), nach **Auslöser** oder nach einem Zeitraum mit **Von** und **Bis**.
+
+3. Wählen Sie bei einem Eintrag **Anzeigen**, um die Einzelheiten zu sehen.
+
+4. Mit **Ältere Einträge laden** blättern Sie weiter zurück.
+
+</Steps>
+
+Dauert eine Abfrage zu lange, schränken Sie Zeitraum oder Bereich ein.
+
+### Exportieren
+
+**Exportieren** lädt die Einträge als Datei im Format JSON Lines herunter, die ältesten zuerst und mit den Hashes der Kette. Die gewählten Filter gelten auch für den Export. Mit der Datei lässt sich die Kette außerhalb von SentryAssets nachrechnen.
+
+- Eine Datei enthält höchstens 20 000 Einträge oder 16 MiB. Sind es mehr, trägt die Datei „teil“ im Namen, und **Weiter exportieren** lädt den nächsten Teil.
+- Jede Person kann höchstens drei Exporte je Minute starten. Jeder Export steht selbst im Audit-Log.
+
+### Hash-Kette prüfen
+
+<Steps>
+
+1. Wählen Sie auf der Karte **Hash-Kette** die Schaltfläche **Kette prüfen**.
+
+2. Der Server rechnet alle Einträge nach; solange steht dort „Prüfung läuft …“.
+
+3. Das Ergebnis bleibt sichtbar: „Kette intakt · … Einträge geprüft“ oder „Kette unterbrochen ab Eintrag …“.
+
+</Steps>
+
+Eine Prüfung der letzten 15 Minuten gilt weiter; eine neue ist erst danach möglich. Die Prüfung führt der Job-Worker aus; der [Systemzustand](#systemzustand) zeigt die letzte. Auf dem Server prüfen Sie die Kette mit dem Befehl unter [Audit-Kette prüfen](/guides/sicherung/#audit-kette-prüfen).
+
+Meldet die Prüfung „Kette unterbrochen“, wurde ein Eintrag ab dieser Stelle außerhalb der Anwendung verändert oder entfernt. Behandeln Sie das als Sicherheitsvorfall: Sichern Sie den Zustand, prüfen Sie, wer Zugriff auf die Datenbank hatte, und vergleichen Sie mit einem früheren Export. Wer die Datenbank vollständig beherrscht, könnte die Kette neu berechnen; jede erfolgreiche Prüfung hält deshalb Zahl und Hash des letzten Eintrags zusätzlich im Log des Workers fest.
+
+### SIEM-Export
+
+Ab Pro geht das Audit-Log laufend an bis zu drei SIEM-Ziele, siehe [SIEM-Export](/pro/siem/).
+
+## Status-Tokens
+
+Mit einem **Status-Token** meldet ein Monitoring, das Sie schon betreiben (etwa Zabbix, Checkmk, PRTG oder Uptime Kuma), den Zustand von Assets an SentryAssets: in Ordnung, Warnung, kritisch oder unbekannt. Der Zustand erscheint auf der Karte **Zustand** des Assets mit der Ampel und in der Liste **Assets mit Handlungsbedarf**. Das lohnt sich vor allem für Geräte ohne Agent, etwa Switches, Drucker, USV, Firewalls oder Appliances. Für Geräte mit Agent brauchen Sie kein Token.
+
+### Was ein Status-Token darf
+
+Ein Status-Token darf nur Zustände von Assets melden, also `POST /api/v1/status-reports` aufrufen. Es kann nichts lesen und nichts ändern, auch keine anderen Teile der API. So kann ein gestohlenes Token nie mehr als diesen einen Zweck. Mehr zum Maschinenzugang steht unter [API](/reference/api/).
+
+### Status-Token anlegen
+
+<Steps>
+
+1. Öffnen Sie **Einstellungen › Status-Tokens**.
+
+2. Bestätigen Sie oben unter **Anmeldung bestätigen** Ihre Anmeldung: mit dem **Einmalcode aus der Authenticator-App** oder mit **Beim Identity-Provider erneut anmelden**. Ohne frische Bestätigung lässt sich kein Token anlegen.
+
+3. Wählen Sie **Status-Token anlegen**.
+
+4. Tragen Sie den **Name der Quelle** ein, zum Beispiel „Monitoring Zentrale“. Er erscheint als Quelle beim gemeldeten Zustand.
+
+5. Wählen Sie unter **Gültig für** 30, 90, 180 oder 365 Tage.
+
+6. Wählen Sie **Status-Token anlegen**. Das Token erscheint unter **Token einmalig angezeigt**.
+
+7. Kopieren Sie das Token jetzt in Ihr Monitoring und wählen Sie **Fertig**. Es wird nur dieses eine Mal angezeigt; gespeichert ist nur ein Hash.
+
+</Steps>
+
+Legen Sie je Monitoring ein eigenes Token an. Die Liste zeigt je Token den Status **Aktiv**, **Abgelaufen** oder **Widerrufen**, das Ablaufdatum und wann es zuletzt genutzt wurde.
+
+### Zustand melden
+
+Das Monitoring meldet den Zustand je Asset mit der **Asset-ID**; sie steht auf der Detailseite des Assets. Ein Beispiel mit Platzhaltern:
+
+```bash
+curl -X POST https://assets.example.test/api/v1/status-reports \
+  -H "Authorization: Bearer <Status-Token>" -H "Content-Type: application/json" \
+  -d '{"asset_id": "<Asset-ID>", "state": "critical", "message": "Lüfter ausgefallen"}'
+```
+
+| Feld | Werte |
+|---|---|
+| `asset_id` | Asset-ID (UUID) |
+| `state` | `ok`, `warning`, `critical` oder `unknown` |
+| `message` | optional, bis 300 druckbare Zeichen |
+
+Eine erfolgreiche Meldung beantwortet der Server mit `204` ohne Inhalt.
+
+### Widerrufen
+
+Wählen Sie beim Token **Widerrufen** und bestätigen Sie. Das Token kann danach keine Zustände mehr melden, und seine bisherigen Meldungen zählen nicht mehr. Das lässt sich nicht rückgängig machen. Widerrufen geht jederzeit, auch ohne frische Bestätigung der Anmeldung.
+
+### Grenzen
+
+- Ein Token gilt höchstens ein Jahr. Danach legen Sie ein neues an und hinterlegen es im Monitoring.
+- Je Organisation sind höchstens 50 aktive Tokens möglich. Widerrufene und abgelaufene bleiben zur Nachvollziehbarkeit in der Liste.
+- Eine Meldung ist höchstens 4 KiB groß; je Token sind bis zu 1 200 Meldungen je Minute möglich.
+- Meldungen ohne Nachfolger zählen nach 24 Stunden nicht mehr. Ein Monitoring, das verstummt, sagt dann nichts mehr über das Asset.
+- Anlegen und Widerrufen stehen im Audit-Log, einzelne Meldungen nicht.
+
+## Lifecycle-Regeln
+
+Unter **Einstellungen › Lifecycle-Regeln** legen Sie fest, wann ein Asset Aufmerksamkeit braucht. Jede Regel erzeugt eine Aufgabe in der **Übersicht** und einen Filter in der Asset-Liste. Den Status eines Assets ändert keine Regel; das entscheiden Sie.
+
+### Die Regeln
+
+| Regel | Was sie findet | Einstellung | Standard | Erlaubt |
+|---|---|---|---|---|
+| **Garantie endet** | Assets in Betrieb, deren Feld „Garantie bis“ in dieser Frist erreicht ist oder schon vorbei ist | **Vorlauf in Tagen** | 60 | 7 bis 365 |
+| **Lange nicht gesehen: Status prüfen** | Assets in Betrieb, von denen sich so lange keine Quelle gemeldet hat | **Ohne Meldung seit Tagen** | 90 | 31 bis 730 |
+| **Ersatz planen** | Assets in Betrieb, deren Kaufdatum so lange zurückliegt | **Alter in Jahren** | 5 | 1 bis 15 |
+
+„In Betrieb“ heißt hier: jeder Lebenszyklus außer **Außer Betrieb** und **Entsorgt**.
+
+### Regeln einstellen
+
+<Steps>
+
+1. Öffnen Sie **Einstellungen › Lifecycle-Regeln**.
+
+2. Schalten Sie bei jeder Regel **Regel aktiv** ein oder aus.
+
+3. Tragen Sie bei einer aktiven Regel eine ganze Zahl im erlaubten Bereich ein.
+
+4. Wählen Sie **Regeln speichern**. Mit **Rückgängig** im Hinweis stellen Sie die vorigen Werte wieder her.
+
+</Steps>
+
+### Wirkung auf Aufgaben
+
+Die Regeln gelten für die ganze Organisation. In der **Übersicht** erscheinen dann Aufgaben wie „Bei … Assets endet die Garantie“, „… Assets melden sich lange nicht mehr“ oder „… Assets sind reif für Ersatz“. Ein Klick auf **Ansehen** oder **Status prüfen** zeigt die betroffenen Assets in der Asset-Liste.
+
+- Garantie und Kaufdatum zählen nur bei Kategorien, die die Felder „Garantie bis“ und „Kaufdatum“ haben.
+- **Lange nicht gesehen** zählt nur Assets, die sich schon einmal gemeldet haben, etwa über einen Agent oder ein Monitoring. Nach 30 Tagen gelten sie schon als **Verwaist**; diese Regel fragt zusätzlich, ob sie außer Betrieb sind. Ändern Sie dann den Status des Assets.
+- Felder mit Personenbezug zählen nur für Rollen, die sie sehen dürfen.
+- Eine ausgeschaltete Regel erzeugt keine Aufgabe.
+- Jede Änderung der Regeln steht im Audit-Log.
+
+## Rechte
+
+| Rolle | Systemzustand | Audit-Log | Status-Tokens | Lifecycle-Regeln |
+|---|---|---|---|---|
+| Administrator | ansehen | ansehen, exportieren, Kette prüfen | anlegen, widerrufen | einstellen |
+| Informationssicherheit | – | ansehen, exportieren, Kette prüfen | – | einstellen |
+| Datenschutz, Prüfung | – | ansehen, exportieren, Kette prüfen | – | – |
+| Bearbeitung, Lesend | – | – | – | – |
+
+- Den **Systemzustand** sieht nur die Administration; dieses Recht lässt sich keiner anderen Rolle geben.
+- Audit-Log und Status-Tokens sind **weitreichende** Rechte: Das Audit-Log legt die Spur aller Handlungen offen, ein Status-Token lässt ein Fremdsystem bis zu einem Jahr herein. Mit [anpassbaren Rollen](/pro/rollen-anpassen/#weitreichende-rechte) fragt die Seite nach, bevor Sie sie einer anderen Rolle geben.
+- Die Aufgaben aus den Lifecycle-Regeln sieht jede Rolle, die das Inventar lesen darf, gezählt über die Assets, die sie sehen darf.
+
+Eine Übersicht aller Rollen steht unter [Rollen](/reference/rollen/).
+
+## Ergebnis prüfen
+
+- Der **Systemzustand** zeigt bei Diensten, Zertifikaten, Audit-Log und Sicherung **In Ordnung** oder **Ruhig**.
+- Das **Audit-Log** zeigt nach **Kette prüfen** „Kette intakt“.
+- Ein neues Status-Token steht als **Aktiv** in der Liste; nach der ersten Meldung zeigt es „zuletzt genutzt …“, und das Asset zeigt den gemeldeten Zustand.
+- Nach dem Speichern der Lifecycle-Regeln zeigt die **Übersicht** die passenden Aufgaben.
+
+## Fehlerbehebung
+
+- **„Nur für die Administration“** auf dem Systemzustand: Ihre Rolle ist nicht **Administrator**.
+- **„Bitte warten Sie eine Minute bis zur nächsten Prüfung.“** Sie haben die Kette gerade mehrfach prüfen lassen.
+- **„Die letzte Prüfung liegt weniger als 15 Minuten zurück; eine neue ist danach möglich.“** Die letzte Prüfung gilt weiter.
+- **„Zu viele Exporte in kurzer Zeit. Bitte versuchen Sie es in einer Minute erneut.“** oder **„Gerade läuft ein anderer Export.“** Warten Sie kurz und exportieren Sie erneut.
+- **„Die Abfrage hat zu lange gedauert. …“** Schränken Sie im Audit-Log den Zeitraum oder den Bereich ein.
+- **Status-Token anlegen ist ausgegraut:** Bestätigen Sie zuerst oben Ihre Anmeldung. **„Ihre Bestätigung der Anmeldung ist abgelaufen. …“** heißt, dass Sie sie erneut bestätigen müssen.
+- **Das Monitoring erhält `401`:** Das Token fehlt, ist falsch kopiert, abgelaufen oder widerrufen. Legen Sie bei Bedarf ein neues an.
+- **Das Monitoring erhält `404`:** Die Asset-ID gehört zu keinem Asset dieser Organisation, oder das Asset wurde gelöscht.
+- **„Bitte eine ganze Zahl von … bis … eintragen.“** Der Wert einer Lifecycle-Regel liegt außerhalb des erlaubten Bereichs.

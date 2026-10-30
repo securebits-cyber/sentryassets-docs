@@ -1,0 +1,248 @@
+---
+title: Software, licences, contracts and certificates
+description: View installed software, add and assign licences, keep contracts with notice periods and certificates with their expiry, and get reminded in good time.
+head:
+  - tag: title
+    content: Licences, contracts and certificates | SentryAssets Docs
+sidebar:
+  label: Licences and contracts
+  order: 50
+---
+
+import { Aside, Badge, Steps } from '@astrojs/starlight/components';
+
+Software, licences, contracts and certificates have one thing in common: they run out, and whoever misses the deadline pays extra, renews by accident or runs a service nobody trusts any more. SentryAssets keeps all four in the **Inventory** menu under **Software and licences** and reminds you of every deadline under **Tasks** and, if you like, by e-mail.
+
+- **Software:** what the agents find on the devices.
+- **Licences:** what you bought, with seats and term.
+- **Contracts:** maintenance, support and leasing with notice periods.
+- **Certificates:** servers, services and your own PKI with expiry and revocation status.
+
+Everything on this page is part of the Community edition. Comparing licences with the installed software and evaluating the cost comes with Pro, see [What belongs to Pro](#what-belongs-to-pro).
+
+## Prerequisites
+
+- Any role may view; the role **Read only** does not see certificates. To add and change, you need **Administrator**, **Information security** or **Editor** (see [Rights](#rights)).
+- For the software list: [agents](/en/guides/agents/) on the devices.
+- For a licence's manufacturer and a contract's supplier: entries under **Master data › Suppliers**.
+- For licence keys: a master key set up for the installation.
+- For reminders by e-mail: a configured mail server (see [Notifications](/en/guides/benachrichtigungen/)).
+
+## Software
+
+**Inventory › Software** shows the installed software on devices with an agent. The agent reports installed programs with version and publisher and sends the list only when it has changed (see [What the agent collects](/en/guides/agents/#what-the-agent-collects)). You maintain nothing here by hand.
+
+For every product the list shows **Name**, **Publisher**, **Platform** and the number of **Versions** and **Devices**. You search for software or publisher and filter by **Platform** (**Windows**, **Linux**, **macOS**), **Source** such as **Debian package**, **RPM**, **Windows Installer** or **winget**, by **Publisher** and **Device class**. Under **Sort by** you choose **Name**, **Most devices** or **Most versions**.
+
+Choosing a product shows its **Versions** and the **Installations** with device, **Source** and **Installed on**; at most 1,000 installations are shown. Installations for a single user only are marked “for one user only”. The software of a single device is on the asset's page in the **Software** tab.
+
+## Licences
+
+### Adding a licence
+
+<Steps>
+
+1. Open **Inventory › Licences** and choose **Add licence**.
+
+2. Enter the **Product** and choose the **Manufacturer** from the suppliers of the kind “Manufacturer”.
+
+3. Choose the **Licence model** (see the table below).
+
+4. Enter the **Quantity** of seats. A site licence has no quantity.
+
+5. Enter **Valid from** and **Valid until**. Leave **Valid until** empty for perpetual licences.
+
+6. Enter **Cost**, **Currency** and **Interval** if needed. The interval says how often the cost falls due; the [cost report](/en/guides/kostenstellen/#cost-report-by-cost-center) works with it.
+
+7. Add **Order number**, **Note** and **Licence key** if needed.
+
+8. Save.
+
+</Steps>
+
+| Licence model | Assignment |
+|---|---|
+| **Per device** | Every seat belongs to an asset. |
+| **Per user** | Every seat belongs to a responsible person. |
+| **Volume licence** | Many seats under one agreement, often with a shared key; seats for assets or persons. |
+| **Concurrent use** | Seats for assets or persons; the maximum counts. |
+| **Subscription** | Seats for assets or persons for the term of the subscription. |
+| **Site licence** | Covers everyone; there is no quantity. |
+
+<Aside type="note" title="Licence key">
+The licence key is stored encrypted and shown only on request. With **Show**, only **Administrator** and **Information security** see it; every time it is shown, the audit log records it. When editing a licence, leave the field empty to keep the stored key. Without a master key for the installation, licence keys cannot be stored.
+</Aside>
+
+### Assigning a licence
+
+<Steps>
+
+1. Open the licence. **Assignments** lists who holds a seat.
+
+2. Choose **Assign**.
+
+3. Under **Kind**, choose **Asset** or **Person**, depending on what the licence model allows.
+
+4. Search for the asset or person, choose the match and add a **Note** if needed.
+
+5. Confirm with **Assign**.
+
+</Steps>
+
+The licence then shows “… of … taken, … free”. If all seats are taken, a further assignment is still possible; the licence then counts as **Over-assigned**. You remove an assignment in the table with **Remove**.
+
+The licence list filters by **All**, **Expiring** and **Over-assigned**. On a licence's page, the **Contracts** tab lists the linked contracts and **Documents** its documents, such as invoices.
+
+## Contracts
+
+### Adding a contract
+
+<Steps>
+
+1. Open **Inventory › Contracts** and choose **Add contract**.
+
+2. Enter the **Title** and choose the **Type**: **Purchase**, **Maintenance**, **Support**, **Licence**, **Service**, **Rent/leasing** or **Other**.
+
+3. Choose the **Supplier** and enter the **Contract number** if needed.
+
+4. Enter **Start** and **End of term**. Leave the end empty if the contract is open-ended.
+
+5. Enter the **Notice period** with a number and a **Unit** (**Days**, **Weeks** or **Months**). It applies to the end of the term; leave it empty if none is agreed.
+
+6. Set **Renews automatically** if the contract carries on without notice, and enter **Renews by months**. This needs an end of term.
+
+7. Enter **Cost**, **Currency**, **Billing** and a **Note** if needed.
+
+8. Under **Covered**, choose the assets, licences and locations the contract applies to. You link more later on the contract's page.
+
+9. Save.
+
+</Steps>
+
+The contract's page shows **Term until** and **Notice by**, the last day the notice must be received for the contract to end instead of renewing. SentryAssets works out both every day from the details; a renewed contract thus moves into its next term by itself.
+
+- **Without automatic renewal**, the contract ends at the end of its term; the notice period then sets no deadline.
+- **Open-ended:** give notice at any time; the contract ends the notice period after the day of notice.
+
+### Recording notice
+
+<Steps>
+
+1. Open the contract and choose **Record notice**.
+
+2. Under **Notice given on**, enter the day the notice was received.
+
+3. Choose **Save notice**.
+
+</Steps>
+
+The end of the contract follows from its term and notice period; the contract shows the state **Notice given**. If the notice was a mistake, choose **Withdraw notice**.
+
+### Linking and the list
+
+Under **Covered**, **Link** adds further assets, licences or locations and **Remove** takes them off. On the page of an asset and of a licence, the **Contracts** tab shows the contracts covering it. Under **Documents** you keep the contract documents.
+
+The contract list filters by **All**, **Notice due**, **Ending soon** and **Ended**. When a contract is deleted, its documents stay as they are.
+
+## Certificates
+
+**Inventory › Certificates** keeps the certificates of your servers and services and those of your own CA. SentryAssets reminds you of every renewal, shows the chain up to the root CA, checks revocation lists and marks weak algorithms. It issues no certificates itself and stores no private keys.
+
+### Importing certificates
+
+<Steps>
+
+1. Choose **Import certificates**.
+
+2. Choose a **File**: PEM (several certificates in one file are fine), DER or PKCS#7 (`.p7b`).
+
+3. Choose **Import certificates** in the dialog. The result states how many certificates are new and how many known already.
+
+</Steps>
+
+Known certificates are skipped; SentryAssets adds issuer and chain itself. An issuer counts only when its signature checks out.
+
+<Aside type="caution" title="No private keys">
+SentryAssets does not accept private keys or PFX files. Export the certificate only, on Windows for example with “Export… without the private key”.
+</Aside>
+
+### Looking after a certificate
+
+On a certificate's page:
+
+- **Used on:** link the servers, services and applications the certificate is installed on: search for the asset, choose it, link it. At most 50 assets per certificate.
+- **Responsibility:** under **Responsible**, choose the person who renews the certificate, and under **Notes** record where it is installed or who requests it.
+- **Kept offline:** for a root CA, mark that its key is kept on a computer without a network or on a medium in a safe.
+- **Download as PEM** gives the certificate back out; **Delete** removes it from the inventory, the certificate itself stays valid.
+
+### Expiry and renewal
+
+A certificate shows **Expires within 60 days**, **Expires within 30 days**, **Expires within 14 days** or **Expired**. Each stage raises a task; for CA certificates “… CA certificate expires within 60 days” appears 60 days before.
+
+Once you have renewed a certificate, import the new one. If it has the same subject, the same issuer and a later end, SentryAssets recognises it as the renewal: the old one shows **Renewed** with a link under **Renewed by** and stops reminding.
+
+### Revocation lists and weak algorithms
+
+- SentryAssets fetches revocation lists once a day from the addresses in the certificates. **Check revocation lists now** starts the check at once; the result appears after a few minutes.
+- Servers in your own network, such as the list of a Windows CA, are listed by the role **Administrator** under **Internal revocation list servers**: a host name such as `pki.company.local` or a private network such as `10.0.10.0/24`, at most 50 entries. SentryAssets reaches public servers without an entry.
+- A revocation list running out within 48 hours becomes a task: once it runs out, clients refuse every certificate of this CA, for example at smartcard sign-in.
+- A revoked certificate that is still valid and not yet replaced by a new one appears as the task “… revoked certificate is still in use”. Replace it and import the new one.
+- **Weak algorithm** marks RSA or DSA below 2048 bits, curves below 256 bits and signatures with SHA-1 or MD5.
+
+The list offers the views **Current**, **Expiring**, **Expired**, **Revoked**, **CAs**, **Weak** and **All** and searches by name, issuer, serial number and DNS name. Certificates on security keys are linked to the [PIV slots](/en/guides/ausgaben/#piv-certificates) there.
+
+## Deadlines as tasks and by e-mail
+
+SentryAssets raises tasks from the deadlines by itself. They are listed under **Tasks** and in the bell, each with a link to the filtered list:
+
+| Area | Task |
+|---|---|
+| Licences | licence expires within 60 days or has expired; licence is over-assigned |
+| Contracts | notice period ends within the next 60 days; contract ends within 60 days |
+| Certificates | certificate expires within 14, 30 or 60 days; CA certificate expires within 60 days; revocation list runs out within 48 hours; revoked certificate still in use |
+
+By e-mail you receive the same tasks, at once or as a daily digest: in your **Profile**, under **E-mail notifications**, choose the categories **Licences**, **Contracts** and **Certificates** (see [Subscribing to notifications](/en/guides/benachrichtigungen/#subscribing-to-notifications)). The mail names only title, count and link, no names.
+
+## What belongs to Pro
+
+<Badge text="Pro" variant="note" /> These functions apply from the Pro edition.
+
+[Licence management](/en/pro/lizenzmanagement/) compares licences with the installed software (licence reconciliation), shows the cost of licences and contracts over time, budgets with a forecast, and keeps renewals with their decision. Licences, contracts and certificates themselves stay fully usable in the Community edition.
+
+## Rights
+
+| Role | Software | Licences | Contracts | Certificates |
+|---|---|---|---|---|
+| Administrator | view | change, show keys | change | change, internal revocation list servers |
+| Information security | view | change, show keys | change | change |
+| Editor | view | change | change | change |
+| Data protection, Auditor (read only) | view | view | view | view |
+| Read only | view | view | view | – |
+
+“Change” covers adding, editing, assigning or linking, and deleting. Every change is recorded in the audit log; of notes only that they changed.
+
+## Limits
+
+- Licences: 1 to 1,000,000 seats; licence keys at most 4,000 characters; notes at most 2,000 characters. The page lists at most 500 assignments.
+- Contracts: notice period at most five years; renewal 1 to 120 months; at most 50 covered objects when adding; the page lists at most 500 links.
+- Certificates: a file of at most 1 MiB with at most 200 certificates, each at most 16 KiB; at most 50,000 certificates per organisation.
+- Software: at most 1,000 installations are shown per product.
+
+## Check the result
+
+- The licence shows “… of … taken, … free” and the assets or persons under **Assignments**.
+- The contract shows **Notice by** with the right day and its objects under **Covered**.
+- The certificate shows **Valid until**, the chain up to the root CA and its assets under **Used on**.
+- The deadlines appear under **Tasks** as soon as they fall within their period.
+
+## Troubleshooting
+
+- **“No software found”:** no agent runs on the devices yet, or its first inventory is still to come.
+- **“The manufacturer must be an active supplier of the kind “Manufacturer”.”** Add the manufacturer under **Master data › Suppliers** with the kind “Manufacturer”, or bring back an archived one with **Restore**.
+- **“Without a master key, licence keys cannot be stored.”** Save the licence without a key, or have the master key set up.
+- **“The licence model does not allow this kind of assignment.”** A **Per device** licence belongs to assets, a **Per user** one to persons.
+- **“The existing assignments do not fit the new licence model.”** Remove the assignments that do not fit first.
+- **“Automatic renewal needs an end of term.”** Enter the **End of term**.
+- **“A notice period needs a number and a unit.”** Add the **Unit**.
+- **“The file holds a private key. …”** or **“This is a PFX or PKCS#12 file …”** Export the certificate without its key as PEM, DER or `.p7b`.
+- **A revocation list shows “Address not allowed”:** the server is in your own network. List it under **Internal revocation list servers**.

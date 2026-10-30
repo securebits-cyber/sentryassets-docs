@@ -13,9 +13,13 @@ This page describes the community edition. Features from Pro on are under [Pro a
 
 ## Overview and tasks
 
+Guide: [Overview, tasks and reports](/en/guides/uebersicht/).
+
 The **Overview** is the start page: the next sensible step, progress in the IT-Grundschutz, key figures compared with the previous week, the sources of discovery and the **Tasks**. Tasks arise from deadlines and rules, such as licences and contracts running out, support ending, backup proofs missing, requirements due or consumables below their minimum; with the add-ons also the report deadlines of breaches and security incidents, data subject requests, the registration under NIS2, checks and defects of medical technology and follow-ups due. The command palette (`Ctrl + K`) finds assets, pages and actions; a scanned asset label or EAN appears there as the first match and opens the asset or the item with Enter. The navigation is divided into areas (IT estate, network, compliance, reports and administration, plus areas of the add-ons): the area of the current page stands open, the others open and close by their name, and the browser remembers your choice. On long pages **Back to top** at the bottom right leads back to the start of the page.
 
 ## Inventory
+
+Guides: [Recording and importing assets](/en/guides/assets/), [Master data](/en/guides/stammdaten/), [Asset handovers and security keys](/en/guides/ausgaben/).
 
 - **Assets** with category, location, owners, lifecycle (planned, active, in maintenance, retired, disposed), protection requirement per security goal and relations to other assets.
 - **Categories** as a tree with fields of their own per category, such as IMEI for mobile devices or, for **medical technology**, the risk class under the MDR and the UDI-DI; fields holding personal values are marked and visible only to roles allowed to see them. The navigation lists the categories with their counts.
@@ -46,6 +50,8 @@ The **Active Directory** sync reads computer objects over LDAPS (port 636) from 
 
 ## Asset health
 
+Guide: [asset health](/en/guides/uebersicht/) in the overview, reports from your own scripts with a [status token](/en/guides/betrieb/).
+
 A traffic light per asset (healthy, warning, critical, unknown) with its reasons, from the agent's last heartbeat with fixed thresholds (silence by device class, disk from 90 %, memory from 95 %) and from states an existing monitoring reports. Assets needing attention are on a page of their own and appear as tasks in the overview. The **Health** tab of an asset shows CPU, memory, disks, network throughput and graphics card.
 
 **Security state of devices:** once a day the agent reports for each protective function whether it is on, off, partly on or unknown: disk encryption, antivirus (with the age of its signatures), firewall, automatic updates (with the day of the last updates), Secure Boot and screen lock. It reads states only, never keys, rules, findings or names of updates; what cannot be determined reliably with built-in means stays "unknown". The state shows in the **Health** tab and serves the implementation help in IT-Grundschutz as a suggestion. On macOS it follows with the macOS agent.
@@ -54,9 +60,13 @@ A traffic light per asset (healthy, warning, critical, unknown) with its reasons
 
 ## IT-Grundschutz
 
+Guide: [IT-Grundschutz step by step](/en/guides/grundschutz/).
+
 Grundschutz++ and Edition 2023 with a guided process, the Grundschutz check and evidence, see [IT-Grundschutz](/en/guides/grundschutz/).
 
 ## Records
+
+Guides: [Software, licences, contracts and certificates](/en/guides/lizenzen/), [Documents](/en/guides/dokumente/).
 
 - **Licences:** product, manufacturer, licence model (per device, per user, volume, concurrent use, subscription, site), seats, term and cost; assigned to assets or people, over-assignment shown; licence keys encrypted and visible only to administration and information security, each time with an audit entry.
 - **Contracts:** supplier, type, term, notice period with automatic renewal, cost with billing interval; reminders before deadlines; covered assets, licences and locations.
@@ -72,6 +82,8 @@ Grundschutz++ and Edition 2023 with a guided process, the Grundschutz check and 
 - **Documents** with versions, per-file encryption, confidentiality levels, retention periods, optional virus scanning and links to assets, locations, suppliers, licences and contracts.
 
 ## Reports
+
+Guide: [Reports](/en/guides/uebersicht/).
 
 - **Inventory:** assets by lifecycle, category and location, what needs care (no owner, orphaned, support ending, shadow IT) and agent coverage; every figure leads to the filtered asset list.
 - **Costs:** monthly and yearly costs of licences and contracts per currency, area and item, and by cost center with the year's procurement, as CSV and for printing.
@@ -94,6 +106,8 @@ Add-ons are licensed separately and appear as their own group in the navigation.
 Deadlines and follow-ups of the add-ons appear under **Tasks**, in the bell and, on request, by e-mail, only for people who may make changes in the add-on.
 
 ## Operations
+
+Guide: [System health, audit log, status tokens and lifecycle rules](/en/guides/betrieb/).
 
 - **Sign-in:** local accounts with password and mandatory TOTP, created by the administration with a setup link; optionally OIDC with any identity provider; six [roles](/en/reference/rollen/), from Pro [adjustable and extended by custom roles](/en/pro/rollen-anpassen/); see [Setup](/en/guides/einrichtung/#sign-in-local-accounts-and-oidc).
 - **System health:** database, Valkey, job worker and virus scanner, the job queue, deadlines of the agent PKI, document storage and the last check of the audit chain.

@@ -1,0 +1,288 @@
+---
+title: Master data
+description: Create and maintain categories with their own fields and numberings, the location tree, responsible persons and suppliers with their contacts.
+head:
+  - tag: title
+    content: Maintaining master data | SentryAssets Docs
+sidebar:
+  label: Master data
+  order: 50
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+Master data are the frame your [assets](/en/guides/assets/) hang on: which **category** a device belongs to and which fields it has there, at which **location** it stands, who is **responsible** and which **supplier** it comes from. Keep these details tidy once, and lists, filters, labels and reports stay reliable later on.
+
+You find the master data in the navigation in the **Settings** area under **Master data**. On the left, the sections stand in three groups: **Inventory** with **Categories** and **Locations**, **People and partners** with **Responsible persons** and **Suppliers**, **Finance** with **Cost centers** (see [Cost centers](/en/guides/kostenstellen/)).
+
+Master data are part of the Community edition.
+
+## Prerequisites
+
+- **Viewing:** every role.
+- **Changing categories, fields and numberings:** **Administrator** or **Information security**.
+- **Changing locations, responsible persons and suppliers:** **Administrator**, **Information security** or **Editor**.
+- Details are under [Rights](#rights).
+
+## Categories
+
+Under **Master data › Categories**, the **Category tree** stands on the left, and on the right the chosen category with its **Fields** and its **Inventory numbers**. SentryAssets comes with standard categories, for computers, network devices and phones for instance; you add to them as needed.
+
+The tree has up to three levels, such as “Computer › Laptop › Development”. A subcategory inherits the fields and the numbering of its parent category. Under **Assets**, the navigation lists every category with its count.
+
+### Creating a category
+
+<Steps>
+
+1. Choose **Create category**, or choose a category and then **Create subcategory**.
+
+2. Enter the **Name**, such as “Development” (at most 100 characters).
+
+3. Enter the **Key**: lower-case letters, digits, hyphen, at most 50 characters, such as `development`. It cannot be changed later.
+
+4. Under **Parent category**, choose the category above or **None (top level)**.
+
+5. Choose the **Device class**: **Servers**, **Virtual machines**, **Clients**, **Network**, **Printers and peripherals**, **Mobile devices** or **IoT / OT**. For a subcategory, **Take over from the parent category** uses the class above; **None (not a device)** suits software or databases.
+
+6. Choose **Create category**.
+
+</Steps>
+
+The device class decides which technical details the asset form shows: mobile devices have no host name, categories without a device class only the manufacturer. The asset list filters by it.
+
+The category **Unassigned** is special: new devices from agents and network scans arrive there until you move them to a fitting category. It cannot be deleted and cannot require an inventory number.
+
+### Recommended fields
+
+The standard categories come with recommended fields such as purchase date, warranty, firmware version or licence type. **Add recommended fields** above the tree creates the missing ones; existing fields stay as they are.
+
+### Fields of your own
+
+Every category can have fields of its own, such as the IMEI of mobile devices or the end of warranty of laptops. They appear in the asset form and in the profile under **Category fields**.
+
+<Steps>
+
+1. Choose the category and then **Add field**.
+
+2. Enter the **Label** as it should appear in the form (at most 100 characters).
+
+3. Enter the **Key**: lower-case letters, digits and underscore, starting with a letter, at most 50 characters, such as `imei`. It cannot be changed later.
+
+4. Choose the **Field type** (see the table). It cannot be changed later either.
+
+5. Set the limits for the type.
+
+6. Tick **Required** and **Personal data** as needed.
+
+7. Choose **Save**.
+
+</Steps>
+
+| Field type | Limits |
+|---|---|
+| **Text** | **Maximum length (characters)** from 1 to 1,000 |
+| **Number** | **Minimum** and **Maximum** |
+| **Date** | – |
+| **Selection** | **Options**, one option per line, at most 50, each at most 100 characters |
+| **Yes/No** | – |
+
+A field of the parent category appears in the subcategory with “inherited from …”; it can be changed and deleted only where it was created. **Edit field** changes the label, limits, **Required** and **Personal data**. **Delete field** removes the field and its stored values from every asset of the category and its subcategories.
+
+There are no fields for PINs, passwords, seeds or recovery codes: such secrets are never stored.
+
+### Personal fields
+
+Mark a field as **Personal data** if its value identifies a person, such as the IMEI or the number of a company phone. Such a field carries the mark **personal** in the list of fields. Its values
+
+- are seen only by **Administrator**, **Information security**, **Editor** and **Data protection**; the other roles only see a note on the asset that such fields exist, and
+- are never included in the CSV export of the asset list.
+
+### Deleting a category
+
+Choose **Delete category** and confirm. This is only possible if no assets and no subcategories belong to the category; move them first. Its field definitions are deleted with the category.
+
+### Inventory numbers
+
+A category's **Inventory numbers** card sets up its **numbering**. It also applies to subcategories without their own.
+
+<Steps>
+
+1. Choose the category and, on the **Inventory numbers** card, **Set up numbering**.
+
+2. Enter the **Prefix**, at most 30 characters. `{jahr}` stands for the current year, such as `NB-{jahr}-`.
+
+3. Choose the **Digits** (1 to 10) and the **Next number (counter)**.
+
+4. Check the preview “The next asset gets:”, such as `NB-2026-00001`.
+
+5. Tick **Required for all assets of the category** if needed, and save.
+
+</Steps>
+
+New assets get the next number if you leave the **Inventory number** field empty. With **Required**, every asset of the category has a number: when saving, existing assets without a number get the next numbers, and the number can then be changed but no longer removed. Under **Without number**, the card shows how many assets have none yet.
+
+**Remove** takes the numbering away. If a parent category has a required numbering, assets without a number then get numbers from it; this cannot be undone, so SentryAssets asks first.
+
+## Locations
+
+Under **Master data › Locations**, you maintain the **Location tree**: where your devices stand, from the branch down to the server room. Locations serve as a filter in the asset list and are used by [stocktaking](/en/guides/inventur/), racks, consumables and agents.
+
+Every entry has a **Kind**:
+
+| Kind | Example |
+|---|---|
+| **Site** | Head office, Cologne branch |
+| **Building** | Building A |
+| **Floor** | 2nd floor |
+| **Room** | Server room 2.14 |
+
+The order is site, building, floor, room: a building never lies below a room. The same level is fine, such as a room within a room or a wing within a building. A **Site** also has a **Site type**: **Headquarters**, **Branch**, **Data centre**, **Home office** or **Cloud region**.
+
+### Creating a location
+
+<Steps>
+
+1. Choose **Create location**, or choose a location and then **Create below**.
+
+2. Enter the **Name**, at most 200 characters. Each name is possible only once on the same level.
+
+3. Under **Located in**, choose the entry above or **None (top level)**.
+
+4. Choose the **Kind** and, for a site, the **Site type**.
+
+5. Add a **Description** and the **Address** (**Street**, **House number**, **Postal code**, **City**, **Country**) as needed and choose **Create location**.
+
+</Steps>
+
+### What a location shows
+
+Choose a location in the tree. The tabs:
+
+- **Overview:** the number of **Assets** and **Racks** here and below, the **Locations below**, the **Profile** and the **Protection requirement**. The protection requirement follows the maximum principle of BSI Standard 200-2: per security goal, a location has the highest protection requirement of the assets in it.
+- **Master data:** the details from above, plus
+  - **Responsibility:** **Responsible**, such as the head of the branch, and **Contact on site**, such as facility management, both from the responsible persons,
+  - **Access:** **Access protection** from **Freely accessible** to **Secure area with logged access** and a **Note on access**, without codes or passwords,
+  - for sites and buildings only: **Hazards of the location** after the BSI's elementary threats, such as **Flood** (G 0.3, G 0.5) or **Major traffic routes nearby** (G 0.6), and the **Internet connection** with **Kind of line**, bandwidth and **Second line in place**.
+
+  Choose **Save**; the message offers **Undo**.
+- **Documentation**, **Documents** and **Contracts** of the location.
+- **Connections:** how locations are connected with each other. **Add connection**, choose the other location and the **Kind**: **WAN (provider)**, **VPN over the internet**, **Own line** or **Radio link**, plus bandwidth, label and note as needed. The connection appears at both locations.
+- **Assets:** the assets here and below, with a link to the filtered asset list.
+
+### Deleting a location
+
+Choose **Delete location** and confirm. Persons, agents and rollout tokens with this location lose it. Assets, sub-locations, racks and consumable stock must move to another location first; otherwise SentryAssets refuses with a fitting message. A location with an open stocktaking cannot be deleted.
+
+## Responsible persons
+
+Under **Master data › Responsible persons** are the people and teams responsible for assets. You choose them on an asset under **Responsible**, at locations, for disposals and for asset handovers.
+
+<Steps>
+
+1. Choose **Create responsible person**.
+
+2. Enter the **Name** and, as needed, **Function / role** (such as head of IT or caretaker), **E-mail** and **Department**.
+
+3. Choose the **Location** where the person works, if you like.
+
+4. Enter the **Last working day (optional)** if known. SentryAssets reminds you 14 days before to take back the assets handed over.
+
+5. Save.
+
+</Steps>
+
+A click on a person opens their page with **Handed over** (which assets they hold at the moment) and **Responsible for** (which assets they are entered for). Name, function, e-mail and department are personal data; the audit log records changes to them as “changed” only.
+
+If you delete a person, their assets are no longer assigned. If assets are still handed to them or they are needed elsewhere, for an appointment for instance, SentryAssets refuses to delete; take the assets back first.
+
+<Badge text="Pro" variant="note" /> From Pro, SentryAssets matches the responsible persons with the [users from Active Directory](/en/pro/active-directory/) and guides you through [joiners and leavers](/en/pro/ein-und-austritte/).
+
+## Suppliers
+
+Under **Master data › Suppliers** are manufacturers, resellers and service providers. On an asset, you link them as **Manufacturer**, **Bought from** and **Maintained by**.
+
+### Adding a supplier
+
+<Steps>
+
+1. Choose **Add supplier**.
+
+2. Enter the **Name** and choose at least one **Kind**: **Manufacturer**, **Reseller** or **Service provider**. A supplier can have several kinds, such as reseller and service provider.
+
+3. Add the address, **Customer number**, **Website**, **Support page**, **Support email**, **Support phone** and **Note** as needed. Web addresses only with `https://`; passwords or credentials do not belong in the note.
+
+4. Save.
+
+</Steps>
+
+It is quicker from the asset form: choosing a supplier offers, for instance, **Create a new reseller …**. Name and kind are enough there; you add the rest later.
+
+The list searches with **Search suppliers** and filters by kind and by **Active** or **Archived**. A supplier's page has the tabs **Overview**, **Contacts**, **Assets** (with **Linked as**), **Documents** and **Contracts**.
+
+### Importing suppliers
+
+<Steps>
+
+1. Choose **Import** and, if needed, **Download template**.
+
+2. Fill in one row per supplier. **Name** and **Kind** are required (manufacturer, reseller or service provider, several separated by commas).
+
+3. Upload the file under **CSV file**. The preview shows how many rows are new, already there or invalid.
+
+4. Choose **Create … suppliers**.
+
+</Steps>
+
+Existing suppliers are not changed. The file has at most 500 rows and 1 MB, in UTF-8 or Windows-1252.
+
+### Contacts
+
+On the **Contacts** tab, choose **Add contact** and enter **Name**, **Job title**, **Business email** and **Business phone**. Under **Roles**, choose **Sales**, **Support**, **Emergency contact** or **Data protection**. Record business contact details only. A person can be listed at several suppliers; they then show “Also at: …”.
+
+Contacts are personal data:
+
+- **Export personal data** downloads what is stored about the contact, for a request under Art. 15 GDPR for instance. The export is recorded in the audit log.
+- If a contact no longer belongs to any active supplier, the list suggests them under **Suggested for deletion**.
+- The audit log records which fields changed, not their values.
+
+### Archiving instead of deleting
+
+If you no longer work with a supplier, choose **Archive**. It keeps its links but is no longer offered for new ones. **Restore** takes that back. **Delete** works only while the supplier is linked to no asset and no contact.
+
+## Rights
+
+| Role | Categories, fields, numberings | Locations | Responsible persons | Suppliers | Contacts |
+|---|---|---|---|---|---|
+| Administrator, Information security | view, change | view, change | view, change | view, change | view, change |
+| Editor | view | view, change | view, change | view, change | view, change |
+| Data protection | view | view | view | view | view |
+| Auditor, Read only | view | view | view | view | – |
+
+- **Personal category fields** are seen only by Administrator, Information security, Editor and Data protection.
+- <Badge text="Pro" variant="note" /> With [location rights](/en/pro/standortrechte/), people change only at their locations. Responsible persons can then be deleted only by someone not bound to locations.
+- What each role may do is under [Roles and permissions](/en/reference/rollen/); from Pro, roles can be adjusted.
+
+## Limits
+
+- Categories: at most three levels and 500 categories per organisation, at most 50 fields per category.
+- Numberings: prefix at most 30 characters, 1 to 10 digits; one save numbers at most 1,000 assets at once.
+- Locations: at most 2,000 per organisation; name at most 200 characters, description at most 2,000, note on access at most 500; bandwidth 1 to 100,000 Mbit/s; at most 500 connections.
+- Suppliers: import at most 500 rows and 1 MB per file.
+
+## Check the result
+
+- The new category is in the category tree and in the navigation under **Assets**; its fields appear in the asset form under **Category fields**.
+- The numbering's preview shows the number the next asset gets.
+- The location is in the location tree with its kind and can be chosen as a filter in the asset list.
+- Responsible persons and suppliers can be chosen in the asset form.
+
+## Troubleshooting
+
+- **“The category is still in use: move its assets and subcategories first. …”** Move the assets to another category and move or delete the subcategories.
+- **““Unassigned” cannot require a number: new devices of agents arrive there.”** Set up the required numbering in another category.
+- **“More than 1,000 assets have no number yet. …”** Set up the required numbering first in subcategories with fewer assets.
+- **“This name already exists on this level.”** Choose another name or another level for the location.
+- **“A location never lies below a lower level: …”** Choose a fitting **Kind** or another entry under **Located in**.
+- **“Assets still belong to this location. Move them first.”** In the asset list, set another location with **Set location**.
+- **“… is still linked to assets or contacts. Archive the supplier instead.”** Choose **Archive**.
+- **“The header contains an unknown column. Please use the template.”** Get the template with **Download template** and use its header.
