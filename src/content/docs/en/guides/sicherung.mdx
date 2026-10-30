@@ -116,6 +116,8 @@ docker compose restart caddy
 
 The command asks for the passphrase and issues both again for the same names. **Restart the proxy by the time the command names**, usually 24 hours later. Until then the previous issuing CA keeps issuing, and it stays valid until it ends, so no agent drops out. If the command reports that the files were not all replaced, do not restart the proxy and run the command again.
 
+Under rootless Docker or Podman the container reads with an ID of its own, so `Permission denied` means it may not read the key file. Make the mounted folder and the file readable (`chmod 755` and `chmod 644`); keep the folder inside one only you can open, as on a medium of your own. The file is encrypted with the passphrase.
+
 ## Checking the audit chain
 
 ```bash

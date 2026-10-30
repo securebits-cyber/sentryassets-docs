@@ -116,6 +116,8 @@ docker compose restart caddy
 
 Der Befehl fragt die Passphrase ab und stellt beides für dieselben Namen neu aus. **Starten Sie den Proxy bis zu dem Zeitpunkt neu, den der Befehl nennt**, in der Regel 24 Stunden später. Bis dahin stellt die bisherige Issuing-CA aus, und sie bleibt gültig, bis sie endet; so fällt kein Agent heraus. Meldet der Befehl, dass die Dateien nicht vollständig ersetzt sind, starten Sie den Proxy nicht neu und führen Sie den Befehl erneut aus.
 
+Unter rootless Docker oder Podman liest der Container mit einer eigenen Kennung; `Permission denied` heißt dann, dass er die Schlüsseldatei nicht lesen darf. Machen Sie den eingebundenen Ordner und die Datei lesbar (`chmod 755` und `chmod 644`) und legen Sie den Ordner in einen, den nur Sie öffnen können, etwa auf Ihrem eigenen Datenträger. Die Datei ist mit der Passphrase verschlüsselt.
+
 ## Audit-Kette prüfen
 
 ```bash
