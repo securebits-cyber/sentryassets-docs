@@ -55,12 +55,29 @@ The start page shows the figures **Devices**, **Not ready**, **Defects** (this y
 | Area | Content |
 |---|---|
 | **Defects** | Malfunctions, operating errors and damage with state, author, **device ready / not ready** and **BfArM report** (to be decided, required, not required); filters for period, state, report, keyword and "My reports only". An open defect marked "not ready" keeps the device from use until it is resolved. A defect holds the **repair order** to a service company with order number and cost, consequences, the date the manufacturer was informed, and the resolution. Defects stay in the device book |
-| **Report defect** | Also for the team at the device (a role with the right "Report defects of medical devices", by default also viewers): device, subject, kind, description and whether the device can still be used. Each person can report 10 defects a minute and 100 a day |
+| **Report defect** | Also for the team at the device (a role with the right "Report defects of medical devices", by default also viewers): device, subject, kind, description, whether the device can still be used and whether a person died or their state of health deteriorated seriously. Each person can report 10 defects a minute and 100 a day |
+| **Internal deadline** | Your own target for required reports to the BfArM: 1 to 14 days, default 3, for the whole organisation. It is changed by who manages the medical technology and is bound to no location; every change is in the audit log |
 | **Recalls** | Field safety notices and corrective actions of manufacturers with reference, receipt, due date and document; for each device concerned, the date the action was done |
 
 <Aside type="note" title="Report to the BfArM">
 Operators and users report suspected serious incidents to the competent federal authority without delay, usually the BfArM (§ 3 MPAMIV). Whether such an incident occurred is your decision; the software suggests nothing automatically and reports nothing itself. Once a report is required and not yet recorded, it appears in the bell as an urgent task at once. Enter the date and reference after reporting.
+
+The device concerned must not be discarded or reprocessed until the BfArM has finished its risk assessment (§ 72 No. 5 MPDG); the defect shows this note as soon as a report is required.
 </Aside>
+
+### Internal deadline and escalation
+
+The law asks for the report **without delay**, that is without culpable hesitation, and names no number of days. The internal deadline under **Defects and reports › Internal deadline** is therefore only your own target: it escalates open reports but gives no legal leeway. Until you enter the date of the report, a required report passes three stages, counted from "Noticed on":
+
+| Stage | When | Shown as |
+|---|---|---|
+| Pending | at once | "Report pending", an urgent task in the bell |
+| Reminder | after 24 hours | "Reminder: report pending" |
+| Internal deadline passed | after the internal deadline (default 3 days) | "Internal deadline passed" |
+
+Tick **Death or serious deterioration of health** on the defect, and the reminder comes after **4 hours** and the internal deadline ends **24 hours** after noticing. "The same day" is implemented as 24 hours on purpose, so an incident just before midnight does not get only minutes.
+
+Each open report is in exactly one stage; the bell shows one line per stage and leads to the filtered list of defects. Each move to the next stage sends a new instant mail to everyone who receives the medical technology category at once. Everyone who manages the medical technology sees the tasks, by default the administration too. The card of each defect names its stage and the end of the internal deadline.
 
 ## Organisation
 
@@ -75,7 +92,7 @@ A device's **device book** (§ 13) is built from its entries: name and identific
 
 ## Tasks and e-mail
 
-For roles that manage medical technology, the bell and the e-mail category **Deadlines, defects and reports of medical technology** show: pending BfArM reports, devices not ready for use, checks overdue and due within 30 days, open recalls (urgent once past their due date), missing briefings and missing officers.
+For roles that manage medical technology, the bell and the e-mail category **Deadlines, defects and reports of medical technology** show: pending BfArM reports in three stages (pending, reminder, internal deadline passed), devices not ready for use, checks overdue and due within 30 days, open recalls (urgent once past their due date), missing briefings and missing officers.
 
 ## Roles and permissions
 

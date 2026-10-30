@@ -55,12 +55,29 @@ Die Startseite zeigt die Kennzahlen **Geräte**, **Nicht einsatzklar**, **Mänge
 | Bereich | Inhalt |
 |---|---|
 | **Mängel** | Funktionsstörungen, Bedienungsfehler und Schäden mit Stand, Verfasser, **Gerät einsatzklar / nicht einsatzklar** und **BfArM-Meldung** (zu klären, erforderlich, nicht erforderlich); Filter nach Zeitraum, Stand, Meldung, Stichwort und „Nur meine Meldungen“. Ein offener Mangel mit „nicht einsatzklar“ macht das Gerät nicht einsatzklar, bis er behoben ist. Zum Mangel gehören der **Reparaturauftrag** an eine Servicefirma mit Auftragsnummer und Kosten, Folgen, Hersteller informiert am und die Lösung. Mängel bleiben im Medizinproduktebuch |
-| **Mangel melden** | auch für das Team am Gerät (Rolle mit dem Recht „Mängel an Medizinprodukten melden“, standardmäßig auch Betrachter): Gerät, Betreff, Art, Beschreibung und ob das Gerät weiter benutzt werden kann. Je Person sind 10 Meldungen in der Minute und 100 am Tag möglich |
+| **Mangel melden** | auch für das Team am Gerät (Rolle mit dem Recht „Mängel an Medizinprodukten melden“, standardmäßig auch Betrachter): Gerät, Betreff, Art, Beschreibung, ob das Gerät weiter benutzt werden kann und ob eine Person gestorben ist oder sich ihr Gesundheitszustand schwerwiegend verschlechtert hat. Je Person sind 10 Meldungen in der Minute und 100 am Tag möglich |
+| **Hausfrist** | Ihr internes Ziel für erforderliche Meldungen an das BfArM: 1 bis 14 Tage, Standard 3, für die ganze Organisation. Ändern darf, wer die Medizintechnik verwaltet und an keinen Standort gebunden ist; jede Änderung steht im Audit-Log |
 | **Rückrufe** | Kundeninformationen und Sicherheitskorrekturmaßnahmen der Hersteller mit Referenz, Eingang, Frist und Dokument; je betroffenem Gerät das Datum der Erledigung |
 
 <Aside type="note" title="Meldung an das BfArM">
 Mutmaßliche schwerwiegende Vorkommnisse melden Betreiber und Anwender unverzüglich der zuständigen Bundesoberbehörde, in der Regel dem BfArM (§ 3 MPAMIV). Ob ein solches Vorkommnis vorliegt, entscheiden Sie; die Software schlägt nichts automatisch vor und meldet nichts selbst. Ist eine Meldung erforderlich und noch nicht eingetragen, steht sie sofort als dringende Aufgabe in der Glocke. Tragen Sie nach der Meldung Datum und Kennung ein.
+
+Das betroffene Produkt darf nicht verworfen und nicht aufbereitet werden, bis das BfArM seine Risikobewertung abgeschlossen hat (§ 72 Nr. 5 MPDG); der Mangel zeigt diesen Hinweis, sobald eine Meldung erforderlich ist.
 </Aside>
+
+### Hausfrist und Eskalation
+
+Das Gesetz verlangt die Meldung **unverzüglich**, also ohne schuldhaftes Zögern, und nennt keine Zahl von Tagen. Die Hausfrist unter **Mängel und Meldungen › Hausfrist** ist deshalb nur ein internes Ziel: Sie eskaliert offene Meldungen, gibt aber keinen rechtlichen Spielraum. Bis Sie das Meldedatum eintragen, durchläuft eine erforderliche Meldung, gerechnet ab „Bemerkt am“, drei Stufen:
+
+| Stufe | Wann | Anzeige |
+|---|---|---|
+| Ausstehend | sofort | „Meldung ausstehend“, dringende Aufgabe in der Glocke |
+| Erinnerung | nach 24 Stunden | „Erinnerung: Meldung ausstehend“ |
+| Hausfrist überschritten | nach der Hausfrist (Standard 3 Tage) | „Hausfrist überschritten“ |
+
+Kreuzen Sie am Mangel **Tod oder schwerwiegende Verschlechterung des Gesundheitszustands** an, kommt die Erinnerung nach **4 Stunden** und die Hausfrist endet **24 Stunden** nach dem Bemerken. „Am selben Tag“ ist bewusst als 24 Stunden umgesetzt, damit ein Vorkommnis kurz vor Mitternacht nicht nur Minuten hat.
+
+Jede offene Meldung steht in genau einer Stufe; die Glocke zeigt eine Zeile je Stufe und führt zur gefilterten Liste der Mängel. Jeder Wechsel in die nächste Stufe löst eine neue Sofort-Mail aus an alle, die die Kategorie Medizintechnik sofort erhalten. Die Aufgaben sehen alle, die die Medizintechnik verwalten, standardmäßig also auch die Administration. Die Karte jedes Mangels nennt Stufe und Ende der Hausfrist.
 
 ## Organisation
 
@@ -75,7 +92,7 @@ Das **Medizinproduktebuch** (§ 13) eines Geräts entsteht aus seinen Einträgen
 
 ## Aufgaben und E-Mail
 
-Für Rollen, die die Medizintechnik verwalten, erscheinen in der Glocke und in der E-Mail-Kategorie **Fristen, Mängel und Meldungen der Medizintechnik**: ausstehende BfArM-Meldungen, nicht einsatzklare Geräte, überfällige und in 30 Tagen fällige Prüfungen, offene Rückrufe (nach Ablauf der Frist dringend), fehlende Einweisungen und fehlende Beauftragte.
+Für Rollen, die die Medizintechnik verwalten, erscheinen in der Glocke und in der E-Mail-Kategorie **Fristen, Mängel und Meldungen der Medizintechnik**: ausstehende BfArM-Meldungen in drei Stufen (ausstehend, Erinnerung, Hausfrist überschritten), nicht einsatzklare Geräte, überfällige und in 30 Tagen fällige Prüfungen, offene Rückrufe (nach Ablauf der Frist dringend), fehlende Einweisungen und fehlende Beauftragte.
 
 ## Rollen und Rechte
 
