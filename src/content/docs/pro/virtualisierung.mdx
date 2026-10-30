@@ -21,7 +21,7 @@ SentryAssets liest Hosts und virtuelle Maschinen im Hintergrund in einem Abstand
 |---|---|
 | **Proxmox VE** | ein Knoten des Clusters, Port 8006, API-Token eines Benutzers mit der Rolle `PVEAuditor` auf `/` (nur lesend) |
 | **VMware vCenter** ab 7.0 Update 2 | Port 443, Benutzer mit der Rolle „Nur lesen“; einzelne ESXi-Hosts ohne vCenter haben die nötige API nicht |
-| **Hyper-V** | über den Agent auf dem Host: einmal die Verbindung „Hyper-V über den Agent“ anlegen; der Agent liest die Gäste über WMI, nur lesend, mit Bordmitteln von Windows |
+| **Hyper-V** | über den Agent auf dem Host: einmal die Verbindung „Hyper-V über Agent“ anlegen; der Agent liest die Gäste über WMI, nur lesend, mit Bordmitteln von Windows |
 
 ## Agent auf jedem Host
 
