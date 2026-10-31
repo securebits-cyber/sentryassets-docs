@@ -52,7 +52,7 @@ Der Bericht wird **nicht gesendet**, sondern als JSON-Datei gespeichert, die Sie
 | Registrierung bricht wegen der CA ab | Der Fingerprint im Befehl passt nicht zur Root-CA, oder ein Proxy bricht TLS auf. Nehmen Sie den Agent-Host von der TLS-Inspektion aus. |
 | Token abgelehnt | abgelaufen, aufgebraucht oder widerrufen. Erzeugen Sie ein neues. |
 | Agent erscheint nicht als Asset | Er wartet auf Freigabe unter **Agents**. Ohne Freigabe wird er nach der Frist gesperrt. |
-| Agent meldet sich nicht mehr | Zertifikat abgelaufen (Uhrzeit des Geräts prüfen) oder Agent gesperrt. Ein gesperrter Agent braucht ein neues Rollout-Token. Steht unter **Einstellungen › Aktivität** **gesperrtes Zertifikat erneut vorgelegt**, wurde seine Identität kopiert: siehe [Zertifikate und Erneuerung](/guides/agents/#zertifikate-und-erneuerung). |
+| Agent meldet sich nicht mehr | Zertifikat abgelaufen (Uhrzeit des Geräts prüfen) oder Agent gesperrt. Ein gesperrter Agent braucht ein neues Rollout-Token. Steht unter **Einstellungen › Aktivität** **gesperrtes Zertifikat erneut vorgelegt**, wurde seine Identität kopiert oder das Gerät auf einen alten Snapshot zurückgesetzt; der Agent ist gesperrt, siehe [Zertifikate und Erneuerung](/guides/agents/#zertifikate-und-erneuerung). |
 | Collector findet keine MAC-Adressen | Er steht in einem anderen Netzsegment. |
 
 ## Uploads und Dokumente
