@@ -1,6 +1,6 @@
 ---
 title: Joiners and leavers
-description: With Pro, SentryAssets leads through staff joining and leaving, issues devices, finds by itself what must come back and prints the protocol to sign.
+description: With Pro, SentryAssets leads through joining, leaving and transfers, with deadlines, tickets, mails and approvals per step, finds what must come back and lets the person confirm receipt.
 head:
   - tag: title
     content: Employee onboarding and offboarding | SentryAssets Docs
@@ -13,7 +13,7 @@ import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 <Badge text="Pro" variant="note" /> This feature applies from the Pro edition.
 
-When a person joins, they receive devices, keys and access; when they leave, everything must come back. Under **Employees › Joiners and leavers**, SentryAssets handles both as a case with steps: a **joining** case follows the steps of its template, a **leaving** case also finds by itself what the person still has. At the end there is a protocol to sign.
+When a person joins, they receive devices, keys and access; when they leave, everything must come back. Under **Employees › Joiners and leavers**, SentryAssets handles both as a case with steps: a **joining** case follows the steps of its template, a **leaving** case also finds by itself what the person still has, and a **transfer** to another department or location finds what they have and lets you decide for each point whether it stays. At the end there is a protocol to sign.
 
 This matches module ORP.2 “Personnel” of the IT-Grundschutz Compendium, which asks for a controlled induction and a controlled procedure when staff leave (source: BSI, IT-Grundschutz Compendium, Edition 2023, module ORP.2). SentryAssets supports the procedure; whether everything is done, you check yourself. Support, not an audit.
 
@@ -49,19 +49,34 @@ Templates set which steps a case has, such as “Set up building access” or �
 
 1. Open **Employees › Joiners and leavers** and the **Templates** tab.
 
-2. Choose **Add template**, enter the **Name** and choose **Joining** or **Leaving** under **For**.
+2. Choose **Add template**, enter the **Name** and choose **Joining**, **Leaving** or **Transfer** under **For**.
 
 3. Tick **Default template for this kind** if needed. There is one default template per kind.
 
 4. Choose **Add step** and enter a title and, if you like, a description.
 
-5. Choose the kind of step: **Task to check off** or, for joining only, **Issue device**. Tick **Required** if the case must not complete without this step.
+5. Choose the kind of step: **Task to check off** or, for joining and transfers, **Issue device**. Tick **Required** if the case must not complete without this step. Optional per step: deadline, approval, mail and ticket (see below).
 
 6. Order the steps with the arrows and choose **Save**.
 
 </Steps>
 
 For leaving, list only further tasks such as blocking access: what the person returns is found by the case itself. At most 50 templates with 100 steps each. Templates apply at every location; a case copies the steps when it starts, so later changes and removing a template leave running cases untouched.
+
+### Deadline, approval, mail and ticket per step
+
+| Field of the step | Effect |
+|---|---|
+| **Deadline in days** | Days relative to the case's day, from −90 to 90; −3 means three days before, empty means no deadline. The case shows the date and marks overdue steps. If the day changes, all deadlines move with it. The bell and the e-mail notifications report **Steps due soon** (within the next three days) and **Steps overdue**. |
+| **Approval by a second person** | Tasks only. Checked off, the step waits for approval; it is done only once another person with the right to cases chooses **Approve**. Whoever checked it off does not approve it. |
+| **Mail to** | Up to three addresses, separated by commas. When the case begins, a mail per step goes out with name, kind, day and step, never with the note. It needs the [e-mail notifications](/en/guides/benachrichtigungen/) set up and allowed domains; the case shows whether it went out. |
+| **Create ticket in** | A configured [ticket system](/en/pro/tickets/). When the case begins, SentryAssets creates a ticket per step with a fixed title, the step's text and a link to the case, without the note. The case links the ticket or says why there was none. |
+
+### The fitting template by department, location and job title
+
+Under **Applies to** you optionally name **Departments**, **Job titles** (separated by commas, at most 20, case does not matter) and **Locations**, each with everything below it. If you choose no template when beginning, the case takes the one that matches most: department, job title and location of the person under **Master data › Responsible persons**. At a tie the older one applies, without a match the default template. The **Begin case** dialog shows which template fits and why. The automation also takes the fitting template when none is set.
+
+With **Confirmation by the person before completing**, the template requires that the person confirms under **My devices** what they received or returned (see [Confirmation by the person](#confirmation-by-the-person)).
 
 ## Joining
 
@@ -116,16 +131,21 @@ Right after a take-back you can reverse it with **Undo** in the notice, for 15 m
 
 If a tested [Entra ID connection](/en/pro/entra/) is set up and you may read personal details from Entra ID, the leaving case shows the card **Account in Entra ID**: whether the account linked to the person is still enabled as of the last reconciliation, and how many Intune devices still name them as primary user. SentryAssets only reads Entra ID; it disables or changes nothing there. Disable the account in Entra ID yourself. The note does not hold up completing and reflects the last reconciliation.
 
+## Transfer
+
+When a person moves to another department or location, begin a **Transfer** with the **Day of the transfer**. As for a leaver, the case finds what the person has. For each point you decide: **Person keeps it** (the device stays with them, the point is done) or take it back, reassign or free it as for a leaver. **Decide again** reopens a kept point. You may keep what you could also take back, that is with the write right of the area and at the asset's location. The transfer's template brings what the new place needs; what the transfer issues itself does not count as found. The **Transfer protocol** lists kept points as **Stays with the person**, never as returned.
+
 ## Beginning by themselves
 
-Under **Employees › Joiners and leavers**, tab **Automation**, leaving and joining cases begin by themselves as soon as [Active Directory](/en/pro/active-directory/) or [Entra ID](/en/pro/entra/) show them. SentryAssets checks every 15 minutes.
+Under **Employees › Joiners and leavers**, tab **Automation**, leaving, joining and transfer cases begin by themselves as soon as [Active Directory](/en/pro/active-directory/) or [Entra ID](/en/pro/entra/) show them. SentryAssets checks every 15 minutes.
 
 <Steps>
 
 1. Choose the **sources**: Active Directory, Entra ID or both. The people must already be read there.
 2. **Begin leaving cases automatically** for people whose account was disabled or left the groups and who are linked to a responsible person. The last working day is the day of the disabling; it goes into the directory as the last working day where your rights allow it.
 3. **Begin joining cases automatically** for people whose account was created within the last 30 days. The first working day is the day it was created. New people without a responsible person are created only if **Create new people as responsible persons on the way** is chosen.
-4. Choose a **template** per kind or keep the default template, and **Save**. To switch it on you confirm your sign-in first, as the automation then works with your rights for good.
+4. **Start transfers automatically** for linked people the directory shows in another department or (AD only, through the location rules) at another location than recorded for them. The day of the transfer is the day it is noticed; the automation takes the new values over into the person. This needs the right to resolve people from AD or Entra ID and the write right in the inventory. A value filled in for the first time is no transfer, nor is the office field, which accounts can change themselves.
+5. Choose a **template** per kind or keep **Fitting template, else the default template**, and **Save**. To switch it on you confirm your sign-in first, as the automation then works with your rights for good.
 
 </Steps>
 
@@ -134,17 +154,28 @@ The automation begins cases in the name of the person who saved last, and only w
 </Aside>
 
 - **Never twice:** if a case of this kind is running, no second one begins. If you cancel a case that began by itself, it does not begin again by itself for the same day, even if you changed its date before.
-- **Safeguard:** each run begins 20 cases at most. If more than 20 leavers were due at once, or more than three and at the same time more than a tenth of the people, nothing begins and the automation pauses with the note “unusually many leavers”. Check groups and base DNs then.
+- **One transfer per destination:** the same move of a person to the same new department or location begins once, whether the case was completed, cancelled or the takeover failed. What differs already when switching on is the starting point. If a person's accounts, or AD and Entra ID, show different departments, nothing begins. Someone joining or leaving gets no transfer on top.
+- **Safeguard:** each run begins 20 cases at most. If more than 20 leavers were due at once, or more than three and at the same time more than a tenth of the people, nothing begins and the automation pauses with the note “unusually many leavers”. Check groups and base DNs then. The same holds for transfers: begin a reorganisation by hand.
 - **Nothing in AD or Entra ID:** SentryAssets still never creates, changes or disables accounts there.
 - Roles that may begin joining and leaving and read personal data, without a location binding, and that may read the chosen source, may change the automation.
 
 Cases that begin this way carry the note **automatic from AD** or **automatic from Entra ID** in the list.
+
+## Confirmation by the person
+
+Under [My devices](/en/pro/selbstbedienung/), a person with a linked account sees in the section **To confirm** what a running case issued to them or took back through the case, and chooses **Confirm receipt** or **Confirm return**. The case shows **Confirmed by the person on …** at the step. What the person keeps, or what was returned directly in the inventory, needs no confirmation.
+
+- The person confirms only their own steps and can change nothing else. The confirmation does not replace a signature on the protocol.
+- Whoever issued or took back the step, and whoever linked the account to the person by hand, does not confirm in their place.
+- If a take-back is undone, its confirmation goes with it.
 
 ## Completing
 
 Choose **Complete** once everything is done:
 
 - for **joining**, as soon as all required steps are done;
+- when no step waits for approval and, if the template asks for it, the person has confirmed everything;
+- for a **transfer**, when every point found is kept or done;
 - for **leaving**, in addition when no handover is open any more and every point found is done. Only someone who may read handovers, inventory, licences and security keys completes a leaving case; otherwise something could be overlooked.
 
 Afterwards the case can no longer be changed. **Cancel case** removes a running case with its checked steps after confirmation; handovers and changes in the inventory stay.
@@ -167,7 +198,7 @@ On the person's page under **Master data › Responsible persons**, the card **J
 - **Cases** also need the right to read personal fields, because who joins or leaves, and when, is personal. The auditor therefore sees only the templates.
 - **Names of users** (responsible, done by) show only to roles that see the names of persons in the audit log: Administrator, Information security, Data protection and Auditor.
 - Only someone not bound to locations changes templates. Cases are not bound to locations; every action on an asset still checks its location ([rights per location](/en/pro/standortrechte/)).
-- **Audit log:** start with person and template, without kind and date; date changes only as “changed”, notes only as “noted”, never titles or names. Actions in the inventory write its entries as well.
+- **Audit log:** start with person, template and how it was chosen (chosen, fitting, default), without kind and date; approvals, keeping, confirmations, mails (number of recipients only) and tickets (without text); date changes only as “changed”, notes only as “noted”, never titles or names. Actions in the inventory write its entries as well.
 - **Deleting:** if a person is deleted from the responsible persons, their cases go with them. There is no purpose for keeping the name afterwards (Art. 5 and Art. 17 GDPR). The asset handovers still record that an asset was handed out and came back, only no longer to whom.
 - Do not put sensitive details into notes, such as health or reasons for leaving.
 
@@ -193,5 +224,9 @@ On the person's page under **Master data › Responsible persons**, the card **J
 - **“The asset is already handed over to someone.”** Choose another asset, or take the existing handover back first.
 - **“The asset is out of use.”** Disposed assets cannot be issued.
 - **“You lack the rights or the location for this.”** The action needs write access at the asset's location.
+- **“Steps are still waiting for approval.”** Another person with the right to cases chooses **Approve** at the step.
+- **“The person has not yet confirmed everything …”** Ask the person to confirm under **My devices**; if their account is not linked, link it under [Self-service](/en/pro/selbstbedienung/).
+- **Mail not sent:** the case gives the reason, such as notifications not set up or a domain not allowed. The mail is not sent again.
+- **No ticket:** the case gives the reason, such as missing rights at the ticket system or a connection switched off.
 - **“The date is too far away.”** The day may be at most two years from today.
 - **No cases visible:** you lack the right to read personal fields.

@@ -1,6 +1,6 @@
 ---
 title: Ein- und Austritte
-description: Mit Pro führt SentryAssets durch Ein- und Austritte, gibt Geräte aus, ermittelt beim Austritt, was zurück muss, und druckt das Protokoll zur Unterschrift.
+description: Mit Pro führt SentryAssets durch Ein-, Austritte und Wechsel, mit Fristen, Tickets, Mails und Freigaben je Schritt, ermittelt, was zurück muss, und lässt die Person den Erhalt bestätigen.
 head:
   - tag: title
     content: Ein- und Austritte mit Geräterückgabe | SentryAssets Docs
@@ -13,7 +13,7 @@ import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 <Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro.
 
-Beim Eintritt bekommt eine Person Geräte, Schlüssel und Zugänge, beim Austritt muss alles zurück. Unter **Mitarbeitende › Ein- und Austritte** führt SentryAssets beides als Vorgang mit Schritten: Ein **Eintritt** folgt den Schritten seiner Vorlage, ein **Austritt** ermittelt zusätzlich von selbst, was die Person noch hat. Am Ende steht ein Protokoll zum Unterschreiben.
+Beim Eintritt bekommt eine Person Geräte, Schlüssel und Zugänge, beim Austritt muss alles zurück. Unter **Mitarbeitende › Ein- und Austritte** führt SentryAssets beides als Vorgang mit Schritten: Ein **Eintritt** folgt den Schritten seiner Vorlage, ein **Austritt** ermittelt zusätzlich von selbst, was die Person noch hat, und ein **Wechsel** von Abteilung oder Standort ermittelt, was sie hat, und lässt Sie je Punkt entscheiden, ob es bleibt. Am Ende steht ein Protokoll zum Unterschreiben.
 
 Das entspricht dem Baustein ORP.2 „Personal“ im IT-Grundschutz-Kompendium, der eine geregelte Einarbeitung und eine geregelte Verfahrensweise beim Weggang verlangt (Quelle: BSI, IT-Grundschutz-Kompendium, Edition 2023, Baustein ORP.2). SentryAssets unterstützt den Ablauf; ob alles erledigt ist, prüfen Sie selbst. Unterstützung, keine Prüfung.
 
@@ -49,19 +49,34 @@ Vorlagen legen fest, welche Schritte ein Vorgang hat, etwa „Zugang zum Gebäud
 
 1. Öffnen Sie **Mitarbeitende › Ein- und Austritte** und den Reiter **Vorlagen**.
 
-2. Wählen Sie **Vorlage anlegen**, tragen Sie den **Namen** ein und wählen Sie unter **Für** **Eintritt** oder **Austritt**.
+2. Wählen Sie **Vorlage anlegen**, tragen Sie den **Namen** ein und wählen Sie unter **Für** **Eintritt**, **Austritt** oder **Wechsel**.
 
 3. Setzen Sie bei Bedarf **Standardvorlage für diese Art**. Je Art gibt es eine Standardvorlage.
 
 4. Wählen Sie **Schritt hinzufügen** und tragen Sie Titel und bei Bedarf eine Beschreibung ein.
 
-5. Wählen Sie die Art des Schritts: **Aufgabe zum Abhaken** oder, nur beim Eintritt, **Gerät ausgeben**. Setzen Sie **Pflicht**, wenn der Vorgang ohne diesen Schritt nicht abgeschlossen werden darf.
+5. Wählen Sie die Art des Schritts: **Aufgabe zum Abhaken** oder, beim Eintritt und Wechsel, **Gerät ausgeben**. Setzen Sie **Pflicht**, wenn der Vorgang ohne diesen Schritt nicht abgeschlossen werden darf. Optional je Schritt: Frist, Freigabe, Mail und Ticket (siehe unten).
 
 6. Ordnen Sie die Schritte mit den Pfeilen und wählen Sie **Speichern**.
 
 </Steps>
 
 Beim Austritt tragen Sie nur weitere Aufgaben ein, etwa Zugänge sperren: Was die Person zurückgibt, ermittelt der Vorgang von selbst. Höchstens 50 Vorlagen mit je 100 Schritten. Vorlagen gelten an allen Standorten; ein Vorgang kopiert die Schritte beim Beginn, spätere Änderungen und das Entfernen einer Vorlage lassen laufende Vorgänge unberührt.
+
+### Fristen, Freigabe, Mail und Ticket je Schritt
+
+| Feld im Schritt | Wirkung |
+|---|---|
+| **Frist in Tagen** | Tage zum Stichtag, von −90 bis 90; −3 heißt drei Tage vorher, leer heißt ohne Frist. Der Vorgang zeigt das Datum und markiert überfällige Schritte. Ändert sich der Stichtag, rücken alle Fristen mit. Die Glocke und die Mail-Benachrichtigungen melden **Schritte bald fällig** (in den nächsten drei Tagen) und **Schritte überfällig**. |
+| **Freigabe durch eine zweite Person** | Nur bei Aufgaben. Abgehakt steht der Schritt auf **Wartet auf Freigabe**; erledigt ist er erst, wenn eine andere Person mit Recht auf Vorgänge **Freigeben** wählt. Wer abgehakt hat, gibt nicht frei. |
+| **Mail an** | Bis zu drei Adressen, durch Komma getrennt. Beim Beginn des Vorgangs geht je Schritt eine Mail mit Name, Art, Stichtag und Schritt hinaus, nie mit der Notiz. Sie braucht die eingerichteten [Mail-Benachrichtigungen](/guides/benachrichtigungen/) und erlaubte Domänen; der Vorgang zeigt, ob sie hinausging. |
+| **Ticket anlegen in** | Ein eingerichtetes [Ticketsystem](/pro/tickets/). Beim Beginn legt SentryAssets je Schritt ein Ticket mit festem Titel, dem Text des Schritts und einem Link auf den Vorgang an, ohne Notiz. Der Vorgang verlinkt das Ticket oder nennt, warum es keines gab. |
+
+### Passende Vorlage nach Abteilung, Standort und Funktion
+
+Unter **Gilt für** nennen Sie optional **Abteilungen**, **Funktionen** (je durch Komma getrennt, höchstens 20, ohne Rücksicht auf Groß- und Kleinschreibung) und **Standorte**, jeweils mit allem darunter. Wählen Sie beim Beginn keine Vorlage, nimmt der Vorgang die, auf die am meisten zutrifft: Abteilung, Funktion und Standort der Person unter **Stammdaten › Verantwortliche**. Bei Gleichstand gilt die ältere, ohne Treffer die Standardvorlage. Der Dialog **Vorgang beginnen** zeigt, welche Vorlage passt und warum. Auch die Automatik nimmt ohne eingestellte Vorlage die passende.
+
+Mit **Bestätigung durch die Person vor dem Abschluss** verlangt die Vorlage, dass die Person unter **Meine Geräte** bestätigt, was sie erhalten oder zurückgegeben hat (siehe [Bestätigung durch die Person](#bestätigung-durch-die-person)).
 
 ## Eintritt
 
@@ -116,16 +131,21 @@ Direkt nach einer Rücknahme können Sie sie im Hinweis mit **Rückgängig** zur
 
 Ist eine getestete [Verbindung zu Entra ID](/pro/entra/) eingerichtet und dürfen Sie personenbezogene Angaben aus Entra ID lesen, zeigt der Austritt die Karte **Konto in Entra ID**: ob das Konto, mit dem die Person verknüpft ist, laut letztem Abgleich noch aktiv ist, und wie viele Geräte in Intune sie noch als Hauptbenutzer nennen. SentryAssets liest Entra ID nur; es sperrt und ändert dort nichts. Sperren Sie das Konto in Entra ID selbst. Der Hinweis hält den Abschluss nicht auf und hat den Stand des letzten Abgleichs.
 
+## Wechsel
+
+Wechselt eine Person die Abteilung oder den Standort, beginnen Sie einen **Wechsel** mit dem **Tag des Wechsels**. Der Vorgang ermittelt wie beim Austritt, was die Person hat. Je Punkt entscheiden Sie: **Behält die Person** (das Gerät bleibt bei ihr, der Punkt ist erledigt) oder zurücknehmen, neu zuordnen bzw. freigeben wie beim Austritt. **Doch klären** öffnet einen behaltenen Punkt wieder. Behalten dürfen Sie, was Sie auch zurücknehmen dürften, also mit dem Schreibrecht des Bereichs und am Standort des Assets. Die Vorlage des Wechsels bringt die Ausgaben für die neue Stelle; was der Wechsel selbst ausgibt, gilt nicht als ermittelt. Das **Wechselprotokoll** nennt behaltene Punkte als **Bleibt bei der Person**, nie als Rückgabe.
+
 ## Automatisch beginnen
 
-Unter **Mitarbeitende › Ein- und Austritte**, Reiter **Automatik**, beginnen Austritte und Eintritte von selbst, sobald [Active Directory](/pro/active-directory/) oder [Entra ID](/pro/entra/) sie zeigen. SentryAssets prüft das alle 15 Minuten.
+Unter **Mitarbeitende › Ein- und Austritte**, Reiter **Automatik**, beginnen Austritte, Eintritte und Wechsel von selbst, sobald [Active Directory](/pro/active-directory/) oder [Entra ID](/pro/entra/) sie zeigen. SentryAssets prüft das alle 15 Minuten.
 
 <Steps>
 
 1. **Quellen** wählen: Active Directory, Entra ID oder beide. Die Personen müssen dort schon gelesen werden.
 2. **Austritte automatisch beginnen** für Personen, deren Konto deaktiviert oder aus den Gruppen ist und die einem Verantwortlichen zugeordnet sind. Letzter Arbeitstag ist der Tag der Deaktivierung; er wird als letzter Arbeitstag ins Verzeichnis übernommen, wo Ihre Rechte das erlauben.
 3. **Eintritte automatisch beginnen** für Personen, deren Konto in den letzten 30 Tagen angelegt wurde. Erster Arbeitstag ist der Tag der Anlage. Neue Personen ohne Verantwortlichen legt die Automatik nur an, wenn **Neue Personen dabei als Verantwortliche anlegen** gewählt ist.
-4. Je Art eine **Vorlage** wählen oder die Standardvorlage lassen und **Speichern**. Zum Einschalten bestätigen Sie vorher Ihre Anmeldung, weil die Automatik danach dauerhaft mit Ihren Rechten arbeitet.
+4. **Wechsel automatisch beginnen** für zugeordnete Personen, die das Verzeichnis in einer anderen Abteilung oder (nur AD, über die Regeln der Standorte) an einem anderen Standort führt, als bei ihnen eingetragen ist. Tag des Wechsels ist der Tag, an dem es auffällt; die neuen Angaben übernimmt die Automatik dabei in die Person. Dazu braucht sie das Recht, Personen aus AD bzw. Entra ID zuzuordnen, und Schreibrecht im Inventar. Ein zum ersten Mal gefüllter Wert ist kein Wechsel, ebenso wenig das Feld Büro, das Konten selbst ändern können.
+5. Je Art eine **Vorlage** wählen oder **Passende Vorlage, sonst die Standardvorlage** lassen und **Speichern**. Zum Einschalten bestätigen Sie vorher Ihre Anmeldung, weil die Automatik danach dauerhaft mit Ihren Rechten arbeitet.
 
 </Steps>
 
@@ -134,17 +154,28 @@ Die Automatik beginnt Vorgänge im Namen der Person, die zuletzt gespeichert hat
 </Aside>
 
 - **Nie doppelt:** Läuft schon ein Vorgang dieser Art, beginnt kein zweiter. Brechen Sie einen automatisch begonnenen Vorgang ab, beginnt er für denselben Tag nicht wieder von selbst, auch wenn Sie dessen Datum vorher geändert haben.
-- **Schutz vor Fehlern:** Je Lauf beginnen höchstens 20 Vorgänge. Wären mehr als 20 Austritte auf einmal fällig, oder mehr als drei und zugleich mehr als ein Zehntel der Personen, beginnt nichts, und die Automatik hält mit dem Hinweis „ungewöhnlich viele Austritte“ an. Prüfen Sie dann Gruppen und Basis-DNs.
+- **Wechsel einmal je Ziel:** Derselbe Wechsel einer Person zur selben neuen Abteilung oder zum selben neuen Standort beginnt nur einmal, ob der Vorgang abgeschlossen, abgebrochen oder die Übernahme gescheitert ist. Was beim Einschalten schon abweicht, gilt als Ausgangsstand. Zeigen die Konten einer Person oder AD und Entra ID verschiedene Abteilungen, beginnt nichts. Wer gerade ein- oder austritt, bekommt keinen Wechsel dazu.
+- **Schutz vor Fehlern:** Je Lauf beginnen höchstens 20 Vorgänge. Wären mehr als 20 Austritte auf einmal fällig, oder mehr als drei und zugleich mehr als ein Zehntel der Personen, beginnt nichts, und die Automatik hält mit dem Hinweis „ungewöhnlich viele Austritte“ an. Prüfen Sie dann Gruppen und Basis-DNs. Dasselbe gilt für Wechsel: Eine Umorganisation beginnen Sie von Hand.
 - **Nichts in AD oder Entra ID:** Konten legt SentryAssets dort weiterhin nicht an, ändert und sperrt sie nicht.
 - Ändern dürfen die Automatik Rollen, die Ein- und Austritte beginnen und Personendaten lesen dürfen, ohne Bindung an Standorte, und die die gewählte Quelle lesen dürfen.
 
 Vorgänge, die so beginnen, tragen in der Liste den Hinweis **automatisch aus AD** bzw. **automatisch aus Entra ID**.
+
+## Bestätigung durch die Person
+
+Unter [Meine Geräte](/pro/selbstbedienung/) sieht eine Person mit verknüpftem Konto im Abschnitt **Zu bestätigen**, was ihr ein laufender Vorgang ausgegeben oder über den Vorgang zurückgenommen hat, und wählt **Erhalt bestätigen** bzw. **Rückgabe bestätigen**. Der Vorgang zeigt am Schritt **Von der Person bestätigt am …**. Was die Person behält oder im Inventar direkt zurückgegeben wurde, ist nicht zu bestätigen.
+
+- Die Person bestätigt nur eigene Schritte und kann sonst nichts ändern. Die Bestätigung ersetzt keine Unterschrift auf dem Protokoll.
+- Wer den Schritt ausgegeben oder zurückgenommen hat und wer das Konto von Hand mit der Person verknüpft hat, bestätigt nicht an ihrer Stelle.
+- Wird eine Rücknahme rückgängig gemacht, fällt ihre Bestätigung weg.
 
 ## Abschließen
 
 Wählen Sie **Abschließen**, wenn alles erledigt ist:
 
 - beim **Eintritt**, sobald alle Pflichtschritte erledigt sind;
+- wenn kein Schritt mehr auf Freigabe wartet und, falls die Vorlage es verlangt, die Person alles bestätigt hat;
+- beim **Wechsel**, wenn jeder ermittelte Punkt behalten oder erledigt ist;
 - beim **Austritt** zusätzlich, wenn keine Ausgabe mehr offen ist und alle ermittelten Punkte erledigt sind. Einen Austritt schließt nur ab, wer Ausgaben, Inventar, Lizenzen und Sicherheitsschlüssel lesen darf; sonst könnte etwas übersehen werden.
 
 Danach lässt sich der Vorgang nicht mehr ändern. Einen laufenden Vorgang entfernt **Vorgang abbrechen** nach Bestätigung mit seinen abgehakten Schritten; Ausgaben und Änderungen im Inventar bleiben.
@@ -167,7 +198,7 @@ Auf der Seite der Person unter **Stammdaten › Verantwortliche** zeigt die Kart
 - **Vorgänge** brauchen zusätzlich das Recht auf personenbezogene Felder, denn wer kommt oder geht und wann, ist personenbezogen. Die Prüfung sieht deshalb nur die Vorlagen.
 - **Namen von Benutzern** (verantwortlich, erledigt von) erscheinen nur für Rollen, die Namen von Personen im Audit-Log sehen: Administrator, Informationssicherheit, Datenschutz und Prüfung.
 - Vorlagen ändert nur, wer an keine Standorte gebunden ist. Vorgänge sind an keinen Standort gebunden; jede Aktion an einem Asset prüft aber dessen Standort ([Rechte je Standort](/pro/standortrechte/)).
-- **Audit-Log:** Beginn mit Person und Vorlage, ohne Art und Datum; Änderungen des Datums nur als „geändert“, Notizen nur als „vermerkt“, nie Titel oder Namen. Aktionen im Inventar schreiben zusätzlich dessen Einträge.
+- **Audit-Log:** Beginn mit Person, Vorlage und wie sie gewählt wurde (gewählt, passend, Standard), ohne Art und Datum; Freigaben, Behalten, Bestätigungen, Mails (nur Zahl der Empfänger) und Tickets (ohne Text); Änderungen des Datums nur als „geändert“, Notizen nur als „vermerkt“, nie Titel oder Namen. Aktionen im Inventar schreiben zusätzlich dessen Einträge.
 - **Löschen:** Wird eine Person aus den Verantwortlichen gelöscht, gehen ihre Vorgänge mit. Es besteht kein Zweck, den Namen danach aufzubewahren (Art. 5 und Art. 17 DSGVO). Die Asset-Ausgaben halten weiter fest, dass ein Asset ausgegeben war und zurückkam, nur nicht mehr an wen.
 - Tragen Sie in Notizen keine sensiblen Angaben ein, etwa zu Gesundheit oder Kündigungsgründen.
 
@@ -193,5 +224,9 @@ Auf der Seite der Person unter **Stammdaten › Verantwortliche** zeigt die Kart
 - **„Das Asset ist schon an jemanden ausgegeben.“** Wählen Sie ein anderes Asset oder nehmen Sie die bestehende Ausgabe zuerst zurück.
 - **„Das Asset ist außer Betrieb.“** Ausgesonderte Assets lassen sich nicht ausgeben.
 - **„Dafür fehlen Ihnen die Rechte oder der Standort.“** Die Aktion braucht Schreibrecht am Standort des Assets.
+- **„Es warten noch Schritte auf Freigabe.“** Eine andere Person mit Recht auf Vorgänge wählt am Schritt **Freigeben**.
+- **„Die Person hat noch nicht alles bestätigt …“** Bitten Sie die Person, unter **Meine Geräte** zu bestätigen; ist ihr Konto nicht verknüpft, verknüpfen Sie es unter [Selbstbedienung](/pro/selbstbedienung/).
+- **Mail nicht gesendet:** Der Vorgang nennt den Grund, etwa nicht eingerichtete Benachrichtigungen oder eine nicht erlaubte Domäne. Die Mail wird nicht erneut gesendet.
+- **Kein Ticket:** Der Vorgang nennt den Grund, etwa fehlende Rechte am Ticketsystem oder eine abgeschaltete Verbindung.
 - **„Das Datum liegt zu weit entfernt.“** Der Tag darf höchstens zwei Jahre von heute entfernt sein.
 - **Keine Vorgänge sichtbar:** Ihnen fehlt das Recht auf personenbezogene Felder.
