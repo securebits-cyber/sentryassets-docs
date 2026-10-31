@@ -63,7 +63,8 @@ Für Switches, Router und Drucker liest der Collector auf Wunsch per SNMPv3 Syst
 - bis zu 4 SNMPv3-Zugänge je Collector, nur **authPriv mit SHA-2 und AES**, Passphrasen mit mindestens 20 Zeichen (auf Wunsch erzeugt);
 - verschlüsselt gespeichert und so versiegelt, dass nur der zugehörige Collector sie erhält; er hält sie nur im Arbeitsspeicher;
 - ein Zugang lässt sich auf einzelne Netze des Collectors beschränken; ein Gerät, das schon geantwortet hat, wird nur mit seinem Zugang gefragt;
-- nur Geräte, die derselbe Scan fand, und mit einem festen Budget an Anfragen je Gerät.
+- nur Geräte, die derselbe Scan fand, und mit einem festen Budget an Anfragen je Gerät;
+- nie Geräte mit eigenem SentryAssets-Agent: Das sind PCs und Server, keine Netzwerktechnik, und ein übernommenes Endgerät soll die Anfragen nicht nutzen können, um Passphrasen zu erraten. Lassen Sie die Passphrasen deshalb erzeugen, statt eigene zu wählen.
 
 Die VLANs stehen am Gerät unter **Discovery › Netzwerk** und am Port im Rack. Sie kommen aus der Q-BRIDGE-MIB, die die meisten verwalteten Switches beantworten, und bei Cisco-Switches ohne sie aus Ciscos eigenen Tabellen (Access-VLAN, natives VLAN und erlaubte VLANs am Trunk). Ein Gerät ohne beides zeigt keine VLANs. Hat ein Switch mehr, als eine Abfrage liest, steht dort „nicht alle gelesen“: Was angezeigt wird, stimmt, es fehlt nur ein Teil.
 

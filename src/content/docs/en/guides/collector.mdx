@@ -63,7 +63,8 @@ For switches, routers and printers the collector reads on request over SNMPv3 th
 - up to 4 SNMPv3 users per collector, **authPriv with SHA-2 and AES** only, passphrases of at least 20 characters (generated on request);
 - stored encrypted and sealed so that only their collector receives them; it keeps them in memory only;
 - a user can be limited to some of the collector's networks; a device that has answered is asked with its own user only;
-- only devices the same scan found, with a fixed budget of requests per device.
+- only devices the same scan found, with a fixed budget of requests per device;
+- never devices with a SentryAssets agent of their own: they are PCs and servers, not network equipment, and a taken-over endpoint must not use the requests to guess passphrases. So let the passphrases be generated rather than choosing your own.
 
 The VLANs show at the device under **Discovery › Network** and at the port in the rack. They come from the Q-BRIDGE-MIB, which most managed switches answer, and for Cisco switches without it from Cisco's own tables (access VLAN, native VLAN and allowed VLANs on a trunk). A device with neither shows no VLANs. If a switch has more than one query reads, it says “not all read”: what is shown is right, only a part is missing.
 
