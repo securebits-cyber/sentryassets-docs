@@ -52,7 +52,7 @@ The report is **not sent**; it is saved as a JSON file you pass on yourself. Ses
 | Enrolment stops because of the CA | The fingerprint in the command does not match the root CA, or a proxy breaks TLS open. Exempt the agent host from TLS inspection. |
 | Token refused | expired, used up or revoked. Create a new one. |
 | Agent does not appear as an asset | It waits for approval under **Agents**. Without approval it is blocked after the period. |
-| Agent stops reporting | Certificate expired (check the device's clock) or agent blocked. A blocked agent needs a new rollout token. |
+| Agent stops reporting | Certificate expired (check the device's clock) or agent blocked. A blocked agent needs a new rollout token. If **Settings › Activity** shows **revoked certificate presented again**, its identity was copied: see [Certificates and renewal](/en/guides/agents/#certificates-and-renewal). |
 | Collector finds no MAC addresses | It is in another network segment. |
 
 ## Uploads and documents

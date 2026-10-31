@@ -57,6 +57,8 @@ SentryAssets hält Daten über Ihre gesamte IT, und der Agent läuft mit erhöht
 - eigenes Schlüsselpaar je Gerät (ECDSA P-256), Zertifikate für 30 Tage, Erneuerung mit neuem Schlüssel;
 - mTLS mit TLS 1.3, Vertrauen nur in die bei der Registrierung gepinnte CA, kein „Trust on First Use“;
 - Identität ausschließlich aus dem Zertifikat; Sperrliste bei jeder Anfrage; Replay-Schutz;
+- ein gesperrtes Zertifikat, das ein aktiver Agent erneut vorlegt (kopierte Identität), steht mit Quell-IP im Audit-Log; Einträge der Agents tragen die Quell-IP;
+- das CA-Bündel für die Registrierung ist ohne Anmeldung abrufbar, je Quelle begrenzt;
 - Rollout-Tokens mit 256 Bit, nur als Hash gespeichert, höchstens 7 Tage gültig, begrenzte Nutzungen, widerrufbar;
 - Updates nur mit Signatur des Herstellers, kein Downgrade.
 

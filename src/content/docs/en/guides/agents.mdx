@@ -115,6 +115,8 @@ Block the agent before removing it: an agent deleted only on the device keeps a 
 
 Each agent creates its own key pair (ECDSA P-256), which never leaves the device, and receives a certificate for 30 days. From day 20 it renews it itself, each time with a **new** key. Connections use only mTLS with TLS 1.3 against the CA pinned at enrolment.
 
+As soon as the agent uses the new certificate, the old one is revoked. If such a revoked certificate is presented for an active agent afterwards, two parties hold the same identity: key and certificate were copied, for example from a backup, a snapshot or a compromised device, and the copy renewed first. **Settings › Activity** then shows **revoked certificate presented again** with the source address, once a day per certificate. Usually it is the genuine device that can no longer report. Block the agent and enrol the device again with a new rollout token; the copy loses its access as well.
+
 ## Updates
 
 Agents update themselves, but only to versions the vendor signed offline (Ed25519, keys built into the agent). A server taken over can therefore not distribute a foreign version.

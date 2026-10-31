@@ -57,6 +57,8 @@ SentryAssets holds data about your whole IT, and the agent runs with elevated ri
 - a key pair of its own per device (ECDSA P-256), certificates for 30 days, renewal with a new key;
 - mTLS with TLS 1.3, trust only in the CA pinned at enrolment, no "trust on first use";
 - identity only from the certificate; revocation list at every request; replay protection;
+- a revoked certificate presented again for an active agent (copied identity) is recorded in the audit log with its source address; entries of agents carry the source address;
+- the CA bundle for enrolment is available without sign-in, limited per source;
 - rollout tokens with 256 bits, stored as a hash, valid for 7 days at most, limited uses, revocable;
 - updates only with the vendor's signature, no downgrade.
 
