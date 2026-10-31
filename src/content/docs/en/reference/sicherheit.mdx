@@ -54,7 +54,7 @@ SentryAssets holds data about your whole IT, and the agent runs with elevated ri
 ## Agents
 
 - read-only, outbound only, no mechanism to run commands or scripts;
-- a key pair of its own per device (ECDSA P-256), certificates for 30 days, renewal with a new key;
+- a key pair of its own per device (ECDSA P-256), on Windows non-exportable in the TPM or the Windows key storage, certificates for 30 days, renewal with a new key;
 - mTLS with TLS 1.3, trust only in the CA pinned at enrolment, no "trust on first use";
 - identity only from the certificate; revocation list at every request; replay protection;
 - a revoked certificate presented again for an active agent (copied identity) revokes all its certificates, blocks the agent and is recorded in the audit log with its source address; entries of agents carry the source address;

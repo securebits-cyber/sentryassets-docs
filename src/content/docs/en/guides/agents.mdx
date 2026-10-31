@@ -113,7 +113,7 @@ Block the agent before removing it: an agent deleted only on the device keeps a 
 
 ## Certificates and renewal
 
-Each agent creates its own key pair (ECDSA P-256), which never leaves the device, and receives a certificate for 30 days. From day 20 it renews it itself, each time with a **new** key. Connections use only mTLS with TLS 1.3 against the CA pinned at enrolment.
+Each agent creates its own key pair (ECDSA P-256), which never leaves the device, and receives a certificate for 30 days. On Windows the key is kept in the TPM, on devices without one in the Windows key storage, non-exportable in both cases: a backup or image of the device holds no usable key. On Linux it is a file only the service can read. From day 20 it renews it itself, each time with a **new** key. Connections use only mTLS with TLS 1.3 against the CA pinned at enrolment.
 
 As soon as the agent uses the new certificate, the old one is revoked. If such a revoked certificate is presented for an active agent afterwards, two parties hold the same identity: key and certificate were copied, for example from a backup, a snapshot or a compromised device, and the copy renewed first. SentryAssets then revokes all certificates of the agent at once, so the copy has no access either, and shortly afterwards, within an hour, blocks the agent itself. **Settings › Activity** shows **revoked certificate presented again** with the source address and the block with its reason. Enrol the device again with a new rollout token. A device you reset to a snapshot from before its last renewal looks the same and is blocked as well.
 
