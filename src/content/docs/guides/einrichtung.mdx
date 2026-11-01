@@ -90,6 +90,7 @@ Mit OIDC meldet SentryAssets Personen über Ihren Identity Provider an (OpenID C
    - Weiterleitungsadresse: `https://<SA_UI_HOST>/api/v1/auth/oidc/callback`
    - Adresse nach der Abmeldung: `https://<SA_UI_HOST>/login`
    - Der Provider liefert die Gruppen im Claim `groups` (der Name ist mit `SA_OIDC_ROLE_CLAIM` einstellbar).
+   - Bietet der Provider einen Scope mit dem Namen dieses Claims an (etwa `groups` bei Pocket ID), fragt SentryAssets ihn zusätzlich zu `openid profile email` an. Andere Provider liefern die Gruppen ohne eigenen Scope (Keycloak über einen Mapper, Entra ID als optionaler Claim).
 
 2. Tragen Sie unter **Einstellungen › Anmeldung** Issuer, Client-ID, Client-Secret und die Zuordnung von Gruppen zu Rollen als Entwurf ein, zum Beispiel `sa-admins=admin` und `sa-auditors=auditor`. Die Rollen erklärt [Rollen und Rechte](/reference/rollen/).
 
