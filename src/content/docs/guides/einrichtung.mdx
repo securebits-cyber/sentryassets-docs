@@ -58,7 +58,11 @@ Ein Einrichtungslink gilt 72 Stunden. Ist er abgelaufen, zeigt die Benutzerliste
 - **Fehlversuche:** Nach fünf falschen Anmeldungen wird das Konto mit wachsender Wartezeit gesperrt.
 - **Neue lokale Konten untersagen:** Unter **Einstellungen › Benutzer** schalten Sie **Anlegen neuer lokaler Konten erlauben** ab, wenn neue Personen nur noch über OIDC kommen sollen. Bestehende lokale Konten melden sich weiter an und lassen sich zurücksetzen.
 
-Anlegen, Rolle ändern, Zurücksetzen und der Schalter für neue Konten verlangen eine frische Bestätigung Ihrer Anmeldung: bei lokalen Konten einen Einmalcode, bei OIDC-Konten eine erneute Anmeldung beim Identity Provider.
+Anlegen, Rolle ändern, Zurücksetzen, Deaktivieren und Aktivieren sowie der Schalter für neue Konten verlangen eine frische Bestätigung Ihrer Anmeldung: bei lokalen Konten einen Einmalcode, bei OIDC-Konten eine erneute Anmeldung beim Identity Provider.
+
+<Aside type="caution" title="Name des Notfallkontos">
+Nach fünf falschen Passwörtern sperrt SentryAssets ein lokales Konto für eine Weile, bei jeder weiteren Sperre doppelt so lange, bis zu einer Stunde. Wer den Namen kennt, kann so auch das Notfallkonto sperren, gerade wenn OIDC ausfällt. Nennen Sie es deshalb nicht `admin`, sondern wählen Sie einen Namen, den niemand errät, und richten Sie unter **Einstellungen › Benachrichtigungen** das Ereignis **Lokales Konto nach Fehlversuchen gesperrt** ein. Aufheben lässt sich die Sperre mit dem Befehl unten.
+</Aside>
 
 ### Befehle auf dem Server
 
@@ -115,7 +119,7 @@ Alternativ legen Sie OIDC in einer `docker-compose.override.yml` mit `SA_OIDC_IS
 
 ## Benutzer verwalten
 
-Unter **Einstellungen › Benutzer** sehen Sie alle Konten mit Rolle, Anmeldeart, Status und letzter Anmeldung. **Deaktivieren** entzieht den Zugriff sofort, mit „Rückgängig“ im Hinweis. Ihr eigenes Konto ändern Sie dort nicht; dafür gibt es das Profil. Eine Administration und ein Weg zur Anmeldung bleiben immer bestehen.
+Unter **Einstellungen › Benutzer** sehen Sie alle Konten mit Rolle, Anmeldeart, Status und letzter Anmeldung. **Deaktivieren** entzieht den Zugriff sofort, mit „Rückgängig“ im Hinweis; wie die übrigen Änderungen an Konten erst nach einer frischen Bestätigung Ihrer Anmeldung. Ihr eigenes Konto ändern Sie dort nicht; dafür gibt es das Profil. Eine Administration und ein Weg zur Anmeldung bleiben immer bestehen.
 
 **E-Mail-Adresse:** Bei lokalen Konten wählen Sie in der Spalte **E-Mail** **Ändern**, tragen die Adresse ein und wählen **Speichern**; ein leeres Feld entfernt sie. Das geht auch für Ihr eigenes Konto, etwa für das Konto aus `cli admin create-admin`, das ohne Adresse angelegt wird. Die Seite fragt vorher nach einer Bestätigung Ihrer Anmeldung. An die Adresse gehen die [Benachrichtigungen per E-Mail](/guides/benachrichtigungen/), und über sie findet [Meine Geräte](/pro/selbstbedienung/) die Person im Verzeichnis; deshalb setzt nur die Administration sie, nie das Konto selbst. Bei OIDC-Konten kommt die Adresse vom Identitätsanbieter.
 
