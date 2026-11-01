@@ -23,7 +23,7 @@ SentryAssets hilft beim Vorgehen, ersetzt aber keine Prüfung. Ob eine Anforderu
 
 - Eine Rolle mit Zugriff auf den Grundschutz: **Administrator**, **Informationssicherheit**, **Bearbeitung**, **Datenschutz** oder **Prüfung (nur lesend)**. Die Rolle **Lesend** sieht den Grundschutz nicht, weil offene Anforderungen zeigen, wo eine Organisation verwundbar ist. Was welche Rolle darf, steht unter [Rechte](#rechte).
 - Ein gepflegtes Inventar: Assets mit **Kategorie** und **Standort**. Die Kategorie ist wichtig, denn aus ihr leitet SentryAssets die Vorschläge ab.
-- Die Datei des BSI für Ihre Variante. Sie laden sie selbst herunter; SentryAssets verbindet sich dafür nicht mit dem Internet.
+- Für Grundschutz++ nichts weiter: SentryAssets bringt den Katalog des BSI mit. Für die Edition 2023 laden Sie die XML-Datei des BSI selbst herunter. SentryAssets verbindet sich in keinem Fall mit dem Internet.
 
 ## Variante wählen
 
@@ -79,13 +79,15 @@ Bevor es losgeht, braucht SentryAssets das IT-Grundschutz-Kompendium des BSI. Ei
 
 <Steps>
 
-1. Wählen Sie in der Karte **IT-Grundschutz-Kompendium** den Link **Seite des BSI zum Kompendium öffnen**.
+1. Wählen Sie in der Karte **IT-Grundschutz-Kompendium** den Link **XML-Datei des Kompendiums 2023 beim BSI herunterladen**. Er führt direkt zur Datei `XML_Kompendium_2023.xml` (etwa 3 MB).
 
-2. Laden Sie dort die „XML-Version des IT-Grundschutz-Kompendiums“ herunter.
+2. Zeigt der Browser die Datei an, statt sie zu speichern: Klicken Sie den Link mit der rechten Maustaste an und wählen Sie „Link speichern unter …“.
 
-3. Wählen Sie **Kompendium einlesen** und die heruntergeladene Datei.
+3. Wählen Sie **Kompendium einlesen** und die gespeicherte Datei.
 
 </Steps>
+
+Funktioniert der Link nicht, etwa weil das BSI die Adresse geändert hat, finden Sie die Datei über **Seite des BSI zum Kompendium öffnen** auf der Übersichtsseite des BSI. Anders als den Katalog Grundschutz++ bringt SentryAssets die Edition 2023 wegen der Nutzungsbedingungen des BSI nicht selbst mit.
 
 SentryAssets prüft die Datei vollständig, bevor es sie speichert, und meldet danach „Kompendium eingelesen“. Die Karte zeigt **Titel**, **Edition**, die Zahl der **Bausteine** und **Anforderungen** sowie die **Prüfsumme (SHA-256)**. Mit **Bausteine ansehen** blättern Sie im Kompendium, gefiltert nach **Schicht** und **Zielobjekttyp**. Erscheint eine neue Fassung, lesen Sie sie mit **Neue Fassung einlesen** ein.
 
@@ -97,7 +99,7 @@ Der erste Schritt heißt **Was wollen Sie schützen?**
 
 1. Wählen Sie **Informationsverbund festlegen**.
 
-2. Tragen Sie einen **Name** ein, an dem Sie den Verbund erkennen. Mit **Vorschlag einsetzen** übernehmen Sie einen fertigen Text für den **Geltungsbereich**, der die ganze Organisation umfasst.
+2. Tragen Sie einen **Name** ein, an dem Sie den Verbund erkennen. Im Feld **Geltungsbereich** steht schon ein Vorschlag, der die ganze Organisation umfasst. Passen Sie ihn an, etwa wenn nur ein Standort dazugehört, oder lassen Sie ihn so; gespeichert wird der Text, wie er im Feld steht.
 
 3. Wählen Sie die **Vorgehensweise**. Sie legt fest, wie gründlich Sie vorgehen:
    - **Basis-Absicherung**: nur die Basis-Anforderungen. Empfohlen für den Einstieg; Sie sichern schnell das Wichtigste ab und bauen später aus.
@@ -108,7 +110,7 @@ Der erste Schritt heißt **Was wollen Sie schützen?**
 
 </Steps>
 
-Den Verbund ändern Sie später mit **Verbund bearbeiten**.
+Den Verbund ändern Sie später mit **Verbund bearbeiten**. Haben Sie den Geltungsbereich dort geleert, holt **Vorschlag einsetzen** den Vorschlag zurück.
 
 ### Zielobjekte erfassen
 
@@ -120,15 +122,20 @@ Der zweite Schritt heißt **Woraus besteht er?** Hier erfassen Sie die Zielobjek
 
 <Steps>
 
-1. Wählen Sie in der Karte **Zielobjekte** die Schaltfläche **Zielobjekt hinzufügen**.
+1. Wählen Sie in der Karte **So gehen Sie vor** die Schaltfläche **Zielobjekte erfassen**; der Dialog **Zielobjekt hinzufügen** öffnet sich direkt. Später erreichen Sie ihn auch in der Karte **Zielobjekte** über **Zielobjekt hinzufügen**.
 
-2. Wählen Sie die **Art des Zielobjekts**: **Kategorie**, **Asset** oder **Standort**.
+2. Wählen Sie die **Art des Zielobjekts**: **Kategorie**, **Asset** oder **Standort**. Der Dialog zeigt sofort, was zur Wahl steht:
+   - bei **Kategorie** alle Kategorien Ihres Inventars mit der Zahl ihrer Assets in Betrieb, Unterkategorien eingeschlossen,
+   - bei **Standort** alle Standorte, Gebäude, Etagen und Räume mit Art und Lage,
+   - bei **Asset** die ersten 20 Assets nach Namen.
 
-3. Suchen Sie das Objekt, etwa über **Kategorie suchen**, und wählen Sie es unter **Treffer**.
+3. Wählen Sie das Objekt unter **Treffer**. Die Suche, etwa **Kategorie suchen**, grenzt die Liste nur ein; bei Assets findet sie alle, nicht nur die ersten 20.
 
 4. Wählen Sie **„…“ hinzufügen**.
 
 </Steps>
+
+Was schon Zielobjekt ist, trägt den Vermerk „bereits Zielobjekt“. Findet die Suche nichts, sagt der Dialog es und rät, die Suche zu leeren. Gibt es noch keine Kategorien, Assets oder Standorte, führt ein Link dorthin, wo Sie sie anlegen, etwa **Kategorien unter Stammdaten anlegen**.
 
 Die Liste zeigt je Zielobjekt die Zahl der Assets in Betrieb, der Bausteine und den Stand des Checks („Check: … erledigt“). Ein Zielobjekt entfernen Sie auf seiner Seite mit **Zielobjekt entfernen**; das Objekt im Inventar bleibt erhalten.
 
@@ -154,15 +161,23 @@ Der vierte Schritt heißt **Welche Bausteine passen?** Ein Baustein des BSI besc
 
 <Steps>
 
-1. Öffnen Sie ein Zielobjekt. Unter **Vorschläge** schlägt SentryAssets passende Bausteine vor, jeweils mit Begründung, etwa „Passt zur Kategorie des Inventars“, „Betriebssystem … laut Agent“ oder „Standortart: …“.
+1. Öffnen Sie ein Zielobjekt. Unter **Vorschläge** schlägt SentryAssets passende Bausteine vor, jeweils mit Begründung, etwa „Passt zur Kategorie des Inventars“, „Betriebssystem … laut Agent“ oder „Standortart: …“. Unter jedem Baustein sagt ein Satz, wann er zutrifft.
 
-2. Übernehmen Sie jeden passenden Vorschlag einzeln mit **… übernehmen**.
+2. Übernehmen Sie jeden passenden Vorschlag einzeln mit **… übernehmen**. Die Meldung bietet **Rückgängig** an.
 
 3. Fehlt ein Baustein, suchen Sie ihn unter **Weiteren Baustein zuordnen** über **Bausteine durchsuchen**. Jeder Baustein des Kompendiums lässt sich zuordnen, auch ohne Vorschlag.
 
 4. Prüfen Sie die Liste **Modellierte Bausteine**. Einen falschen Baustein nehmen Sie mit **Entfernen** wieder heraus.
 
 </Steps>
+
+Beim Informationsverbund selbst sind die Vorschläge in drei Gruppen geordnet:
+
+- **Gilt für jeden Informationsverbund**: 21 Bausteine, die jede Organisation braucht, etwa ISMS.1. Übernehmen Sie sie.
+- **Nur wenn es bei Ihnen zutrifft**: Lesen Sie den Satz unter jedem Baustein. Trifft er nicht zu, übernehmen Sie den Baustein nicht. CON.2 (Datenschutz) und CON.9 (Informationsaustausch) stehen hier mit dem Hinweis „Trifft auf fast jede Organisation zu“.
+- **Weitere Vorschläge**: alles Übrige, was zum Verbund passen kann.
+
+Die Seite eines Bausteins zeigt denselben Satz unter **Wann er zutrifft**.
 
 Ein Hauptsitz oder eine Niederlassung ohne erfasstes Gebäude bekommt INF.1 wie ein Gebäude. Ein einzelnes Asset ohne Kategorie bekommt keine Vorschläge, denn das Betriebssystem allein unterscheidet keinen Server von einem Client; die Seite führt mit **Kategorie am Asset wählen** direkt dorthin. Mit [Pro](/pro/modellierung/) übernehmen Sie alle Vorschläge auf einmal.
 
@@ -176,7 +191,7 @@ Der fünfte Schritt heißt **Was ist schon umgesetzt?** Die Anforderungen der mo
 
 2. Wählen Sie unter **Baustein** den Baustein, den Sie bearbeiten wollen. Mit **Offen** blenden Sie aus, was schon beantwortet ist.
 
-3. Lesen Sie bei Bedarf den **Text der Anforderung**. Ein Kennzeichen zeigt die Stufe: **Basis** (zuerst umsetzen), **Standard** oder **Erhöhter Schutzbedarf**.
+3. Lesen Sie bei Bedarf den **Text der Anforderung**. Ein Kennzeichen zeigt die Stufe: **Basis** (zuerst umsetzen), **Standard** oder **Erhöhter Schutzbedarf**. Bei den zentralen Bausteinen, etwa ISMS.1, erklärt **Worum geht es? Was ist zu tun?** die Anforderung in Alltagssprache, siehe [Erklärungen zu den Anforderungen](#erklärungen-zu-den-anforderungen).
 
 4. Beantworten Sie die Anforderung, wie unter [Der Grundschutz-Check: so antworten Sie](#der-grundschutz-check-so-antworten-sie) beschrieben.
 
@@ -192,17 +207,25 @@ Wählen Sie unter **Variante** **Grundschutz++**. Die Karte **So gehen Sie vor**
 
 Einlesen dürfen **Administrator** und **Informationssicherheit**.
 
+SentryAssets bringt den Anwenderkatalog Grundschutz++ des BSI mit, im Stand vom 29.10.2026. Wählen Sie in der Karte **Katalog Grundschutz++** die Schaltfläche **Mitgelieferten Katalog verwenden (Stand …)**. Eine Verbindung ins Internet ist dafür nicht nötig.
+
+SentryAssets prüft den mitgelieferten Katalog genauso wie eine hochgeladene Datei und zusätzlich seine Prüfsumme; das Audit-Log vermerkt das Einlesen wie bei einem Upload. Ist die Datei beschädigt, liest SentryAssets nichts ein und meldet es. Die Inhalte stammen vom BSI und stehen unter der Lizenz CC BY-SA 4.0; die Karte nennt das.
+
+**Neuere Fassung selbst einlesen:** Das BSI aktualisiert den Katalog laufend. Eine neuere Fassung als die mitgelieferte lesen Sie so ein:
+
 <Steps>
 
 1. Wählen Sie in der Karte **Katalog Grundschutz++** den Link **Datei beim BSI öffnen**. Gemeint ist die Datei `Grundschutz++-resolved_catalog.json` in der Stand-der-Technik-Bibliothek des BSI.
 
 2. Speichern Sie die Datei dort über „Download raw file“.
 
-3. Wählen Sie **Katalog einlesen** und die gespeicherte Datei.
+3. Wählen Sie **Katalog einlesen** bzw. **Neue Fassung einlesen** und die gespeicherte Datei.
 
 </Steps>
 
-SentryAssets prüft die Datei vollständig und meldet „Katalog eingelesen“. Die Karte zeigt **Fassung vom**, **Eingelesen am**, die Zahl der **Anforderungen** und die **Prüfsumme**. Mit **Anforderungen ansehen** schlagen Sie den ganzen Katalog nach, gefiltert nach **Praktik**, **Modalität**, **Sicherheitsniveau** und **Zielobjekt**. Eine neue Fassung lesen Sie mit **Neue Fassung einlesen** ein.
+Bringt eine neue Version von SentryAssets eine neuere Fassung mit als die eingelesene, zeigt die Karte „SentryAssets bringt eine neuere Fassung des Katalogs mit“ und bietet **Mitgelieferte Fassung übernehmen** an. Von selbst ändert ein Update Ihren Katalog nie.
+
+Nach dem Einlesen meldet SentryAssets „Katalog eingelesen“. Die Karte zeigt **Fassung vom**, **Eingelesen am**, die Zahl der **Anforderungen** und die **Prüfsumme**. Mit **Anforderungen ansehen** schlagen Sie den ganzen Katalog nach, gefiltert nach **Praktik**, **Modalität**, **Sicherheitsniveau** und **Zielobjekt**.
 
 ### Informationsverbund und Anforderungspaket
 
@@ -212,7 +235,7 @@ Der erste Schritt heißt **Was wollen Sie schützen?** Aus dem Informationsverbu
 
 1. Wählen Sie **Informationsverbund festlegen**.
 
-2. Tragen Sie **Name** und **Geltungsbereich** ein oder übernehmen Sie den Text mit **Vorschlag einsetzen**.
+2. Tragen Sie einen **Name** ein. Im Feld **Geltungsbereich** steht schon ein Vorschlag, der die ganze Organisation umfasst; passen Sie ihn an oder lassen Sie ihn so. Beim Bearbeiten holt **Vorschlag einsetzen** ihn in ein leeres Feld zurück.
 
 3. Entscheiden Sie über zwei Ankreuzfelder. Für den Einstieg empfiehlt die Oberfläche, beide frei zu lassen:
    - **Auch Anforderungen für das erhöhte Sicherheitsniveau einbeziehen** nur, wenn Sie besonders schützenswerte Informationen verarbeiten, etwa Gesundheits-, Personal- oder Finanzdaten in großem Umfang, oder Kunden und Vorschriften es verlangen.
@@ -270,13 +293,32 @@ Der vierte Schritt heißt **Was ist schon umgesetzt?** Gehen Sie Ihr Paket durch
 
 2. Wählen Sie unter **Praktik** eine Praktik. Mit **Offen** blenden Sie aus, was schon beantwortet ist; ist alles erledigt, steht dort „Hier ist nichts mehr offen.“
 
-3. Öffnen Sie bei einer Anforderung **Was heißt das? Woran erkennen Sie es?**. Dort steht, was die Modalität bedeutet (MUSS: muss unbedingt erfüllt werden; SOLLTE: normalerweise erfüllen, Abweichungen stichhaltig begründen; KANN: je nach Situation sinnvoll), das **Erwartetes Ergebnis:** und **Als Nachweis eignet sich:**. Der Text enthält dabei schon Ihre Parameterwerte.
+3. Öffnen Sie bei einer Anforderung **Was heißt das? Woran erkennen Sie es?**. Ist die Anforderung erklärt, steht dort zuerst die Erklärung von SentryAssets in Alltagssprache (siehe [Erklärungen zu den Anforderungen](#erklärungen-zu-den-anforderungen)); darunter öffnen Sie **Angaben im Katalog des BSI**. Sie nennen, was die Modalität bedeutet (MUSS: muss unbedingt erfüllt werden; SOLLTE: normalerweise erfüllen, Abweichungen stichhaltig begründen; KANN: je nach Situation sinnvoll), das **Erwartetes Ergebnis:** und **Als Nachweis eignet sich:**. Der Text enthält dabei schon Ihre Parameterwerte.
 
 4. Beantworten Sie die Anforderung, wie im nächsten Abschnitt beschrieben.
 
 </Steps>
 
 Sie können eine Anforderung auch über **Anforderungen ansehen** öffnen: Die Karte **Umsetzung bei Ihnen** dort zeigt dieselbe Antwort wie unter **Umsetzung prüfen**.
+
+## Erklärungen zu den Anforderungen
+
+Wer zum ersten Mal einen Grundschutz-Check macht, kennt die Begriffe oft nicht. Für viele Anforderungen bringt SentryAssets deshalb eine eigene Erklärung in Alltagssprache mit, auf Deutsch und Englisch, in drei Teilen:
+
+- **Worum geht es:** was die Anforderung meint, mit erklärten Fachbegriffen,
+- **Was Sie konkret tun:** zwei bis fünf Schritte für eine kleine oder mittlere Organisation,
+- **Beispiel für einen Nachweis:** was Sie vorzeigen könnten, etwa ein Protokoll oder einen Beschluss.
+
+| Variante | Wo | Was erklärt ist |
+|---|---|---|
+| Edition 2023 | im Grundschutz-Check über dem Text der Anforderung unter **Worum geht es? Was ist zu tun?** | die zentralen Bausteine, zuerst ISMS.1 |
+| Grundschutz++ | unter **Was heißt das? Woran erkennen Sie es?**, vor den aufklappbaren **Angaben im Katalog des BSI** | alle Anforderungen der Praktik GC (Governance) und zentrale aus Personal, Berechtigungen und MFA, Datensicherung, Updates, Netzsegmentierung, Vorfällen und Gebäude |
+
+Verlangen eine Anforderung der Edition 2023 und eine von Grundschutz++ dasselbe, teilen sie sich eine Erklärung. Fehlt eine Erklärung, sehen Sie wie bisher den Text des BSI.
+
+<Aside type="note" title="Eigene Worte, maßgeblich ist das BSI">
+Die Erklärungen sind von SentryAssets in eigenen Worten geschrieben, als Einstieg. Maßgeblich ist immer der Text der Anforderung des BSI; im Zweifel lesen Sie ihn nach.
+</Aside>
 
 ## Der Grundschutz-Check: so antworten Sie
 
@@ -341,7 +383,7 @@ Beide Varianten verwenden dieselben Rechte. Ab Pro passen Sie Rechte an [eigene 
 
 ## Hinweise und Grenzen
 
-- Katalog- und Kompendiumsdatei: höchstens 16 MB. Steht ein Reverse-Proxy vor SentryAssets, muss er für diesen Upload mindestens 16 MB erlauben.
+- Katalog- und Kompendiumsdatei: höchstens 16 MB, auch beim mitgelieferten Katalog. Steht ein Reverse-Proxy vor SentryAssets, muss er für diesen Upload mindestens 16 MB erlauben.
 - Edition 2023: höchstens 500 Zielobjekte und 200 Bausteine je Zielobjekt. Fassen Sie gleichartige Assets in einer Kategorie zusammen.
 - Höchstens 20 Nachweise je Anforderung; fassen Sie Belege am besten in einem Dokument zusammen.
 - Parameterwerte: höchstens 500 Zeichen in einer Zeile.

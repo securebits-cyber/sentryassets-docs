@@ -26,21 +26,33 @@ Die Netze legen Sie beim Einrichten auf dem Collector-Rechner fest. Der Server k
 - höchstens 8 Netze, jedes höchstens ein /22 (1 024 Adressen), zusammen höchstens 4 096 Adressen;
 - nur private IPv4-Bereiche (RFC 1918 und 100.64.0.0/10), ohne Überschneidung. Für 100.64.0.0/10 warnt der Collector, weil das oft das Netz eines Providers ist.
 
+Beim Einrichten bietet die Oberfläche die Netze des Rechners zum Ankreuzen an, siehe [Collector einrichten](#collector-einrichten).
+
 Ein Collector taugt damit weder als Werkzeug gegen das Internet noch als Sprungbrett in Netze, die vor Ort niemand freigegeben hat.
 
 ## Collector einrichten
 
 <Steps>
 
-1. Öffnen Sie **Agents › Rollout-Token erzeugen** und wählen Sie die Art **Collector**. Ein Collector-Token nennt den Standort, an den der Collector gebunden wird; gefundene Geräte schlagen diesen Standort vor.
+1. Am einfachsten geht es von einem Linux-Rechner aus, auf dem schon ein Agent läuft. Die Seite **Netzwerk** listet solche Rechner unter **Rechner für einen Collector**; wählen Sie dort **Als Collector einrichten**. Dieselbe Schaltfläche heißt auf der Seite des Assets **Als Collector für dieses Netz einrichten**.
 
-   Alternativ öffnen Sie das Asset eines Linux-Rechners mit Agent und wählen **Als Collector für dieses Netz einrichten**. Die Oberfläche schlägt die privaten Netze seiner Schnittstellen vor.
+   Ohne Agent öffnen Sie **Agents › Rollout-Token erzeugen** und wählen die Art **Collector**.
+
+2. Wählen Sie den **Standort (Pflichtfeld)**. Gefundene Geräte schlagen diesen Standort vor; ohne Standort lässt sich kein Collector einrichten. Gibt es noch keinen Standort, legen Sie den ersten direkt im Dialog an, etwa für Ihren Hauptsitz. Fehlt Ihnen das Recht dazu, bitten Sie Ihre Administration, unter **Stammdaten › Standorte** einen anzulegen.
+
+3. Kreuzen Sie unter **Netze, die der Collector untersuchen darf** die Netze an. Angeboten werden die privaten Netze der Netzwerkkarten des Rechners; vorausgewählt ist, was zusammen in die Grenzen passt. Schnittstellen von Containern (etwa Docker), virtuellen Maschinen und VPNs bietet der Dialog nicht an und nennt sie unter „Nicht angeboten“: Dort findet ein Scan keine Geräte im Netz.
+
+   Ein Netz, das der Rechner nicht zeigt, tragen Sie unter **Erweitert** bei **Weitere Netze von Hand (optional)** ein. Ohne Agent tragen Sie alle Netze so ein. Ein Netz schreiben Sie als erste Adresse und Größe (CIDR-Schreibweise), etwa `192.168.10.0/24`: Das sind die Adressen 192.168.10.0 bis 192.168.10.255. Die Zahl nach dem Schrägstrich gibt die Größe an: /24 sind 256 Adressen, /23 sind 512, /22 sind 1 024; größer geht nicht.
+
+4. Unter **Erweitert** stehen auch **Gültig für (Stunden)** und **Anzahl Geräte**, mit 24 Stunden und 1 Gerät vorbelegt. Für einen Rechner müssen Sie daran nichts ändern.
+
+5. Wählen Sie **Token erzeugen**. Ist die Schaltfläche gesperrt, sagt der Dialog darunter, was fehlt, etwa „Wählen Sie zuerst einen Standort, dann lässt sich das Token erzeugen.“
 
    Ein Collector-Token entsteht nur kurz nach einer Bestätigung Ihrer Anmeldung (Einmalcode oder erneute Anmeldung beim Identity Provider, gültig 5 Minuten), denn ein Collector untersucht Netze und speist Funde ein. Der Dialog bietet die Bestätigung beim Erzeugen an.
 
-2. Kopieren Sie den Installationsbefehl und führen Sie ihn auf dem Rechner aus. Er prüft die Netze und die Prüfsummen und legt einen eigenen, unprivilegierten Benutzer für den Collector an.
+6. Kopieren Sie den Installationsbefehl und führen Sie ihn auf dem Rechner aus. Er prüft die Netze und die Prüfsummen und legt einen eigenen, unprivilegierten Benutzer für den Collector an.
 
-3. Geben Sie den Collector unter **Agents** frei, falls das Token eine Freigabe verlangt. Unter **Netzwerk** wählen Sie, welche der freigegebenen Netze er wie oft untersucht.
+7. Geben Sie den Collector unter **Agents** frei, falls das Token eine Freigabe verlangt. Unter **Netzwerk** wählen Sie, welche der freigegebenen Netze er wie oft untersucht.
 
 </Steps>
 

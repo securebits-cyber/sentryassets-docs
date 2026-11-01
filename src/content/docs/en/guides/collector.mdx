@@ -26,21 +26,33 @@ You set the networks when setting up the collector on its machine. The server ca
 - at most 8 networks, each at most a /22 (1,024 addresses), 4,096 addresses together;
 - private IPv4 ranges only (RFC 1918 and 100.64.0.0/10), without overlap. For 100.64.0.0/10 the collector warns, as it is often a provider's network.
 
+When setting up, the web UI offers the host's networks to tick, see [Setting up a collector](#setting-up-a-collector).
+
 A collector can thus serve neither as a tool against the internet nor as a stepping stone into networks nobody on site allowed.
 
 ## Setting up a collector
 
 <Steps>
 
-1. Open **Agents › Create rollout token** and choose the kind **Collector**. A collector token names the location the collector is bound to; devices found propose this location.
+1. The easiest way starts from a Linux host on which an agent already runs. The page **Network** lists such hosts under **Hosts for a collector**; choose **Set up as collector** there. On the asset's page the same button is called **Set up as collector for this network**.
 
-   Alternatively, open the asset of a Linux machine with an agent and choose **Set up as collector for this network**. The web UI proposes the private networks of its interfaces.
+   Without an agent, open **Agents › Create rollout token** and choose the kind **Collector**.
+
+2. Choose the **Location (required)**. Devices found propose this location; a collector cannot be set up without one. If there is no location yet, create the first one right in the dialog, for example for your headquarters. If you lack the right to do so, ask your administration to create one under **Master data › Locations**.
+
+3. Tick the networks under **Networks the collector may scan**. Offered are the private networks of the host's network adapters; preselected is what fits the limits together. Interfaces of containers (such as Docker), virtual machines and VPNs are not offered and are named under “Not offered”: a scan there finds no devices of the network.
+
+   A network the host does not show goes under **Advanced** into **More networks by hand (optional)**. Without an agent you enter all networks that way. Write a network as its first address and its size (CIDR notation), such as `192.168.10.0/24`: the addresses 192.168.10.0 to 192.168.10.255. The number after the slash gives the size: /24 is 256 addresses, /23 is 512, /22 is 1,024, and no larger.
+
+4. **Advanced** also holds **Valid for (hours)** and **Number of devices**, preset to 24 hours and 1 device. For one host you need not change them.
+
+5. Choose **Create token**. If the button is locked, the dialog says below it what is missing, such as “Choose a location first; then the token can be created.”
 
    A collector token is created only shortly after confirming your sign-in (one-time code or signing in again at the identity provider, valid for 5 minutes), since a collector scans networks and feeds findings in. The dialog offers the confirmation when you create the token.
 
-2. Copy the installation command and run it on the machine. It checks the networks and the checksums and creates an unprivileged user of its own for the collector.
+6. Copy the installation command and run it on the machine. It checks the networks and the checksums and creates an unprivileged user of its own for the collector.
 
-3. Approve the collector under **Agents** if the token requires approval. Under **Network** you choose which of the allowed networks it scans and how often.
+7. Approve the collector under **Agents** if the token requires approval. Under **Network** you choose which of the allowed networks it scans and how often.
 
 </Steps>
 

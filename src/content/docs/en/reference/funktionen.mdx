@@ -42,7 +42,7 @@ Guides: [Recording and importing assets](/en/guides/assets/), [Master data](/en/
 ## Automatic discovery
 
 - **Agents** for Linux and Windows, see [Agents](/en/guides/agents/). To remove one, block the agent and delete it from the device with the command shown, certificate and keys included, see [Uninstalling an agent](/en/guides/agents/#uninstalling-an-agent).
-- **Collector** for network scans with SNMPv3, LLDP and VLANs per switch port, see [Collector](/en/guides/collector/).
+- **Collector** for network scans with SNMPv3, LLDP and VLANs per switch port, see [Collector](/en/guides/collector/). The page **Network** lists the hosts with a Linux agent that can serve as a collector; when setting one up, the networks of its interfaces are offered to tick, without Docker, VM and VPN interfaces. The location is required and, if there is none yet, can be created right in the dialog.
 - **Software inventory** per device with normalised names and publishers; the overview filters by platform, source, publisher and device class.
 
 ### Directory
@@ -64,6 +64,12 @@ A traffic light per asset (healthy, warning, critical, unknown) with its reasons
 Guide: [IT-Grundschutz step by step](/en/guides/grundschutz/).
 
 Grundschutz++ and Edition 2023 with a guided process, the Grundschutz check and evidence, see [IT-Grundschutz](/en/guides/grundschutz/).
+
+- **Catalogues:** the BSI's Grundschutz++ comes with SentryAssets (CC BY-SA 4.0) and is imported with one click without internet, with the same checks and the same audit entry as an upload; newer versions can be uploaded, and SentryAssets offers to take a newer included version. For edition 2023 a direct link leads to the XML file at the BSI.
+- **Information domain:** the scope is in the field as an editable proposal when you create it.
+- **Target objects (edition 2023):** categories with the number of their assets in operation, locations and assets are offered at once; whatever is a target object already is marked.
+- **Modelling (edition 2023):** every module says in one sentence when it applies; the suggestions for the information domain are grouped by how widely they apply and taken over one by one. [Automatic modelling](/en/pro/modellierung/) in Pro takes them all at once.
+- **Explanations per requirement** in plain words: what it is about, what you do, an example of proof; the BSI's text is what counts.
 
 ## Records
 

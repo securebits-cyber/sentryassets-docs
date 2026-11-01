@@ -23,7 +23,7 @@ SentryAssets helps with the process but does not replace an audit. Whether a req
 
 - A role with access to the Grundschutz: **Administrator**, **Information security**, **Editor**, **Data protection** or **Auditor (read only)**. The role **Read only** does not see the Grundschutz, as open requirements show where an organisation is vulnerable. What each role may do is listed under [Rights](#rights).
 - A maintained inventory: assets with a **category** and a **location**. The category matters, as SentryAssets derives its proposals from it.
-- The BSI file for your variant. You download it yourself; SentryAssets does not connect to the internet for this.
+- For Grundschutz++ nothing more: SentryAssets includes the BSI's catalogue. For edition 2023 you download the BSI's XML file yourself. SentryAssets never connects to the internet for either.
 
 ## Choosing the variant
 
@@ -79,13 +79,15 @@ Before you start, SentryAssets needs the BSI's IT-Grundschutz-Kompendium. **Admi
 
 <Steps>
 
-1. In the card **IT-Grundschutz-Kompendium**, choose the link **Open the BSI page on the Kompendium**.
+1. In the card **IT-Grundschutz-Kompendium**, choose the link **Download the XML file of the Kompendium 2023 from the BSI**. It leads straight to the file `XML_Kompendium_2023.xml` (about 3 MB).
 
-2. Download the “XML-Version des IT-Grundschutz-Kompendiums” there.
+2. If the browser shows the file instead of saving it: right-click the link and choose “Save link as …”.
 
-3. Choose **Import Kompendium** and the downloaded file.
+3. Choose **Import Kompendium** and the saved file.
 
 </Steps>
+
+If the link does not work, for example because the BSI changed the address, you find the file on the BSI's overview page with **Open the BSI page on the Kompendium**. Unlike the Grundschutz++ catalogue, SentryAssets does not include edition 2023 itself, because of the BSI's terms of use.
 
 SentryAssets checks the file completely before it stores it and then reports “Kompendium imported”. The card shows **Title**, **Edition**, the number of **Modules** and **Requirements** and the **Checksum (SHA-256)**. With **View modules** you browse the Kompendium, filtered by **Layer** and **Target object type**. When a new version appears, import it with **Import a new version**.
 
@@ -97,7 +99,7 @@ The first step is called **What do you want to protect?**
 
 1. Choose **Define the information domain**.
 
-2. Enter a **Name** by which you recognise the domain. With **Use the proposal** you take a ready-made text for the **Scope** that covers the whole organisation.
+2. Enter a **Name** by which you recognise the domain. The field **Scope** already holds a proposal that covers the whole organisation. Adapt it, for example if only one site belongs to it, or leave it as it is; the text is saved as it stands in the field.
 
 3. Choose the **Approach**. It sets how thoroughly you proceed:
    - **Basic protection**: only the basic requirements. Recommended to begin with; you quickly protect what matters most and extend later.
@@ -108,7 +110,7 @@ The first step is called **What do you want to protect?**
 
 </Steps>
 
-You change the domain later with **Edit domain**.
+You change the domain later with **Edit domain**. If you have cleared the scope there, **Use the proposal** brings the proposal back.
 
 ### Recording target objects
 
@@ -120,15 +122,20 @@ The second step is called **What does it consist of?** Here you record the targe
 
 <Steps>
 
-1. In the card **Target objects**, choose **Add target object**.
+1. In the card **How to proceed**, choose **Record target objects**; the dialog **Add target object** opens straight away. Later you also reach it in the card **Target objects** with **Add target object**.
 
-2. Choose the **Kind of target object**: **Category**, **Asset** or **Location**.
+2. Choose the **Kind of target object**: **Category**, **Asset** or **Location**. The dialog shows at once what there is to choose from:
+   - for **Category** all categories of your inventory with the number of their assets in operation, subcategories included,
+   - for **Location** all sites, buildings, floors and rooms with their kind and where they are,
+   - for **Asset** the first 20 assets by name.
 
-3. Search for the object, for example with **Search category**, and choose it under **Matches**.
+3. Choose the object under **Matches**. The search, for example **Search category**, only narrows the list; for assets it finds all of them, not just the first 20.
 
 4. Choose **Add “…”**.
 
 </Steps>
+
+Whatever is a target object already is marked “already a target object”. If the search finds nothing, the dialog says so and suggests clearing the search. If there are no categories, assets or locations yet, a link leads to where you create them, such as **Create categories under master data**.
 
 The list shows for each target object the number of assets in operation, the modules and the state of the check (“Check: … done”). You remove a target object on its page with **Remove target object**; the object in the inventory stays.
 
@@ -154,15 +161,23 @@ The fourth step is called **Which modules fit?** A BSI module describes the requ
 
 <Steps>
 
-1. Open a target object. Under **Suggestions** SentryAssets proposes fitting modules, each with a reason, such as “Fits the category of the inventory”, “Operating system …, as reported by the agent” or “Kind of location: …”.
+1. Open a target object. Under **Suggestions** SentryAssets proposes fitting modules, each with a reason, such as “Fits the category of the inventory”, “Operating system …, as reported by the agent” or “Kind of location: …”. Below each module a sentence says when it applies.
 
-2. Take over each fitting suggestion on its own with **Take …**.
+2. Take over each fitting suggestion on its own with **Take …**. The notice offers **Undo**.
 
 3. If a module is missing, look for it under **Assign another module** with **Search modules**. Any module of the Kompendium can be assigned, also without a suggestion.
 
 4. Check the list **Modelled modules**. You take out a wrong module with **Remove**.
 
 </Steps>
+
+For the information domain itself the suggestions are sorted into three groups:
+
+- **Applies to every information domain**: 21 modules that every organisation needs, such as ISMS.1. Take them.
+- **Only if it applies to you**: read the sentence below each module. If it does not apply, do not take the module. CON.2 (data protection) and CON.9 (information exchange) are listed here with the note “Applies to almost every organisation.”
+- **Further suggestions**: everything else that may fit the domain.
+
+A module's page shows the same sentence under **When it applies**.
 
 A headquarters or branch without a building entered gets INF.1 like a building. A single asset without a category gets no suggestions, as the operating system alone does not tell a server from a client; the page leads straight there with **Choose the category at the asset**. With [Pro](/en/pro/modellierung/) you take over every suggestion at once.
 
@@ -176,7 +191,7 @@ The fifth step is called **What is implemented already?** The requirements of th
 
 2. Under **Module**, choose the module you want to work on. With **Open** you hide what is already answered.
 
-3. Read the **Text of the requirement** if needed. A badge shows the level: **Basic** (implement first), **Standard** or **High protection need**.
+3. Read the **Text of the requirement** if needed. A badge shows the level: **Basic** (implement first), **Standard** or **High protection need**. For the central modules, such as ISMS.1, **What is it about? What do you do?** explains the requirement in plain words, see [Explanations of the requirements](#explanations-of-the-requirements).
 
 4. Answer the requirement as described under [The Grundschutz check: how to answer](#the-grundschutz-check-how-to-answer).
 
@@ -192,17 +207,25 @@ Choose **Grundschutz++** under **Variant**. The card **How to proceed** leads in
 
 **Administrator** and **Information security** may import it.
 
+SentryAssets includes the BSI's Grundschutz++ user catalogue, as of 29 October 2026. In the card **Grundschutz++ catalog**, choose **Use the included catalog (as of …)**. No internet connection is needed.
+
+SentryAssets checks the included catalogue just like an uploaded file and also checks its checksum; the audit log records the import as for an upload. If the file is damaged, SentryAssets imports nothing and says so. The content comes from the BSI and is licensed under CC BY-SA 4.0; the card names this.
+
+**Importing a newer version yourself:** the BSI updates the catalogue continuously. You import a newer version than the included one like this:
+
 <Steps>
 
 1. In the card **Grundschutz++ catalog**, choose the link **Open the file at the BSI**. It is the file `Grundschutz++-resolved_catalog.json` in the BSI's state-of-the-art library.
 
 2. Save it there with “Download raw file”.
 
-3. Choose **Import catalog** and the saved file.
+3. Choose **Import catalog** or **Import a new version** and the saved file.
 
 </Steps>
 
-SentryAssets checks the file completely and reports “Catalog imported”. The card shows **Version of**, **Imported on**, the number of **Requirements** and the **Checksum**. With **View requirements** you look up the whole catalogue, filtered by **Practice**, **Modality**, **Security level** and **Target object**. You import a new version with **Import a new version**.
+If a new version of SentryAssets includes a newer catalogue than the imported one, the card says “SentryAssets includes a newer version of the catalog” and offers **Use the included version**. An update never changes your catalogue by itself.
+
+After the import SentryAssets reports “Catalog imported”. The card shows **Version of**, **Imported on**, the number of **Requirements** and the **Checksum**. With **View requirements** you look up the whole catalogue, filtered by **Practice**, **Modality**, **Security level** and **Target object**.
 
 ### Information domain and requirement package
 
@@ -212,7 +235,7 @@ The first step is called **What do you want to protect?** From the information d
 
 1. Choose **Define the information domain**.
 
-2. Enter **Name** and **Scope**, or take the text with **Use the proposal**.
+2. Enter a **Name**. The field **Scope** already holds a proposal that covers the whole organisation; adapt it or leave it as it is. When editing, **Use the proposal** brings it back into an empty field.
 
 3. Decide on two tick boxes. To begin with, the interface recommends leaving both unticked:
    - **Include requirements for the raised security level as well** only if you process particularly sensitive information, such as health, personnel or financial data on a large scale, or customers and regulations require it.
@@ -270,13 +293,32 @@ The fourth step is called **What is implemented already?** Go through your packa
 
 2. Choose a practice under **Practice**. With **Open** you hide what is already answered; once everything is done, it says “Nothing is open here any more.”
 
-3. For a requirement, open **What does it mean? How do you tell?**. It explains the modality (MUSS: must be met in any case; SOLLTE: normally met, justify deviations soundly; KANN: useful depending on the situation), the **Expected result:** and the **Suitable proof:**. The text already contains your parameter values.
+3. For a requirement, open **What does it mean? How do you tell?**. If the requirement is explained, SentryAssets' own explanation in plain words comes first (see [Explanations of the requirements](#explanations-of-the-requirements)); below it you open **What the BSI catalog states**. It explains the modality (MUSS: must be met in any case; SOLLTE: normally met, justify deviations soundly; KANN: useful depending on the situation), the **Expected result:** and the **Suitable proof:**. The text already contains your parameter values.
 
 4. Answer the requirement as described in the next section.
 
 </Steps>
 
 You can also open a requirement from **View requirements**: its card **Implementation at your organisation** shows the same answer as under **Check the implementation**.
+
+## Explanations of the requirements
+
+Anyone doing a Grundschutz check for the first time often does not know the terms. For many requirements SentryAssets therefore includes its own explanation in plain words, in German and English, in three parts:
+
+- **What it is about:** what the requirement means, with technical terms explained,
+- **What you do:** two to five steps for a small or medium-sized organisation,
+- **Example of proof:** what you could show, such as a record or a resolution.
+
+| Variant | Where | What is explained |
+|---|---|---|
+| Edition 2023 | in the Grundschutz check above the text of the requirement under **What is it about? What do you do?** | the central modules, ISMS.1 first |
+| Grundschutz++ | under **What does it mean? How do you tell?**, before the expandable **What the BSI catalog states** | all requirements of the practice GC (governance) and central ones on personnel, permissions and MFA, backup, updates, network segmentation, incidents and buildings |
+
+Where a requirement of edition 2023 and one of Grundschutz++ ask for the same thing, they share one explanation. Without an explanation you see the BSI's text as before.
+
+<Aside type="note" title="Own words, the BSI's text counts">
+The explanations are written by SentryAssets in its own words, as a starting point. What counts is always the BSI's text of the requirement; if in doubt, read it.
+</Aside>
 
 ## The Grundschutz check: how to answer
 
@@ -341,7 +383,7 @@ Both variants use the same rights. From Pro you adapt rights in [custom roles](/
 
 ## Notes and limits
 
-- Catalogue and Kompendium file: at most 16 MB. If a reverse proxy sits in front of SentryAssets, it must allow at least 16 MB for this upload.
+- Catalogue and Kompendium file: at most 16 MB, the included catalogue too. If a reverse proxy sits in front of SentryAssets, it must allow at least 16 MB for this upload.
 - Edition 2023: at most 500 target objects and 200 modules per target object. Group like assets in a category.
 - At most 20 pieces of evidence per requirement; best combine records in one document.
 - Parameter values: at most 500 characters on one line.
