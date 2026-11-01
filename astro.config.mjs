@@ -78,6 +78,7 @@ export default defineConfig({
 							{ icon: 'i-ph:shield-check-duotone', slug: 'guides/grundschutz' },
 							{ icon: 'i-ph:heartbeat-duotone', slug: 'guides/betrieb' },
 							{ icon: 'i-ph:archive-duotone', slug: 'guides/sicherung' },
+							{ icon: 'i-ph:flask-duotone', slug: 'guides/uebungsmandant' },
 							{ icon: 'i-ph:key-duotone', slug: 'guides/lizenz' },
 						],
 					},

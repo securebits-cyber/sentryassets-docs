@@ -1,0 +1,50 @@
+---
+title: Übungsmandant
+description: In einem eigenen Mandanten mit einer erfundenen Firma gefahrlos üben, Konten dafür freigeben und den Übungsmandanten auf den Ausgangsstand zurücksetzen.
+head:
+  - tag: title
+    content: Übungsmandant mit Beispieldaten | SentryAssets Docs
+sidebar:
+  label: Übungsmandant
+  order: 16
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Der Übungsmandant ist ein eigener Mandant in Ihrer Installation, gefüllt mit der erfundenen **Kunststoffwerk Beispiel GmbH**: zwei Standorte mit Gebäuden und Räumen, Personen, Lieferanten, Server, Clients und Netzwerkgeräte, Lizenzen und Verträge. Dort probieren Sie und Ihr Team alles aus, ohne Ihre eigenen Daten zu berühren. Er gehört zur Community-Edition.
+
+## Anlegen und freigeben
+
+Unter **Einstellungen › Übungsmandant** verwaltet die Administration den Übungsmandanten. Es gibt genau einen je Installation.
+
+<Steps>
+
+1. Wählen Sie **Übungsmandant anlegen**. SentryAssets legt den Mandanten mit den Standardkategorien und den Beispieldaten an und gibt Sie selbst frei.
+
+2. Wählen Sie unter **Freigaben** die Konten, die üben sollen, und wählen Sie **Freigeben**. Nur aktive Konten stehen zur Wahl.
+
+3. Freigegebene Personen wechseln über ihr Benutzermenü mit **In den Übungsmandanten** hinein, Sie auch mit **Übungsmandant betreten** auf dieser Seite.
+
+</Steps>
+
+Anlegen, Freigeben, Entziehen und Zurücksetzen verlangen eine frische Bestätigung der Anmeldung (TOTP oder erneute Anmeldung beim Identitätsanbieter).
+
+## Im Übungsmandanten
+
+Ein farbiges Band oben auf jeder Seite zeigt: **Übungsmandant: Änderungen hier betreffen nur Beispieldaten.** Der Titel im Browser beginnt mit „Übung“. **Zurück zu Ihren Daten** im Band oder im Benutzermenü bringt Sie in Ihre eigene Sitzung zurück.
+
+- **Rolle:** Sie arbeiten mit der Rolle Ihres Kontos, als Grundrolle. Eigene Rollen und Rechte je Standort gelten im Übungsmandanten nicht.
+- **Nichts geht nach außen:** keine E-Mails und Benachrichtigungen, keine Rollout-, Status- oder SCIM-Tokens, keine Agents und Collectors, keine Verbindungen zu Active Directory, Entra ID oder Hypervisoren, kein Hilfe- oder Daten-Assistent. Das Audit-Log des Übungsmandanten ist dort nicht lesbar; Wechsel, Rückkehr und Ende einer Übungssitzung stehen im Audit-Log Ihrer echten Daten.
+- **Lizenz:** Es gilt die Lizenz Ihrer Installation. Funktionen ab Pro und die Add-ons sind im Übungsmandanten nur offen, wenn sie es auch bei Ihnen sind. Die Beispieldaten zählen nicht gegen die Zahl der Assets.
+
+Eine Übungssitzung endet, wenn Ihre eigene Sitzung endet (Abmelden, abgelaufen, neue Anmeldedaten), wenn Ihre Freigabe entzogen oder Ihre Rolle geändert wird oder wenn der Übungsmandant zurückgesetzt wird. Abmelden im Übungsmandanten meldet Sie ganz ab.
+
+## Zurücksetzen
+
+**Auf Ausgangsstand zurücksetzen** löscht alles im Übungsmandanten, auch sein Audit-Log, und legt ihn mit den Beispieldaten neu an. Die Freigaben bleiben. Die Arbeit macht der Dienst `backup-runner`; die Seite zeigt **Wird zurückgesetzt** und legt den Übungsmandanten danach von selbst neu an. Das Zurücksetzen steht im Audit-Log Ihrer echten Daten.
+
+<Aside type="caution">
+Das Zurücksetzen lässt sich nicht rückgängig machen. Ihre eigenen Daten berührt es nie: Der Sicherungsdienst löscht nur den Mandanten, der als Übungsmandant angelegt wurde.
+</Aside>
+
+Eine Sicherung enthält den Übungsmandanten wie alles andere.

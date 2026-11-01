@@ -1,0 +1,50 @@
+---
+title: Sandbox
+description: Practise safely in a tenant of its own with an invented company, admit accounts to it and reset the sandbox to its initial state.
+head:
+  - tag: title
+    content: Sandbox with example data | SentryAssets Docs
+sidebar:
+  label: Sandbox
+  order: 16
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+The sandbox is a tenant of its own in your installation, filled with the invented **Kunststoffwerk Beispiel GmbH**: two locations with buildings and rooms, people, suppliers, servers, clients and network devices, licences and contracts. You and your team try everything there without touching your own data. It is part of the Community edition.
+
+## Create and admit
+
+The administration manages the sandbox under **Settings › Sandbox**. There is exactly one per installation.
+
+<Steps>
+
+1. Choose **Create sandbox**. SentryAssets creates the tenant with the standard categories and the example data and admits you.
+
+2. Under **Admissions**, choose the accounts that should practise and choose **Admit**. Only active accounts are offered.
+
+3. Admitted people switch in from their user menu with **Into the sandbox**, you also with **Enter sandbox** on this page.
+
+</Steps>
+
+Creating, admitting, revoking and resetting need a fresh confirmation of the sign-in (TOTP or signing in again at the identity provider).
+
+## In the sandbox
+
+A coloured band at the top of every page says: **Sandbox: Changes here affect example data only.** The browser title begins with “Practice”. **Back to your data** in the band or in the user menu takes you back to your own session.
+
+- **Role:** you work with the role of your account, as a base role. Custom roles and rights per location do not apply in the sandbox.
+- **Nothing goes outside:** no e-mails and notifications, no rollout, status or SCIM tokens, no agents and collectors, no connections to Active Directory, Entra ID or hypervisors, no help or data assistant. The sandbox's audit log cannot be read there; entering, returning and the end of a sandbox session are in the audit log of your real data.
+- **Licence:** the licence of your installation applies. Features from Pro and the add-ons are open in the sandbox only if they are for you. The example data do not count against the number of assets.
+
+A sandbox session ends when your own session ends (sign-out, expiry, new credentials), when your admission is revoked or your role changes, or when the sandbox is reset. Signing out in the sandbox signs you out completely.
+
+## Reset
+
+**Reset to initial state** deletes everything in the sandbox, its audit log too, and creates it anew with the example data. Admissions stay. The `backup-runner` service does the work; the page shows **Being reset** and then creates the sandbox anew by itself. The reset is in the audit log of your real data.
+
+<Aside type="caution">
+A reset cannot be undone. It never touches your own data: the backup service only deletes the tenant that was created as the sandbox.
+</Aside>
+
+A backup holds the sandbox like everything else.
