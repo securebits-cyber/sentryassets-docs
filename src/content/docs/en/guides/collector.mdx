@@ -42,6 +42,8 @@ A collector can thus serve neither as a tool against the internet nor as a stepp
 
 3. Tick the networks under **Networks the collector may scan**. Offered are the private networks of the host's network adapters; preselected is what fits the limits together. Interfaces of containers (such as Docker), virtual machines and VPNs are not offered and are named under “Not offered”: a scan there finds no devices of the network.
 
+   If a network is larger than a /22, such as a /21, the dialog offers only the section of 256 addresses (/24) around this host and says so: the collector will not find devices outside it. You add further sections under **Advanced**.
+
    A network the host does not show goes under **Advanced** into **More networks by hand (optional)**. Without an agent you enter all networks that way. Write a network as its first address and its size (CIDR notation), such as `192.168.10.0/24`: the addresses 192.168.10.0 to 192.168.10.255. The number after the slash gives the size: /24 is 256 addresses, /23 is 512, /22 is 1,024, and no larger.
 
 4. **Advanced** also holds **Valid for (hours)** and **Number of devices**, preset to 24 hours and 1 device. For one host you need not change them.

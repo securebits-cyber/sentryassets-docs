@@ -141,7 +141,7 @@ Agents aktualisieren sich selbst, aber nur auf Versionen, die der Hersteller off
 - Der Agent verweigert den Start, wenn Verzeichnis oder Dateien für andere lesbar sind.
 
 <Aside type="caution" title="Bekannte Einschränkungen">
-Der private Schlüssel liegt bisher in einer Datei mit strengen Rechten; TPM und CNG sind vorbereitet. Windows-Binaries sind noch nicht mit Authenticode signiert, was SmartScreen oder Virenscanner melden können.
+Der private Schlüssel liegt unter Windows in CNG, zuerst im TPM, nicht exportierbar; unter Linux in einer Datei mit strengen Rechten. Windows-Binaries sind noch nicht mit Authenticode signiert, was SmartScreen oder Virenscanner melden können.
 </Aside>
 
 ## Fehlerbehebung

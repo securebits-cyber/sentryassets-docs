@@ -18,6 +18,7 @@ Most successful attacks use flaws that were fixed long ago. IT-Grundschutz asks 
 - **Do not forget servers:** fixed maintenance windows instead of “not now”.
 - **Find devices falling behind:** paused updates, disabled services, devices that are rarely online.
 - **Keep the end of support in view** and plan the replacement in time.
+- **Windows diagnostic data:** the Edition 2023 requires telemetry level 0 (SYS.2.2.3.A4, SYS.1.2.3.A3), which Microsoft now calls “Diagnostic data off”. Microsoft offers this only on Windows Enterprise, Education and Server; on other editions the value acts like level 1. There, stop the transfer, for example at network level; going by Microsoft's statements, do not block `settings-win.data.microsoft.com` and `login.live.com` when doing so. If you rely on Windows Update, Microsoft recommends at least “Required”, as it otherwise receives no information about failed updates; Windows Autopatch and the update reports in Intune rely on diagnostic data.
 - The SentryAssets agent reports whether updates come by themselves and when updates were last installed.
 
 <Aside type="tip" title="In the ISMS add-on">

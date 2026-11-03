@@ -69,7 +69,7 @@ Der Rechner braucht:
 </Steps>
 
 <Aside type="tip" title="Linux">
-Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sentryassets-directory` anlegt und den gehärteten systemd-Dienst `sentryassets-directory` einrichtet. `set` führen Sie dann mit `sudo -u sentryassets-directory /opt/sentryassets-directory/bin/sentryassets-directory set …` aus.
+Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sentryassets-directory` anlegt und den gehärteten systemd-Dienst `sentryassets-directory` einrichtet. Läuft der Dienst schon, stoppt der Befehl ihn für die Neuanmeldung und stellt danach den vorigen Zustand wieder her, auch nach einem Fehler oder Abbruch; scheitert das Stoppen, endet er vor der Anmeldung. `set` führen Sie dann mit `sudo -u sentryassets-directory /opt/sentryassets-directory/bin/sentryassets-directory set …` aus.
 </Aside>
 
 ## Im Betrieb

@@ -72,12 +72,29 @@ SentryAssets hält Daten über Ihre gesamte IT, und der Agent läuft mit erhöht
 ## Lieferkette
 
 - Lockfiles mit Hashes, regelmäßige Schwachstellen-Scans;
-- reproduzierbare Agent-Builds mit CycloneDX-SBOM und SHA-256-Prüfsummen, schlüssellos mit cosign signiert.
+- reproduzierbare Agent-Builds mit CycloneDX-SBOM und SHA-256-Prüfsummen, schlüssellos mit cosign signiert;
+- Container-Images `sentryassets-backend` und `sentryassets-caddy` auf ghcr.io nur unter ihrem Versions-Tag, nie unter `latest`, schlüssellos per Digest signiert und mit ihrer CycloneDX-SBOM als signierte Attestierung.
+
+Die Release-Seite nennt die Images per Digest in `sentryassets-images_<version>.txt`, signiert wie die Agent-Builds. Prüfen Sie zuerst diese Liste und dann jedes Image über den dort genannten Digest:
+
+```bash
+cosign verify-blob --bundle sentryassets-images_<version>.txt.sigstore.json \
+  --certificate-identity "https://github.com/securebits-cyber/sentryassets/.github/workflows/release.yml@refs/tags/v<version>" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  sentryassets-images_<version>.txt
+cosign verify \
+  --certificate-identity "https://github.com/securebits-cyber/sentryassets/.github/workflows/release.yml@refs/tags/v<version>" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  ghcr.io/securebits-cyber/sentryassets-backend@sha256:<digest>
+cosign verify-attestation --type cyclonedx \
+  --certificate-identity "https://github.com/securebits-cyber/sentryassets/.github/workflows/release.yml@refs/tags/v<version>" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  ghcr.io/securebits-cyber/sentryassets-backend@sha256:<digest>
+```
 
 <Aside type="caution" title="Bekannte Grenzen">
-- Der private Schlüssel des Agents liegt bisher in einer Datei mit strengen Rechten; TPM und CNG sind vorbereitet.
+- Der private Schlüssel des Agents liegt unter Windows in CNG, zuerst im TPM, nicht exportierbar; unter Linux in einer Datei mit strengen Rechten.
 - Windows-Binaries sind noch nicht mit Authenticode signiert.
-- Container-Images entstehen beim Betreiber aus dem Quellcode; signierte, veröffentlichte Images folgen.
 </Aside>
 
 ## Schwachstellen melden

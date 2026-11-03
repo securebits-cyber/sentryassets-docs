@@ -72,12 +72,29 @@ SentryAssets holds data about your whole IT, and the agent runs with elevated ri
 ## Supply chain
 
 - lockfiles with hashes, regular vulnerability scans;
-- reproducible agent builds with a CycloneDX SBOM and SHA-256 checksums, signed keylessly with cosign.
+- reproducible agent builds with a CycloneDX SBOM and SHA-256 checksums, signed keylessly with cosign;
+- the container images `sentryassets-backend` and `sentryassets-caddy` on ghcr.io under their version tag only, never `latest`, signed keylessly by digest and with their CycloneDX SBOM as a signed attestation.
+
+The release page lists the images by digest in `sentryassets-images_<version>.txt`, signed like the agent builds. Check that list first, then each image by the digest it names:
+
+```bash
+cosign verify-blob --bundle sentryassets-images_<version>.txt.sigstore.json \
+  --certificate-identity "https://github.com/securebits-cyber/sentryassets/.github/workflows/release.yml@refs/tags/v<version>" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  sentryassets-images_<version>.txt
+cosign verify \
+  --certificate-identity "https://github.com/securebits-cyber/sentryassets/.github/workflows/release.yml@refs/tags/v<version>" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  ghcr.io/securebits-cyber/sentryassets-backend@sha256:<digest>
+cosign verify-attestation --type cyclonedx \
+  --certificate-identity "https://github.com/securebits-cyber/sentryassets/.github/workflows/release.yml@refs/tags/v<version>" \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  ghcr.io/securebits-cyber/sentryassets-backend@sha256:<digest>
+```
 
 <Aside type="caution" title="Known limits">
-- The agent's private key is kept in a file with strict permissions for now; TPM and CNG are prepared.
+- On Windows the agent's private key is kept in CNG, in the TPM where there is one, not exportable; on Linux in a file with strict permissions.
 - Windows binaries are not yet Authenticode-signed.
-- Container images are built by the operator from the source; signed, published images will follow.
 </Aside>
 
 ## Reporting vulnerabilities

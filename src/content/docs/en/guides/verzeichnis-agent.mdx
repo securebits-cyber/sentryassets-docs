@@ -69,7 +69,7 @@ The computer needs:
 </Steps>
 
 <Aside type="tip" title="Linux">
-On Linux the page shows a command that creates a system user `sentryassets-directory` of its own and sets up the hardened systemd service `sentryassets-directory`. Run `set` with `sudo -u sentryassets-directory /opt/sentryassets-directory/bin/sentryassets-directory set …`.
+On Linux the page shows a command that creates a system user `sentryassets-directory` of its own and sets up the hardened systemd service `sentryassets-directory`. If the service is already running, the command stops it to enrol anew and then restores the previous state, also after an error or an abort; if stopping fails, it ends before enrolling. Run `set` with `sudo -u sentryassets-directory /opt/sentryassets-directory/bin/sentryassets-directory set …`.
 </Aside>
 
 ## In operation

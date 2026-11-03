@@ -139,7 +139,7 @@ Agents update themselves, but only to versions the vendor signed offline (Ed2551
 - The agent refuses to start if its directory or files are readable by others.
 
 <Aside type="caution" title="Known limitations">
-The private key is kept in a file with strict permissions for now; TPM and CNG are prepared. Windows binaries are not yet Authenticode-signed, which SmartScreen or virus scanners may report.
+On Windows the private key is kept in CNG, in the TPM where there is one, not exportable; on Linux in a file with strict permissions. Windows binaries are not yet Authenticode-signed, which SmartScreen or virus scanners may report.
 </Aside>
 
 ## Troubleshooting

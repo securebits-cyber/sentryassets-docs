@@ -18,6 +18,7 @@ Die meisten erfolgreichen Angriffe nutzen Lücken, für die es längst Updates g
 - **Server nicht vergessen:** feste Wartungsfenster statt „passt gerade nicht“.
 - **Zurückbleibende Geräte finden:** pausierte Updates, abgeschaltete Dienste, Geräte, die selten online sind.
 - **Supportende im Blick** behalten und den Ersatz rechtzeitig planen.
+- **Diagnosedaten von Windows:** Die Edition 2023 verlangt die Telemetrie-Stufe 0 (SYS.2.2.3.A4, SYS.1.2.3.A3), bei Microsoft heute „Diagnosedaten aus“. Microsoft bietet das nur unter Windows Enterprise, Education und Server an; unter anderen Editionen wirkt der Wert wie Stufe 1. Dort unterbinden Sie die Übertragung etwa auf Netzebene und sperren dabei `settings-win.data.microsoft.com` und `login.live.com` nach Microsofts Angaben nicht. Microsoft empfiehlt bei Windows Update mindestens „Erforderlich“, weil es sonst keine Angaben zu fehlgeschlagenen Updates erhält; Windows Autopatch und die Update-Berichte in Intune bauen auf Diagnosedaten.
 - Der Agent von SentryAssets meldet, ob Updates automatisch kommen und wann zuletzt welche eingespielt wurden.
 
 <Aside type="tip" title="Im ISMS-Add-on">
