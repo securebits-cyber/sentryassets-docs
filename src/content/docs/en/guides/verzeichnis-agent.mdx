@@ -69,15 +69,16 @@ The computer needs:
 </Steps>
 
 <Aside type="tip" title="Linux">
-On Linux the page shows a command that creates a system user `sentryassets-directory` of its own and sets up the hardened systemd service `sentryassets-directory`. If the service is already running, the command stops it to enrol anew and then restores the previous state, also after an error or an abort; if stopping fails, it ends before enrolling. Run `set` with `sudo -u sentryassets-directory /opt/sentryassets-directory/bin/sentryassets-directory set …`.
+On Linux the page shows a command that creates a system user `sentryassets-directory` of its own and sets up the hardened systemd service `sentryassets-directory`, as root or with `sudo`. If the service is already running, the command stops it to enrol anew and then restores the previous state, also after an error or an abort; if stopping fails, it ends before enrolling. Then set up the service account and the domain controllers with the command the page puts together from your entries, again as root or with `sudo`: it runs `set` as this system user, the program asks for the password without showing it, and the service then restarts. Without root and without `sudo` the commands stop before they change anything.
 </Aside>
 
 ## In operation
 
 - The directory agent reads at the interval set, at most once an hour. **Synchronise now** asks for a run, which it starts 15 minutes after its last start at the earliest; so it reads at most four times an hour. When the next run comes at the earliest is shown under **Settings › Directory services** as **Next run**. SentryAssets takes a run over only once it has arrived completely; an interrupted or failed run changes nothing.
-- **Changing the password:** run `sentryassets-directory set` again on the computer. The interface has no field for it; the next test shows the new state.
+- **Changing the password:** run `sentryassets-directory set` again on the computer, on Linux with the command from the setup. The interface has no field for it; the next test shows the new state.
 - **Changing the route:** if you switch an existing connection from "Directly from the server (LDAPS)" to "Over a directory agent (no VPN)", SentryAssets deletes the password stored on the server when you activate it. Computers keep their links.
 - **Updates:** On Windows the directory agent updates itself, only with versions the vendor signed, staggered within 24 hours. To update at once: `& "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" update; Restart-Service SentryAssetsDirectory`. On Linux it runs without write access to its program and does not update itself; use the command **Update later (Linux)** from the setup there. It checks the SHA-256 sum, replaces the program and restarts the service, without enrolling again.
+- **Enrolling again on Windows:** if you run the installation command on a computer where the service is already set up, it disables the service for the time being, so that the recovery actions do not start the old program during enrollment. Afterwards the previous start type applies again, and a service that was running runs again. This also holds after an error or an abort; the previous program then stays as well. If the service stayed disabled after an interrupted run, the next run sets it to automatic and starts it.
 - One directory agent serves exactly one connection. For several domains (Pro) set up one per domain.
 - **Removing it:** see [Uninstalling](#uninstalling).
 
@@ -93,10 +94,20 @@ On Linux the page shows a command that creates a system user `sentryassets-direc
    Stop-Service SentryAssetsDirectory -ErrorAction SilentlyContinue; sc.exe delete SentryAssetsDirectory; Remove-Item -Recurse -Force (Join-Path $env:ProgramFiles 'SentryAssets\Directory'), (Join-Path $env:ProgramData 'SentryAssets\Directory') -ErrorAction SilentlyContinue
    ```
 
-   On Linux in a terminal:
+   On Linux in a terminal as root or with `sudo`; without either the command stops before it changes anything:
 
    ```bash
-   sudo systemctl disable --now sentryassets-directory && sudo rm -f /etc/systemd/system/sentryassets-directory.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-directory /var/lib/sentryassets-directory && sudo userdel sentryassets-directory
+   (
+     set -eu
+     if [ "$(id -u)" -eq 0 ]; then as_root=""
+     elif command -v sudo >/dev/null 2>&1; then as_root="sudo"
+     else echo 'Run this as root, for example after su -' >&2; exit 1; fi
+     $as_root systemctl disable --now sentryassets-directory
+     $as_root rm -f /etc/systemd/system/sentryassets-directory.service
+     $as_root systemctl daemon-reload
+     $as_root rm -rf /opt/sentryassets-directory /var/lib/sentryassets-directory
+     $as_root userdel sentryassets-directory
+   )
    ```
 
    The command stops the service and deletes program, certificate, key and the service account's password stored there.

@@ -35,7 +35,7 @@ This page describes uploaded files. Guides, runbooks and emergency plans that yo
 
 3. Choose the **Kind**: **Contract**, **Receipt**, **Manual**, **Evidence**, **Certificate** or **Other**.
 
-4. Choose the **Confidentiality**: **Public**, **Internal**, **Confidential** or **Strictly confidential**. Only levels you may see yourself are offered.
+4. Choose the **Confidentiality**: **Public**, **Internal**, **Confidential** or **Strictly confidential**. You can choose the levels your role may set with its effective rights, also if the administration has adjusted the role. If the place calls for a higher level, your highest stands in the field and a note names the intended one; someone with more rights can raise it later. If SentryAssets refuses a level on saving, for instance because the rights have changed in the meantime, the field says so.
 
 5. If needed, enter **Valid until**, **Retain until** and a person under **Responsible**.
 
@@ -49,7 +49,7 @@ This page describes uploaded files. Guides, runbooks and emergency plans that yo
 
 The file is optional; a document without one shows “No file yet”, and you add it later as a version. A choice of documents, such as for evidence, still lists it and marks it “no file”. If the check rejects a file, the document stays without one; a note says so on every way out, also when you close the dialog with the X or with Esc.
 
-It is quicker from the object: assets, locations, suppliers, licences and contracts have a **Documents** tab. Whatever you upload there is linked with that object straight away. Where the ISMS, NIS2, data protection and medical technology add-ons ask for a document, too, you choose **Upload a new document** right in the picker, with the same checks and a proposed title from the name of the place, such as “Audit report”, which you can change; without write access, a note says whom to ask.
+It is quicker from the object: assets, locations, suppliers, licences and contracts have a **Documents** tab. Whatever you upload there is linked with that object straight away. Where the ISMS, NIS2, data protection and medical technology add-ons ask for a document, too, you choose **Upload a new document** right in the picker, with the same checks and a proposed title from the name of the place, such as “Audit report”, which you can change; without write access, a note says whom to ask. Among existing documents, the picker shows each one's level. If the place calls for a level, it warns about documents below it; you can still choose them, and raise the level on the document if it holds data of this record.
 
 ### Kinds
 
@@ -84,7 +84,7 @@ The confidentiality decides who sees a document at all. A document above your ro
 | Editor, Auditor | **Confidential** |
 | Read only | **Internal** |
 
-New documents are **Internal**. Nobody can set a document to a level they could not see afterwards. More under [Confidentiality of documents](/en/reference/rollen/#confidentiality-of-documents).
+These are the limits as delivered; with [Pro](/en/pro/rollen-anpassen/) the administration can change them per role, and the effective rights apply. New documents are **Internal** unless the place calls for another level. Nobody can set a document to a level they could not see afterwards. More under [Confidentiality of documents](/en/reference/rollen/#confidentiality-of-documents).
 
 Each file is encrypted before it is stored, with a key of its own per version, which in turn is encrypted with the installation's master key. On disk it lies under a random name; the original file name is only a detail of the document. Without the master key the documents are lost; see [The master key](/en/guides/sicherung/#the-master-key).
 

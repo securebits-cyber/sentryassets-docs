@@ -35,7 +35,7 @@ Diese Seite beschreibt hochgeladene Dateien. Anleitungen, Runbooks und Notfallpl
 
 3. Wählen Sie die **Art**: **Vertrag**, **Kaufbeleg**, **Handbuch**, **Nachweis**, **Zertifikat** oder **Sonstiges**.
 
-4. Wählen Sie die **Vertraulichkeit**: **Öffentlich**, **Intern**, **Vertraulich** oder **Streng vertraulich**. Angeboten werden nur Stufen, die Sie selbst sehen dürfen.
+4. Wählen Sie die **Vertraulichkeit**: **Öffentlich**, **Intern**, **Vertraulich** oder **Streng vertraulich**. Zur Wahl stehen die Stufen, die Ihre Rolle mit ihren wirksamen Rechten vergeben darf, auch wenn die Administration die Rolle angepasst hat. Sieht die Stelle eine höhere Stufe vor, steht Ihre höchste im Feld, und ein Hinweis nennt die vorgesehene; wer mehr darf, kann sie später anheben. Lehnt SentryAssets eine Stufe beim Speichern ab, etwa weil sich die Rechte inzwischen geändert haben, steht das am Feld.
 
 5. Tragen Sie bei Bedarf **Gültig bis**, **Aufbewahren bis** und eine Person unter **Verantwortlich** ein.
 
@@ -49,7 +49,7 @@ Diese Seite beschreibt hochgeladene Dateien. Anleitungen, Runbooks und Notfallpl
 
 Die Datei ist optional; ein Dokument ohne Datei zeigt „Noch keine Datei“, und Sie laden sie später als Version nach. Eine Auswahl von Dokumenten, etwa bei einem Nachweis, listet es weiter und kennzeichnet es mit „ohne Datei“. Lehnt die Prüfung eine Datei ab, bleibt das Dokument ohne Datei bestehen; ein Hinweis sagt das auf jedem Weg, auch beim Schließen des Dialogs mit dem X oder mit Esc.
 
-Schneller geht es vom Objekt aus: Assets, Standorte und Lieferanten haben einen Reiter **Dokumente**, Lizenzen und Verträge einen Reiter **Belege**. Was Sie dort hochladen, ist gleich mit diesem Objekt verknüpft. Auch wo die Add-ons ISMS, NIS2, Datenschutz und Medizintechnik ein Dokument verlangen, wählen Sie **Neues Dokument hochladen** direkt in der Auswahl, mit denselben Prüfungen und einem Titelvorschlag aus dem Namen der Stelle, etwa „Auditbericht“, den Sie ändern können; ohne Schreibrecht sagt ein Hinweis, wen Sie bitten.
+Schneller geht es vom Objekt aus: Assets, Standorte und Lieferanten haben einen Reiter **Dokumente**, Lizenzen und Verträge einen Reiter **Belege**. Was Sie dort hochladen, ist gleich mit diesem Objekt verknüpft. Auch wo die Add-ons ISMS, NIS2, Datenschutz und Medizintechnik ein Dokument verlangen, wählen Sie **Neues Dokument hochladen** direkt in der Auswahl, mit denselben Prüfungen und einem Titelvorschlag aus dem Namen der Stelle, etwa „Auditbericht“, den Sie ändern können; ohne Schreibrecht sagt ein Hinweis, wen Sie bitten. Unter den vorhandenen Dokumenten zeigt die Auswahl bei jedem seine Stufe. Sieht die Stelle eine Stufe vor, warnt sie bei Dokumenten darunter; wählen können Sie sie trotzdem und heben die Stufe beim Dokument an, wenn es Daten dieses Vorgangs enthält.
 
 ### Arten
 
@@ -84,7 +84,7 @@ Die Vertraulichkeit entscheidet, wer ein Dokument überhaupt sieht. Ein Dokument
 | Bearbeitung, Prüfung | **Vertraulich** |
 | Lesend | **Intern** |
 
-Neu angelegte Dokumente sind **Intern**. Niemand kann ein Dokument auf eine Stufe setzen, die er danach selbst nicht mehr sähe. Mehr dazu unter [Vertraulichkeit von Dokumenten](/reference/rollen/#vertraulichkeit-von-dokumenten).
+Das sind die Grenzen ab Werk; mit [Pro](/pro/rollen-anpassen/) kann die Administration sie je Rolle ändern, und es gelten die wirksamen Rechte. Neu angelegte Dokumente sind **Intern**, wenn die Stelle keine andere Stufe vorsieht. Niemand kann ein Dokument auf eine Stufe setzen, die er danach selbst nicht mehr sähe. Mehr dazu unter [Vertraulichkeit von Dokumenten](/reference/rollen/#vertraulichkeit-von-dokumenten).
 
 Jede Datei wird vor dem Speichern verschlüsselt, mit eigenem Schlüssel je Version, der wiederum mit dem Master-Schlüssel der Installation verschlüsselt ist. Auf der Platte liegt sie unter einem zufälligen Namen; der ursprüngliche Dateiname ist nur eine Angabe am Dokument. Ohne den Master-Schlüssel sind die Dokumente verloren; siehe [Der Master-Schlüssel](/guides/sicherung/#der-master-schlüssel).
 

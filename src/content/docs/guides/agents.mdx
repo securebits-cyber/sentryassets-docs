@@ -95,10 +95,19 @@ Wenn ein Gerät ausgemustert wird oder keinen Agent mehr haben soll, finden Sie 
 
 2. Entfernen Sie ihn auf dem Gerät mit dem Befehl für sein System, mit Administratorrechten. Der Befehl stoppt den Dienst und löscht Programm, Zertifikat und Schlüssel. Er nutzt nur, was das Betriebssystem mitbringt.
 
-   **Linux**, im Terminal mit `sudo`:
+   **Linux**, im Terminal als root oder mit `sudo`. Ohne beides bricht der Befehl ab, bevor er etwas ändert:
 
    ```bash
-   sudo systemctl disable --now sentryassets-agent && sudo rm -f /etc/systemd/system/sentryassets-agent.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-agent /var/lib/sentryassets-agent
+   (
+     set -eu
+     if [ "$(id -u)" -eq 0 ]; then as_root=""
+     elif command -v sudo >/dev/null 2>&1; then as_root="sudo"
+     else echo 'Run this as root, for example after su -' >&2; exit 1; fi
+     $as_root systemctl disable --now sentryassets-agent
+     $as_root rm -f /etc/systemd/system/sentryassets-agent.service
+     $as_root systemctl daemon-reload
+     $as_root rm -rf /opt/sentryassets-agent /var/lib/sentryassets-agent
+   )
    ```
 
    **Windows**, in einer PowerShell, die als Administrator gestartet wurde:

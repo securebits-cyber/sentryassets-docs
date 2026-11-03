@@ -94,10 +94,20 @@ Richten Sie auf den Geräten einen eigenen SNMPv3-Benutzer nur mit Leserechten e
 
 1. Sperren Sie den Collector unter **Agents** mit **Sperren**. Sein Zertifikat wird sofort ungültig, und er scannt nicht mehr. Hatte er SNMPv3-Zugänge, ändern Sie deren Passphrasen auf den Geräten: Er kannte sie bis zuletzt.
 
-2. Entfernen Sie ihn auf seinem Host im Terminal mit `sudo`. Der Befehl steht unter **Agents** in der Karte **Agent deinstallieren** unter **Collector**; er stoppt den Dienst, löscht Programm, Zertifikat und Schlüssel und entfernt auch den Systembenutzer des Collectors.
+2. Entfernen Sie ihn auf seinem Host im Terminal als root oder mit `sudo`; ohne beides bricht der Befehl ab, bevor er etwas ändert. Der Befehl steht unter **Agents** in der Karte **Agent deinstallieren** unter **Collector**; er stoppt den Dienst, löscht Programm, Zertifikat und Schlüssel und entfernt auch den Systembenutzer des Collectors.
 
    ```bash
-   sudo systemctl disable --now sentryassets-collector && sudo rm -f /etc/systemd/system/sentryassets-collector.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-collector /var/lib/sentryassets-collector && sudo userdel sentryassets-collector
+   (
+     set -eu
+     if [ "$(id -u)" -eq 0 ]; then as_root=""
+     elif command -v sudo >/dev/null 2>&1; then as_root="sudo"
+     else echo 'Run this as root, for example after su -' >&2; exit 1; fi
+     $as_root systemctl disable --now sentryassets-collector
+     $as_root rm -f /etc/systemd/system/sentryassets-collector.service
+     $as_root systemctl daemon-reload
+     $as_root rm -rf /opt/sentryassets-collector /var/lib/sentryassets-collector
+     $as_root userdel sentryassets-collector
+   )
    ```
 
 </Steps>

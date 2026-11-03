@@ -69,15 +69,16 @@ Der Rechner braucht:
 </Steps>
 
 <Aside type="tip" title="Linux">
-Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sentryassets-directory` anlegt und den gehärteten systemd-Dienst `sentryassets-directory` einrichtet. Läuft der Dienst schon, stoppt der Befehl ihn für die Neuanmeldung und stellt danach den vorigen Zustand wieder her, auch nach einem Fehler oder Abbruch; scheitert das Stoppen, endet er vor der Anmeldung. `set` führen Sie dann mit `sudo -u sentryassets-directory /opt/sentryassets-directory/bin/sentryassets-directory set …` aus.
+Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sentryassets-directory` anlegt und den gehärteten systemd-Dienst `sentryassets-directory` einrichtet, als root oder mit `sudo`. Läuft der Dienst schon, stoppt der Befehl ihn für die Neuanmeldung und stellt danach den vorigen Zustand wieder her, auch nach einem Fehler oder Abbruch; scheitert das Stoppen, endet er vor der Anmeldung. Dienstkonto und Domänencontroller richten Sie danach mit dem Befehl ein, den die Seite aus Ihren Eingaben zusammensetzt, ebenfalls als root oder mit `sudo`: Er ruft `set` als dieser Systembenutzer auf, das Passwort fragt das Programm ohne Anzeige ab, und danach startet der Dienst neu. Ohne root und ohne `sudo` brechen die Befehle ab, bevor sie etwas ändern.
 </Aside>
 
 ## Im Betrieb
 
 - Der Verzeichnis-Agent liest im eingestellten Abstand, höchstens einmal je Stunde. **Jetzt abgleichen** fordert einen Lauf an, den er frühestens 15 Minuten nach seinem letzten Start beginnt; so liest er höchstens viermal je Stunde. Wann der nächste Lauf frühestens kommt, zeigt **Einstellungen › Verzeichnisdienste** unter **Nächster Lauf**. SentryAssets übernimmt einen Lauf erst, wenn er vollständig angekommen ist; ein abgebrochener oder gescheiterter Lauf ändert nichts.
-- **Passwort ändern:** auf dem Rechner `sentryassets-directory set` erneut ausführen. In der Oberfläche gibt es dafür kein Feld; den neuen Stand sehen Sie am nächsten Test.
+- **Passwort ändern:** auf dem Rechner `sentryassets-directory set` erneut ausführen, unter Linux mit dem Befehl aus der Einrichtung. In der Oberfläche gibt es dafür kein Feld; den neuen Stand sehen Sie am nächsten Test.
 - **Wechsel des Wegs:** Wechseln Sie eine bestehende Verbindung von „Direkt vom Server (LDAPS)“ auf „Über Verzeichnis-Agent (ohne VPN)“, löscht SentryAssets beim Aktivieren das auf dem Server gespeicherte Passwort. Die Computer behalten ihre Zuordnungen.
 - **Updates:** Unter Windows aktualisiert sich der Verzeichnis-Agent selbst, nur mit Versionen, die der Hersteller signiert hat, gestaffelt innerhalb von 24 Stunden. Sofort geht es mit `& "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe" update; Restart-Service SentryAssetsDirectory`. Unter Linux läuft er ohne Schreibrecht auf sein Programm und aktualisiert sich nicht selbst; dort nehmen Sie den Befehl **Später aktualisieren (Linux)** aus der Einrichtung. Er prüft die SHA-256-Summe, ersetzt das Programm und startet den Dienst neu, ohne neue Registrierung.
+- **Neu anmelden unter Windows:** Führen Sie den Installationsbefehl auf einem Rechner aus, auf dem der Dienst schon eingerichtet ist, deaktiviert er ihn vorübergehend, damit die Wiederanlaufregeln das alte Programm nicht während der Anmeldung starten. Danach gilt wieder der vorige Starttyp, und ein Dienst, der lief, läuft wieder. Das gilt auch nach einem Fehler oder Abbruch; dann bleibt auch das vorige Programm. Blieb der Dienst nach einem unterbrochenen Lauf deaktiviert, setzt ihn der nächste Lauf auf automatisch und startet ihn.
 - Ein Verzeichnis-Agent dient genau einer Verbindung. Für mehrere Domänen (Pro) richten Sie je Domäne einen ein.
 - **Entfernen:** siehe [Deinstallieren](#deinstallieren).
 
@@ -93,10 +94,20 @@ Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sent
    Stop-Service SentryAssetsDirectory -ErrorAction SilentlyContinue; sc.exe delete SentryAssetsDirectory; Remove-Item -Recurse -Force (Join-Path $env:ProgramFiles 'SentryAssets\Directory'), (Join-Path $env:ProgramData 'SentryAssets\Directory') -ErrorAction SilentlyContinue
    ```
 
-   Unter Linux im Terminal:
+   Unter Linux im Terminal als root oder mit `sudo`; ohne beides bricht der Befehl ab, bevor er etwas ändert:
 
    ```bash
-   sudo systemctl disable --now sentryassets-directory && sudo rm -f /etc/systemd/system/sentryassets-directory.service && sudo systemctl daemon-reload && sudo rm -rf /opt/sentryassets-directory /var/lib/sentryassets-directory && sudo userdel sentryassets-directory
+   (
+     set -eu
+     if [ "$(id -u)" -eq 0 ]; then as_root=""
+     elif command -v sudo >/dev/null 2>&1; then as_root="sudo"
+     else echo 'Run this as root, for example after su -' >&2; exit 1; fi
+     $as_root systemctl disable --now sentryassets-directory
+     $as_root rm -f /etc/systemd/system/sentryassets-directory.service
+     $as_root systemctl daemon-reload
+     $as_root rm -rf /opt/sentryassets-directory /var/lib/sentryassets-directory
+     $as_root userdel sentryassets-directory
+   )
    ```
 
    Der Befehl stoppt den Dienst und löscht Programm, Zertifikat, Schlüssel und das dort gespeicherte Passwort des Dienstkontos.
