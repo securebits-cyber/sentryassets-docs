@@ -33,7 +33,7 @@ Pro lohnt sich, wenn Ihnen Zeit fehlt oder mehrere Personen zusammenarbeiten. Es
 
 | Sie möchten … | Pro bietet |
 |---|---|
-| den IT-Grundschutz schneller abschließen | [Schutzbedarfsvererbung](/pro/schutzbedarf/) entlang der Abhängigkeiten, als Grafik und Tabelle, [automatische Modellierung](/pro/modellierung/) aller Zielobjekte auf einmal, [Freigaben](/pro/freigaben/) im Grundschutz-Check nach dem Vier-Augen-Prinzip |
+| den IT-Grundschutz schneller abschließen | [Schutzbedarfsvererbung](/pro/schutzbedarf/) entlang der Abhängigkeiten, als Grafik und Tabelle, [automatische Modellierung](/pro/modellierung/): die gewählten Vorschläge aller Zielobjekte auf einmal, [Freigaben](/pro/freigaben/) im Grundschutz-Check nach dem Vier-Augen-Prinzip |
 | mehr Geräte ohne Agent erfassen | [Entra ID und Intune](/pro/entra/) sowie [Proxmox, vCenter und Hyper-V](/pro/virtualisierung/) mit ihren virtuellen Maschinen |
 | Lizenzkosten im Griff behalten | [Lizenzmanagement](/pro/lizenzmanagement/): Soll und Ist je Lizenz, Kosten mit Verlauf, Budgets und Prognose |
 | Abweichungen nicht übersehen | [Prüfregeln](/pro/pruefregeln/) über alle Assets, [Workflows](/pro/workflows/) und [Tickets](/pro/tickets/) in Jira, GitLab, YouTrack oder Zammad |
@@ -82,6 +82,12 @@ Die zusätzlichen Funktionen finden Sie im Menü bei den Themen, zu denen sie ge
 | **Einstellungen › Aktivität** | [SIEM-Export](/pro/siem/) |
 | **Einstellungen › System** | [Icecat](/pro/icecat/) |
 
+## Gesperrte Bereiche
+
+Öffnen Sie einen Bereich ohne Lizenz, steht dort **Für diesen Bereich ist eine Lizenz nötig** mit einer kurzen Erklärung, was er tut. Beim ISMS- und beim Medizintechnik-Add-on nennt die Seite auch die Voraussetzung: Sie ergänzen Pro oder Enterprise, der Lizenzschlüssel enthält das Add-on zusammen mit einer dieser Editionen.
+
+Die Administration findet dort **Lizenzschlüssel eingeben** und, solange der Test noch möglich ist, **30 Tage testen**. Alle anderen sehen den Hinweis, sich an die Administration zu wenden.
+
 ## Testzeitraum
 
 Mit dem Testzeitraum probieren Sie **alle** Funktionen von Pro, Enterprise und aller Add-ons (ISMS, Datenschutz, NIS2, Medizintechnik) einmalig 30 Tage lang aus, ohne Schlüssel und ohne Internetverbindung.
@@ -111,7 +117,7 @@ Nach dem Ende gilt wieder die Community-Edition. **Ihre Daten bleiben erhalten**
 - Nach Ablauf der Laufzeit gilt wieder die Community-Edition; alle Daten bleiben erhalten.
 
 <Aside>
-Wer nur die Community-Edition betreiben möchte, setzt `SA_EXTENSIONS=` (leer) in der `.env` und baut die Images neu. Die Bereiche der Erweiterungen fehlen dann, ebenso der Testzeitraum.
+Wer nur die Community-Edition betreiben möchte, setzt `SA_EXTENSIONS=` (leer) in der `.env` und baut die Images neu. Die Bereiche der Erweiterungen fehlen dann, ebenso der Testzeitraum; die Seite **Lizenz und Edition** sagt, dass die Installation nur mit der Community-Edition gebaut wurde.
 </Aside>
 
 ## Die Lizenz der Software

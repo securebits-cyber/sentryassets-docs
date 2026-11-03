@@ -15,7 +15,9 @@ In einem flachen Netz erreicht ein übernommener Rechner jeden anderen; ein offe
 ## Worauf es ankommt
 
 - **Ein aktueller Netzplan und ein vollständiges Inventar** als Grundlage; SentryAssets hält beides mit Agents und Collector aktuell.
-- **Zonen** für Server, Arbeitsplätze, Gäste und Geräte des Gebäudes, mit kontrollierten Übergängen.
+- **Zonen physisch getrennt:** internes Netz, DMZ und Außenanbindungen. An den Übergängen lässt eine Firewall nur ausdrücklich Erlaubtes durch; zwischen Internet und internem Netz stehen mindestens zwei Stufen zustandsbehafteter Paketfilter.
+- **Segmente im internen Netz** für Clients, Server, Verwaltung der Netzgeräte, Sicherung, Gäste, Drucker und IoT sowie VoIP, als VLANs, gegen VLAN-Hopping gehärtet und mit dem Verkehr dazwischen über die Firewall. VLANs ersetzen nicht die physische Trennung der Zonen.
+- **Ein Sicherheits-Proxy außerhalb des internen Netzes** entkoppelt Verbindungen ins Internet, etwa Web-Proxy und Mail-Relay in der DMZ; direkte Verbindungen interner Geräte sind gesperrt.
 - **Eine Firewall auf jedem Gerät** und am Übergang ins Internet, nach „alles verboten, was nicht erlaubt ist“.
 - **Fernzugriff nur über abgesicherte Wege** mit Mehr-Faktor-Anmeldung, keine direkt erreichbaren Fernwartungsdienste.
 

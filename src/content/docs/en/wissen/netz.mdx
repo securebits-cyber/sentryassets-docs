@@ -15,7 +15,9 @@ In a flat network a compromised computer reaches every other; open remote access
 ## What matters
 
 - **A current network plan and a complete inventory** as the basis; SentryAssets keeps both current with agents and collector.
-- **Zones** for servers, workstations, guests and building devices, with controlled transitions.
+- **Physically separate zones:** internal network, DMZ and external connections. At the transitions a firewall lets through only what is expressly allowed; between the internet and the internal network there are at least two tiers of stateful packet filters.
+- **Segments in the internal network** for clients, servers, management of network devices, backup, guests, printers and IoT, and VoIP, as VLANs hardened against VLAN hopping, with traffic between them going through the firewall. VLANs do not replace the physical separation of the zones.
+- **A security proxy outside the internal network** decouples connections to the internet, for example a web proxy and mail relay in the DMZ; direct connections of internal devices are blocked.
 - **A firewall on every device** and at the transition to the internet, after “deny everything not allowed”.
 - **Remote access only over secured ways** with multi-factor sign-in, no directly reachable remote maintenance services.
 

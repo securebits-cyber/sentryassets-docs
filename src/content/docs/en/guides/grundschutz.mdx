@@ -179,7 +179,7 @@ For the information domain itself the suggestions are sorted into three groups:
 
 A module's page shows the same sentence under **When it applies**.
 
-A headquarters or branch without a building entered gets INF.1 like a building. A single asset without a category gets no suggestions, as the operating system alone does not tell a server from a client; the page leads straight there with **Choose the category at the asset**. With [Pro](/en/pro/modellierung/) you take over every suggestion at once.
+A headquarters or branch without a building entered gets INF.1 like a building. A single asset without a category gets no suggestions, as the operating system alone does not tell a server from a client; the page leads straight there with **Choose the category at the asset**. With [Pro](/en/pro/modellierung/) you take over the chosen suggestions at once.
 
 ### Grundschutz check of the target objects
 
@@ -293,7 +293,7 @@ The fourth step is called **What is implemented already?** Go through your packa
 
 2. Choose a practice under **Practice**. With **Open** you hide what is already answered; once everything is done, it says “Nothing is open here any more.”
 
-3. For a requirement, open **What does it mean? How do you tell?**. If the requirement is explained, SentryAssets' own explanation in plain words comes first (see [Explanations of the requirements](#explanations-of-the-requirements)); below it you open **What the BSI catalog states**. It explains the modality (MUSS: must be met in any case; SOLLTE: normally met, justify deviations soundly; KANN: useful depending on the situation), the **Expected result:** and the **Suitable proof:**. The text already contains your parameter values.
+3. If the requirement is explained, open **What is it about? What do you do?**: there you find SentryAssets' own explanation in plain words (see [Explanations of the requirements](#explanations-of-the-requirements)), and below it you open **What the BSI catalog states**. Without an explanation the place is called **What does it mean? How do you tell?** and shows these statements straight away. They explain the modality (MUSS: must be met in any case; SOLLTE: normally met, justify deviations soundly; KANN: useful depending on the situation), the **Expected result:** and the **Suitable proof:**. The text already contains your parameter values.
 
 4. Answer the requirement as described in the next section.
 
@@ -306,13 +306,13 @@ You can also open a requirement from **View requirements**: its card **Implement
 Anyone doing a Grundschutz check for the first time often does not know the terms. For selected requirements SentryAssets therefore includes its own explanation in plain words, in German and English, in three parts:
 
 - **What it is about:** what the requirement means, with technical terms explained,
-- **What you do:** two to five steps for a small or medium-sized organisation,
-- **Example of proof:** what you could show, such as a record or a resolution.
+- **What you do for the requirement:** two to five steps for a small or medium-sized organisation,
+- **Proof for the requirement, for example:** what you could show, such as a record or a resolution.
 
 | Variant | Where | What is explained |
 |---|---|---|
-| Edition 2023 | in the Grundschutz check above the text of the requirement under **What is it about? What do you do?** | the basic and standard requirements of 24 core modules: ISMS.1, ORP.1 to ORP.5, CON.3, OPS.1.1.1 to OPS.1.1.7, SYS.2.1, NET.1.1, INF.1, INF.2 and INF.5 to INF.10 |
-| Grundschutz++ | under **What does it mean? How do you tell?**, before the expandable **What the BSI catalog states** | all requirements of the practice GC (governance) and central ones on personnel, permissions and MFA, backup, updates, network segmentation, incidents and buildings |
+| Edition 2023 | under **What is it about? What do you do?**: in the Grundschutz check above the text of the requirement, on the module's page below the text of each requirement | the basic and standard requirements of 24 core modules: ISMS.1, ORP.1 to ORP.5, CON.3, OPS.1.1.1 to OPS.1.1.7, SYS.2.1, NET.1.1, INF.1, INF.2 and INF.5 to INF.10 |
+| Grundschutz++ | under **What is it about? What do you do?**: in the Grundschutz check before the expandable **What the BSI catalog states**, on the requirement's page as a card of its own | all requirements of the practice GC (governance) and central ones on personnel, permissions and MFA, backup, updates, network segmentation, incidents and buildings |
 
 Where a requirement of edition 2023 and one of Grundschutz++ ask for the same thing, they share one explanation. Without an explanation you see the BSI's text as before.
 
@@ -324,7 +324,7 @@ The explanations are written by SentryAssets in its own words, as a starting poi
 
 ## The Grundschutz check: how to answer
 
-In both variants you answer each requirement the same way. At the top of the page, **How to assess a requirement** explains when each answer is right:
+In both variants you answer each requirement the same way: the answer buttons stand in the card directly below its header, the texts below them across the full width. At the top of the page, **How to assess a requirement** explains when each answer is right:
 
 | Answer | When it is right | What you add |
 |---|---|---|
@@ -405,7 +405,7 @@ RECPLAST GmbH is the BSI's example company. In SentryAssets its way with Edition
 The Community edition contains the whole guided way. From Pro you also get:
 
 - [Inheriting protection requirements](/en/pro/schutzbedarf/) along the dependencies.
-- [Automatic modelling](/en/pro/modellierung/): take over all suggestions at once.
+- [Automatic modelling](/en/pro/modellierung/): take over the chosen suggestions at once, for the information domain with only what every domain needs preselected.
 - [Approvals in the Grundschutz check](/en/pro/freigaben/) after the four-eyes principle.
 - [Check rules](/en/pro/pruefregeln/) that check requirements against the inventory data.
 - The [ISMS add-on](/en/pro/isms/) adds the policy, risk analysis after BSI Standard 200-3, the implementation plan and the reference documents A.0 to A.6.
