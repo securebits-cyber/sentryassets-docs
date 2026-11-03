@@ -26,16 +26,72 @@ The add-on structures and documents. Assessments, approvals and reports remain d
 | **Policy and responsibilities** | the information security policy from a template, in versions, approved by the management with evidence (the signed decision can be added once later to the version in force; evidence once added stays: its document can no longer be deleted, replaced by a new file or renamed); security officer, deputy, management and data protection named |
 | **Risk analysis** | after BSI Standard 200-3 with a risk matrix (frequency times impact), elementary and own threats, grades before and after the treatment; risk acceptance only with the management's approval |
 | **Implementation plan** (A.6) | from the gaps of both Grundschutz variants and the measures of the risk analysis, with priority, costs, effort and CSV export |
-| **Implementation aid** | technical measures below each matching requirement, which they support but do not fulfil by themselves, with the assets concerned, detection through agents, Intune and Entra ID, a suggested state of implementation and the knowledge base; see [Implementation aid](/en/wissen/umsetzungshilfe/) |
-| **Evidence** | an overview of all evidence with expiry, versions and review date, yearly by default; below each requirement, proposals from the documentation of the assets concerned to link, see [Documentation as evidence](/en/guides/dokumentation/#using-it-as-evidence) |
-| **Guidelines** | such as IT use, passwords, backup, mobile work, reporting incidents, e-mail and phishing, clean desk; from templates, approved by the management, reviewed every 12 to 36 months, acknowledgement per version |
-| **Trainings** (ORP.3) | awareness and training of the staff in the shared register of trainings: topic, date, form, attendees (also pasted as a list), validity (12 months by default), evidence and a record to sign; who is due or overdue. The step “Awareness” counts as done once there are guidelines, at least one valid training is recorded and nobody is overdue |
+| **Implementation aid** | in the check, notes at the few requirements that ask for exactly what a page of the ISMS holds (approved policy, appointed security officer), with no automatic assessment; technical measures below each matching requirement, which they support but do not fulfil by themselves, with the assets concerned, detection through agents, Intune and Entra ID, a suggested state of implementation and the knowledge base; see [Implementation aid](/en/wissen/umsetzungshilfe/) |
+| **Evidence** | an overview of all evidence with expiry, versions and review date, yearly by default; before the first review the step **Review regularly** is neutral; below each requirement, proposals from the documentation of the assets concerned to link, see [Documentation as evidence](/en/guides/dokumentation/#using-it-as-evidence) |
+| **Guidelines** | such as IT use, passwords, backup, mobile work, reporting incidents, e-mail and phishing, clean desk; from templates, approved by the management, reviewed every 12 to 36 months, acknowledgement per version, on the page also **Never confirmed** with the number of responsible persons |
+| **Trainings** (ORP.3) | awareness and training of the staff in the shared register of trainings: topic, date, form, attendees (also pasted as a list), validity (12 months by default), evidence and a record to sign; who is due or overdue. See [Trainings](#trainings-what-sentryassets-does) |
 | **Suppliers and processing register** | criticality from three plain questions, a questionnaire after module OPS.2.3 and NIS2, processing agreements after Art. 28 GDPR |
 | **Security incidents** | with affected assets and reporting deadlines from when the incident became known: under NIS2 an early warning within 24 hours, a notification within 72 hours and a final report a month later; under the GDPR the authority within 72 hours. From the report on, the document a recorded report names as evidence cannot be deleted and keeps its file, title and kind. A report recorded by mistake can be removed within the first 30 days; when information security removes a report under the GDPR, data protection receives a notice. Information security records and reports data breaches itself; for a data breach, only data protection and the administration change the detection, take back “data breach” or “high risk”, or mark it as no security incident, as that shifts or ends the deadlines of the GDPR |
 | **Internal audits** | programme, checklists from eight templates or own questions, findings with corrective actions |
-| **Key figures and management review** | figures from every area; the management's review with a snapshot of the figures and a guide after ISO/IEC 27001, 9.3 |
+| **Key figures and management review** | figures from every area; the management's review with a snapshot of the figures and a guide after ISO/IEC 27001, 9.3; the figure **Never confirmed** counts the responsible persons who never confirmed at least one guideline in force |
 | **Reference documents** A.0 to A.6 | policies, structure analysis, protection requirements, modelling, Grundschutz check, risk analysis, implementation plan; as a print view, as PDF through the browser and as Markdown |
 | **Templates to sign** | the management's decision on the policy and the appointment of the security officer, filled in from the policy and the appointments, as a print view, PDF or Markdown; you add the signed copy as evidence to the policy in force or to the appointment |
+
+## The start page: variant and state of the steps
+
+The **ISMS** start page leads through the steps and shows where you stand on each. **Green means: done in substance.** What has not come up yet stays neutral, such as “nothing to check yet” or “nothing to report yet”.
+
+**The variant first.** While no variant of the Grundschutz has been begun, choosing one comes first: **Begin with Grundschutz++** or **Begin with Edition 2023**, beside them **Compare the variants**. Steps 2 to 4 wait for it. Without existing Grundschutz documentation the page recommends Grundschutz++ and names the limits: its method is still on trial, and certification is expected from 2027 at the earliest. If you are after a certificate now or carry on existing documentation, choose Edition 2023. The choice is not stored as such: a variant counts as chosen once its information domain has been created. If you have begun both, Grundschutz++ counts.
+
+| Step | Done when … |
+|---|---|
+| **Who is responsible?** | a policy is in force, its announcement is recorded, its review is not due, and the security officer and management are appointed |
+| **What belongs to it?** | with Grundschutz++ the information domain is defined, in Edition 2023 its target objects are recorded as well |
+| **Which requirements apply?** | with Grundschutz++ the target object categories are confirmed, in Edition 2023 each target object has its modules |
+| **What is implemented already?** | all requirements are assessed |
+| **Where does a risk remain?** | the assessment has begun (at least one requirement assessed), there is at least one risk, all are decided, no acceptance is overdue and every proposed target object has a risk |
+| **What is to be done by when?** | all requirements of the chosen variant are assessed, no gap lies outside the plan and no entry is open or overdue. Until then the step says how many requirements have no assessment yet. An empty plan is done when everything is assessed and no gap remained |
+| **Does everyone know?** | guidelines are in force and acknowledged, at least one valid training is recorded and nobody is overdue |
+| **What do service providers do?** | at least one supplier is in the register, no entry needs action and no supplier with the “Service provider” checkbox is missing |
+| **What to do when something happens?** | the guideline on reporting incidents is in force and no report is overdue or due soon; no incident is needed for this, being prepared is what counts |
+| **Does the ISMS work?** | the assessment has begun, an audit was completed in the last twelve months, no nonconformity is open and the next management review is not overdue |
+
+Existing installations may therefore show steps as open again that were green before. The pages of the risk analysis and the management review describe their own work and do not wait for the assessment; the start page gives the reason where the two differ.
+
+With Pro, **Approvals**, **Check rules**, **Workflows** and **Tickets** stand at the end of the menu in their own group **Automate and approve**, as they are no steps of the build-up.
+
+## Policy: adapt, approve, announce
+
+- **Adapting the template:** the step is only done once you have changed and saved a section or confirm with **The text fits as it is** that the template fits exactly. Until then the approval button says what is missing. The management's decision is what counts.
+- **Announcement:** at the version in force you record under **Announcement** the day you made it known to all staff, for instance on the intranet or by circular. The day cannot lie before the approval. You correct a wrong date with **Change the date**; the announcement cannot be withdrawn, and the audit log holds the old and the new day. A new version is open again, the replaced one keeps its day.
+- **Signing:** **To the template to sign** leads from the page to the management's decision.
+
+## Risk analysis: proposals and threats
+
+- **Why there are no proposals:** proposals come from the protection needs in the Grundschutz. If there are none, the page gives the reason, such as that the Grundschutz has not been begun or that all target objects have normal protection needs, and leads to the **protection needs assessment** or the **information domain**. With normal protection needs, the Grundschutz check is usually enough.
+- **Recording without a proposal:** with **Record a threat for another target object** you name the target object yourself. You can choose the target objects of Edition 2023 (if you may read the Grundschutz), locations and target object categories; free text goes under **Other**.
+- **The 47 elementary threats:** each is explained in a sentence of its own. Eight common ones stand under **Recommended to start with**. That is a recommendation of SentryAssets, not a requirement of the BSI; with high protection needs, go through the rest as well.
+- **On to the plan:** once all risks are decided, **On to the implementation plan** leads there.
+
+## Suppliers
+
+The proposals are suppliers from the master data with the **Service provider** checkbox. The others stand under **Further suppliers without the “Service provider” checkbox**, for instance plain manufacturers or resellers; if one also provides a service for you, choose **Mark as service provider** or **Add directly**. While the questionnaire is not finished, the assessment shows how many questions are open (“3 questions still open”), and a requested processing agreement appears as **DPA requested** in the register.
+
+## People
+
+Where the ISMS asks for a person (appointments, acknowledgement, attendees of a training), you create them right in the dialog with **Add a new person** or take them over from the user accounts, with Pro from the directory as well. The new person is then chosen, and the dialog keeps what you have entered. The choice comes from **Master data › Responsible persons**; all staff must be listed there, not only those responsible for assets. This takes write access to the inventory, otherwise the dialog says whom to ask.
+
+## Internal audits: findings
+
+When you grade a question, the dialog explains the results: **observation** (requirement met, but something can be improved), **minor nonconformity** (missed in a single case or in part) and **major nonconformity** (requirement missing or consistently not met). Every finding gets an action. The completion dialog warns if one is missing. You can still complete the audit and add the action afterwards; until then the step **Improve** stays open. Before the first audit it is neutral. For the step **Does the ISMS work?** an audit only counts while no nonconformity is open, not just until an action is overdue.
+
+## Trainings: what SentryAssets does
+
+The page bears the name of the step, **Does everyone know?**, and leads in three parts: **Train and record**, **Enter the attendees**, **Refresh**. **What to train on?** suggests topics after module ORP.3, with a link to the implementation aid. **SentryAssets provides no training material**; it records who took part and when. “Nobody due” appears only once someone is trained; a training that expires within the next 30 days keeps the step on the page open.
+
+## Uploading evidence directly
+
+Wherever you choose a document as evidence in the ISMS, you can store a file with **Upload a new document** without leaving the dialog. The same checks, limits and rights apply as under [Documents](/en/guides/dokumente/). Without write access to documents, a note says whom to ask. Blocked buttons name what is missing, such as “Still missing: date”.
 
 ## Tasks and e-mail
 
