@@ -39,7 +39,7 @@ The page shows the numbers of your installation beforehand.
 
 ## Which account stays
 
-One active local account with the administration role, a password and TOTP: your own if you are signed in with such an account, otherwise the oldest. The page names it beforehand. Check that someone has the password and TOTP of this account, because afterwards it is the only way in. If not, only `docker compose run --rm cli admin create-admin` on the server helps.
+One active local account with the administration role, a password and TOTP: your own if you are signed in with such an account, otherwise the oldest. The page names it beforehand. The reset asks for a current TOTP code of this account, also when you signed in through OIDC: afterwards it is the only way in, and this shows that someone can still operate it. If nobody has access to it, only `docker compose run --rm cli admin create-admin` on the server helps.
 
 ## Requirements
 
@@ -48,6 +48,7 @@ The page says beforehand if something is missing, and the server refuses in thes
 - There is a local administration account as described above.
 - Local accounts are not switched off (`SA_LOCAL_ACCOUNTS`).
 - The service `backup-runner` runs; only it may delete the data.
+- The function is not switched off on the server (`SA_DATA_RESET`, see below).
 
 The service also refuses if there is a further tenant beside your organisation that is not the sandbox, or if it cannot write to the document storage.
 
@@ -59,7 +60,7 @@ The service also refuses if there is a further tenant beside your organisation t
 
 2. Read what is deleted and what stays, and confirm your sign-in again.
 
-3. Type the name of the organisation by hand and choose **Delete all data irrevocably**.
+3. Type the name of the organisation by hand and enter the current TOTP code of the account that stays. A code works once; if you have just used it for the confirmation, wait for the next one. Then choose **Delete all data irrevocably**.
 
 4. The application stops for a few minutes depending on the amount of data. All sessions end, and you are taken to the sign-in.
 
@@ -68,6 +69,18 @@ The service also refuses if there is a further tenant beside your organisation t
 </Steps>
 
 If the reset fails, all data stays unchanged. You then sign in again, and the page names the reason.
+
+Three attempts per hour are possible. A wrong code counts like a failed sign-in of this account, and the audit log records it.
+
+## Switching it off on the server
+
+If nobody in your installation should be able to delete all data, set `SA_DATA_RESET=disabled` in the `.env` next to the Compose file and restart the service:
+
+```bash
+docker compose up -d backup-runner
+```
+
+Only the service `backup-runner` reads this setting. It cannot be changed in the interface, and even someone who took over the API cannot get around it. The page shows the state beforehand, and a request filed anyway is refused and appears in the audit log. A value other than `enabled` and `disabled` counts as a mistake and refuses as well; backups go on meanwhile.
 
 ## Afterwards
 

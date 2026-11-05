@@ -122,6 +122,7 @@ secrets:
 | `SA_OIDC_ROLE_MAPPING` | – | Paare `Gruppe=Rolle`, durch Kommas getrennt |
 | `SA_OIDC_TRUST_EMAIL` | `false` | Adressen des Providers gelten auch ohne `email_verified` als bestätigt, siehe [Benachrichtigungen](/guides/benachrichtigungen/#adressen-eines-anbieters-als-bestätigt-erklären) |
 | `SA_LOCAL_ACCOUNTS` | `enabled` | Lokale Konten mit Passwort und TOTP: `enabled` (neben OIDC) oder `disabled` (nur OIDC) |
+| `SA_DATA_RESET` | `enabled` | nur beim Dienst `backup-runner`: `disabled` schaltet [Alle Daten zurücksetzen](/guides/daten-zuruecksetzen/) ab; jeder andere Wert als `enabled` oder `disabled` lehnt ebenfalls ab |
 | `SA_CONTACT_RETENTION_DAYS` | `365` | archivierte Ansprechpartner nach dieser Zeit zur Löschung vorschlagen (30–3650) |
 | `SA_DOCUMENT_QUOTA_BYTES` | 20 GiB | Summe aller Dokumentversionen je Organisation |
 | `SA_DOCUMENT_TRANSFERS` | `2` | gleichzeitige Uploads und Downloads je API-Instanz; jede hält eine Datei im Speicher, erhöhen Sie dann auch `mem_limit` der API |

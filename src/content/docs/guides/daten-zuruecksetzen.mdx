@@ -39,7 +39,7 @@ Die Seite nennt vorab die Zahlen Ihrer Installation.
 
 ## Welches Konto bleibt
 
-Es bleibt ein aktives lokales Konto der Rolle Administration mit Passwort und TOTP: Ihr eigenes, wenn Sie mit einem solchen Konto angemeldet sind, sonst das älteste. Die Seite nennt es vorab. Prüfen Sie, ob jemand Passwort und TOTP dieses Kontos hat, denn danach ist es der einzige Weg in die Anwendung. Falls nicht, hilft nur `docker compose run --rm cli admin create-admin` auf dem Server.
+Es bleibt ein aktives lokales Konto der Rolle Administration mit Passwort und TOTP: Ihr eigenes, wenn Sie mit einem solchen Konto angemeldet sind, sonst das älteste. Die Seite nennt es vorab. Das Zurücksetzen verlangt einen aktuellen TOTP-Code dieses Kontos, auch wenn Sie über OIDC angemeldet sind: Danach ist es der einzige Weg in die Anwendung, und so ist nachgewiesen, dass es noch jemand bedienen kann. Hat niemand Zugriff darauf, hilft nur `docker compose run --rm cli admin create-admin` auf dem Server.
 
 ## Voraussetzungen
 
@@ -48,6 +48,7 @@ Die Seite sagt vorab, wenn etwas fehlt, und der Server lehnt in diesen Fällen a
 - Es gibt ein lokales Administrationskonto wie oben beschrieben.
 - Lokale Konten sind nicht abgeschaltet (`SA_LOCAL_ACCOUNTS`).
 - Der Dienst `backup-runner` läuft; nur er darf die Daten löschen.
+- Die Funktion ist auf dem Server nicht abgeschaltet (`SA_DATA_RESET`, siehe unten).
 
 Der Dienst lehnt außerdem ab, wenn es neben Ihrer Organisation einen weiteren Mandanten gibt, der nicht der Übungsmandant ist, oder wenn er den Dokumentspeicher nicht beschreiben kann.
 
@@ -59,7 +60,7 @@ Der Dienst lehnt außerdem ab, wenn es neben Ihrer Organisation einen weiteren M
 
 2. Lesen Sie, was gelöscht wird und was bleibt, und bestätigen Sie Ihre Anmeldung erneut.
 
-3. Tippen Sie den Namen der Organisation von Hand ein und wählen Sie **Alle Daten unwiderruflich löschen**.
+3. Tippen Sie den Namen der Organisation von Hand ein und geben Sie den aktuellen TOTP-Code des Kontos ein, das bleibt. Ein Code gilt nur einmal; haben Sie ihn gerade für die Bestätigung benutzt, warten Sie auf den nächsten. Wählen Sie dann **Alle Daten unwiderruflich löschen**.
 
 4. Die Anwendung steht je nach Datenmenge einige Minuten still. Alle Sitzungen enden, danach kommen Sie zur Anmeldung.
 
@@ -68,6 +69,18 @@ Der Dienst lehnt außerdem ab, wenn es neben Ihrer Organisation einen weiteren M
 </Steps>
 
 Scheitert das Zurücksetzen, bleiben alle Daten unverändert. Sie melden sich dann neu an, und die Seite nennt den Grund.
+
+Drei Versuche je Stunde sind möglich. Ein falscher Code zählt wie ein Fehlversuch bei der Anmeldung dieses Kontos, und das Audit-Log hält ihn fest.
+
+## Auf dem Server abschalten
+
+Soll in Ihrer Installation niemand alle Daten löschen können, setzen Sie in der `.env` neben der Compose-Datei `SA_DATA_RESET=disabled` und starten den Dienst neu:
+
+```bash
+docker compose up -d backup-runner
+```
+
+Nur der Dienst `backup-runner` liest diese Einstellung. Über die Oberfläche lässt sie sich nicht ändern, und auch wer die API übernommen hat, kann sie nicht umgehen. Die Seite nennt den Zustand vorab, und ein trotzdem gestellter Auftrag wird abgelehnt und steht im Audit-Log. Ein Wert außer `enabled` und `disabled` gilt als Fehler und lehnt ebenfalls ab; Sicherungen laufen dabei weiter.
 
 ## Danach
 
