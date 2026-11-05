@@ -172,7 +172,17 @@ site-search button[data-open-modal] {
 	border: 1px solid var(--sl-color-gray-5);
 }
 @media (min-width: 50rem) {
+	.hero {
+		grid-template-columns: 1fr 1fr;
+	}
 	.hero .hero-html {
 		width: min(100%, 44rem);
 	}
+}
+
+/* Screenshots in the text: light images need an edge on the light page, and all of them
+   on the dark page. */
+.sl-markdown-content img[src^='/screens/'] {
+	border-radius: 0.75rem;
+	border: 1px solid var(--sl-color-gray-5);
 }
