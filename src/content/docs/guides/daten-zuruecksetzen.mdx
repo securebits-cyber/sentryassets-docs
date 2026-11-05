@@ -1,0 +1,76 @@
+---
+title: Alle Daten zurücksetzen
+description: Die SentryAssets-Installation auf den Stand nach der Einrichtung bringen. Was gelöscht wird, was bleibt, welche Voraussetzungen gelten und wie Sie Geräte danach neu anmelden.
+head:
+  - tag: title
+    content: Alle Daten zurücksetzen | SentryAssets Docs
+sidebar:
+  label: Alle Daten zurücksetzen
+  order: 17
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Unter **Einstellungen › Alle Daten zurücksetzen** bringen Sie die Installation auf den Stand nach der Einrichtung, etwa nach einem Probebetrieb oder bevor eine andere Abteilung sie übernimmt. Die Funktion gehört zu jeder Edition und steht nur der Administration offen.
+
+<Aside type="danger" title="Beim Fortsetzen werden alle Daten unwiderruflich gelöscht.">
+In SentryAssets lässt sich das nicht rückgängig machen. Der einzige Weg zurück ist eine [Sicherung](/guides/sicherung/), die vorher entstanden ist.
+</Aside>
+
+## Was gelöscht wird
+
+- Alle Assets, Dokumente mit ihren Dateien, Standorte, Lizenzen, Verträge, Lieferanten und alles übrige Inventar
+- Grundschutz, ISMS, Datenschutz, NIS2 und Medizintechnik
+- Alle Benutzerkonten außer einem lokalen Administrationskonto, dazu Sitzungen, angepasste und eigene Rollen und Bindungen
+- Agents, Collectors und Verzeichnis-Agents mit ihren Zertifikaten, dazu alle Rollout-Tokens
+- Der [Übungsmandant](/guides/uebungsmandant/) mit seinem eigenen Audit-Log
+- Gespeicherte Zugangsdaten (SNMP, Mail, Konnektoren) und die in der Oberfläche eingerichtete Anmeldung über OIDC
+- Aufträge, Benachrichtigungen und Auswertungen
+
+Die Seite nennt vorab die Zahlen Ihrer Installation.
+
+## Was bleibt
+
+- **Das Audit-Log** Ihrer Organisation, vollständig und mit intakter Hash-Kette. Das Zurücksetzen ist sein letzter Eintrag, mit Akteur, Zeit, Quell-IP und Zählungen. `sentryassets audit verify` besteht danach.
+- **Der Lizenzschlüssel** und der Vermerk, dass der Testzeitraum genutzt wurde. Ein Zurücksetzen startet ihn nicht neu.
+- **Die Organisation** mit ihrem Namen und die Standard-Kategorien.
+- **Die Zertifizierungsstelle der Agents**, damit Installationsbefehle gültig bleiben.
+- **Alle Sicherungen.** Sie enthalten weiter die alten Daten; löschen Sie sie selbst, wenn diese Daten verschwinden sollen. Der Zeitplan entfernt keine Sicherung von vor dem Zurücksetzen. Auch das Journal der Wiederherstellungen in der Ablage bleibt.
+
+## Welches Konto bleibt
+
+Es bleibt ein aktives lokales Konto der Rolle Administration mit Passwort und TOTP: Ihr eigenes, wenn Sie mit einem solchen Konto angemeldet sind, sonst das älteste. Die Seite nennt es vorab. Prüfen Sie, ob jemand Passwort und TOTP dieses Kontos hat, denn danach ist es der einzige Weg in die Anwendung. Falls nicht, hilft nur `docker compose run --rm cli admin create-admin` auf dem Server.
+
+## Voraussetzungen
+
+Die Seite sagt vorab, wenn etwas fehlt, und der Server lehnt in diesen Fällen ab:
+
+- Es gibt ein lokales Administrationskonto wie oben beschrieben.
+- Lokale Konten sind nicht abgeschaltet (`SA_LOCAL_ACCOUNTS`).
+- Der Dienst `backup-runner` läuft; nur er darf die Daten löschen.
+
+Der Dienst lehnt außerdem ab, wenn es neben Ihrer Organisation einen weiteren Mandanten gibt, der nicht der Übungsmandant ist, oder wenn er den Dokumentspeicher nicht beschreiben kann.
+
+## So gehen Sie vor
+
+<Steps>
+
+1. Legen Sie eine Sicherung an: **Jetzt sichern** auf der Seite oder unter [Sicherung](/guides/sicherung/). Die Seite zeigt das Datum der letzten.
+
+2. Lesen Sie, was gelöscht wird und was bleibt, und bestätigen Sie Ihre Anmeldung erneut.
+
+3. Tippen Sie den Namen der Organisation von Hand ein und wählen Sie **Alle Daten unwiderruflich löschen**.
+
+4. Die Anwendung steht je nach Datenmenge einige Minuten still. Alle Sitzungen enden, danach kommen Sie zur Anmeldung.
+
+5. Melden Sie sich mit dem verbliebenen lokalen Konto an und richten Sie die Installation neu ein.
+
+</Steps>
+
+Scheitert das Zurücksetzen, bleiben alle Daten unverändert. Sie melden sich dann neu an, und die Seite nennt den Grund.
+
+## Danach
+
+- **Agents und Collectors im Feld** melden Fehler, weil der Server ihre Zertifikate nicht mehr annimmt. Melden Sie sie mit einem neuen [Rollout-Token](/guides/agents/) neu an. Die Zertifizierungsstelle ist dieselbe.
+- **OIDC:** Eine in der Oberfläche eingerichtete Anmeldung ist weg. Steht OIDC in der [Serverkonfiguration](/reference/konfiguration/), bleibt sie aktiv, und Personen mit passender Gruppe können sich weiter anmelden. Die Seite weist darauf hin; entfernen Sie sie dort, wenn das nicht gewünscht ist.
+- **Wiederherstellen:** Eine Sicherung von vorher bringt alle alten Daten zurück, auch Konten und Agents.

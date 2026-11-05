@@ -79,6 +79,7 @@ export default defineConfig({
 							{ icon: 'i-ph:heartbeat-duotone', slug: 'guides/betrieb' },
 							{ icon: 'i-ph:archive-duotone', slug: 'guides/sicherung' },
 							{ icon: 'i-ph:flask-duotone', slug: 'guides/uebungsmandant' },
+							{ icon: 'i-ph:warning-duotone', slug: 'guides/daten-zuruecksetzen' },
 							{ icon: 'i-ph:key-duotone', slug: 'guides/lizenz' },
 						],
 					},

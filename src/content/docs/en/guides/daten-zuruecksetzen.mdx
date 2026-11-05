@@ -1,0 +1,76 @@
+---
+title: Reset all data
+description: Take the SentryAssets installation back to the state after its setup. What is deleted, what stays, what it requires and how to enroll devices again afterwards.
+head:
+  - tag: title
+    content: Reset all data | SentryAssets Docs
+sidebar:
+  label: Reset all data
+  order: 17
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+Under **Settings › Reset all data** you take the installation back to the state after its setup, for example after a trial run or before another department takes it over. It is part of every edition and open to the administration only.
+
+<Aside type="danger" title="If you continue, all data will be irrevocably deleted.">
+This cannot be undone in SentryAssets. The only way back is a [backup](/en/guides/sicherung/) made before it.
+</Aside>
+
+## What is deleted
+
+- All assets, documents with their files, locations, licences, contracts, suppliers and the rest of the inventory
+- Grundschutz, ISMS, data protection, NIS2 and medical technology
+- All user accounts but one local administration account, along with sessions, adjusted and custom roles and bindings
+- Agents, collectors and directory agents with their certificates, and all rollout tokens
+- The [sandbox](/en/guides/uebungsmandant/) with its own audit log
+- Stored credentials (SNMP, mail, connectors) and OIDC sign-in set up in the interface
+- Jobs, notifications and reports
+
+The page shows the numbers of your installation beforehand.
+
+## What stays
+
+- **The audit log** of your organisation, complete and with its hash chain intact. The reset is its last entry, with actor, time, source IP and counts. `sentryassets audit verify` passes afterwards.
+- **The license key** and the record that the trial was used. A reset does not start it anew.
+- **The organisation** with its name, and the standard categories.
+- **The agents' certificate authority**, so that install commands stay valid.
+- **All backups.** They still hold the old data; delete them yourself if that data should disappear. The schedule removes no backup from before the reset. The journal of restores in the backup storage stays too.
+
+## Which account stays
+
+One active local account with the administration role, a password and TOTP: your own if you are signed in with such an account, otherwise the oldest. The page names it beforehand. Check that someone has the password and TOTP of this account, because afterwards it is the only way in. If not, only `docker compose run --rm cli admin create-admin` on the server helps.
+
+## Requirements
+
+The page says beforehand if something is missing, and the server refuses in these cases:
+
+- There is a local administration account as described above.
+- Local accounts are not switched off (`SA_LOCAL_ACCOUNTS`).
+- The service `backup-runner` runs; only it may delete the data.
+
+The service also refuses if there is a further tenant beside your organisation that is not the sandbox, or if it cannot write to the document storage.
+
+## How to proceed
+
+<Steps>
+
+1. Make a backup: **Back up now** on the page or under [Backup](/en/guides/sicherung/). The page shows the date of the last one.
+
+2. Read what is deleted and what stays, and confirm your sign-in again.
+
+3. Type the name of the organisation by hand and choose **Delete all data irrevocably**.
+
+4. The application stops for a few minutes depending on the amount of data. All sessions end, and you are taken to the sign-in.
+
+5. Sign in with the remaining local account and set up the installation anew.
+
+</Steps>
+
+If the reset fails, all data stays unchanged. You then sign in again, and the page names the reason.
+
+## Afterwards
+
+- **Agents and collectors in the field** report errors, because the server no longer accepts their certificates. Enroll them again with a new [rollout token](/en/guides/agents/). The certificate authority is the same.
+- **OIDC:** Sign-in set up in the interface is gone. If OIDC is set in the [server's configuration](/en/reference/konfiguration/), it stays active, and people with a matching group can still sign in. The page points this out; remove it there if that is not wanted.
+- **Restoring:** A backup from before brings all old data back, accounts and agents included.
