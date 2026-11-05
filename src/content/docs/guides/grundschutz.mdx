@@ -402,13 +402,15 @@ Beide Varianten verwenden dieselben Rechte. Ab Pro passen Sie Rechte an [eigene 
 
 ## Beispiel: Beispielfirma GmbH
 
-Die Beispielfirma GmbH ist ein erfundenes Unternehmen der Kunststoffverarbeitung; sie füllt auch den [Übungsmandanten](/guides/uebungsmandant/). In SentryAssets könnte ihr Weg mit der Edition 2023 so aussehen:
+Die Beispielfirma GmbH ist ein erfundenes Medizinisches Versorgungszentrum mit einem Haupthaus und einer Außenstelle; sie füllt auch den [Übungsmandanten](/guides/uebungsmandant/). Das Beispiel handelt von Geräten und Räumen, nicht von Patientinnen und Patienten. Ihr Weg mit der Edition 2023 könnte so aussehen:
 
-1. Informationsverbund „Beispielfirma gesamt“ mit dem Hauptwerk und dem Außenlager als Standorten, Basis-Absicherung.
-2. Die Agents erfassen Server und Clients; der Collector findet Drucker und Switches. Die Kategorien „Server“, „Clients“ und „Netzwerk“ werden zu Zielobjekten.
-3. Der Dateiserver erhält Schutzbedarf „hoch“ für Vertraulichkeit, weil dort Konstruktionsdaten liegen; das Hauptwerk übernimmt diesen Wert nach dem Maximumprinzip.
-4. SentryAssets schlägt für die Windows-Server die passenden Bausteine vor, für den Serverraum den Baustein für Serverräume.
-5. Im Grundschutz-Check hängt der ISB das freigegebene Datensicherungskonzept als Nachweis an.
+1. **Informationsverbund:** Die Ärztliche Leitung und die ISB legen „MVZ gesamt“ mit Haupthaus und Außenstelle fest. Sie wählen die Standard-Absicherung, denn in der Basis-Absicherung fehlen die Anforderungen für erhöhten Schutzbedarf, und den hat hier fast alles.
+2. **Zielobjekte:** Dazu gehören die Standorte „Praxisgebäude“ im Haupthaus, „Serverraum“ und „Praxisräume Außenstelle“, die Kategorien „Desktop / Workstation“, „Kartenterminal“ und „Medizinische Geräte“ sowie als einzelnes Asset die virtuelle Maschine `vm-pvs01` mit der Praxisverwaltung.
+3. **Schutzbedarf:** `vm-pvs01` erhält „sehr hoch“ für die Vertraulichkeit, denn dort liegt die Behandlungsdokumentation. Die Laboranalysegeräte erhalten „sehr hoch“ für die Integrität, denn ein falscher Messwert führt zu einer falschen Behandlung. Das Praxisgebäude übernimmt beide Werte nach dem Maximumprinzip, die Außenstelle bleibt bei „hoch“.
+4. **Bausteine:** SentryAssets schlägt für das Praxisgebäude INF.1 und INF.12 vor, für `vm-pvs01` SYS.1.1, für die Rechner SYS.2.1 und für die Kartenterminals SYS.4.4. Für Räume und Medizingeräte gibt es keinen Vorschlag: Unter **Weiteren Baustein zuordnen** ordnet die ISB dem Serverraum INF.5 zu und den vernetzten Medizingeräten SYS.4.4.
+5. **Grundschutz-Check:** Die ISB beginnt beim Informationsverbund. Bei CON.3 (Datensicherungskonzept) hängt sie das Protokoll der letzten Wiederherstellungsprobe als Nachweis an. Was noch fehlt, etwa bei NET.1.1 ein eigenes Netz für die Laborgeräte, bekommt eine verantwortliche Person und einen Termin, hier die IT-Leitung.
+
+Das Bestandsverzeichnis und die Prüfungen der Medizingeräte selbst führt das [Medizintechnik-Add-on](/pro/medizintechnik/); der Grundschutz-Check fragt nach ihrer Informationssicherheit.
 
 ## Was zu Pro gehört
 

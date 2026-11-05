@@ -402,13 +402,15 @@ Both variants use the same rights. From Pro you adapt rights in [custom roles](/
 
 ## Example: Beispielfirma GmbH
 
-Beispielfirma GmbH is an invented plastics processor; it also fills the [sandbox](/en/guides/uebungsmandant/). In SentryAssets its way with Edition 2023 could look like this:
+Beispielfirma GmbH is an invented medical care centre with a main house and an outpost; it also fills the [sandbox](/en/guides/uebungsmandant/). The example is about devices and rooms, not about patients. Its way with Edition 2023 could look like this:
 
-1. Information domain "Beispielfirma overall" with the main plant and the outer warehouse as locations, basic protection.
-2. The agents discover servers and clients; the collector finds printers and switches. The categories "Server", "Clients" and "Network" become target objects.
-3. The file server gets protection requirement "high" for confidentiality, as design data are stored there; the main plant takes this value over by the maximum principle.
-4. SentryAssets proposes the matching modules for the Windows servers and the module for server rooms for the server room.
-5. In the Grundschutz check the security officer attaches the approved backup concept as evidence.
+1. **Information domain:** The medical director and the security officer define "MVZ overall" with the main house and the outpost. They choose standard protection, because basic protection leaves out the requirements for a raised protection requirement, and nearly everything here has one.
+2. **Target objects:** These are the locations "Praxisgebäude" (the practice building of the main house), "Serverraum" (server room) and "Praxisräume Außenstelle" (the rooms of the outpost), the categories "Desktop / Workstation", "Kartenterminal" (card terminals) and "Medizinische Geräte" (medical devices), and as a single asset the virtual machine `vm-pvs01` with the practice management software. The example data are in German.
+3. **Protection requirement:** `vm-pvs01` gets "very high" for confidentiality, as the treatment records are there. The laboratory analysers get "very high" for integrity, as a wrong reading leads to a wrong treatment. The practice building takes both values over by the maximum principle; the outpost stays at "high".
+4. **Modules:** SentryAssets proposes INF.1 and INF.12 for the practice building, SYS.1.1 for `vm-pvs01`, SYS.2.1 for the computers and SYS.4.4 for the card terminals. Rooms and medical devices get no suggestion: under **Assign another module** the security officer assigns INF.5 to the server room and SYS.4.4 to the networked medical devices.
+5. **Grundschutz check:** The security officer starts with the information domain. For CON.3 (backup concept) she attaches the record of the last restore test as evidence. What is still missing, such as a network of their own for the laboratory devices under NET.1.1, gets a person in charge and a date, here the head of IT.
+
+The [medical technology add-on](/en/pro/medizintechnik/) keeps the register and the checks of the medical devices themselves; the Grundschutz check asks about their information security.
 
 ## What belongs to Pro
 
