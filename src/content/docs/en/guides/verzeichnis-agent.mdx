@@ -33,7 +33,7 @@ The computer needs:
 
 - Windows Server 2016 or later (or Linux with systemd), without additional software.
 - Outbound HTTPS to your SentryAssets (agent address, port 443 or 8443).
-- TCP 636 (or 3269) to the domain controllers. Only private addresses are contacted.
+- TCP 636 (or 3269) to the domain controllers. Only private addresses are contacted; link-local addresses (`fe80::`, `169.254.`), which Windows adds for its own name, are skipped.
 
 ## Setting it up
 
@@ -122,6 +122,6 @@ On Linux the page shows a command that creates a system user `sentryassets-direc
 |---|---|
 | The directory agent has not reported | The service is not running, not approved yet, or has no outbound connection. Check `Get-Service SentryAssetsDirectory` and make the agent address reachable. |
 | The service does not start | `set` has not been run yet; without access to AD the service does not start on purpose. |
-| Address not allowed | The domain controller's name resolves to a public address. The directory agent contacts private addresses only. |
+| Address not allowed | The domain controller's name resolves (also) to a public or loopback address, or to link-local addresses only. The directory agent contacts private addresses only. Check on the agent's computer with `Resolve-DnsName <name>`. |
 | Certificate invalid | The domain controller's name is not in its certificate, or `--ca-file` names the wrong CA. |
 | Sign-in refused | Wrong bind name or password; set them again with `set`. After a refusal the directory agent tries no further domain controllers, so the account is not locked out. |

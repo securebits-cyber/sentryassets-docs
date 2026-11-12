@@ -33,7 +33,7 @@ Der Rechner braucht:
 
 - Windows Server 2016 oder neuer (oder Linux mit systemd), ohne zusätzliche Software.
 - Ausgehend HTTPS zu Ihrem SentryAssets (Agent-Adresse, Port 443 oder 8443).
-- TCP 636 (oder 3269) zu den Domänencontrollern. Nur private Adressen werden angesprochen.
+- TCP 636 (oder 3269) zu den Domänencontrollern. Nur private Adressen werden angesprochen; Link-Local-Adressen (`fe80::`, `169.254.`), die Windows für den eigenen Namen mitliefert, überspringt der Verzeichnis-Agent.
 
 ## Einrichten
 
@@ -122,6 +122,6 @@ Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sent
 |---|---|
 | Verzeichnis-Agent hat sich nicht gemeldet | Dienst läuft nicht, noch nicht freigegeben oder keine ausgehende Verbindung. `Get-Service SentryAssetsDirectory` prüfen und die Agent-Adresse erreichbar machen. |
 | Dienst startet nicht | `set` wurde noch nicht ausgeführt; ohne Zugang zum AD startet der Dienst bewusst nicht. |
-| Adresse nicht erlaubt | Der Name des Domänencontrollers löst auf eine öffentliche Adresse auf. Der Verzeichnis-Agent spricht nur private Adressen an. |
+| Adresse nicht erlaubt | Der Name des Domänencontrollers löst (auch) auf eine öffentliche Adresse oder Loopback auf, oder nur auf Link-Local-Adressen. Der Verzeichnis-Agent spricht nur private Adressen an. Prüfen Sie auf dem Rechner des Agents mit `Resolve-DnsName <Name>`. |
 | Zertifikat ungültig | Name des Domänencontrollers nicht im Zertifikat oder falsche CA in `--ca-file`. |
 | Anmeldung abgelehnt | Bind-Name oder Passwort falsch; mit `set` neu setzen. Nach einer Ablehnung versucht der Verzeichnis-Agent keine weiteren Domänencontroller, damit das Konto nicht gesperrt wird. |
