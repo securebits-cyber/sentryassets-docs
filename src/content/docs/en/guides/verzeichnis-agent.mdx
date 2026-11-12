@@ -82,6 +82,24 @@ On Linux the page shows a command that creates a system user `sentryassets-direc
 - One directory agent serves exactly one connection. For several domains (Pro) set up one per domain.
 - **Removing it:** see [Uninstalling](#uninstalling).
 
+## Exclusions in virus scanners and EDR
+
+Virus scanners and EDR products (such as Microsoft Defender for Endpoint, CrowdStrike Falcon, SentinelOne or ManageEngine Endpoint Central) may classify the directory agent as an unknown program, quarantine and delete it, sometimes within seconds of the download. On domain controllers and other servers the policies are often especially strict. Therefore, set up an exclusion for the program folder in your product's console **before installing**:
+
+| System | Program folder (exclusion) | State folder |
+|---|---|---|
+| Windows | `C:\Program Files\SentryAssets\Directory\` with `sentryassets-directory.exe` | `C:\ProgramData\SentryAssets\Directory\` |
+| Linux | `/opt/sentryassets-directory/bin/` with `sentryassets-directory` | `/var/lib/sentryassets-directory/` |
+
+**Why the folder and not just the file:** on Windows the directory agent replaces itself in its own program folder during an update. It first stores the new version there as `.sentryassets-directory.update-…`, checks it, renames the running program to `sentryassets-directory.exe.old` and puts the new file in its place; Windows then restarts the service. The installation command also downloads the program into this folder, first as `sentryassets-directory.exe.download`. To an EDR product this looks like a service swapping an executable, and it intervenes. An exclusion by checksum (hash) applies to one version only and ends with the next update; use the folder path if your product allows it, together with the program path as a process. On Linux the directory agent does not update itself; it only needs an exclusion there if your scanner blocks the program while installing or updating it.
+
+Notes:
+
+- Keep the exclusion as narrow as possible: only the program folder, not `C:\Program Files\` or `/opt/` as a whole. The program folder is writable only by administrators or root.
+- The state folder usually needs no exclusion. If the console reports blocked access to the certificate, the key or the stored credentials there, exclude it as well.
+- Even with an exclusion the directory agent only accepts updates signed by the vendor.
+- The same applies to the agent on your other devices, see [Agents](/en/guides/agents/#exclusions-in-virus-scanners-and-edr).
+
 ## Uninstalling
 
 <Steps>
@@ -122,6 +140,33 @@ On Linux the page shows a command that creates a system user `sentryassets-direc
 |---|---|
 | The directory agent has not reported | The service is not running, not approved yet, or has no outbound connection. Check `Get-Service SentryAssetsDirectory` and make the agent address reachable. |
 | The service does not start | `set` has not been run yet; without access to AD the service does not start on purpose. |
+| The service does not start, "access denied" | A virus scanner or EDR product has blocked or deleted the program, see [below](#service-does-not-start-access-denied). |
 | Address not allowed | The domain controller's name resolves (also) to a public or loopback address, or to link-local addresses only. The directory agent contacts private addresses only. Check on the agent's computer with `Resolve-DnsName <name>`. |
 | Certificate invalid | The domain controller's name is not in its certificate, or `--ca-file` names the wrong CA. |
 | Sign-in refused | Wrong bind name or password; set them again with `set`. After a refusal the directory agent tries no further domain controllers, so the account is not locked out. |
+
+### Service does not start: access denied
+
+If a virus scanner or EDR product has quarantined the directory agent, it looks like this:
+
+- Under **Discovery › Agents** the directory agent no longer reports, often shortly after installation or after an update.
+- `Start-Service SentryAssetsDirectory` fails, `sc.exe start SentryAssetsDirectory` reports `FAILED 5: Access is denied`.
+- `Test-Path "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe"` returns `False`, or the file cannot be opened.
+- The Windows event log often shows nothing, because the EDR product intervenes itself and logs only in its own console.
+
+How to fix it:
+
+<Steps>
+
+1. **Check the EDR product's console:** search the quarantine and the event or detection log for `sentryassets-directory` or the path of the program folder. It shows the time, the computer and the rule that triggered. For managed products this view is in the central console, not on the computer.
+
+2. **Set up an exclusion** for the program folder as described under [Exclusions in virus scanners and EDR](#exclusions-in-virus-scanners-and-edr), and wait until the policy has reached the computer.
+
+3. **Bring the program back:**
+   - If `sentryassets-directory.exe.old` is still in the program folder after an update, rename it back to `sentryassets-directory.exe` and start the service with `Start-Service SentryAssetsDirectory`. The directory agent then updates again, this time with the exclusion in place.
+   - Otherwise restore the file from quarantine and start the service.
+   - If neither works, create a new rollout token under **Settings › Directory services** and run the installation command again (steps 2 and 3 under [Setting it up](#setting-it-up)). It downloads and checks the program anew. The access to AD in `C:\ProgramData\SentryAssets\Directory` is kept unless the scanner deleted it; otherwise set it up again with `set`. As the computer is then a new registration, choose it as the directory agent in the connection afterwards and block the old registration.
+
+4. **Check the result:** `Get-Service SentryAssetsDirectory` shows `Running`, and **Test connection** under **Settings › Directory services** succeeds.
+
+</Steps>

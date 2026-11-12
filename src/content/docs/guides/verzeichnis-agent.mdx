@@ -82,6 +82,24 @@ Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sent
 - Ein Verzeichnis-Agent dient genau einer Verbindung. Für mehrere Domänen (Pro) richten Sie je Domäne einen ein.
 - **Entfernen:** siehe [Deinstallieren](#deinstallieren).
 
+## Ausnahmen in Virenscannern und EDR
+
+Virenscanner und EDR-Produkte (etwa Microsoft Defender for Endpoint, CrowdStrike Falcon, SentinelOne oder ManageEngine Endpoint Central) können den Verzeichnis-Agent als unbekanntes Programm einstufen, in Quarantäne nehmen und löschen, manchmal schon Sekunden nach dem Herunterladen. Auf Domänencontrollern und anderen Servern sind die Richtlinien oft besonders streng. Richten Sie deshalb **vor der Installation** in der Konsole Ihres Produkts eine Ausnahme für den Programmordner ein:
+
+| System | Programmordner (Ausnahme) | Zustandsordner |
+|---|---|---|
+| Windows | `C:\Program Files\SentryAssets\Directory\` mit `sentryassets-directory.exe` | `C:\ProgramData\SentryAssets\Directory\` |
+| Linux | `/opt/sentryassets-directory/bin/` mit `sentryassets-directory` | `/var/lib/sentryassets-directory/` |
+
+**Warum der Ordner und nicht nur die Datei:** Unter Windows ersetzt sich der Verzeichnis-Agent bei einem Update im eigenen Programmordner. Er legt die neue Version dort zunächst als `.sentryassets-directory.update-…` ab, prüft sie, benennt das laufende Programm in `sentryassets-directory.exe.old` um und setzt die neue Datei an seine Stelle; danach startet Windows den Dienst neu. Der Installationsbefehl lädt das Programm ebenfalls in diesen Ordner, zuerst als `sentryassets-directory.exe.download`. Für ein EDR-Produkt sieht das aus wie ein Dienst, der eine ausführbare Datei austauscht, und es greift ein. Eine Ausnahme über die Prüfsumme (Hash) gilt nur für eine Version und endet mit dem nächsten Update; nehmen Sie den Ordnerpfad, wenn Ihr Produkt es erlaubt, zusammen mit dem Programmpfad als Prozess. Unter Linux aktualisiert sich der Verzeichnis-Agent nicht selbst; eine Ausnahme braucht er dort nur, wenn Ihr Scanner das Programm beim Installieren oder Aktualisieren blockiert.
+
+Hinweise dazu:
+
+- Halten Sie die Ausnahme so eng wie möglich: nur den Programmordner, nicht `C:\Program Files\` oder `/opt/` als Ganzes. Der Programmordner ist nur für Administratoren bzw. root beschreibbar.
+- Der Zustandsordner braucht meist keine Ausnahme. Meldet die Konsole Blockaden beim Zugriff auf Zertifikat, Schlüssel oder die gespeicherten Zugangsdaten dort, nehmen Sie ihn ebenfalls aus.
+- Auch nach einer Ausnahme nimmt der Verzeichnis-Agent nur Updates an, die der Hersteller signiert hat.
+- Für den Agent auf den übrigen Geräten gilt dasselbe, siehe [Agents](/guides/agents/#ausnahmen-in-virenscannern-und-edr).
+
 ## Deinstallieren
 
 <Steps>
@@ -122,6 +140,33 @@ Unter Linux zeigt die Seite einen Befehl, der einen eigenen Systembenutzer `sent
 |---|---|
 | Verzeichnis-Agent hat sich nicht gemeldet | Dienst läuft nicht, noch nicht freigegeben oder keine ausgehende Verbindung. `Get-Service SentryAssetsDirectory` prüfen und die Agent-Adresse erreichbar machen. |
 | Dienst startet nicht | `set` wurde noch nicht ausgeführt; ohne Zugang zum AD startet der Dienst bewusst nicht. |
+| Dienst startet nicht, „Zugriff verweigert“ | Ein Virenscanner oder EDR-Produkt hat das Programm gesperrt oder gelöscht, siehe [unten](#dienst-startet-nicht-zugriff-verweigert). |
 | Adresse nicht erlaubt | Der Name des Domänencontrollers löst (auch) auf eine öffentliche Adresse oder Loopback auf, oder nur auf Link-Local-Adressen. Der Verzeichnis-Agent spricht nur private Adressen an. Prüfen Sie auf dem Rechner des Agents mit `Resolve-DnsName <Name>`. |
 | Zertifikat ungültig | Name des Domänencontrollers nicht im Zertifikat oder falsche CA in `--ca-file`. |
 | Anmeldung abgelehnt | Bind-Name oder Passwort falsch; mit `set` neu setzen. Nach einer Ablehnung versucht der Verzeichnis-Agent keine weiteren Domänencontroller, damit das Konto nicht gesperrt wird. |
+
+### Dienst startet nicht: Zugriff verweigert
+
+Hat ein Virenscanner oder EDR-Produkt den Verzeichnis-Agent in Quarantäne genommen, sieht das so aus:
+
+- Unter **Discovery › Agents** meldet sich der Verzeichnis-Agent nicht mehr, oft kurz nach der Installation oder nach einem Update.
+- `Start-Service SentryAssetsDirectory` scheitert, `sc.exe start SentryAssetsDirectory` meldet `FEHLER 5: Zugriff verweigert` (englisch `Access is denied`).
+- `Test-Path "$env:ProgramFiles\SentryAssets\Directory\sentryassets-directory.exe"` ergibt `False`, oder die Datei lässt sich nicht öffnen.
+- Im Ereignisprotokoll von Windows steht oft nichts dazu, weil das EDR-Produkt selbst eingreift und nur in seiner eigenen Konsole protokolliert.
+
+So beheben Sie es:
+
+<Steps>
+
+1. **In der Konsole des EDR-Produkts nachsehen:** Suchen Sie in der Quarantäne und im Ereignis- oder Erkennungsprotokoll nach `sentryassets-directory` oder dem Pfad des Programmordners. Dort stehen Zeitpunkt, Rechner und die Regel, die gegriffen hat. Bei verwalteten Produkten liegt diese Ansicht in der zentralen Konsole, nicht auf dem Rechner.
+
+2. **Ausnahme einrichten** für den Programmordner wie unter [Ausnahmen in Virenscannern und EDR](#ausnahmen-in-virenscannern-und-edr) beschrieben, und warten Sie, bis die Richtlinie auf dem Rechner angekommen ist.
+
+3. **Programm zurückholen:**
+   - Ist nach einem Update noch `sentryassets-directory.exe.old` im Programmordner, benennen Sie es in `sentryassets-directory.exe` zurück und starten den Dienst mit `Start-Service SentryAssetsDirectory`. Der Verzeichnis-Agent aktualisiert sich danach erneut, nun mit Ausnahme.
+   - Sonst stellen Sie die Datei aus der Quarantäne wieder her und starten den Dienst.
+   - Geht beides nicht, erzeugen Sie unter **Einstellungen › Verzeichnisdienste** ein neues Rollout-Token und führen den Installationsbefehl erneut aus (Schritte 2 und 3 unter [Einrichten](#einrichten)). Er lädt und prüft das Programm neu. Der Zugang zum AD in `C:\ProgramData\SentryAssets\Directory` bleibt erhalten, solange der Scanner ihn nicht gelöscht hat; sonst richten Sie ihn mit `set` neu ein. Weil der Rechner damit eine neue Registrierung ist, wählen Sie ihn danach in der Verbindung als Verzeichnis-Agent aus und sperren die alte Registrierung.
+
+4. **Ergebnis prüfen:** `Get-Service SentryAssetsDirectory` zeigt `Running`, und **Verbindung testen** unter **Einstellungen › Verzeichnisdienste** ist erfolgreich.
+
+</Steps>

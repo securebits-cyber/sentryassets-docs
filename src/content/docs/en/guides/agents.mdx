@@ -148,11 +148,58 @@ Agents update themselves, but only to versions the vendor signed offline (Ed2551
 - The agent refuses to start if its directory or files are readable by others.
 
 <Aside type="caution" title="Known limitations">
-On Windows the private key is kept in CNG, in the TPM where there is one, not exportable; on Linux in a file with strict permissions. Windows binaries are not yet Authenticode-signed, which SmartScreen or virus scanners may report.
+On Windows the private key is kept in CNG, in the TPM where there is one, not exportable; on Linux in a file with strict permissions. Windows binaries are not yet Authenticode-signed, which SmartScreen or virus scanners may report; set up [exclusions](#exclusions-in-virus-scanners-and-edr) for this reason.
 </Aside>
+
+## Exclusions in virus scanners and EDR
+
+Virus scanners and EDR products (such as Microsoft Defender for Endpoint, CrowdStrike Falcon, SentinelOne or ManageEngine Endpoint Central) may classify the agent as an unknown program, quarantine and delete it, often while it is being downloaded or when it updates itself. Therefore, set up an exclusion for the program folder in your product's console **before rolling out**:
+
+| System | Program folder (exclusion) | State folder |
+|---|---|---|
+| Windows | `C:\Program Files\SentryAssets\Agent\` with `sentryassets-agent.exe` | `C:\ProgramData\SentryAssets\Agent\` |
+| Linux | `/opt/sentryassets-agent/bin/` with `sentryassets-agent` | `/var/lib/sentryassets-agent/` |
+
+**Why the folder and not just the file:** during an update the agent replaces itself in its own program folder. It first stores the new version there as `.sentryassets-agent.update-…`, checks it, renames the running program (`sentryassets-agent.exe.old` on Windows, `sentryassets-agent.previous` on Linux) and puts the new file in its place; the service manager then restarts it. The installation command also downloads the program into this folder, first as `sentryassets-agent.exe.download`. To an EDR product this looks like a service swapping an executable, and it intervenes. An exclusion by checksum (hash) applies to one version only and ends with the next update; use the folder path if your product allows it, together with the program path as a process.
+
+Notes:
+
+- Keep the exclusion as narrow as possible: only the program folder, not `C:\Program Files\` or `/opt/` as a whole. Both folders are writable only by administrators or root; on Linux the agent checks this before every update.
+- The state folder usually needs no exclusion. If the console reports blocked access to the certificate or key there, exclude it as well.
+- Even with an exclusion the agent checks every update itself: it only accepts versions signed by the vendor (see [Updates](#updates)).
+- The same applies to the [collector](/en/guides/collector/) with `/opt/sentryassets-collector/bin/`, and to the [directory agent](/en/guides/verzeichnis-agent/#exclusions-in-virus-scanners-and-edr) with its own folder.
 
 ## Troubleshooting
 
 - **"Server not reachable":** the message names host and port. Check DNS, routes, firewalls and, if set, the device's proxy. TLS inspection by a proxy breaks mTLS on purpose; exempt the agent host there.
 - **Clock:** certificates need a correct clock. The agent detects a deviation and reports it.
 - **Enrolling again:** stop the service first (`sudo systemctl stop sentryassets-agent`) and start it again afterwards. The command from the rollout dialog does that itself.
+- **Service does not start, "access denied":** see the following section.
+
+### Service does not start: access denied
+
+If a virus scanner or EDR product has quarantined the agent, it looks like this:
+
+- The agent shows **No heartbeat** under **Agents**, often shortly after installation or after an update.
+- `Start-Service SentryAssetsAgent` fails, `sc.exe start SentryAssetsAgent` reports `FAILED 5: Access is denied`.
+- `Test-Path "$env:ProgramFiles\SentryAssets\Agent\sentryassets-agent.exe"` returns `False`, or the file cannot be opened.
+- The Windows event log often shows nothing, because the EDR product intervenes itself and logs only in its own console.
+
+How to fix it:
+
+<Steps>
+
+1. **Check the EDR product's console:** search the quarantine and the event or detection log for `sentryassets-agent` or the path of the program folder. It shows the time, the device and the rule that triggered. For managed products this view is in the central console, not on the device.
+
+2. **Set up an exclusion** for the program folder as described under [Exclusions in virus scanners and EDR](#exclusions-in-virus-scanners-and-edr), and wait until the policy has reached the device.
+
+3. **Bring the program back:**
+   - If `sentryassets-agent.exe.old` is still in the program folder after an update, rename it back to `sentryassets-agent.exe` and start the service with `Start-Service SentryAssetsAgent`. The agent then updates again, this time with the exclusion in place.
+   - Otherwise restore the file from quarantine and start the service.
+   - If neither works, run the installation command again with a new rollout token. It downloads and checks the program anew. The device is then a new registration; take over the previous asset with **Replace** (see [Device installed again](#device-installed-again)).
+
+4. **Check the result:** `Get-Service SentryAssetsAgent` shows `Running`, and after a few minutes the agent is **Active** again under **Agents**.
+
+</Steps>
+
+On Linux the same shows up as `Permission denied` or a missing file in `journalctl -u sentryassets-agent`; set up an exclusion for `/opt/sentryassets-agent/bin/`, rename `sentryassets-agent.previous` back or install again, then `sudo systemctl restart sentryassets-agent`.
