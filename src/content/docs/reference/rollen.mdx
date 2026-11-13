@@ -16,7 +16,7 @@ SentryAssets kennt sechs feste Rollen mit Standardrechten; mit [Pro](/pro/rollen
 | Administrator | `admin` | Betrieb und Einrichtung: alles, auch Anmeldung, Benutzer, Agents, Benachrichtigungen, Systemzustand |
 | Informationssicherheit | `isb` | Informationssicherheitsbeauftragte: Inventar und IT-Grundschutz vollständig, Audit-Log, Lizenzschlüssel |
 | Bearbeitung | `editor` | IT-Team im Alltag: Inventar, Standorte, Lizenzen, Verträge, Dokumente, Grundschutz-Check pflegen |
-| Datenschutz | `dpo` | Datenschutzbeauftragte: alles lesen wie die Prüfung, dazu personenbezogene Felder, Kontakte und streng vertrauliche Dokumente; ändert im Kern nichts |
+| Datenschutz | `dpo` | Datenschutzbeauftragte: alles lesen wie die Prüfung, dazu personenbezogene Felder, Kontakte und streng vertrauliche Dokumente; lädt eigene Nachweise hoch, ändert im Kern sonst nichts |
 | Prüfung (nur lesend) | `auditor` | interne oder externe Prüfung: alles lesen einschließlich Audit-Log, nichts ändern |
 | Lesend | `viewer` | Auskunft: Inventar und Verwaltung lesen |
 
@@ -31,6 +31,8 @@ Die Tabelle zeigt die Standardrechte. Was Ihre Organisation angepasst hat, steht
 | Inventar, Standorte, Lizenzen, Verträge, Racks, Material, Beschaffung, Inventuren, Aussonderungen, Kostenstellen lesen | ja | ja | ja | ja | ja | ja |
 | Inventar, Standorte, Lizenzen, Verträge, Racks, Material, Beschaffung ändern | ja | ja | ja | – | – | – |
 | Inventuren durchführen, Assets aussondern | ja | ja | ja | – | – | – |
+| Dokumente hochladen, ändern, verknüpfen und löschen | ja | ja | ja | – | – | – |
+| Eigene Dokumente hochladen, ohne Verantwortlichen und Verknüpfung, neue Fassungen nur zu selbst angelegten | ja | ja | ja | ja | – | – |
 | Kategorien, Felder und Kostenstellen verwalten | ja | ja | – | – | – | – |
 | Personenbezogene Feldwerte und Kontakte lesen | ja | ja | ja | ja | – | – |
 | IT-Grundschutz lesen | ja | ja | ja | ja | ja | – |
@@ -66,6 +68,8 @@ Wer Inventuren erfasst, wer an einer Aussonderung beteiligt war und die verantwo
 | Lesend | intern |
 
 Das sind die Grenzen ab Werk; angepasste Rollen haben ihre eigene. Vergeben lassen sich genau die Stufen bis zu dieser Grenze. Nachweise oberhalb der eigenen Stufe werden im Grundschutz-Check nur gezählt, nicht gezeigt.
+
+Die Rolle Datenschutz lädt ihre eigenen Nachweise selbst hoch, etwa einen AV-Vertrag oder die Antwort auf eine Betroffenenanfrage, und vergibt dabei Stufen bis streng vertraulich. Sie legt solche Dokumente ohne Verantwortlichen und ohne Verknüpfung mit Assets, Lieferanten, Lizenzen, Verträgen oder Standorten an und lädt neue Fassungen nur zu Dokumenten hoch, die sie selbst angelegt hat. Titel, Art, Stufe und Aufbewahrung ändern und Dokumente löschen bleibt Rollen mit Schreibrecht auf Dokumente vorbehalten. Jeder Schritt steht im Audit-Log. Mit [Pro](/pro/rollen-anpassen/) heißt das Recht „Eigene Dokumente hochladen“ und lässt sich anderen Rollen geben oder nehmen.
 
 ## Rechte je Standort
 

@@ -16,7 +16,7 @@ SentryAssets has six fixed roles with default permissions; with [Pro](/en/pro/ro
 | Administrator | `admin` | operations and setup: everything, including sign-in, users, agents, notifications, system health |
 | Information security | `isb` | information security officers: inventory and IT-Grundschutz in full, audit log, licence keys |
 | Editor | `editor` | the IT team day to day: inventory, locations, licences, contracts, documents, Grundschutz check |
-| Data protection | `dpo` | data protection officers: read everything like auditors, plus personal fields, contacts and strictly confidential documents; change nothing in the core |
+| Data protection | `dpo` | data protection officers: read everything like auditors, plus personal fields, contacts and strictly confidential documents; upload their own evidence, change nothing else in the core |
 | Auditor (read only) | `auditor` | internal or external audit: read everything including the audit log, change nothing |
 | Read only | `viewer` | information: read inventory and records |
 
@@ -31,6 +31,8 @@ The table shows the default permissions. What your organisation adjusted is unde
 | Read inventory, locations, licences, contracts, racks, consumables, procurement, stocktakings, disposals, cost centers | yes | yes | yes | yes | yes | yes |
 | Change inventory, locations, licences, contracts, racks, consumables, procurement | yes | yes | yes | – | – | – |
 | Carry out stocktakings, dispose of assets | yes | yes | yes | – | – | – |
+| Upload, change, link and delete documents | yes | yes | yes | – | – | – |
+| Upload own documents, without owner or link, new versions only to those one created | yes | yes | yes | yes | – | – |
 | Manage categories, fields and cost centers | yes | yes | – | – | – | – |
 | Read personal field values and contacts | yes | yes | yes | yes | – | – |
 | Read IT-Grundschutz | yes | yes | yes | yes | yes | – |
@@ -66,6 +68,8 @@ Who recorded a stocktaking entry, who took part in a disposal and the responsibl
 | Read only | internal |
 
 These are the limits as delivered; adjusted roles have their own. Exactly the levels up to this limit can be set. Evidence above one's own level is only counted in the Grundschutz check, not shown.
+
+The data protection role uploads its own evidence itself, such as a data processing agreement or the answer to a data subject request, and sets levels up to strictly confidential. It creates such documents without owner and without links to assets, suppliers, licences, contracts or locations, and uploads new versions only to documents it created itself. Changing title, kind, level and retention and deleting documents stays with roles that may write documents. Every step is in the audit log. With [Pro](/en/pro/rollen-anpassen/) the permission is called “Upload own documents” and can be given to or taken from other roles.
 
 ## Rights per location
 
