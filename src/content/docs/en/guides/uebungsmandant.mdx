@@ -41,7 +41,7 @@ A sandbox session ends when your own session ends (sign-out, expiry, new credent
 
 ## Reset
 
-**Reset to initial state** deletes everything in the sandbox, its audit log too, and creates it anew with the example data. Admissions stay. The `backup-runner` service does the work; the page shows **Being reset** and then creates the sandbox anew by itself. The reset is in the audit log of your real data.
+**Reset to initial state** deletes everything in the sandbox, its audit log too, and creates it anew with the example data. Admissions stay. The `backup-runner` service does the work; the page shows **Being reset** and then creates the sandbox anew by itself. The reset is in the audit log of your real data. The example data of the sandbox cannot be removed on their own, and the example data of the setup wizard do not go into the sandbox; for a fresh start, reset it.
 
 <Aside type="caution">
 A reset cannot be undone. It never touches your own data: the backup service only deletes the tenant that was created as the sandbox.
