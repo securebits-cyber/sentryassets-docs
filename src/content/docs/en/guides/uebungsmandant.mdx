@@ -1,6 +1,6 @@
 ---
 title: Sandbox
-description: Practise safely in a tenant of its own with an invented company, admit accounts to it and reset the sandbox to its initial state.
+description: Practise safely in a tenant of its own with an invented company and the Grundschutz check it has begun, admit accounts to it and reset the sandbox to its initial state.
 head:
   - tag: title
     content: Sandbox with example data | SentryAssets Docs
@@ -11,7 +11,7 @@ sidebar:
 
 import { Aside, Steps } from '@astrojs/starlight/components';
 
-The sandbox is a tenant of its own in your installation, filled with the invented **Beispielfirma GmbH**, a medical care centre: a main house and an outpost with reception, treatment rooms, a laboratory and a server room, people, suppliers, servers, clients, network devices, card terminals and medical devices, licences and contracts. All names are invented, and the example holds no data about patients. You and your team try everything there without touching your own data. It is part of the Community edition.
+The sandbox is a tenant of its own in your installation, filled with the invented **Beispielfirma GmbH**, a medical care centre: a main house and an outpost with reception, treatment rooms, a laboratory and a server room, people, suppliers, servers, clients, network devices, card terminals and medical devices, licences and contracts, and a Grundschutz++ check it has begun. All names are invented, and the example holds no data about patients. You and your team try everything there without touching your own data. It is part of the Community edition.
 
 ## Create and admit
 
@@ -19,7 +19,7 @@ The administration manages the sandbox under **Settings › Sandbox**. There is 
 
 <Steps>
 
-1. Choose **Create sandbox**. SentryAssets creates the tenant with the standard categories and the example data and admits you.
+1. Choose **Create sandbox**. SentryAssets creates the tenant with the standard categories, the example data and the begun Grundschutz check and admits you.
 
 2. Under **Admissions**, choose the accounts that should practise and choose **Admit**. Only active accounts are offered.
 
@@ -38,6 +38,22 @@ A coloured band at the top of every page says: **Sandbox: Changes here affect ex
 - **Licence:** the licence of your installation applies. Features from Pro and the add-ons are open in the sandbox only if they are for you. The example data do not count against the number of assets.
 
 A sandbox session ends when your own session ends (sign-out, expiry, new credentials), when your admission is revoked or your role changes, or when the sandbox is reset. Signing out in the sandbox signs you out completely.
+
+## The begun Grundschutz check
+
+Beispielfirma GmbH has begun its Grundschutz check after **Grundschutz++**. You see what a check in progress looks like and practise on the open requirements.
+
+- **Catalog and information domain:** The catalog of the BSI that comes with SentryAssets is read in. The information domain “Informationsverbund Beispielfirma GmbH” covers the main house and the outpost at the normal security level, with MUSS and SOLLTE requirements and target object categories that fit the inventory, such as IT systems, mobile devices, WLANs, server rooms and users.
+- **20 requirements answered:** 8 implemented with a responsible person, 5 partly and 5 not implemented, each with “What is still missing?”, a responsible person and a date, and 2 not applicable with a justification. The texts fit the devices of the example company, such as unencrypted workstations in the treatment rooms or one WLAN shared by practice and guests. One requirement is overdue, so the overview shows a task.
+- **The rest is open:** several hundred requirements for you to assess.
+
+**Practise the Grundschutz check** in the band at the top leads there. On the **Grundschutz** page a notice leads to **Assess the open requirements**. Go through them step by step; for each requirement the page explains what it means and how to tell it is implemented (see [the Grundschutz check: how to answer](/en/guides/grundschutz/#the-grundschutz-check-how-to-answer)).
+
+- **Edition 2023:** It has not begun, as the compendium of the BSI does not come with SentryAssets. To practise it, read it in inside the sandbox, as in your real tenant.
+- **Approvals with four eyes (Pro):** The example answers come from no person but from the system (ID `example`). With Pro they appear under **Approvals** in the stage **To submit**. One person submits, a second admitted person approves; nobody approves alone, as with your real data.
+- **Licence:** Grundschutz++ is part of the Community edition, so the check works in every installation.
+
+A sandbox created before this version gets the check once it is reset.
 
 ## Reset
 

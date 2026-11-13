@@ -1,6 +1,6 @@
 ---
 title: Übungsmandant
-description: In einem eigenen Mandanten mit einer erfundenen Firma gefahrlos üben, Konten dafür freigeben und den Übungsmandanten auf den Ausgangsstand zurücksetzen.
+description: In einem eigenen Mandanten mit einer erfundenen Firma und ihrem begonnenen Grundschutz-Check gefahrlos üben, Konten dafür freigeben und den Übungsmandanten auf den Ausgangsstand zurücksetzen.
 head:
   - tag: title
     content: Übungsmandant mit Beispieldaten | SentryAssets Docs
@@ -11,7 +11,7 @@ sidebar:
 
 import { Aside, Steps } from '@astrojs/starlight/components';
 
-Der Übungsmandant ist ein eigener Mandant in Ihrer Installation, gefüllt mit der erfundenen **Beispielfirma GmbH**, einem Medizinischen Versorgungszentrum: Haupthaus und Außenstelle mit Empfang, Behandlungsräumen, Labor und Serverraum, Personen, Lieferanten, Server, Clients, Netzwerkgeräte, Kartenterminals und Medizingeräte, Lizenzen und Verträge. Alle Namen sind erfunden, und das Beispiel enthält keine Daten über Patientinnen und Patienten. Dort probieren Sie und Ihr Team alles aus, ohne Ihre eigenen Daten zu berühren. Er gehört zur Community-Edition.
+Der Übungsmandant ist ein eigener Mandant in Ihrer Installation, gefüllt mit der erfundenen **Beispielfirma GmbH**, einem Medizinischen Versorgungszentrum: Haupthaus und Außenstelle mit Empfang, Behandlungsräumen, Labor und Serverraum, Personen, Lieferanten, Server, Clients, Netzwerkgeräte, Kartenterminals und Medizingeräte, Lizenzen und Verträge, dazu ein begonnener Grundschutz-Check nach Grundschutz++. Alle Namen sind erfunden, und das Beispiel enthält keine Daten über Patientinnen und Patienten. Dort probieren Sie und Ihr Team alles aus, ohne Ihre eigenen Daten zu berühren. Er gehört zur Community-Edition.
 
 ## Anlegen und freigeben
 
@@ -19,7 +19,7 @@ Unter **Einstellungen › Übungsmandant** verwaltet die Administration den Übu
 
 <Steps>
 
-1. Wählen Sie **Übungsmandant anlegen**. SentryAssets legt den Mandanten mit den Standardkategorien und den Beispieldaten an und gibt Sie selbst frei.
+1. Wählen Sie **Übungsmandant anlegen**. SentryAssets legt den Mandanten mit den Standardkategorien, den Beispieldaten und dem begonnenen Grundschutz-Check an und gibt Sie selbst frei.
 
 2. Wählen Sie unter **Freigaben** die Konten, die üben sollen, und wählen Sie **Freigeben**. Nur aktive Konten stehen zur Wahl.
 
@@ -38,6 +38,22 @@ Ein farbiges Band oben auf jeder Seite zeigt: **Übungsmandant: Änderungen hier
 - **Lizenz:** Es gilt die Lizenz Ihrer Installation. Funktionen ab Pro und die Add-ons sind im Übungsmandanten nur offen, wenn sie es auch bei Ihnen sind. Die Beispieldaten zählen nicht gegen die Zahl der Assets.
 
 Eine Übungssitzung endet, wenn Ihre eigene Sitzung endet (Abmelden, abgelaufen, neue Anmeldedaten), wenn Ihre Freigabe entzogen oder Ihre Rolle geändert wird oder wenn der Übungsmandant zurückgesetzt wird. Abmelden im Übungsmandanten meldet Sie ganz ab.
+
+## Begonnener Grundschutz-Check
+
+Die Beispielfirma GmbH hat ihren Grundschutz-Check nach **Grundschutz++** begonnen. So sehen Sie, wie ein Check im Gange aussieht, und üben an den offenen Anforderungen weiter.
+
+- **Katalog und Informationsverbund:** Der mitgelieferte Katalog des BSI ist eingelesen. Der Informationsverbund „Informationsverbund Beispielfirma GmbH“ umfasst Haupthaus und Außenstelle mit normalem Sicherheitsniveau, MUSS- und SOLLTE-Anforderungen und Zielobjekt-Kategorien passend zum Inventar, etwa IT-Systeme, Mobile Endgeräte, WLANs, Serverräume und Nutzende.
+- **20 Anforderungen beantwortet:** 8 umgesetzt mit verantwortlicher Person, 5 teilweise und 5 nicht umgesetzt, jeweils mit „Was fehlt noch?“, verantwortlicher Person und Termin, und 2 entbehrlich mit Begründung. Die Texte passen zu den Geräten der Beispielfirma, etwa unverschlüsselte Arbeitsplätze in den Behandlungsräumen oder ein gemeinsames WLAN für Praxis und Gäste. Eine Anforderung ist überfällig, damit die Übersicht eine Aufgabe zeigt.
+- **Der Rest ist offen:** mehrere hundert Anforderungen, die Sie selbst bewerten.
+
+Den Weg dorthin zeigt **Grundschutz-Check üben** im Band oben. Auf der Seite **Grundschutz** führt ein Hinweis zu **Offene Anforderungen bewerten**. Gehen Sie sie Schritt für Schritt durch; zu jeder Anforderung erklärt die Seite, was gemeint ist und woran Sie die Umsetzung erkennen (siehe [Grundschutz-Check: so antworten Sie](/guides/grundschutz/#der-grundschutz-check-so-antworten-sie)).
+
+- **Edition 2023:** Sie ist nicht begonnen, denn das Kompendium des BSI wird nicht mitgeliefert. Wer sie üben will, liest es im Übungsmandanten selbst ein, wie im echten Mandanten.
+- **Freigaben mit vier Augen (Pro):** Die Beispielantworten stammen von keiner Person, sondern vom System (Kennung `example`). Mit Pro erscheinen sie unter **Freigaben** im Ablauf **Einzureichen**. Eine Person reicht ein, eine zweite freigegebene Person gibt frei; allein lässt sich nichts freigeben, wie bei Ihren echten Daten.
+- **Lizenz:** Grundschutz++ gehört zur Community-Edition. Der Check ist also in jeder Installation nutzbar.
+
+Ein Übungsmandant, der vor diesem Stand angelegt wurde, bekommt den Check nach dem Zurücksetzen.
 
 ## Zurücksetzen
 
