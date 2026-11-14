@@ -124,6 +124,7 @@ export default defineConfig({
 							{ icon: 'i-ph:users-three-duotone', slug: 'pro/active-directory' },
 							{ icon: 'i-ph:cube-duotone', slug: 'pro/virtualisierung' },
 							{ icon: 'i-ph:receipt-duotone', slug: 'pro/lizenzmanagement' },
+							{ icon: 'i-ph:chart-bar-duotone', slug: 'pro/it-ausgaben' },
 							{ icon: 'i-ph:broadcast-duotone', slug: 'pro/siem' },
 							{ icon: 'i-ph:map-pin-duotone', slug: 'pro/standortrechte' },
 							{ icon: 'i-ph:user-gear-duotone', slug: 'pro/rollen-anpassen' },

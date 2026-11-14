@@ -1,0 +1,52 @@
+---
+title: IT spending
+description: With Pro, SentryAssets shows what IT spent per month, quarter, half-year, year and in total, from procurement, licences and contracts, net and gross.
+head:
+  - tag: title
+    content: 'IT spending: costs over time | SentryAssets Docs'
+sidebar:
+  label: IT spending
+  order: 7
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> This feature is available from the Pro edition. The [cost report](/en/guides/uebersicht/#costs), showing what runs per month and year today, comes with every edition.
+
+**IT estate › Inventory › IT spending** shows what IT spent: on procurement, licences and contracts, per period and in total, every figure net and gross.
+
+## Prerequisites
+
+- Pro is active, see [Licence and editions](/en/guides/lizenz/).
+- You may read reports; every role may. Procurement, licences and contracts appear only if you may read them otherwise too. If a right is missing, the page says what is left out.
+- Licences and contracts carry cost, interval, start and whether the amount is net or gross, see [Licences](/en/guides/lizenzen/).
+
+## View the spending
+
+<Steps>
+
+1. Open **IT estate › Inventory › IT spending**.
+
+2. Choose the period: **Month**, **Quarter**, **Half-year**, **Year** or **Total**. For month, quarter and half-year, choose the **Year** next to it.
+
+3. Read the sum of the period and per source at the top, below it a chart (net, coloured by source; net and gross when pointing at a bar) and the table with every row net and gross.
+
+</Steps>
+
+Currencies are never added together; with more than one, choose it above the chart.
+
+## How it is computed
+
+- **Procurement** counts on the day it was ordered, without an order on the day it was received. Requested, rejected and withdrawn ones do not count.
+- **Licences and contracts** count on each day their cost fell due since they began: at the start, then per interval, up to today or their end. One-time costs count at their start.
+- **Net and gross** use each item's own VAT rate, see [VAT](/en/guides/einrichtung/#vat).
+
+## Not included
+
+Items that cannot be placed are listed under **Not included** with a link: without net or gross, without a start or without an interval. Add the missing detail and they count.
+
+## Limits
+
+- The overview reaches back 50 years at most; one item counts at most 1,200 times.
+- More than 5,000 licences, 5,000 contracts or 20,000 priced purchases are refused rather than summed incompletely.
+- Each person may open it 30 times a minute.

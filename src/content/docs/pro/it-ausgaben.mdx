@@ -1,0 +1,52 @@
+---
+title: IT-Ausgaben
+description: Mit Pro zeigt SentryAssets, was die IT je Monat, Quartal, Halbjahr, Jahr und insgesamt ausgegeben hat, aus Beschaffungen, Lizenzen und Verträgen, netto und brutto.
+head:
+  - tag: title
+    content: 'IT-Ausgaben: Kosten im Zeitverlauf | SentryAssets Docs'
+sidebar:
+  label: IT-Ausgaben
+  order: 7
+---
+
+import { Badge, Steps } from '@astrojs/starlight/components';
+
+<Badge text="Pro" variant="note" /> Diese Funktion gilt ab der Edition Pro. Den [Kostenbericht](/guides/uebersicht/#kosten), der zeigt, was heute im Monat und im Jahr läuft, gibt es in jeder Edition.
+
+**IT-Bestand › Inventar › IT-Ausgaben** zeigt, was die IT ausgegeben hat: durch Beschaffungen, Lizenzen und Verträge, je Zeitraum und insgesamt, jede Zahl netto und brutto.
+
+## Voraussetzungen
+
+- Pro ist aktiv, siehe [Lizenz und Editionen](/guides/lizenz/).
+- Sie dürfen Berichte lesen; das darf jede Rolle. Beschaffungen, Lizenzen und Verträge erscheinen nur, wenn Sie sie auch sonst lesen dürfen. Fehlt ein Recht, nennt die Seite, was deshalb fehlt.
+- Bei Lizenzen und Verträgen stehen Kosten, Turnus, Beginn und ob der Betrag netto oder brutto ist, siehe [Lizenzen](/guides/lizenzen/).
+
+## Ausgaben ansehen
+
+<Steps>
+
+1. Öffnen Sie **IT-Bestand › Inventar › IT-Ausgaben**.
+
+2. Wählen Sie den Zeitraum: **Monat**, **Quartal**, **Halbjahr**, **Jahr** oder **Gesamt**. Bei Monat, Quartal und Halbjahr wählen Sie daneben das **Jahr**.
+
+3. Lesen Sie oben die Summe des Zeitraums und je Quelle, darunter ein Diagramm (netto, nach Quelle gefärbt; beim Zeigen auf einen Balken netto und brutto) und die Tabelle mit jeder Zeile netto und brutto.
+
+</Steps>
+
+Mehrere Währungen werden nie zusammengezählt; gibt es mehr als eine, wählen Sie sie über dem Diagramm.
+
+## So wird gerechnet
+
+- **Beschaffungen** zählen am Tag der Bestellung, ohne Bestellung am Tag des Eingangs. Beantragte, abgelehnte und zurückgezogene zählen nicht.
+- **Lizenzen und Verträge** zählen an jedem Tag, an dem ihre Kosten seit dem Beginn fällig wurden: am Beginn, dann je Turnus, bis heute oder bis zu ihrem Ende. Einmalige Kosten zählen an ihrem Beginn.
+- **Netto und brutto** rechnet jeder Posten mit seinem eigenen Steuersatz, siehe [Mehrwertsteuer](/guides/einrichtung/#mehrwertsteuer).
+
+## Nicht eingerechnet
+
+Posten, die sich nicht einordnen lassen, stehen unter **Nicht eingerechnet** mit Link: ohne Angabe netto oder brutto, ohne Beginn oder ohne Turnus. Ergänzen Sie die Angabe, dann zählen sie mit.
+
+## Grenzen
+
+- Die Übersicht reicht höchstens 50 Jahre zurück, ein Posten zählt höchstens 1 200-mal.
+- Mehr als 5 000 Lizenzen, 5 000 Verträge oder 20 000 Beschaffungen mit Preis lehnt sie ab, statt eine unvollständige Summe zu zeigen.
+- Je Person sind 30 Aufrufe in der Minute möglich.
