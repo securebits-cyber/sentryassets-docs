@@ -241,6 +241,7 @@ All assets are linked to the request or order and its position. The inventory nu
 - **Quantity:** at most 100 pieces per step and never more than the position's open pieces. A link made by hand does not count. If a created asset is deleted, its piece is open again.
 - **Required fields:** if the category has required fields, SentryAssets refuses; create these assets one by one with **Add asset**.
 - **No undo:** the message after creating offers no “Undo”, because deleting up to 100 assets again would be a mass deletion of its own. Delete a wrongly created asset in the asset list; its link goes with it.
+- **Changing positions:** A position devices were already created from keeps its place in the list, its title and its kind, and its quantity does not drop below the devices created. Prices and the other positions can still be changed. Otherwise you see “Devices were already created from a position.”
 - **Rights:** the right to change procurement and the inventory; with [rights per location](/en/pro/standortrechte/), write access at the order's location and at the assets' target location.
 
 ## Booking a receipt into stock
