@@ -123,6 +123,10 @@ Under **Settings › Users** you see all accounts with role, sign-in method, sta
 
 **Email address:** for local accounts, choose **Change** in the **Email** column, enter the address and choose **Save**; an empty field removes it. This works for your own account too, for example the account from `cli admin create-admin`, which is created without an address. The page asks you to confirm your sign-in first. [Email notifications](/en/guides/benachrichtigungen/) go to this address, and [My devices](/en/pro/selbstbedienung/) finds the person in the directory through it; that is why only administrators set it, never the account itself. OIDC accounts take their address from the identity provider.
 
+## VAT
+
+Under **Settings › Organisation**, administrators set the **Standard rate in %**, 19 % by default. New costs of licences, contracts and procurement start with it; change it in the item for reduced rates. Costs already entered keep their rate, even if you change the standard rate later. Allowed are 0 to 100 % with at most two decimals, such as `7.5`. Every change is in the audit log.
+
 ## Further settings
 
 - **Directory services:** syncing computers with Active Directory over LDAPS, see [Connecting Active Directory](/en/guides/active-directory/).

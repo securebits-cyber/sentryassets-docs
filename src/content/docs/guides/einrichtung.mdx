@@ -123,6 +123,10 @@ Unter **Einstellungen › Benutzer** sehen Sie alle Konten mit Rolle, Anmeldeart
 
 **E-Mail-Adresse:** Bei lokalen Konten wählen Sie in der Spalte **E-Mail** **Ändern**, tragen die Adresse ein und wählen **Speichern**; ein leeres Feld entfernt sie. Das geht auch für Ihr eigenes Konto, etwa für das Konto aus `cli admin create-admin`, das ohne Adresse angelegt wird. Die Seite fragt vorher nach einer Bestätigung Ihrer Anmeldung. An die Adresse gehen die [Benachrichtigungen per E-Mail](/guides/benachrichtigungen/), und über sie findet [Meine Geräte](/pro/selbstbedienung/) die Person im Verzeichnis; deshalb setzt nur die Administration sie, nie das Konto selbst. Bei OIDC-Konten kommt die Adresse vom Identitätsanbieter.
 
+## Mehrwertsteuer
+
+Unter **Einstellungen › Organisation** legt die Administration den **Standardsatz in %** fest, voreingestellt 19 %. Mit ihm beginnen neue Kosten bei Lizenzen, Verträgen und Beschaffungen; für ermäßigte Sätze ändern Sie ihn im jeweiligen Posten. Bereits erfasste Kosten behalten ihren Satz, auch wenn Sie den Standardsatz später ändern. Erlaubt sind 0 bis 100 % mit höchstens zwei Nachkommastellen, etwa `7,5`. Jede Änderung steht im Audit-Log.
+
 ## Weitere Einstellungen
 
 - **Verzeichnisdienste:** Abgleich der Computer mit dem Active Directory per LDAPS, siehe [Active Directory anbinden](/guides/active-directory/).
