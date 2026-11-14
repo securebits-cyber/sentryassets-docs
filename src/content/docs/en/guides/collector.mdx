@@ -118,3 +118,6 @@ The collector's findings are no longer visible afterwards; assets you took over 
 
 - **No MAC addresses:** the collector is in another segment than the devices. The ARP table only knows its own segment; set up a collector of its own there.
 - **A scan reports nothing:** a blocked collector or one not yet approved does not scan. An invalid stored choice of networks scans nothing rather than everything, on purpose.
+- **No scan after a restart:** the collector remembers when the last scan began and scans again only once the interval has passed. A scan by hand with `run --once` counts as well.
+- **An approval does not take effect at once:** after a refused message, for example while the approval is pending, the collector waits with a growing interval of up to 15 minutes before it tries again.
+- **Clock:** if the host's clock is off by more than 5 minutes, the log carries a warning; certificates need a correct clock.

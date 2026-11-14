@@ -140,6 +140,7 @@ Agents update themselves, but only to versions the vendor signed offline (Ed2551
   ```
 
 - Fallback: rename `sentryassets-agent.previous` (Linux) or `sentryassets-agent.exe.old` (Windows) back and restart the service.
+- Damaged state: the agent keeps in `update.json` in its state directory which version was offered and installed. If the file cannot be read, for example because it is damaged, the agent installs no update. The log names the file; check or remove it, and the next check runs again.
 
 ## Hardening on the device
 

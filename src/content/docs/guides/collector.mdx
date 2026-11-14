@@ -118,3 +118,6 @@ Die Funde des Collectors sind danach nicht mehr sichtbar; Assets, die Sie aus ih
 
 - **Keine MAC-Adressen:** Der Collector steht in einem anderen Segment als die Geräte. Die ARP-Tabelle kennt nur das eigene Segment; richten Sie dort einen eigenen Collector ein.
 - **Ein Scan meldet nichts:** Ein gesperrter oder noch nicht freigegebener Collector scannt nicht. Eine ungültige gespeicherte Auswahl der Netze scannt bewusst nichts statt alles.
+- **Nach einem Neustart kein Scan:** Der Collector merkt sich den Beginn des letzten Scans und scannt erst wieder, wenn das Intervall um ist. Auch ein Scan von Hand mit `run --once` zählt.
+- **Freigabe wirkt nicht sofort:** Nach einer abgelehnten Meldung, etwa solange die Freigabe aussteht, wartet der Collector mit wachsendem Abstand bis zu 15 Minuten bis zum nächsten Versuch.
+- **Uhrzeit:** Weicht die Uhr des Hosts mehr als 5 Minuten ab, steht eine Warnung im Log; Zertifikate brauchen eine korrekte Uhr.

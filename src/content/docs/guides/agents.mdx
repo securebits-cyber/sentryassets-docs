@@ -142,6 +142,7 @@ Agents aktualisieren sich selbst, aber nur auf Versionen, die der Hersteller off
   ```
 
 - Rückfall: `sentryassets-agent.previous` (Linux) bzw. `sentryassets-agent.exe.old` (Windows) zurückbenennen und den Dienst neu starten.
+- Beschädigter Stand: Der Agent merkt sich in `update.json` in seinem Zustandsverzeichnis, welche Version angeboten und installiert wurde. Lässt sich die Datei nicht lesen, etwa weil sie beschädigt ist, installiert er kein Update. Das Log nennt die Datei; prüfen oder entfernen Sie sie, danach läuft die nächste Prüfung wieder.
 
 ## Härtung auf dem Gerät
 
