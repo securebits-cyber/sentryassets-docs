@@ -144,7 +144,7 @@ Agents update themselves, but only to versions the vendor signed offline (Ed2551
 
 ## Hardening on the device
 
-- **Linux:** systemd unit with a sandbox (among others `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `MemoryDenyWriteExecute`, a system call filter). Write access only to its own program directory and the state directory `/var/lib/sentryassets-agent`.
+- **Linux:** systemd unit with a sandbox (among others `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `MemoryDenyWriteExecute`, a system call filter, no capabilities, no access to device nodes). Write access only to its own program directory and the state directory `/var/lib/sentryassets-agent`.
 - **Windows:** a service; the state directory `%ProgramData%\SentryAssets\Agent` only for SYSTEM and administrators. Data through WMI with fixed, read-only queries, no PowerShell.
 - The agent refuses to start if its directory or files are readable by others.
 

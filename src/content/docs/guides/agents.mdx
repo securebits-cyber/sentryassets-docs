@@ -146,7 +146,7 @@ Agents aktualisieren sich selbst, aber nur auf Versionen, die der Hersteller off
 
 ## Härtung auf dem Gerät
 
-- **Linux:** systemd-Unit mit Sandbox (unter anderem `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `MemoryDenyWriteExecute`, Systemaufruf-Filter). Schreibrechte nur im eigenen Programmverzeichnis und im Zustandsverzeichnis `/var/lib/sentryassets-agent`.
+- **Linux:** systemd-Unit mit Sandbox (unter anderem `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `MemoryDenyWriteExecute`, Systemaufruf-Filter, keine Capabilities, kein Zugriff auf Gerätedateien). Schreibrechte nur im eigenen Programmverzeichnis und im Zustandsverzeichnis `/var/lib/sentryassets-agent`.
 - **Windows:** Dienst; Zustandsverzeichnis `%ProgramData%\SentryAssets\Agent` nur für SYSTEM und Administratoren. Daten über WMI mit festen, lesenden Abfragen, kein PowerShell-Aufruf.
 - Der Agent verweigert den Start, wenn Verzeichnis oder Dateien für andere lesbar sind.
 
