@@ -62,7 +62,7 @@ The server must be allowed to reach the domain controller: its network is listed
    - **Service account:** as UPN (`svc-sentryassets@company.local`), `COMPANY\svc-sentryassets` or DN, with its **password**. It is stored encrypted and never shown again.
    - **Own CA (PEM):** the content of the exported `.cer` file.
 2. **Save draft** and **Test connection.** The test names the reason if something is missing, such as a name that does not match the certificate.
-3. **Activate.** The first reconciliation of computers runs; results are under **Discovery › Directory service › Computers**.
+3. **Activate.** The first reconciliation of computers runs; results are under **Discovery › Directory service › Computers**. Computers no longer in the directory are shown in the view **Removed**. One linked to no asset is deleted after 90 days; per organisation at most 20,000 such entries stay, the most recently removed. Linked ones stay until their asset is deleted.
 4. <Badge text="Pro" variant="note" /> For people, enter the groups under **Discovery › Directory service › Settings** and choose **Save and reconcile**, see [Users from Active Directory](/en/pro/active-directory/).
 
 </Steps>
