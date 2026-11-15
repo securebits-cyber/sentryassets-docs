@@ -27,7 +27,7 @@ SentryAssets holds data about your whole IT, and the agent runs with elevated ri
 | Session | server-side in Valkey, cookie `__Host-sa_session` with `HttpOnly`, `Secure`, `SameSite=Lax`; a new session ID after sign-in |
 | Lifetime | 30 minutes idle, 12 hours at most |
 | CSRF | synchroniser token and a check of `Origin` or `Sec-Fetch-Site` for every changing request |
-| Local accounts | Argon2id, TOTP required (enforced by the database), lockout after failed attempts; created only by administrators with a fresh confirmation; the person sets password and TOTP through a setup link (256 bits, stored as a hash only, shown once, valid 72 hours, in the URL fragment); creating new local accounts can be forbidden; can be switched off with `SA_LOCAL_ACCOUNTS=disabled` |
+| Local accounts | Argon2id, TOTP required (enforced by the database), lockout after failed attempts (addresses the account signed in from before count on their own); created only by administrators with a fresh confirmation; the person sets password and TOTP through a setup link (256 bits, stored as a hash only, shown once, valid 72 hours, in the URL fragment); creating new local accounts can be forbidden; can be switched off with `SA_LOCAL_ACCOUNTS=disabled` |
 | Machine access | only tokens for one narrow purpose (status reports, SCIM), 256 bits, stored as a hash, shown once, expiring, revocable |
 
 ## Web security

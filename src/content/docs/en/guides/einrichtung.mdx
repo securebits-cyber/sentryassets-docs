@@ -61,7 +61,7 @@ A setup link is valid for 72 hours. Once it has expired, the user list shows "Li
 Creating, changing roles, resetting, disabling and enabling, and the setting for new accounts ask for a fresh confirmation of your sign-in: a one-time code for local accounts, a renewed sign-in at the identity provider for OIDC accounts.
 
 <Aside type="caution" title="Name of the emergency account">
-After five wrong passwords SentryAssets locks a local account for a while, twice as long with each further lockout, up to an hour. Whoever knows the name can lock the emergency account this way too, just when OIDC fails. So do not call it `admin`; choose a name nobody guesses, and set up the event **Local account locked after failed attempts** under **Settings › Notifications**. The command below lifts the lockout.
+After five wrong passwords SentryAssets locks a local account for a while, twice as long with each further lockout, up to an hour. Whoever knows the name can lock the emergency account this way too, just when OIDC fails. This lockout does not apply to an address the account signed in from successfully within the last 90 days: from there the person still gets in, and failed attempts from there lock only that address. So do not call it `admin`; choose a name nobody guesses, and set up the event **Local account locked after failed attempts** under **Settings › Notifications**. The command below lifts the lockout.
 </Aside>
 
 ### Commands on the server
