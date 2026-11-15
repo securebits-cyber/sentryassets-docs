@@ -65,7 +65,7 @@ SentryAssets holds data about your whole IT, and the agent runs with elevated ri
 ## Operations
 
 - containers without root rights, read-only, without capabilities, with `no-new-privileges` and resource limits;
-- separate networks; database and Valkey not reachable from outside; the gateway without a way out;
+- separate networks; database and Valkey not reachable from outside; the gateway without a way out; the core API answers only requests that come through Caddy (shared secret `api_proxy_secret`);
 - secrets as files, not environment variables; the application does not start with a secret in its environment;
 - outgoing connections (notifications, directory, connectors, AI) only into networks the operator allows; the containers' own networks, loopback, link-local and metadata addresses are always closed.
 

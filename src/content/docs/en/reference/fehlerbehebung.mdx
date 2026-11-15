@@ -29,6 +29,7 @@ The report is **not sent**; it is saved as a JSON file you pass on yourself. Ses
 | Problem | Cause and solution |
 |---|---|
 | A service does not start and names an unsafe setting | A secret is given directly in the environment instead of as a file, or a required value is missing. The message names the setting, never the value. |
+| The API does not start after an update and names `api_proxy_secret` | The secret between Caddy and the API is missing. `../../scripts/generate-secrets.sh` creates it, then `docker compose up -d`. |
 | `migrate` ends with an error | The database cannot be reached or a secret is missing. `../../scripts/generate-secrets.sh` creates missing secrets, then `docker compose up -d postgres` and `docker compose run --rm migrate`. |
 | Sign-in fails with error 500 after an interrupted start | Containers with missing network aliases. `docker compose up -d --force-recreate` creates them again. |
 | Start refused because of an unencrypted connection | PostgreSQL or Valkey are on another host without TLS. See [High availability](/en/pro/hochverfuegbarkeit/). |

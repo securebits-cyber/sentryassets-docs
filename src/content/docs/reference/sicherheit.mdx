@@ -65,7 +65,7 @@ SentryAssets hält Daten über Ihre gesamte IT, und der Agent läuft mit erhöht
 ## Betrieb
 
 - Container ohne Root-Rechte, schreibgeschützt, ohne Capabilities, mit `no-new-privileges` und Ressourcenlimits;
-- getrennte Netze; Datenbank und Valkey nicht von außen erreichbar; das Gateway ohne Weg nach außen;
+- getrennte Netze; Datenbank und Valkey nicht von außen erreichbar; das Gateway ohne Weg nach außen; die Core-API antwortet nur auf Anfragen, die über Caddy kommen (gemeinsames Geheimnis `api_proxy_secret`);
 - Geheimnisse als Dateien, nicht als Umgebungsvariablen; die Anwendung startet nicht mit einem Geheimnis in der Umgebung;
 - Verbindungen nach außen (Benachrichtigungen, Verzeichnis, Konnektoren, KI) nur in Netze, die der Betreiber erlaubt; die eigenen Container-Netze, Loopback, Link-local und Metadaten-Adressen sind immer gesperrt.
 

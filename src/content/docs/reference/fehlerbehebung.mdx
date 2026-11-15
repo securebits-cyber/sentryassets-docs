@@ -29,6 +29,7 @@ Der Bericht wird **nicht gesendet**, sondern als JSON-Datei gespeichert, die Sie
 | Problem | Ursache und Lösung |
 |---|---|
 | Ein Dienst startet nicht und nennt eine unsichere Einstellung | Ein Geheimnis steht direkt in der Umgebung statt als Datei, oder eine Pflichtangabe fehlt. Die Meldung nennt die Einstellung, nie den Wert. |
+| Die API startet nach einem Update nicht und nennt `api_proxy_secret` | Das Geheimnis zwischen Caddy und API fehlt. `../../scripts/generate-secrets.sh` legt es an, dann `docker compose up -d`. |
 | `migrate` endet mit Fehler | Die Datenbank ist nicht erreichbar oder ein Secret fehlt. `../../scripts/generate-secrets.sh` erzeugt fehlende Secrets, dann `docker compose up -d postgres` und `docker compose run --rm migrate`. |
 | Anmeldung liefert Fehler 500 nach einem abgebrochenen Start | Container mit fehlenden Netzwerk-Aliasen. `docker compose up -d --force-recreate` erzeugt sie neu. |
 | Start verweigert wegen unverschlüsselter Verbindung | PostgreSQL oder Valkey liegen auf einem anderen Host ohne TLS. Siehe [Hochverfügbarkeit](/pro/hochverfuegbarkeit/). |
