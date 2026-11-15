@@ -29,9 +29,9 @@ Schedule, download and restore need a fresh confirmation of the sign-in (TOTP or
 
 <Steps>
 
-1. Choose **Restore** at a **checked** backup and type the name of your organisation to confirm.
+1. Choose **Restore** at a **checked** backup and type the name of your organisation to confirm. This works only while the backup service runs; if it does not answer, the page refuses the request.
 
-2. The backup service checks the file again and then stops API, agent gateway and worker (maintenance). SentryAssets is unavailable for a few minutes; agents wait and send again afterwards.
+2. The backup service checks the file again. It carries out the request only if it is at most 15 minutes old and the account that gave it is still an active administration; otherwise it changes nothing, and the page names the reason. Then it stops API, agent gateway and worker (maintenance). SentryAssets is unavailable for a few minutes; agents wait and send again afterwards.
 
 3. First it makes a **safety backup** of the current state. Should the restore fail, it brings this copy back by itself. If the service is stopped halfway, it continues with the safety backup at its next start.
 

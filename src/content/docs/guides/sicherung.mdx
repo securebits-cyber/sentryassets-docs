@@ -29,9 +29,9 @@ Zeitplan, Herunterladen und Wiederherstellen verlangen eine frische Bestätigung
 
 <Steps>
 
-1. Wählen Sie bei einer **geprüften** Sicherung **Wiederherstellen** und geben Sie zur Bestätigung den Namen Ihrer Organisation ein.
+1. Wählen Sie bei einer **geprüften** Sicherung **Wiederherstellen** und geben Sie zur Bestätigung den Namen Ihrer Organisation ein. Das geht nur, solange der Sicherungsdienst läuft; meldet er sich nicht, lehnt die Seite den Auftrag ab.
 
-2. Der Sicherungsdienst prüft die Datei noch einmal und hält dann API, Agent-Gateway und Worker an (Wartungsmodus). SentryAssets ist einige Minuten nicht erreichbar; Agents warten und senden danach weiter.
+2. Der Sicherungsdienst prüft die Datei noch einmal. Er führt den Auftrag nur aus, wenn er höchstens 15 Minuten alt ist und das Konto, das ihn gab, noch eine aktive Administration ist; sonst ändert er nichts, und die Seite nennt den Grund. Dann hält er API, Agent-Gateway und Worker an (Wartungsmodus). SentryAssets ist einige Minuten nicht erreichbar; Agents warten und senden danach weiter.
 
 3. Vorher legt er eine **Sicherheitskopie** des jetzigen Stands an. Scheitert die Wiederherstellung, spielt er diese Kopie automatisch zurück. Wird der Dienst mittendrin beendet, setzt er beim nächsten Start mit der Sicherheitskopie fort.
 
