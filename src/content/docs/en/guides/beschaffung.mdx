@@ -13,7 +13,7 @@ import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 Under **Inventory › Procurement** you take procurement requests from the request to the inventory: what is to be bought, for which department and location, at what price, and how the management decided. A request can be printed for signature, saved as a PDF or sent as a prepared e-mail. Once approved, you link it to the assets and consumables it brought.
 
-What is ordered at once without a request, such as toner or cables, you record as an [order](#orders-without-a-request). On [receipt](#booking-a-receipt-into-stock), requests and orders book the delivered consumables straight into stock.
+What is ordered at once without a request, such as toner or cables, you record as an [order](#orders-without-a-request). An approved request is ordered whole or in [partial orders](#partial-orders). On [receipt](#booking-a-receipt-into-stock), requests and orders book the delivered consumables straight into stock.
 
 Procurement is part of the Community edition. Pro adds the [reorder proposal](#reorder-proposal) from the minimum stock and [creating devices as assets](#creating-devices-as-assets) on receipt. You assign cost centers to requests and orders as described under [Cost centers](/en/guides/kostenstellen/).
 
@@ -83,11 +83,40 @@ Each status also allows exactly one step back, so a slip can be undone, such as 
 
 A request can be **deleted** only while nothing has been ordered: as **Requested**, **Rejected** or **Withdrawn**. The audit log keeps a record of it.
 
+## Partial orders
+
+Not everything of an approved request is ordered at once: one part can be delivered now, the rest later or by another supplier. For that you order a request in parts.
+
+<Steps>
+
+1. On an approved request, choose **Mark as ordered** under **Progress**.
+
+2. Under **What is ordered now?** each position has a tick and a **Quantity**. Untick positions not ordered yet, or lower the quantity. Below the field you see what is still open, such as **open: 3 of 4**.
+
+3. Choose **Create partial order**.
+
+</Steps>
+
+With everything ticked in full, the whole request is ordered as before. Order less, and an [order](#orders-without-a-request) of its own is created with a number of its own, such as `BE-0005`. It takes the subject, location, supplier, cost center, price basis and the approved unit prices. Change its supplier and offer with **Edit** if needed; its positions stay as they were ordered. The toast after creating it offers **Undo**: the partial order is then cancelled and deleted.
+
+The request's page then shows the card **Orders** with every partial order and its status, and below each position how much is ordered, such as **1 of 4 ordered**. **Create partial order** in the card orders a further part; only what is still open is offered. The partial order names the request under **For request**, with a link back.
+
+How a request with partial orders behaves:
+
+- **The status follows the orders:** **Approved** while anything is open; **Ordered** once everything is ordered; **Received** once every partial order not cancelled is received. The request then offers no steps of its own.
+- **Receipt per partial order:** each partial order has its own [receipt](#booking-a-receipt-into-stock) and books its consumables itself. Devices as assets (from Pro) are created on the partial order too.
+- **Cancelled:** a cancelled partial order frees its quantities again. It can be resumed only while they are still open.
+- **What was approved stays:** positions, supplier, offer and price of the request no longer change; department, location and requester still do.
+- **Costs:** the [cost report](/en/guides/kostenstellen/) counts the partial orders, not the request itself, so nothing counts twice.
+- **Rights:** as for ordering: the right to change procurement; with [rights per location](/en/pro/standortrechte/) (from Pro) write access at the request's location.
+
+A remainder that is never ordered cannot be dropped for now; the request then stays **Approved**.
+
 ## Positions with consumables
 
 A position of the kind **Consumable** can name the item it means, such as “Toner HP 26X”. Choose it in the dialog of the request or order under **Consumable**; **Not assigned** leaves the position without an item. You can choose from your organisation's items that you may see.
 
-An assigned position is booked into the item's stock on [receipt](#booking-a-receipt-into-stock). Without an assignment it stays a plain line of the cost breakdown.
+An assigned position is booked into the item's stock on [receipt](#booking-a-receipt-into-stock). Without an assignment you choose the item on receipt, or the receipt creates it from the position (see [Position without an item](#position-without-an-item)).
 
 ## Orders without a request
 
@@ -99,7 +128,7 @@ Consumables and small items are often ordered at once, without the management ha
 
 2. Under **Department and location**, enter the **Department**, the **Location**, **Ordered by** and **Ordered on**. The order counts as ordered from this date.
 
-3. Fill in **What it is about**, **Positions** and **Costs** as for a [request](#adding-a-request). Assign positions of the kind **Consumable** to their item if the receipt is to book them in.
+3. Fill in **What it is about**, **Positions** and **Costs** as for a [request](#adding-a-request). You can assign positions of the kind **Consumable** to their item right away; otherwise the receipt chooses or creates it.
 
 4. Choose **Add order**.
 
@@ -246,7 +275,7 @@ All assets are linked to the request or order and its position. The inventory nu
 
 ## Booking a receipt into stock
 
-Once delivered, choose **Mark as received** on a request or an order. If it has positions with an [assigned consumable](#positions-with-consumables), the dialog shows a **Receipt** section below.
+Once delivered, choose **Mark as received** on a request or an order. If it has positions of the kind [Consumable](#positions-with-consumables), the dialog shows a **Receipt** section below.
 
 <Steps>
 
@@ -254,7 +283,7 @@ Once delivered, choose **Mark as received** on a request or an order. If it has 
 
 2. Under **Receipt**, check the tick **Book … in** for each position. Without the tick nothing is booked for that position.
 
-3. Choose the **Storage location**. The location of the request or order is filled in.
+3. Choose the **Storage location**. The location of the request or order is filled in; without one, the storage location that already holds most of the item.
 
 4. Check the **Quantity**. The quantity ordered is filled in and shown below the field as **ordered: …**; more than ordered cannot be confirmed.
 
@@ -268,6 +297,16 @@ The receipt and its bookings happen in one step: if a booking fails, the receipt
 - **Only once:** a request or an order books in only once.
 - **Origin:** each booking names the request or order it came from. In the [consumables](/en/guides/verbrauchsmaterial/), the **Voucher** column under **Bookings** shows the number, such as `BE-0003`, with a link back. Only the server sets it.
 - **Rights:** booking in needs the right to change consumables. Without it the dialog says “You may not change consumables, so nothing is booked in; the receipt is recorded without bookings.” With [rights per location](/en/pro/standortrechte/) (from Pro) you also need write access at the storage location.
+
+### Position without an item
+
+If a position of the kind **Consumable** names no item yet, because it was only typed in for instance, the receipt shows the field **Consumable item** for it. Filled in is:
+
+1. the existing item with the same **article number**, otherwise
+2. the existing item with the same **title** (regardless of case), otherwise
+3. **New item “…”**: the receipt creates the item with the position's title and article number, the supplier and the unit **Piece**.
+
+You only confirm, or choose another item. Creating, assigning and booking in happen in the same step as the receipt; the position then names its item. If an item of that name exists already, the dialog says “An item of this name exists already. Please choose it.” Only who may add items creates a new one; accounts bound by [rights per location](/en/pro/standortrechte/) choose an existing item. Complete category, unit, EAN and minimum stock in the [consumables](/en/guides/verbrauchsmaterial/) afterwards.
 
 ### Scan the delivery
 

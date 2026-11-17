@@ -13,7 +13,7 @@ import { Aside, Badge, Steps } from '@astrojs/starlight/components';
 
 Unter **Inventar › Beschaffung** führen Sie Beschaffungsanträge vom Antrag bis zur Aufnahme ins Inventar: was beschafft werden soll, für welche Abteilung und welchen Standort, zu welchem Preis, und wie die Geschäftsleitung entschieden hat. Ein Antrag lässt sich zur Unterschrift drucken, als PDF speichern oder mit dem PDF im Anhang per E-Mail senden. Nach der Freigabe verknüpfen Sie ihn mit den Assets und dem Verbrauchsmaterial, die er gebracht hat.
 
-Was ohne Antrag sofort bestellt wird, etwa Toner oder Kabel, erfassen Sie als [Bestellung](#bestellungen-ohne-antrag). Beim [Wareneingang](#wareneingang-einbuchen) buchen Antrag und Bestellung das gelieferte Verbrauchsmaterial gleich in den Bestand.
+Was ohne Antrag sofort bestellt wird, etwa Toner oder Kabel, erfassen Sie als [Bestellung](#bestellungen-ohne-antrag). Einen freigegebenen Antrag bestellen Sie ganz oder in [Teilbestellungen](#teilbestellungen). Beim [Wareneingang](#wareneingang-einbuchen) buchen Antrag und Bestellung das gelieferte Verbrauchsmaterial gleich in den Bestand.
 
 Die Beschaffung gehört zur Community-Edition. Ab Pro kommen der [Bestellvorschlag](#bestellvorschlag) aus dem Mindestbestand und das [Anlegen von Geräten als Assets](#geräte-als-assets-anlegen) beim Wareneingang dazu. Kostenstellen ordnen Sie Anträgen und Bestellungen wie unter [Kostenstellen](/guides/kostenstellen/) beschrieben zu.
 
@@ -83,11 +83,40 @@ Je Status gibt es außerdem genau einen Schritt zurück, damit sich ein Versehen
 
 **Löschen** lässt sich ein Antrag nur, solange nichts bestellt ist: als **Beantragt**, **Abgelehnt** oder **Zurückgezogen**. Im Audit-Log bleibt er vermerkt.
 
+## Teilbestellungen
+
+Nicht alles aus einem freigegebenen Antrag wird auf einmal bestellt: Ein Teil ist gleich lieferbar, der Rest später oder bei einem anderen Lieferanten. Dafür bestellen Sie einen Antrag in Teilen.
+
+<Steps>
+
+1. Wählen Sie bei einem freigegebenen Antrag unter **Stand** **Als bestellt markieren**.
+
+2. Unter **Was wird jetzt bestellt?** steht jede Position mit Haken und **Menge**. Nehmen Sie den Haken bei Positionen heraus, die noch nicht bestellt werden, oder senken Sie die Menge. Unter dem Feld steht, wie viel noch offen ist, etwa **offen: 3 von 4**.
+
+3. Wählen Sie **Teilbestellung anlegen**.
+
+</Steps>
+
+Bleibt alles ausgewählt und in voller Menge, wird der ganze Antrag bestellt wie bisher. Bestellen Sie weniger, entsteht eine eigene [Bestellung](#bestellungen-ohne-antrag) mit eigener Nummer, etwa `BE-0005`. Sie übernimmt Betreff, Standort, Lieferant, Kostenstelle, Preisbasis und die freigegebenen Einzelpreise. Den Lieferanten und das Angebot ändern Sie dort bei Bedarf mit **Bearbeiten**; ihre Positionen bleiben, wie sie bestellt wurden. Der Toast nach dem Anlegen bietet **Rückgängig**: Die Teilbestellung wird dann storniert und gelöscht.
+
+Die Seite des Antrags zeigt danach die Karte **Bestellungen** mit allen Teilbestellungen und ihrem Status, und unter jeder Position, wie viel bestellt ist, etwa **1 von 4 bestellt**. **Teilbestellung anlegen** in der Karte bestellt einen weiteren Teil; angeboten wird nur, was noch offen ist. Die Teilbestellung nennt unter **Zum Antrag** die Nummer des Antrags mit Link zurück.
+
+So verhält sich ein Antrag mit Teilbestellungen:
+
+- **Der Status folgt den Bestellungen:** **Freigegeben**, solange etwas offen ist; **Bestellt**, sobald alles bestellt ist; **Im Inventar aufgenommen**, sobald jede nicht stornierte Teilbestellung aufgenommen ist. Eigene Schritte bietet der Antrag dann nicht mehr an.
+- **Wareneingang je Teilbestellung:** Jede Teilbestellung hat ihren eigenen [Wareneingang](#wareneingang-einbuchen) und bucht ihr Verbrauchsmaterial selbst ein. Geräte als Assets (ab Pro) legen Sie ebenfalls an der Teilbestellung an.
+- **Storniert:** Eine stornierte Teilbestellung gibt ihre Mengen wieder frei. Fortsetzen lässt sie sich nur, solange diese Mengen noch offen sind.
+- **Was freigegeben wurde, bleibt:** Positionen, Lieferant, Angebot und Preis des Antrags ändern sich nicht mehr; Abteilung, Standort und Antragsteller schon.
+- **Kosten:** Der [Kostenbericht](/guides/kostenstellen/) zählt die Teilbestellungen, nicht den Antrag selbst, damit nichts doppelt zählt.
+- **Rechte:** wie beim Bestellen: das Recht, die Beschaffung zu ändern; mit [Rechten je Standort](/pro/standortrechte/) (ab Pro) Schreibrecht am Standort des Antrags.
+
+Eine Restmenge, die nie bestellt wird, lässt sich derzeit nicht verwerfen; der Antrag bleibt dann **Freigegeben**.
+
 ## Positionen mit Verbrauchsmaterial
 
 Eine Position der Art **Verbrauchsmaterial** kann den Artikel nennen, den sie meint, etwa „Toner HP 26X“. Wählen Sie ihn im Dialog des Antrags oder der Bestellung unter **Verbrauchsmaterial**; **Nicht zugeordnet** lässt die Position ohne Artikel. Zur Auswahl stehen die Artikel Ihrer Organisation, die Sie sehen dürfen.
 
-Eine zugeordnete Position bucht der [Wareneingang](#wareneingang-einbuchen) in den Bestand des Artikels ein. Ohne Zuordnung bleibt sie eine reine Zeile der Kostenaufstellung.
+Eine zugeordnete Position bucht der [Wareneingang](#wareneingang-einbuchen) in den Bestand des Artikels ein. Ohne Zuordnung wählen Sie den Artikel erst beim Wareneingang, oder der Wareneingang legt ihn aus der Position neu an (siehe [Position ohne Artikel](#position-ohne-artikel)).
 
 ## Bestellungen ohne Antrag
 
@@ -99,7 +128,7 @@ Verbrauchsmaterial und Kleinbedarf werden oft sofort bestellt, ohne dass die Ges
 
 2. Tragen Sie unter **Abteilung und Standort** die **Abteilung**, den **Standort**, **Bestellt von** und **Bestellt am** ein. Die Bestellung gilt ab diesem Datum als bestellt.
 
-3. Füllen Sie **Worum es geht**, **Positionen** und **Kosten** aus wie bei einem [Antrag](#antrag-anlegen). Ordnen Sie Positionen der Art **Verbrauchsmaterial** ihrem Artikel zu, wenn der Wareneingang sie einbuchen soll.
+3. Füllen Sie **Worum es geht**, **Positionen** und **Kosten** aus wie bei einem [Antrag](#antrag-anlegen). Positionen der Art **Verbrauchsmaterial** können Sie ihrem Artikel gleich zuordnen; sonst wählt oder legt ihn der Wareneingang an.
 
 4. Wählen Sie **Bestellung anlegen**.
 
@@ -246,7 +275,7 @@ Alle Assets werden mit dem Antrag oder der Bestellung und ihrer Position verknü
 
 ## Wareneingang einbuchen
 
-Ist geliefert, wählen Sie bei einem Antrag oder einer Bestellung **Als aufgenommen markieren**. Nennt der Antrag oder die Bestellung Positionen mit [zugeordnetem Verbrauchsmaterial](#positionen-mit-verbrauchsmaterial), zeigt der Dialog darunter den Abschnitt **Wareneingang**.
+Ist geliefert, wählen Sie bei einem Antrag oder einer Bestellung **Als aufgenommen markieren**. Hat der Antrag oder die Bestellung Positionen der Art [Verbrauchsmaterial](#positionen-mit-verbrauchsmaterial), zeigt der Dialog darunter den Abschnitt **Wareneingang**.
 
 <Steps>
 
@@ -254,7 +283,7 @@ Ist geliefert, wählen Sie bei einem Antrag oder einer Bestellung **Als aufgenom
 
 2. Prüfen Sie unter **Wareneingang** je Position den Haken **… einbuchen**. Ohne Haken wird für diese Position nichts gebucht.
 
-3. Wählen Sie den **Lagerort**. Vorbelegt ist der Standort des Antrags oder der Bestellung.
+3. Wählen Sie den **Lagerort**. Vorbelegt ist der Standort des Antrags oder der Bestellung; ohne ihn der Lagerort, an dem der Artikel schon am meisten liegt.
 
 4. Prüfen Sie die **Menge**. Vorbelegt ist die bestellte Menge, die unter dem Feld als **bestellt: …** steht; mehr als bestellt lässt sich nicht bestätigen.
 
@@ -268,6 +297,16 @@ Eingang und Buchungen geschehen in einem Schritt: Gelingt eine Buchung nicht, wi
 - **Nur einmal:** Ein Antrag oder eine Bestellung bucht nur einmal ein.
 - **Herkunft:** Jede Buchung nennt den Antrag oder die Bestellung, aus dem sie kam. Im [Verbrauchsmaterial](/guides/verbrauchsmaterial/) zeigt die Spalte **Beleg** unter **Buchungen** die Nummer, etwa `BE-0003`, mit Link zurück. Diese Angabe setzt nur der Server.
 - **Rechte:** Einbuchen darf, wer Verbrauchsmaterial ändern darf. Fehlt Ihnen dieses Recht, steht im Dialog „Zum Einbuchen fehlt Ihnen das Recht, Verbrauchsmaterial zu ändern; der Eingang wird ohne Buchung erfasst.“ Mit [Rechten je Standort](/pro/standortrechte/) (ab Pro) brauchen Sie zusätzlich Schreibrecht am Lagerort.
+
+### Position ohne Artikel
+
+Ist eine Position der Art **Verbrauchsmaterial** noch keinem Artikel zugeordnet, etwa weil sie beim Erfassen nur eingetippt wurde, zeigt der Wareneingang bei ihr das Feld **Artikel im Verbrauchsmaterial**. Vorbelegt ist:
+
+1. der vorhandene Artikel mit derselben **Artikelnummer**, sonst
+2. der vorhandene Artikel mit derselben **Bezeichnung** (Groß- und Kleinschreibung zählen nicht), sonst
+3. **Neuer Artikel „…“**: Der Wareneingang legt den Artikel mit Bezeichnung und Artikelnummer der Position, dem Lieferanten und der Einheit **Stück** an.
+
+Sie bestätigen nur noch, oder wählen einen anderen Artikel. Anlegen, Zuordnen und Einbuchen geschehen im selben Schritt wie der Eingang; die Position nennt danach ihren Artikel. Gibt es schon einen Artikel mit dem Namen, meldet der Dialog „Ein Artikel mit diesem Namen besteht schon. Bitte wählen Sie ihn aus.“ Einen neuen Artikel legt nur an, wer Artikel anlegen darf; mit [Rechten je Standort](/pro/standortrechte/) gebundene Konten wählen einen vorhandenen. Im [Verbrauchsmaterial](/guides/verbrauchsmaterial/) ergänzen Sie danach Kategorie, Einheit, EAN und Mindestbestand.
 
 ### Lieferung scannen
 
