@@ -100,35 +100,42 @@ Patchpanels und Switches haben über ihren Ports Beschriftungsfelder. **Port-Eti
 2. Wählen Sie unter **Gerät** ein Gerät oder **Alle Geräte mit Ports**.
 
 3. Wählen Sie die **Art**:
-   - **Streifen für das Beschriftungsfeld:** gleich breite Felder, ein Feld je Port, mit Trennstrich dazwischen und 4 mm leerem Band an beiden Enden. Der letzte Streifen eines Geräts wird mit leeren Feldern auf die gleiche Länge gebracht.
+   - **Streifen für das Beschriftungsfeld:** gleich breite Felder, ein Feld je Port, mit Trennstrich dazwischen. Der letzte Streifen eines Geräts wird mit leeren Feldern auf die gleiche Länge gebracht.
    - **Ein Etikett je Port:** etwa als Fahne am Kabel.
 
-4. Wählen Sie die **Bandbreite**: **24 mm**, **18 mm**, **12 mm** (Vorgabe) oder **9 mm**.
+4. Wählen Sie die **Bandbreite**: **24 mm**, **18 mm**, **12 mm** (Vorgabe) oder **9 mm**, und den **Rand**:
+   - **Schmal: Rand vom Treiber** (Vorgabe): Das Etikett endet am bedruckten Teil; den Rand bis zum Schnitt gibt der Treiber des Geräts dazu, bei Brother P-touch mindestens 2 mm.
+   - **Normal: 4 mm zusätzlich** an beiden Enden, für Geräte, die bis an den Schnitt drucken.
 
 5. Wählen Sie den **Inhalt**: **Beschriftung, sonst Portname**, nur **Portname** oder **Portname und Beschriftung** in zwei Zeilen.
 
 6. Legen Sie die Maße fest:
    - bei Streifen **Breite je Port (mm)**, der Abstand von Portmitte zu Portmitte am Gerät, 5 bis 40 mm in Schritten von 0,5 mm (Vorgabe 15 mm, meist 12 bis 20 mm), und **Ports je Streifen**, 1 bis 48 (Vorgabe 12), so viele, wie ein Beschriftungsfeld überspannt, etwa 6, 12 oder 24;
-   - bei einem Etikett je Port **Länge je Etikett (mm)**, mindestens 25 mm, damit das Gerät sauber schneidet.
+   - bei einem Etikett je Port **Länge je Etikett (mm)**, mindestens 20,5 mm (Rand „Normal“: 25 mm). Kürzer schneidet das Gerät nicht: Mit 2 mm Vorschub an beiden Enden sind das genau die 24,5 mm Band, die ein Brother P-touch mindestens ausgibt.
 
 7. Wählen Sie **Drucken**. Wählen Sie im Druckdialog das Beschriftungsgerät, als Papier die Bandbreite, Ränder „Keine“ und 100 %.
 
 </Steps>
 
-Ein Streifen ist so lang wie Ports je Streifen mal Breite je Port plus 8 mm. Jedes Etikett ist eine eigene Seite. Der Text steht in der Mitte des Bandes, schwarz auf weiß, auch im dunklen Farbschema. Ihre zuletzt gewählten Einstellungen merkt sich der Browser für das nächste Mal.
+Ein Streifen ist so lang wie Ports je Streifen mal Breite je Port, mit dem Rand „Normal“ 8 mm länger, und nie kürzer als ein einzelnes Etikett; die Felder stehen dann in der Mitte. Jedes Etikett ist eine eigene Seite. Der Text steht in der Mitte des Bandes, schwarz auf weiß, auch im dunklen Farbschema. Ihre zuletzt gewählten Einstellungen merkt sich der Browser für das nächste Mal.
 
 <Aside type="note" title="Druck über den Treiber">
 Gedruckt wird über den Druckdialog des Browsers und den Treiber des Beschriftungsgeräts. Geräte wie das Brother PT-E560BT drucken Sie dafür vom Computer über den Treiber per USB; ein Gerät, das sonst nur über eine App am Telefon druckt, braucht den Treiber am Computer. Ob die Länge des Etiketts ankommt, hängt davon ab, dass der Treiber die Seitengröße aus dem Dokument übernimmt.
 </Aside>
 
+<Aside type="tip" title="Band sparen">
+Stellen Sie in den Druckeinstellungen des Treibers den kleinsten Rand ein, und drucken Sie alle Etiketten in einem Auftrag. Vor dem ersten Etikett gibt ein Brother P-touch gut 2 cm leeres Band aus, weil das Messer so weit hinter dem Druckkopf sitzt; zwischen den folgenden Etiketten bleibt nur der Rand des Treibers.
+</Aside>
+
 ## Ergebnis prüfen
 
-- Die Vorschau der Port-Etiketten nennt Zahl, Bandbreite und Länge der Etiketten, etwa „4 Etiketten auf 12-mm-Band, je 188 mm lang“.
+- Die Vorschau der Port-Etiketten nennt Zahl, Bandbreite und Länge der Etiketten, etwa „4 Etiketten auf 12-mm-Band, je 180 mm lang“.
 - Ein gedruckter Streifen passt mit seinen Trennstrichen auf die Ports des Beschriftungsfelds.
 
 ## Fehlerbehebung
 
 - **„So wird ein Streifen länger als 1000 mm.“** Ein Etikett darf höchstens 1 000 mm lang sein; die Seite druckt dann nicht. Wählen Sie weniger Ports je Streifen oder eine kleinere Breite je Port.
+- **Vor und nach dem Text bleibt viel leeres Band:** Wählen Sie den Rand **Schmal** und im Treiber den kleinsten Rand. Das leere Stück vor dem ersten Etikett eines Auftrags gibt das Gerät immer aus.
 - **Die Felder passen nicht zu den Ports:** Messen Sie den Abstand von Portmitte zu Portmitte am Gerät nach und tragen Sie ihn als **Breite je Port (mm)** ein. Prüfen Sie im Druckdialog, dass die Skalierung 100 % beträgt und keine Ränder eingestellt sind.
 - **Der Druck wird abgeschnitten oder hat eine falsche Länge:** Der Treiber übernimmt die Seitengröße des Dokuments nicht. Prüfen Sie im Druckdialog, dass als Papier die Bandbreite gewählt ist, Ränder „Keine“ und 100 %. {/* offen: Einstellungen je Treiber (etwa Brother P-touch unter Windows) für eine variable Länge sind nicht beschrieben. */}
 - **„In diesem Rack hat noch kein Gerät Ports.“** Legen Sie zuerst Ports an einem Einbau an.

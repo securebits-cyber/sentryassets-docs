@@ -98,35 +98,42 @@ Patch panels and switches have label fields above their ports. **Port labels** p
 2. Under **Device**, choose one device or **All devices with ports**.
 
 3. Choose the **Kind**:
-   - **Strip for the label field:** fields of equal width, one per port, with a dividing line between them and 4 mm of blank tape at both ends. The last strip of a device is filled up with blank fields to the same length.
+   - **Strip for the label field:** fields of equal width, one per port, with a dividing line between them. The last strip of a device is filled up with blank fields to the same length.
    - **One label per port:** such as a flag on a cable.
 
-4. Choose the **Tape width**: **24 mm**, **18 mm**, **12 mm** (default) or **9 mm**.
+4. Choose the **Tape width**: **24 mm**, **18 mm**, **12 mm** (default) or **9 mm**, and the **Margin**:
+   - **Narrow: margin from the driver** (default): the label ends where its print ends; the printer's driver adds the margin up to the cut, at least 2 mm on Brother P-touch printers.
+   - **Normal: 4 mm more** at both ends, for printers that print right up to the cut.
 
 5. Choose the **Content**: **Label, else port name**, **Port name** only, or **Port name and label** in two lines.
 
 6. Set the dimensions:
    - for strips, **Width per port (mm)**, the distance from port centre to port centre on the device, 5 to 40 mm in steps of 0.5 mm (default 15 mm, mostly 12 to 20 mm), and **Ports per strip**, 1 to 48 (default 12), as many as one label field spans, such as 6, 12 or 24;
-   - for one label per port, **Length per label (mm)**, at least 25 mm, so the printer cuts cleanly.
+   - for one label per port, **Length per label (mm)**, at least 20.5 mm (margin “Normal”: 25 mm). The printer cuts nothing shorter: with 2 mm of feed at both ends, that is exactly the 24.5 mm of tape a Brother P-touch feeds out at least.
 
 7. Choose **Print**. In the print dialog choose the label printer, the tape width as paper, margins “None” and 100 %.
 
 </Steps>
 
-A strip is as long as ports per strip times width per port plus 8 mm. Each label is a page of its own. The text sits in the middle of the tape, black on white, also in the dark colour scheme. The browser remembers your last settings for next time.
+A strip is as long as ports per strip times width per port, 8 mm longer with the margin “Normal”, and never shorter than a single label; its fields then sit in the middle. Each label is a page of its own. The text sits in the middle of the tape, black on white, also in the dark colour scheme. The browser remembers your last settings for next time.
 
 <Aside type="note" title="Printing through the driver">
 Labels print through the browser's print dialog and the label printer's driver. Print from the computer through the driver over USB for printers such as the Brother PT-E560BT; a printer that otherwise prints only from a phone app needs the driver on the computer. Whether the label's length arrives depends on the driver taking the page size from the document.
 </Aside>
 
+<Aside type="tip" title="Saving tape">
+Set the smallest margin in the driver's printing preferences, and print all labels in one job. Before the first label, a Brother P-touch feeds out a little over 2 cm of blank tape, as its cutter sits that far behind the print head; between the following labels only the driver's margin remains.
+</Aside>
+
 ## Check the result
 
-- The preview of the port labels names the number, tape width and length of the labels, such as “4 labels on 12 mm tape, 188 mm long each”.
+- The preview of the port labels names the number, tape width and length of the labels, such as “4 labels on 12 mm tape, 180 mm long each”.
 - A printed strip fits the ports of the label field with its dividing lines.
 
 ## Troubleshooting
 
 - **“A strip would be longer than 1000 mm.”** A label may be at most 1,000 mm long; the page does not print then. Choose fewer ports per strip or a smaller width per port.
+- **Much blank tape before and after the text:** choose the margin **Narrow** and the smallest margin in the driver. The blank piece before the first label of a job is always fed out.
 - **The fields do not match the ports:** measure the distance from port centre to port centre on the device again and enter it as **Width per port (mm)**. Check in the print dialog that scaling is 100 % and no margins are set.
 - **The print is cut off or has the wrong length:** the driver does not take the document's page size. Check in the print dialog that the tape width is chosen as paper, margins “None” and 100 %. {/* offen: driver settings per printer (such as Brother P-touch on Windows) for a variable length are not described. */}
 - **“No device in this rack has ports yet.”** Add ports at a mount first.
