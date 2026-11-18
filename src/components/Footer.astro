@@ -8,10 +8,18 @@ const vendor =
 	locale === 'en'
 		? 'SentryAssets is a product of SecureBits Cyber Security UG (haftungsbeschränkt)'
 		: 'SentryAssets ist ein Produkt der SecureBits Cyber Security UG (haftungsbeschränkt)';
+// The documentation is not under the product's licence: all rights reserved (decided
+// 2026-11-18). The year range grows with the build year.
+const built = new Date().getFullYear();
+const years = built > 2026 ? `2026–${built}` : '2026';
+const rights =
+	locale === 'en'
+		? `© ${years} SecureBits Cyber Security UG (haftungsbeschränkt). Text and images of this documentation: all rights reserved.`
+		: `© ${years} SecureBits Cyber Security UG (haftungsbeschränkt). Texte und Bilder dieser Dokumentation: alle Rechte vorbehalten.`;
 ---
 
 <Default />
-<p class="sa-vendor">{vendor}</p>
+<p class="sa-vendor">{vendor}<br />{rights}</p>
 
 <style>
 	.sa-vendor {
